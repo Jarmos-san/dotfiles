@@ -4,4 +4,4 @@ WORKDIR /usr/src/
 
 COPY . .
 
-CMD [ "bash", "main.sh"]
+CMD [ "bash", "src/main.sh"]
