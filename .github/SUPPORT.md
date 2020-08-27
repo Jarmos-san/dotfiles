@@ -1,87 +1,44 @@
-# Project Title
+<!--
+TODO:
+- Getting Started
+- Installing
+-->
 
-One Paragraph of project description goes here
+# Dotfiles
+
+This repository hosts a couple of shell scripts for automating setting up a fresh new Ubuntu development environment on a system. Refer to the [README](../README.md) for more information on what all stuffs will be downloaded & installed on to your machine *automatically*.
 
 ## Getting Started
-
+<!-- TODO: Add details -->
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
+A fresh new Ubuntu system is all you need! It's preferable to test out how they work inside a [Ubuntu container](https://hub.docker.com/_/ubuntu).
 
 ### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
+<!-- TODO: Add installation details -->
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Bash](https://www.gnu.org/software/bash/) - The Shell emulator used to write & test the scripts
+* [Docker](https://www.docker.com/) - Package Management
+* [VSCode](https://code.visualstudio.com/) - Used for development
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING](./CONTRIBUTING.md) guidelines for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
+The project is always under development & ever changing according to my needs & requirements. Hence, I decided to not include versioning for the project, as such it's always tagged as `latest`. Download the image from [GitHub Package](https://github.com/Jarmos-san/dotfiles/packages/368490) or [Docker Hub](https://hub.docker.com/r/jarmos/dotfiles).
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Somraj Saha** - [Jarmos-san](https://github.com/jarmos-san)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/jarmos-san/dotfiles/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+This project is licensed under the GNU GPLv3.0 License - see the [LICENSE.md](./../LICENSE.md) file for details
