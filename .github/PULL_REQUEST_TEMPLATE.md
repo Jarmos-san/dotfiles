@@ -26,7 +26,8 @@ Does it work flawlessly on a Ubuntu Machine?
 
 - Ubuntu version:
 - Bash version:
-- Docker version:
+- Windows version:
+- PowerShell version:
 
 ## Checklist
 
