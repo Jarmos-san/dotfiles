@@ -1,0 +1,133 @@
+{
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+    "copyOnSelect": false,
+    "copyFormatting": false,
+    "disabledProfileSources": [
+        "Windows.Terminal.Azure",
+        "Windows.Terminal.Wsl"
+    ],
+    "theme": "dark",
+    "tabWidthMode": "equal",
+    "launchMode": "maximized",
+    "profiles": {
+        "defaults": {
+            "startingDirectory": "E:\\Projects",
+            "fontFace": "MesloLGL Nerd Font",
+            "fontSize": 14,
+            "padding": "20, 8, 8, 3",
+            "cursorShape": "filledBox",
+            "cursorColor": "#969696",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.6,
+            "colorScheme": "Blue Matrix"
+        },
+        "list": [
+            {
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "name": "Windows PowerShell v5.1",
+                "commandline": "powershell.exe",
+                "hidden": false
+            },
+            {
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "name": "Command Prompt",
+                "commandline": "cmd.exe",
+                "hidden": true
+            },
+            {
+                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                "name": "Azure Cloud Shell",
+                "source": "Windows.Terminal.Azure",
+                "hidden": true
+            },
+            {
+                "guid": "{6e22be46-d6b7-4d4e-846a-dc8ff94f006d}",
+                "name": "Git Bash v2.29.2",
+                "commandline": "\"%PROGRAMFILES%\\Git\\usr\\bin\\bash.exe\" -i -l",
+                "icon": "%PROGRAMFILES%\\Git\\mingw64\\share\\git\\git-for-windows.ico",
+                "suppressApplicationTitle": true
+            },
+            {
+                "guid": "{905ee199-8709-449b-b0f1-5ac7ea8638b9}",
+                "commandline": "py.exe",
+                "icon": "%PROGRAMFILES(x86)%\\Python38-32\\python.png",
+                "name": "Python v3.8.5"
+            },
+            {
+                "guid": "{cec59ed5-e63e-4199-9e5f-d292b4ce5346}",
+                "commandline": "nvim",
+                "icon": "%PROGRAMFILES(x86)%\\Neovim\\neovim.png",
+                "name": "Neovim v0.4.4"
+            }
+        ]
+    },
+    "schemes": [
+        {
+            "name": "Blue Matrix",
+            "black": "#101116",
+            "red": "#ff5680",
+            "green": "#00ff9c",
+            "yellow": "#fffc58",
+            "blue": "#00b0ff",
+            "purple": "#d57bff",
+            "cyan": "#76c1ff",
+            "white": "#c7c7c7",
+            "brightBlack": "#686868",
+            "brightRed": "#ff6e67",
+            "brightGreen": "#5ffa68",
+            "brightYellow": "#fffc67",
+            "brightBlue": "#6871ff",
+            "brightPurple": "#d682ec",
+            "brightCyan": "#60fdff",
+            "brightWhite": "#ffffff",
+            "background": "#101116",
+            "foreground": "#00a2ff"
+        }
+    ],
+    "actions": [
+        {
+            "command": {
+                "action": "copy",
+                "singleLine": false
+            },
+            "keys": "ctrl+c"
+        },
+        {
+            "command": "paste",
+            "keys": "ctrl+v"
+        },
+        {
+            "command": "find",
+            "keys": "ctrl+shift+f"
+        },
+        {
+            "command": {
+                "action": "splitPane",
+                "split": "auto",
+                "splitMode": "duplicate"
+            },
+            "keys": "alt+shift+d"
+        },
+        {
+            "command": {
+                "action": "splitPane",
+                "split": "auto",
+                "profile": "Neovim v0.4.4"
+            },
+            "keys": "shift+alt+2"
+        },
+        {
+            "command": "closeTab",
+            "keys": "ctrl+w"
+        },
+        {
+            "command": "closeOtherTabs",
+            "keys": "ctrl+t"
+        },
+        {
+            "command": "closePane",
+            "keys": "ctrl+shift+w"
+        }
+    ]
+}
