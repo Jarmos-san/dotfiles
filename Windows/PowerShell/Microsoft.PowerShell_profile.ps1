@@ -21,7 +21,7 @@
     $startInfo = New-Object System.Diagnostics.ProcessStartInfo
     $startInfo.FileName = "C:\tools\oh-my-posh.exe"
     $cleanPWD = $PWD.ProviderPath.TrimEnd("\")
-    $startInfo.Arguments = "-config=""$env:USERPROFILE\.poshthemes\emodipt.omp.json"" -error=$errorCode -pwd=""$cleanPWD"" -execution-time=$executionTime"
+    $startInfo.Arguments = "-config=""$env:USERPROFILE\.poshthemes\honukai.omp.json"" -error=$errorCode -pwd=""$cleanPWD"" -execution-time=$executionTime"
     $startInfo.Environment["TERM"] = "xterm-256color"
     $startInfo.CreateNoWindow = $true
     $startInfo.StandardOutputEncoding = [System.Text.Encoding]::UTF8
