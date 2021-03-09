@@ -59,6 +59,12 @@
                 "commandline": "nvim",
                 "icon": "%PROGRAMFILES(x86)%\\Neovim\\neovim.png",
                 "name": "Neovim v0.4.4"
+            },
+            {
+                "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+                "hidden": false,
+                "name": "PowerShell v7.2 (Preview)",
+                "source": "Windows.Terminal.PowershellCore"
             }
         ]
     },
