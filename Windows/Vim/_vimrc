@@ -1,37 +1,40 @@
-set number relativenumber			    " Sets relative line numbers on the left side of the window.
-set smartindent autoindent              " Supposed to indent files properly but it doesn't appear to work always.
-set hidden                              " Allow hidden buffers for faster navigation.
-set wrap                                " Wrap texts instead of keep going forever across the screen.
-set smartcase                           " Enables Vim to also search for Upper case characters when case is ignored.
-set nocompatible                        " Vim is setup in a not compatible mode.
-set ruler                               " Add a ruler which shows up at the bottom right corner.
-set background=dark                     " Is supposed to add a dark background but not sure if it's working.
-set encoding=utf-8                      " UTF-8 encoding for all files edited using Vim.
-set textwidth=0                         " Stops Vim from putting new text onto a newline after 80 characters.
-set hidden					            " Vim should now allow switching buffers without prompting to save the file.
-set backspace=indent,eol,start			" Enables backspace apparently it doesn't otherwise.
-set tabstop=4					        " Add 4 visual <Spaces> per <Tab>.
-set softtabstop=4				        " Add 4 <Spaces> when <Tab> is pressed while editing a file.
-set expandtab					        " With this option pressing a single <Tab> inserts 4 <Spaces>.
-set scrolloff=3                         " No clue what it does, need to get back to it at some point of time.
-set wildmenu					        " Enables Tab Completion for Command mode.
-set lazyredraw					        " Tells Vim to slow down on redrawing but not sure of its exact usefulness.
-set showmatch					        " Bracket highlighting (I guess?).
-set nohlsearch incsearch			    " Highlights the searched keyword inclusively but removes after pressing <Enter>. 
-set noswapfile					        " Disables Swap file but not sure why or what it does.
-set ignorecase					        " Ignores case sensitivity while searching through texts.
-set incsearch                           " Highlights the search term as it's typed.
-setlocal spell spelllang=en_gb			" Spell check in British English.
-filetype plugin indent on               " File type recognition & shit.
-if !exists("g:syntax_on")
-    syntax enable                           " Is supposed to enable syntax highlighting. 
-endif
-if exists("termguicolors")
-    set termguicolors
-endif
-colorscheme onehalfdark                 " Replace with One Half Dark later on. 
+" Required & minimal options
+set nocompatible
+set number relativenumber
+set clipboard=unnamedplus
+set hidden
+set nowrap
+set ruler
+set encoding=utf-8
+set backspace=indent,eol,start
+set lazyredraw
+set showmatch
+set nohlsearch incsearch
+set noswapfile
+set ignorecase
+set termguicolors
+set tabstop=4 softtabstop=4 expandtab shiftwidth=4
 
-" Disables Arrow keys on the keyboard
+filetype plugin indent on
+
+if !exists("g:syntax_on")
+    syntax enable
+endif
+
+" Add plugins
+call plug#begin('~/.vimfiles/plugged')
+Plug 'itchyny/lightline.vim'
+Plug 'arcticicestudio/nord-vim'
+call plug#end()
+
+" Set up colour schemes
+colorscheme nord
+let g:lightline = { 'colorscheme' : 'nord' }
+
+set noshowmode
+set laststatus=2
+
+" Disale arrow keys
 noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
