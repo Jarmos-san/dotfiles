@@ -14,6 +14,7 @@ This directory holds all the scripts, configurations, among other stuff required
 - [Python Programming Language][Python]
 - [ShareX][ShareX]
 - [Google Backup & Sync][Google Backup & Sync]
+- [Docker][Docker]
 
 ## Setup Instructions
 
@@ -75,6 +76,18 @@ Cross-platform & open-source software for screen capture, file-sharing & product
 
 For backing up stuffs to Google Drive from the local drive storage automatically. More information is available at [www.google.com/drive/download][Google Backup & Sync].
 
+### Docker
+
+Installing Docker on Windows 10 can be a bit finicky. For one it appears to be very closely knitted with WSL for smoother operation. But making it work natively requires Hyper-V.
+Following are some observations I made to make it work:
+
+- Docker is available on Winget which means it's install can be automated. But
+  for one thing, the file size appears to be about 525 mb!
+- Hyper-V needs to be enabled. There's a PowerShell command to automate it:
+  `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All`
+but it asks for a restart which needs to be confirmed by the user.
+- The user confirmation prompt needs to be automated at some point of time.
+
 <!-- Reference Links -->
 [Windows Terminal]: https://github.com/Jarmos-san/dotfiles/tree/master/Windows/Windows%20Terminal
 [Neovim]: https://github.com/Jarmos-san/dotfiles/tree/master/Windows/nvim
@@ -93,3 +106,4 @@ For backing up stuffs to Google Drive from the local drive storage automatically
 [Python]: https://www.python.org/
 [ShareX]: https://getsharex.com/
 [Google Backup & Sync]: https://www.google.com/drive/download/
+[Docker]: https://www.docker.com/
