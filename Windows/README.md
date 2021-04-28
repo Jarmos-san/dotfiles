@@ -87,6 +87,7 @@ Following are some observations I made to make it work:
   `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All`
 but it asks for a restart which needs to be confirmed by the user.
 - The user confirmation prompt needs to be automated at some point of time.
+- More information on enabling Hyper-V is available at: https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/enable-hyper-v
 
 <!-- Reference Links -->
 [Windows Terminal]: https://github.com/Jarmos-san/dotfiles/tree/master/Windows/Windows%20Terminal
