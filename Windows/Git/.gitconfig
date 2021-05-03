@@ -48,8 +48,6 @@
     insteadof = "Jarmos:"                           # Use case: "git clone Jarmos:<repo-name>"
 [pull]
 	rebase = true                                   # Is synonymous to "git pull --rebase".
-[push]
-    recurseSubmodules = true                        # Checks if a commit exists in a submodule before pushing to the remote. In case the check fails, it returns an error & doesn't push to the remote.
 [status]
     showStash = true                                # Shows existing stashed changes with the "git status" command.
 [tag]
