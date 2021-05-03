@@ -1,0 +1,58 @@
+# Git configuration reference available at: https://git-scm.com/docs/git-config
+[user]                                              # Basic user info like email & name. 
+	email = somraj.mle@gmail.com                    # More info with regards to this section is available at:
+	name = Jarmos-san                               # https://git-scm.com/docs/git-config#Documentation/git-config.txt-username
+	signingkey = 7AF6097D41B9FA3E                   # GPG Signing key used to sign commits & annotated tags.
+[commit]
+	gpgsign = true                                  # Ensures all commits are signed.
+[core]
+    excludesfile = ~/.gitignore                     # Global .gitignore file at $HOME/.git
+    attributesfile = ~/.gitattributes               # Global .gitattributes file at $HOME/.git
+    untrackedcache = true                           # Speeds up commands involving untracked files. More info available at: https://git-scm.com/docs/git-update-index#_untracked_cache
+	autocrlf = false                                # Ensures files in the remote repo has LF line endings but CRLF in the local repo.
+    eol = lf                                        # Adds LF line endings to all files.
+    longpaths = true                                # Circumvents the Windows limitation of 260 characters.
+    whitespace=fix                                  # Fixes whitespace errors introduced by editors.
+	editor = vim                                    # Uses Vim as the text editor for editing needs like commit messages & such.
+#   pager = delta                                     More info on this is available on https://github.com/dandavison/delta
+    pager = ""                                      # Defaults to Less but it doesn't ship with Windows. Need to look further into it.
+[diff]
+    tool = vimdiff                                  # Uses Vim for viewing Git diffs.
+[difftool]
+    prompt = false                                  # Ensures Git doesn't prompt before starting vimdiff.
+[merge]
+	tool = vimdiff                                  # Uses Vim for fixing merge conflicts.
+	conflictstyle = diff3                           # Is supposed to do something I'm not aware of.
+[help]
+	autocorrect = 1                                 # Enables autocorrecting wrong Git commands.
+[color]
+    ui = auto                                       # Default value is "auto" & it takes care of colouring issues.
+[color "branch"]                                    # Colour settings for Git branch command.
+    current = yellow bold
+    local = green bold
+    remote = cyan bold
+[color "diff"]                                      # Colour settings for Git diff command.
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+[color "status"]                                    # Colour settings for Git status command.
+    added = green bold
+    changed = yellow bold
+    untracked = red bold
+    defaultBranch = dev
+[url "git@github.com:"]                             # URL shorthand for the SSH address while cloning a remote repo.
+    insteadof = "gh:"                               # Use case: "git clone gh:<user-name>/<repo-name>
+[url "git@github.com:Jarmos-san/"]                  # URL shorthand for personal repositories. 
+    insteadof = "Jarmos:"                           # Use case: "git clone Jarmos:<repo-name>"
+[pull]
+	rebase = true                                   # Is synonymous to "git pull --rebase".
+[push]
+    recurseSubmodules = true                        # Checks if a commit exists in a submodule before pushing to the remote. In case the check fails, it returns an error & doesn't push to the remote.
+[status]
+    showStash = true                                # Shows existing stashed changes with the "git status" command.
+[tag]
+    forceSignAnnotated = true                       # Forces all annotated tags to be signed.
+    gpgSign = true                                  # Ensure all tags are GPG signed.
+# Add some alises here.
