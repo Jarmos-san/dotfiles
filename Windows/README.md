@@ -2,6 +2,7 @@
 <!-- TODO: Clean it up & organize details properly. -->
 This directory holds all the scripts, configurations, among other stuff required to setup my development environment on a Windows machine. The directory as of the latest commit, contains configurations for the following software(s) among other stuff like font(s).
 
+- [Git][Git]
 - [Windows Terminal][Windows Terminal] (depecrated in favour of Alacritty)
 - [Neovim][Neovim] (depecrated in favour of Vim)
 - [Fira Code Nerd Font][Fira Code Nerd Font]
@@ -14,7 +15,7 @@ This directory holds all the scripts, configurations, among other stuff required
 - [Python Programming Language][Python]
 - [ShareX][ShareX]
 - [Google Backup & Sync][Google Backup & Sync]
-- [Docker][Docker]
+- [Docker][Docker] (Not installing it for now as it requires better hardware)
 
 ## Setup Instructions
 
@@ -89,6 +90,16 @@ but it asks for a restart which needs to be confirmed by the user.
 - The user confirmation prompt needs to be automated at some point of time.
 - More information on enabling Hyper-V is available at: https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/enable-hyper-v
 
+### Git
+
+Installing Git on Windows isn't straight-forward. While there's [Git for Windows][Git for Windows] but it's too bloated for my use case, hence, MinGit is used. But sadly, it doesn't come with all the necessary dependencies either. On top of it, there's no straight way to configure it either. So, following are the detailed steps on how to get it working as soon as possible:
+
+1. Download the zipped file from it's [source repository][MinGit Releases] to the `C:\Tools` directory.
+2. Add the directory `C:\Tools\MinGit\cmd` to `$PATH`.
+3. There're additional configurations that needs to be made. Some include downloading a few missing dependencies but I'm still researching on what's the best & minimalistic solution to fix them.
+4. Copy the configuration files to `$HOME`(same as `%USERPROFILE%` Environment Variable) from the [Git](./Git] directory.
+5. Then ensure it works by typing the `git --version` command on the command-line interface.
+ 
 <!-- Reference Links -->
 [Windows Terminal]: https://github.com/Jarmos-san/dotfiles/tree/master/Windows/Windows%20Terminal
 [Neovim]: https://github.com/Jarmos-san/dotfiles/tree/master/Windows/nvim
