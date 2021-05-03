@@ -1,4 +1,8 @@
 # Starship
+<!--
+TODO: - Update the README
+      - Configurations available at: https://starship.rs/config/
+-->
 
 Starship is a cross-platform customizable prompt. This README holds all the instructions to properly set it up on your local Windows machine.
 
