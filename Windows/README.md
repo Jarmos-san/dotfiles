@@ -1,21 +1,28 @@
 # Dotfiles (supposed) for My Windows Development Environments
 <!-- TODO: Clean it up & organize details properly. -->
-This directory holds all the scripts, configurations, among other stuff required to setup my development environment on a Windows machine. The directory as of the latest commit, contains configurations for the following software(s) among other stuff like font(s).
+This directory holds all the scripts, configurations, among other stuff required to setup my development environment on a Windows machine. As of the latest commit, the directory contains configurations for the following software(s) among other stuff like font(s) & so on.
+
+Stuff required for all Software Development needs:
 
 - [Git][Git]
-- [Windows Terminal][Windows Terminal] (depecrated in favour of Alacritty)
-- [Neovim][Neovim] (depecrated in favour of Vim)
-- [Fira Code Nerd Font][Fira Code Nerd Font]
-- [PowerShell Core][PowerShell Core]
-- [Valve Steam][Steam]
+- [Windows Terminal][Windows Terminal] 
+- [Neovim][Neovim] 
 - [Visual Studio Code][VSCode]
-- [Alacritty][Alacritty]
-- [Transmission Bit Torrent Client][Transmission]
-- [VLC Media Player][VLC]
 - [Python Programming Language][Python]
-- [ShareX][ShareX]
 - [Google Backup & Sync][Google Backup & Sync]
 - [Docker][Docker] (Not installing it for now as it requires better hardware)
+
+Miscellaneous software with no configurations required:
+
+- [Steam][Steam]
+- [Transmission Bittorent Client][Transmission]
+- [VLC Media Plater][VLC]
+- [ShareX][ShareX]
+- [Google Backup & Sync][Google Drive]
+
+And fonts:
+
+- [Fira Code Nerd Font][Fira Code Nerd Font]
 
 ## Setup Instructions
 
@@ -40,10 +47,6 @@ While it's possible to use the original `vim` on Windows with `gvim` but [Neovim
 The configurations for my Neovim is available under this path: [dotfiles/Windows/Neovim/init.vim][My Neovim Config File]. At it's current condition it's heavily a WIP file which is why it's void of any content. Regardless of it, rest assured, Neovim is **VERY** usable without any configurations out-of-the-box.
 
 As for where to copy the configuration to. You can copy the contents of my `init.vim` under your `$env:LOCALAPPDATA\nvim\init.vim`. Then ensure to reload `nvim` on your preferred terminal.
-
-### PowerShell Code
-
-The open-source cross-platform version of Microsoft's PowerShell. More information is available at: [github.com/PowerShell/PowerShell][PowerShell Core].
 
 ### Steam
 
@@ -109,10 +112,8 @@ Installing Git on Windows isn't straight-forward. While there's [Git for Windows
 [Neovim Homepage]: https://adamtheautomator.com/new-windows-terminal
 [My Neovim Config File]: https://github.com/Jarmos-san/dotfiles/tree/master/Neovim/init.vim
 [Fira Code Nerd Font]: https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/FiraCode
-[PowerShell Core]: https://github.com/PowerShell/PowerShell
 [Valve Steam]: https://store.steampowered.com/
 [VSCode]: https://code.visualstudio.com/
-[Alacritty]: https://github.com/alacritty/alacritty
 [Transmission]: https://transmissionbt.com/
 [VLC]: https://www.videolan.org/
 [Python]: https://www.python.org/

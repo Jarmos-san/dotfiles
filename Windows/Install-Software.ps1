@@ -11,10 +11,6 @@ Write-Host "Installing Vim"
 winget install -e --id vim.vim
 Write-Host "Vim installed!"
 
-Write-Host "Installing PowerShell Core"
-winget install -e --id Microsoft.PowerShell
-Write-Host "PowerShell Core installed!"
-
 Write-Host "Installing Steam"
 winget install -e --id Valve.Steam
 Write-Host "Steam installed!"
