@@ -1,5 +1,7 @@
 # Jarmos's Dotfiles 
 
+![GitHub repo size](https://img.shields.io/github/repo-size/Jarmos-san/dotfiles?label=Repo%20Size&logo=GitHub&style=flat-square) ![GitHub](https://img.shields.io/github/license/Jarmos-san/dotfiles?label=License&logo=GitHub&style=flat-square) ![Twitter Follow](https://img.shields.io/twitter/follow/Jarmosan?style=social)
+
 This repository contains various "_dotfiles_" & other configuration files for my personal development needs. Following are a list of software I use regularly for all of my dev needs;
 
 - Git
