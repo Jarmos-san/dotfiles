@@ -60,38 +60,43 @@ local packer = require('packer')
 local use = packer.use
 
 -- Install rest of the required plugins
-packer.startup(function()
+packer.startup({
+    function()
 
-    use { -- Install packer.nvim itself
-        'wbthomason/packer.nvim',
-        opt = true
-    }
+        use { -- Install packer.nvim itself
+            'wbthomason/packer.nvim',
+            opt = true
+        }
 
-    use { -- Plugin for toggling comments on/off
-        'b3nj5m1n/kommentary',
-        event = { 'BufRead', 'BufNewFile' },
-        config = require('conf.kommentary').config
-    }
+        use { -- Plugin for toggling comments on/off
+            'b3nj5m1n/kommentary',
+            event = { 'BufRead', 'BufNewFile' },
+            config = require('conf.kommentary').config
+        }
 
-    use { -- File explorer plugin
-        'kyazdani42/nvim-tree.lua',
-        opt = true,
-        cmd = { 'NvimTreeOpen', 'NvimTreeToggle' },
-        setup = function()
-            require('conf.nvim_tree').setup()
-        end,
-        config = function()
-            require('conf.nvim_tree').config()
-        end,
-        requires = { 'kyazdani42/nvim-web-devicons', opt = true }
-    }
+        use { -- File explorer plugin
+            'kyazdani42/nvim-tree.lua',
+            opt = true,
+            cmd = { 'NvimTreeOpen', 'NvimTreeToggle' },
+            setup = function()
+                require('conf.nvim_tree').setup()
+            end,
+            config = function()
+                require('conf.nvim_tree').config()
+            end,
+            requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+        }
 
-    use { -- Visualize indents & whitespace
-        'lukas-reineke/indent-blankline.nvim',
-        event = { 'BufRead', },
-        config = require('conf.indentline').config
+        use { -- Visualize indents & whitespace
+            'lukas-reineke/indent-blankline.nvim',
+            event = { 'BufRead', },
+            config = require('conf.indentline').config
+        }
+    end,
+    config = {
+        git = { default_url_format = 'https://hub.fastgit.org/%s' }
     }
-end)
+})
 
 -- Global configurations related to plugins
 vim.g.gruvbox_contrast_dark = "hard"
