@@ -54,11 +54,6 @@ function M.config()
         auto_close = true,
         update_cwd = true,
         lsp_diagnostics = true,
-        view = {
-            width = 30,
-            side = 'left',
-            auto_resize = false,
-        },
     }
 
     -- Colorscheme concerns
