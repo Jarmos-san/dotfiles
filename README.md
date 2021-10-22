@@ -1,4 +1,4 @@
-# Jarmos's Dotfiles 
+# Jarmos's Dotfiles
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/Jarmos-san/dotfiles?label=Repo%20Size&logo=GitHub&style=flat-square) ![GitHub](https://img.shields.io/github/license/Jarmos-san/dotfiles?label=License&logo=GitHub&style=flat-square) ![Twitter Follow](https://img.shields.io/twitter/follow/Jarmosan?style=social)
 
@@ -9,9 +9,9 @@ This repository contains various "_dotfiles_" & other configuration files for my
 - [GNU Privacy Guard](https://gnupg.org) (`gpg` for signing `git` commits)
 - [VSCode](https://code.visualstudio.com) (an optional GUI-based Text Editor for the rare times when Neovim isn't enough)
 - [Bat](https://github.com/sharkdp/bat) (a drop-in replacement for `cat`)
-    + [batman](https://github.com/eth-p/bat-extras/blob/master/doc/batman.md)
-    + [batdiff](https://github.com/eth-p/bat-extras/blob/master/doc/batdiff.md)
-    + [prettybat](https://github.com/eth-p/bat-extras/blob/master/doc/prettybat.md)
+  - [batman](https://github.com/eth-p/bat-extras/blob/master/doc/batman.md)
+  - [batdiff](https://github.com/eth-p/bat-extras/blob/master/doc/batdiff.md)
+  - [prettybat](https://github.com/eth-p/bat-extras/blob/master/doc/prettybat.md)
 - [Glow](https://github.com/charmbracelet/glow) (a Markdown previewer for the TUI)
 - [Starship](https://starship.rs) (a fast & customizable prompt)
 - [Homebrew](https://brew.sh/) (an alternative & better package manager for Linux & MacOS)
@@ -20,14 +20,24 @@ This repository contains various "_dotfiles_" & other configuration files for my
 - [GNU Compiler Collection](https://gcc.gnu.org) (`gcc` required for compiling Treesitter parsers for `nvim-treesitter` plugin)
 - [asdf-vm](http://asdf-vm.com) (a CLI tool for managing multiple runtime versions of the software I used regularly)
 - [Python v3.x](https://www.python.org)
-    + [Poetry](https://python-poetry.org) (a modern packaging tool for Python)
-    + [Pipx](https://pypa.github.io/pipx) (a CLI tool to install Python CLI applications like `poetry`, `cookiecutter` & so on)
+  - [Poetry](https://python-poetry.org) (a modern packaging tool for Python)
+  - [Pipx](https://pypa.github.io/pipx) (a CLI tool to install Python CLI applications like `poetry`, `cookiecutter` & so on)
 - [NodeJS](https://nodejs.org) (a programming language runtime which a lot of frontend libraries & frameworks depend on)
 - [GNU Stow](https://www.gnu.org/software/stow) (yet another CLI tool to manage my dotfiles & configurations)
 
 Do note, the list of configuration is never-ending & is subject to change over time. It's **recommended** to not use the config files as is but take inspiration from & configure your own workflow.
 
 For those of you who work from on Windows machine through some Windows Subsystem for Linux (WSL) instance, you should checkout my [dotfiles-windows](https://github.com/Jarmos-san/dotfiles-windows) repository. That repository contains more information on how to setup a Linux development environment on Windows 10 (and Windows 11 when it's available publicly).
+
+## Caveats
+
+Following are some of caveats to take notice of while using these dotfiles:
+
+1. On WSL, Debian comes with a very minimal set of installed packages. And surprisingly, it doesn't include `wget` or `curl` either! So, it's advisable to install either one of them before using the dotfiles here. `wget` can be installed by running the `sudo apt install wget -y` command.
+
+2. Each WSL distro can be configured individually. These configurations are specific to a WSL environment & won't work on native Linux environments. For more info on the topic, refer to the [official Microsoft WSL docs](https://docs.microsoft.com/en-us/windows/wsl/wsl-config#configure-settings-with-wslconfig-and-wslconf). Besides, here's an [example `wsl.conf` file](https://raw.githubusercontent.com/Jarmos-san/dotfiles-windows/master/configs/wsl/wsl.conf) which should placed under `/etc`.
+
+...more such caveats will be noted as & when I come across any.
 
 ## How to Use This Project
 
