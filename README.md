@@ -4,12 +4,26 @@
 
 This repository contains various "_dotfiles_" & other configuration files for my personal development needs. Following are a list of software I use regularly for all of my dev needs;
 
-- Git
-- Neovim
-- VSCode
-- Bat (a drop-in replacement for `cat`)
-- Glow (a Markdown previewer for the TUI)
-- Starship (a fast & customizable prompt)
+- [Git](https://git-scm.com) (a version-controlled software to be used in tandem with GitHub0
+- [Neovim](https://neovim.io) (a terminal-based Text Editor)
+- [GNU Privacy Guard](https://gnupg.org) (`gpg` for signing `git` commits)
+- [VSCode](https://code.visualstudio.com) (an optional GUI-based Text Editor for the rare times when Neovim isn't enough)
+- [Bat](https://github.com/sharkdp/bat) (a drop-in replacement for `cat`)
+    + [batman](https://github.com/eth-p/bat-extras/blob/master/doc/batman.md)
+    + [batdiff](https://github.com/eth-p/bat-extras/blob/master/doc/batdiff.md)
+    + [prettybat](https://github.com/eth-p/bat-extras/blob/master/doc/prettybat.md)
+- [Glow](https://github.com/charmbracelet/glow) (a Markdown previewer for the TUI)
+- [Starship](https://starship.rs) (a fast & customizable prompt)
+- [Homebrew](https://brew.sh/) (an alternative & better package manager for Linux & MacOS)
+- [GitHub CLI](https://cli.github.com) (a CLI tool to manage GitHub from the terminal)
+- [Hugo](https://gohugo.io) (a Static Site Generator used for my personal blog)
+- [GNU Compiler Collection](https://gcc.gnu.org) (`gcc` required for compiling Treesitter parsers for `nvim-treesitter` plugin)
+- [asdf-vm](http://asdf-vm.com) (a CLI tool for managing multiple runtime versions of the software I used regularly)
+- [Python v3.x](https://www.python.org)
+    + [Poetry](https://python-poetry.org) (a modern packaging tool for Python)
+    + [Pipx](https://pypa.github.io/pipx) (a CLI tool to install Python CLI applications like `poetry`, `cookiecutter` & so on)
+- [NodeJS](https://nodejs.org) (a programming language runtime which a lot of frontend libraries & frameworks depend on)
+- [GNU Stow](https://www.gnu.org/software/stow) (yet another CLI tool to manage my dotfiles & configurations)
 
 Do note, the list of configuration is never-ending & is subject to change over time. It's **recommended** to not use the config files as is but take inspiration from & configure your own workflow.
 
