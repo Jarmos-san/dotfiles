@@ -37,6 +37,8 @@ Following are some of caveats to take notice of while using these dotfiles:
 
 2. Each WSL distro can be configured individually. These configurations are specific to a WSL environment & won't work on native Linux environments. For more info on the topic, refer to the [official Microsoft WSL docs](https://docs.microsoft.com/en-us/windows/wsl/wsl-config#configure-settings-with-wslconfig-and-wslconf). Besides, here's an [example `wsl.conf` file](https://raw.githubusercontent.com/Jarmos-san/dotfiles-windows/master/configs/wsl/wsl.conf) which should placed under `/etc`.
 
+3. If using Debian, by default most third-party packages other than core updates can be installed. Hence, it's important to update the `/etc/apt/sources.list` file with necessary info. A detailed writeup on the same is available in [this article](https://www.tecmint.com/fix-unable-to-locate-package-error-in-debian-9/).
+
 ...more such caveats will be noted as & when I come across any.
 
 ## How to Use This Project
