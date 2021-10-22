@@ -51,6 +51,7 @@ The configurations I used are heavily inspired from other giants of the communit
 
 - Salomon Popp's [disrupted/dotfiles](https://github.com/disrupted/dotfiles)
 - Mathias Bynen's [mathiasbynens/dotfiles](https://github.com/mathiasbynens/dotfiles)
+- [codeinthehouse's gist](https://gist.githubusercontent.com/codeinthehole/26b37efa67041e1307db/raw/67c06401c3cdb7f7f96aa9054e95cbe0e473b7f0/osx_bootstrap.sh)
 
 More will be added as & when I come across any.
 
