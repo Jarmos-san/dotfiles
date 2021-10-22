@@ -30,6 +30,8 @@ More will be added as & when I come across any.
 
 ## Support the Project
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/jarmos)
+
 If you found any of the dotfiles here helpful for your requirements in any way, consider supporting the project. And here's how you can do so:
 
 - Contribute to documenting the project. That way you can ensure my personal dotfiles are accessible to everyone in the community. And you can help out someone who's facing issues configuring their software as well.
