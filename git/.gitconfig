@@ -1,0 +1,85 @@
+# Git configuration reference available at: https://git-scm.com/docs/git-config 
+# Example gitconfig is avaialable at: http://michaelwales.com/articles/make-gitconfig-work-for-you/
+[user]                                              # Basic user info like email & name.
+    email = somraj.mle@gmail.com                    # More info with regards to this section is available at:
+    name = Jarmos-san                               # https://git-scm.com/docs/git-config#Documentation/git-config.txt-username
+    signingkey = 7AF6097D41B9FA3E                   # GPG Signing key used to sign commits & annotated tags.
+[commit]
+    gpgsign = true                                  # Ensures all commits are signed.
+[core]
+    excludesfile = ~/.gitignore_global              # Global .gitignore file at $HOME/.git
+    attributesfile = ~/.gitattributes_global        # Global .gitattributes file at $HOME/.git
+    untrackedcache = true                           # Speeds up commands involving untracked files. More info available at: https://git-scm.com/docs/git-update-index#_untracked_cache
+    eol = lf                                        # Explicitly specifies the line-endings to append when checking out files to VCS
+    longpaths = true                                # Circumvents the Windows limitation of 260 characters.
+    whitespace=fix                                  # Fixes whitespace errors introduced by editors.
+    editor = nvim                                   # Uses Vim as the text editor for editing needs like commit messages & such.
+    pager = delta
+[merge]
+    tool = nvimdiff                                 # Uses Vim for fixing merge conflicts.
+    conflictstyle = diff3                           # Is supposed to do something I'm not aware of.
+[mergetool]
+    keepBackup = false                              # Configures Git to not create "*.orig" files while resolving merge conflicts
+    prompt = false                                  # Configures Git to not prompt for confirmation while resolving merge conflicts
+    keepTemporaries = false                         # Removes temporary files creating while resolving merge conflicts
+[mergetool "nvimdiff"]
+    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\" \"$MERGED\" -c 'wincmd w' -c 'wincmd J'"
+[help]
+    autocorrect = 1                                 # Enables autocorrecting wrong Git commands.
+[color]
+# The colour format is like this: <FOREGROUND> <BACKGROUND> <ATTRIBUTE>.
+    ui = auto                                       # Default value is "auto" & it takes care of colouring issues.
+[color "branch"]                                    # Colour settings for Git branch command.
+    current = white magenta bold
+    local = green bold
+    remote = blue bold
+    upstream = magenta bold
+    plain = white bold
+[color "diff"]                                      # Colour settings for Git diff command.
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+[color "status"]                                    # Colour settings for Git status command.
+#   header = <something>                            # Need more information on what it's supposed to do.
+    added = green bold
+    updated = yellow bold
+    changed = red bold
+    untracked = cyan black bold
+# The following variables are used when "git st" is invoked.
+    localBranch = cyan bold
+    remoteBranch = red bold
+[gpg]
+    program = C:Program Files (x86)\\gnupg\\bin\\gpg# Explicitly specifies which GPG binary to use
+[url "git@github.com:"]                             # URL shorthand for the SSH address while cloning a remote repo.
+    insteadof = "gh:"                               # Use case: "git clone gh:<user-name>/<repo-name>
+[url "git@gist.github.com/"]                        # URL shorthand for SSH addresses of the GitHub Gists
+    insteadof = "gist:"                             # Use case: "git clone gist:<user-name>/<gist-id>
+[url "git@github.com:Jarmos-san/"]                  # URL shorthand for personal repositories.
+    insteadof = "Jarmos:"                           # Use case: "git clone Jarmos:<repo-name>"
+[status]
+    showStash = true                                # Shows existing stashed changes with the "git status" command.
+    relativePaths = false                           # All paths are shown relative to repository root rather than the current directory.
+[tag]
+    forceSignAnnotated = true                       # Forces all annotated tags to be signed.
+    gpgSign = true                                  # Ensure all tags are GPG signed.
+[init]
+    defaultBranch = dev
+# List of all aliases for Git commands are as follows:
+[alias]
+    st = status -sb                                 # Equivalent to "git status -sb"
+    ci = commit -m                                  # Equivalent to "git commit -m"
+    ca = commit -am                                 # Equivalent to "git commit -am"
+    pl = pull --rebase                              # Equivalent to "git pull --rebase"
+    pu = push                                       # Equivalent to "git push"
+    cl = clone                                      # Equivalent to "git clone"
+    vb = branch -vv                                 # Equivalent to "git branch -vv"
+    rv = remote -v                                  # Equivalent to "git remote -v"
+    ra = remote add origin                          # Equivalent to "git remote add"
+# Configurations for Delta (this are subject to change & voracious refactors)
+[delta]
+    syntax-theme = gruvbox-dark
+    line-numbers = true
+[credential "helperselector"]
+	selected = <no helper>
