@@ -1,0 +1,7 @@
+# Environment Variables for asdf-vm
+# More info is available at:
+# http://asdf-vm.com/manage/configuration.html#environment-variables
+export ASDF_CONFIG_FILE=$HOME/.config/asdf/asdfrc
+export ASDF_DEFAULT_TOOL_VERSIONS_FILENAME=$HOME/.config/asdf/tool-versions
+export ASDF_DIR=$HOME/.local/asdf
+export ASDF_DATA_DIR=$HOME/.local/asdf
