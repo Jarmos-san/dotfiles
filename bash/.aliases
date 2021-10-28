@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# Easier navigation in the CLI instead of typing "cd" all the time
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ~="cd ~"
+alias -- -="cd -"
+
+# Useful shortcuts to different folders
+alias dots="cd ~/.dotfiles"
+alias p="cd ~/projects"
+alias w="cd ~/work"
+
+# TODO: Write better aliases for the "ls" command
+
+# Update whole system with an alias instead of invoking multiple commands
+alias update='sudo apt update && sudo apt upgrade -y; brew update && brew upgrade && brew autoremove;'
+
+# Reload the shell (not sure why would it be required anyway)
+alias reload="exec ${SHELL} -l"
+
+# Print each PATH entry on a separate line
+alias path="echo -e ${PATH//:/\\n}'
+
