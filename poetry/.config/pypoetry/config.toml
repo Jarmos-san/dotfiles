@@ -1,0 +1,5 @@
+# Config file for Python package manager Poetry. More info will be available at:
+# https://python-poetry.org/docs/configuration
+
+[virtualenvs]
+in-project = true
