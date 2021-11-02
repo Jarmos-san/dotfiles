@@ -1,3 +1,6 @@
+# This Bash startup file is expected to be invoked only once.
+# More info is available at: https://linuxize.com/post/bashrc-vs-bash-profile
+
 # Add "~/.local/bin" to the "$PATH"
 export PATH="$HOME/.local/bin:$PATH";
 
