@@ -16,3 +16,4 @@ echo "Hello, World!"
 # For reference check the following repositories:
 # - https://github.com/mathiasbynens/dotfiles
 # - https://github.com/disrupted/dotfiles
+# - https://github.com/driesvints/dotfiles
