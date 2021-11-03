@@ -1,17 +1,29 @@
 #!/usr/bin/env bash
 
-echo "Hello, World!"
+echo "Boostrapping your machine now! Beware, some files could be overwritten"
 
-# TODO: Write a complete installation script
+# TODO: Programmatically identify if system is WSL or native Linux. Then
+# write configuration at "/etc/wsl.conf". The config details are available at:
+# https://github.com/Jarmos-san/dotfiles-windows/blob/master/configs/wsl/wsl.conf
 
-# Installation & configuration steps
-# 1. Check if Homebrew exists, if not install it
-# 2. Check if Git exists, if not install it using Homebrew
-# 3. Once Git is available, clone the repo to ~
-# 4. Install all necessary software
-# 5. Manage the config files by symlinking using GNU Stow
-# 6. Create necessary folders like "projects", "work" & such
-# 7. Setup SSH, GPG & WSL config files (at /etc/wsl.conf)
+echo "Installing Homebrew\n"
+curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
+
+# TODO: Check if "git" exists, if not install using Homebrew
+
+echo "Downloading dotfiles from remote repository\n"
+git clone git@github.com:Jarmos-san/dotfiles ~/.dotfiles
+cd ~/.dotfiles
+
+echo "Install necessary software as listed in Brewfile"
+brew bundle
+
+# TODO: Create symlinks using "stow"
+
+echo "Creating necessary folders\n"
+mkdir -p "projects" "work"
+
+# TODO: Setup GPG & SSH
 
 # For reference check the following repositories:
 # - https://github.com/mathiasbynens/dotfiles
