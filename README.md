@@ -18,10 +18,8 @@ This repository contains various "_dotfiles_" & other configuration files for my
 - [GitHub CLI](https://cli.github.com) (a CLI tool to manage GitHub from the terminal)
 - [Hugo](https://gohugo.io) (a Static Site Generator used for my personal blog)
 - [GNU Compiler Collection](https://gcc.gnu.org) (`gcc` required for compiling Treesitter parsers for `nvim-treesitter` plugin)
-- [asdf-vm](http://asdf-vm.com) (a CLI tool for managing multiple runtime versions of the software I used regularly)
 - [Python v3.x](https://www.python.org)
-  - [Poetry](https://python-poetry.org) (a modern packaging tool for Python)
-  - [Pipx](https://pypa.github.io/pipx) (a CLI tool to install Python CLI applications like `poetry`, `cookiecutter` & so on)
+- [Poetry](https://python-poetry.org) (a modern packaging tool for Python)
 - [NodeJS](https://nodejs.org) (a programming language runtime which a lot of frontend libraries & frameworks depend on)
 - [GNU Stow](https://www.gnu.org/software/stow) (yet another CLI tool to manage my dotfiles & configurations)
 
