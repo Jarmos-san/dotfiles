@@ -53,3 +53,5 @@ fi;
 # Enable Homebrew as well
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+# Enable Starship for a custom prompt experience
+eval "$(starship init bash)"
