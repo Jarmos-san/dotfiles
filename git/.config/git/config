@@ -1,6 +1,11 @@
 [init]
     defaultBranch = main
 
+[core]
+    editor = nvim
+    pager = bat
+    whitespace = fix
+
 [commit]
     gpgSign = true
 
