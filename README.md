@@ -45,6 +45,29 @@ Following are some of caveats to take notice of while using these dotfiles:
 
 TODO: Detail steps to use the configurations
 
+### Setting Up `git` Version Control System
+
+While the "bootstrap" script takes care of automating most of the configuration
+setup, setting up `git` still requires some manual effort. Following are a few
+steps you might've to after executing the "bootstrap" script.
+
+1. Append the following environment variables to the `~/.exports` file.
+	
+	```console
+	GIT_AUTHOR_NAME="your-name"
+	GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+	GIT_AUTHOR_EMAIL="you-email-address"
+	GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+	```
+2. Run the following commands after setting up those environment variables.
+
+	```console
+	git config --global user.name "$GIT_AUTHOR_NAME"
+	git config --global user.email "$GIT_AUTHOR_EMAIL"
+	```
+
+3. Add GPG keys to GitHub. Follow the [official guide](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-new-gpg-key-to-your-github-account) to set it up by yourself.
+
 ## Acknowledgements
 
 The configurations I used are heavily inspired from other giants of the community. Following are some of the repositories I keep an eye out for inspiration.
