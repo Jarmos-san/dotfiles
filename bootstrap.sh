@@ -6,12 +6,12 @@ echo "Boostrapping your machine now! Beware, some files could be overwritten"
 # write configuration at "/etc/wsl.conf". The config details are available at:
 # https://github.com/Jarmos-san/dotfiles-windows/blob/master/configs/wsl/wsl.conf
 
-echo "Installing Homebrew\n"
+echo "Installing Homebrew"
 curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
 
 # TODO: Check if "git" exists, if not install using Homebrew
 
-echo "Downloading dotfiles from remote repository\n"
+echo "Downloading dotfiles from remote repository"
 git clone git@github.com:Jarmos-san/dotfiles ~/.dotfiles
 cd ~/.dotfiles
 
@@ -20,10 +20,12 @@ brew bundle
 
 # TODO: Create symlinks using "stow"
 
-echo "Creating necessary folders\n"
+echo "Creating necessary folders"
 mkdir -p "projects" "work"
 
 # TODO: Setup GPG & SSH
+
+# TODO: Setup GitHub CLI. More info is available at: https://cli.github.com/manual
 
 # For reference check the following repositories:
 # - https://github.com/mathiasbynens/dotfiles
