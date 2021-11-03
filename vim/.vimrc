@@ -1,27 +1,22 @@
 colorscheme pablo
 
 set background=dark
-set nocompatible
-set clipboard=unnamed		" Use OS clipboard
-set wildmenu			" Enable tab completion for CLI
-set backspace=indent,eol,start	" Enable Backspace in Insert mode
-set gdefault			" Add the g flag to search/replace by default
-set encoding=utf-8 nobomb 	" Use UTF-8 without BOM
-set binary
-set noeol
+set nocp
+set clipboard=unnamed
+set wildmenu
+set backspace=indent,eol,start
+set gdefault
+set encoding=utf-8 nobomb
 set number relativenumber
 set tabstop=2
-set lcs=tab:▸\ ,trail:·,eol:¬,nbsp:_	" Show 'invisible' characters
-set list
 set hlsearch incsearch
 set ignorecase
 set noerrorbells
 set nostartofline
 set ruler
 set shortmess=atI
-set title
 set showcmd
-set scrolloff=3
+set scrolloff=6
 
 let mapleader=" "
 
@@ -36,10 +31,6 @@ endfunction
 
 noremap <leader>ss :call StripWhitespace()<CR>
 
-" Save a file as root
-noremap <leader>W :w !sudo tee % > /dev/null<CR>
-
-" Autocommands
 if has("autocmd")
 	" Enable file type detection
 	filetype on

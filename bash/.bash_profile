@@ -49,3 +49,7 @@ fi;
 # TODO: Add tab completion for SSH connections as well
 # Refer to the following resource for inspiration:
 # https://github.com/mathiasbynens/dotfiles/blob/66ba9b3cc0ca1b29f04b8e39f84e5b034fdb24b6/.bash_profile#L42
+
+# Enable Homebrew as well
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
