@@ -4,34 +4,35 @@ on: [push, pull_request]
 
 jobs:
   runPrettier:
+    # TODO: Implement the following GitHub Action instead of hacking stuff;
+    # https://github.com/marketplace/actions/prettier-action
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2.4.0
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
 
-      - name: Setup Node & NPM
-        uses: actions/setup-node@v2
-
-      - name: Install Prettier
-        run: npm install prettier
-
-      - name: Prettify Markdown Files
-        run: prettier . --write
+      - name: Prettify Markdown, JSON & YAML Files
+        uses: creyD/prettier_action@v4.0
+        with:
+          prettier_options: --write **/*.{json,md,yml}
+          only_changed: true
 
   runShfmt:
+    # TODO: Implement the following GitHub Action instead of hacking stuff;
+    # https://github.com/marketplace/actions/sh-checker
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2.4.0
 
-      - name: Install shfmt for Formatting Shell Scripts
-        run: apt install shfmt
-
-      - name: Format Shell Scripts
-        run: |
-          shfmt -w -s bash/.aliases bash/.functions bash/.bash_profile \
-          bash/.exports bash/.functions bootstrap.sh
-
+      - name: Run the Shell Checker
+        uses: luizm/action-sh-checker@master
+        env:
+          SHELLCHECK_OPTS: -e SC1004
+          SHFMT_OPTS: -s -w
 # TODO: Add a job for formatting Lua code as well which is used for
 # configuring Neovim.
 
