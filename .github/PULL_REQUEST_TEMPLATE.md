@@ -22,15 +22,14 @@ Have you tested it before making a PR?
 
 Does it work flawlessly on a Ubuntu Machine?
 
-- [] Yes
-- [] No
+- [ ] Yes
+- [ ] No
 
 **Test Configuration(s)**:
 
 - Ubuntu version:
 - Bash version:
 - Windows version:
-- PowerShell version:
 
 ## Checklist
 
