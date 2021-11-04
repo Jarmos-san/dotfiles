@@ -3,20 +3,20 @@
 # Make Neovim/Vim the default editor
 # TODO: Conditional make either Vim/Neovim the default editor depending
 # on what's available
-export EDITOR='vim';
+export EDITOR='vim'
 
 # Make Python use UTF-8 encoding for output to stdin, stdout & stderr
-export PYTHONIOENCODING='UTF-8';
+export PYTHONIOENCODING='UTF-8'
 
 # Increase the Bash history size. Allow 32³ entries wherein the default
 # is 500
-export HISTSIZE='32768';
-export HISTFILESIZE="${HISTSIZE}";
-export HISTCONTROL='ignoreboth';
+export HISTSIZE='32768'
+export HISTFILESIZE="${HISTSIZE}"
+export HISTCONTROL='ignoreboth'
 
 # Prefer UK English but use UTF-8
-export LANG='en_IN.UTF-8';
-export LC_ALL='en_IN.UTF-8';
+export LANG='en_IN.UTF-8'
+export LC_ALL='en_IN.UTF-8'
 
 # Use batman/less as the pager depending on what's available
 # TODO: Conditionally configure batman to be used as the pager for manuals
@@ -24,4 +24,4 @@ export MANPAGER='less'
 
 # Avoid issues with `gpg` if installed via Homebrew
 # Refer to: https://stackoverflow.com/a/42265848/8604951
-export GPG_TTY=$(tty);
+export GPG_TTY=$(tty)

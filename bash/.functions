@@ -2,7 +2,7 @@
 
 # Create a new directory & enter it
 function mkd() {
-	mkdir -p "$@" && cd "$_";
+  mkdir -p "$@" && cd "$_"
 }
 
 # TODO: Create a .tar.gz archive using gzip compression
@@ -11,17 +11,17 @@ function mkd() {
 # Determine size of a file or total size of a directory
 # TODO: Explain what's going on in the function code
 function fs() {
-	if du -b /dev/null > /dev/null 2>&1; then
-		local arg=-sbh;
-	else
-		local arg=-sb;
-	fi
-	
-	if [[ -n "$@" ]]; then
-		du $arg -- "$@";
-	else
-		du $arg .[^.]* ./*;
-	fi;
+  if du -b /dev/null >/dev/null 2>&1; then
+    local arg=-sbh
+  else
+    local arg=-sb
+  fi
+
+  if [[ -n $@ ]]; then
+    du $arg -- "$@"
+  else
+    du $arg .[^.]* ./*
+  fi
 }
 
 # TODO: Use "git" colored diff when available over the "batdiff"
@@ -32,8 +32,8 @@ function fs() {
 
 # A better "tree" wrapper with hidden files & color enabled. The ".git"
 # directory will be ignored as well. And thereafter the directories will be
-# listed first. The output is further piped into "less" to preserve color& 
+# listed first. The output is further piped into "less" to preserve color&
 # line numbers unless the output is small enough for one screen.
 function tre() {
-	tree -aC -I '.git|node_modules' --dirsfirst "$@" | less -FRNX;
+  tree -aC -I '.git|node_modules' --dirsfirst "$@" | less -FRNX
 }
