@@ -1,10 +1,46 @@
 [init]
     defaultBranch = main
 
+[merge]
+    tool = vimdiff
+
+[mergetool "vimdiff"]
+    cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c '$wincmd J'
+
+[mergetool]
+    keepBackup = false
+    prompt = false
+    keepTemporaries = false
+
+[push]
+    default = current
+
 [core]
     editor = nvim
     pager = bat
     whitespace = fix
+
+[color "branch"]
+    current = white magenta bold
+    local = green bold
+    remote = blue bold
+    upstream = magenta bold
+    plain = white bold
+
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+
+[color "status"]
+    added = green bold
+    updated = yellow bold
+    changed = red bold
+    untracked = cyan black bold
+    localBranch = cyan bold
+    remoteBranch = red bold
 
 [commit]
     gpgSign = true

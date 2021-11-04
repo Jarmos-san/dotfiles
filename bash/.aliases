@@ -22,5 +22,8 @@ alias update='sudo apt update && sudo apt upgrade -y; brew update && brew upgrad
 alias reload="exec ${SHELL} -l"
 
 # Print each PATH entry on a separate line
-alias path="echo -e ${PATH//:/\\n}'
+alias path="echo -e ${PATH//:/\\n}"
 
+# Better diffing tool
+# More info available at: https://github.com/eth-p/bat-extras/blob/master/doc/batdiff.md
+alias bdiff="batdiff --color --terminal-width=120 --pager=bat"
