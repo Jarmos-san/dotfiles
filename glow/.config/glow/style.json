@@ -2,12 +2,13 @@
   "document": {
     "block_prefix": "\n",
     "block_suffix": "\n",
-    "color": "250",
+    "color": "229",
     "margin": 2
   },
   "block_quote": {
     "indent": 1,
-    "indent_token": "│ "
+    "indent_token": "│ ",
+    "color": "109"
   },
   "paragraph": {},
   "list": {
@@ -15,14 +16,12 @@
   },
   "heading": {
     "block_suffix": "\n",
-    "color": "72",
+    "color": "208",
     "bold": true
   },
   "h1": {
-    "prefix": " ",
-    "suffix": " ",
-    "color": "228",
-    "background_color": "66",
+    "prefix": "# ",
+    "color": "208",
     "bold": true
   },
   "h2": {
@@ -66,7 +65,7 @@
     "unticked": "[ ] "
   },
   "link": {
-    "color": "66",
+    "color": "108",
     "underline": true
   },
   "link_text": {
@@ -88,7 +87,7 @@
     "background_color": "236"
   },
   "code_block": {
-    "color": "244",
+    "color": "248",
     "margin": 2,
     "chroma": {
       "text": {
