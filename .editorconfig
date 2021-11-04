@@ -13,3 +13,6 @@ insert_final_newline = true
 
 [*.{json,md,toml,yml}]
 indent_size = 2
+
+[*.{sh,aliases,functions,bash_profile,exports}]
+indent_size = 2
