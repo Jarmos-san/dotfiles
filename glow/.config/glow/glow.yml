@@ -1,7 +1,7 @@
 # Configures the stylesheet for Glow
 
 # Will be replaced by a custom JSON file later on
-style: "style.json"
+style: "~/.config/glow/style.json"
 # style : "auto"
 
 # Show local Markdown files only
