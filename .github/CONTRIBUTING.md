@@ -210,4 +210,16 @@ label from the same group.
 
 ### PR Labels
 
-**Section will be updated eventually.**
+| Labels             | Description of the Labels                                              |
+|:-----------------: |------------------------------------------------------------------------|
+| `bug`              | Issues reporting a bug                                                 |
+| `documentation`    | Issues related to documentations                                       |
+| `duplicate`        | Issue or PR threads which already has a previous entry                 |
+| `enhancement`      | Issue or PR which suggests some improvements                           |
+| `good first issue` | Issue which are easy to contribute to for beginners                    |
+| `help wanted`      | Issues and/or PRs which could benefit from a helping hand              |
+| `invalid`          | Issue and/or PR threads which are invalid or useless                   |
+| `pinned`           | Issue and/or PR threads which are important & needs attention          |
+| `question`         | Issue threads which should be converted to a Discussion thread instead |
+| `stale`            | Issue and/or PRs which hasn't received any feedback & will be closed   |
+| `wontfix`          | Issue threads which won't be fixed like ever                           |
