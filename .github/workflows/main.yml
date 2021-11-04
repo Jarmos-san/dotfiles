@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@2.4.0
+        uses: actions/checkout@v2.4.0
 
       - name: Setup Node & NPM
         uses: actions/setup-node@v2
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@2.4.0
+        uses: actions/checkout@v2.4.0
 
       - name: Install shfmt for Formatting Shell Scripts
         run: apt install shfmt
