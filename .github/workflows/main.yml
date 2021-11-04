@@ -4,27 +4,22 @@ on: [push, pull_request]
 
 jobs:
   runPrettier:
-
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@2.4.0
 
       - name: Prettify Markdown Files
 
   runShfmt:
-
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@2.4.0
 
       - name: Format Shell Scripts
-
 # TODO: Add a job for formatting Lua code as well which is used for
 # configuring Neovim.
 

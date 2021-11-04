@@ -1,7 +1,6 @@
 blank_issues_enabled: false
 
 contact_links:
-
   - name: Community Support
     url: https://github.com/Jarmos-san/blog/discussions
     about: Please ask and answer questions here.
@@ -12,4 +11,6 @@ contact_links:
 
   - name: Security Policy
     url: https://github.com/Jarmos-san/blog/security/policy
-    about: Refer to the Security Policy to report security vulnerabilities or if you would like to know about how your personal information is used.
+    about:
+      Refer to the Security Policy to report security vulnerabilities or if you
+      would like to know about how your personal information is used.
