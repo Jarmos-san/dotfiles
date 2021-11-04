@@ -5,21 +5,33 @@ on: [push, pull_request]
 jobs:
   runPrettier:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@2.4.0
 
+      - name: Setup Node & NPM
+        uses: actions/setup-node@v2
+
+      - name: Install Prettier
+        run: npm install prettier
+
       - name: Prettify Markdown Files
+        run: prettier . --write
 
   runShfmt:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@2.4.0
 
+      - name: Install shfmt for Formatting Shell Scripts
+        run: apt install shfmt
+
       - name: Format Shell Scripts
+        run: |
+          shfmt -w -s bash/.aliases bash/.functions bash/.bash_profile \
+          bash/.exports bash/.functions bootstrap.sh
+
 # TODO: Add a job for formatting Lua code as well which is used for
 # configuring Neovim.
 
