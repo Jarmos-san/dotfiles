@@ -13,7 +13,8 @@ alias dots="cd ~/.dotfiles"
 alias p="cd ~/projects"
 alias w="cd ~/work"
 
-# TODO: Write better aliases for the "ls" command
+# Better "ls" command
+alias ll='ls -aAl'
 
 # Update whole system with an alias instead of invoking multiple commands
 alias update='sudo apt update && sudo apt upgrade -y; brew update && brew upgrade && brew autoremove;'
