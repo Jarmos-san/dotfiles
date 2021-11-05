@@ -37,3 +37,6 @@ function fs() {
 function tre() {
   tree -aC -I '.git|node_modules' --dirsfirst "$@" | less -FRNX
 }
+
+# TODO: Create function wrapping Hugo, invoking which will "cd" into
+# "~/projects/blog" & start a dev server as well
