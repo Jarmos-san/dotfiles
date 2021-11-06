@@ -49,23 +49,38 @@ environment on Windows 10 (and Windows 11 when it's available publicly).
 
 Following are some of caveats to take notice of while using these dotfiles:
 
-1. On WSL, Debian comes with a very minimal set of installed packages. And
-   surprisingly, it doesn't include `wget` or `curl` either! So, it's advisable
-   to install either one of them before using the dotfiles here. `wget` can be
-   installed by running the `sudo apt install wget -y` command.
+1.  On WSL, Debian comes with a very minimal set of installed packages. And
+    surprisingly, it doesn't include `wget` or `curl` either! So, it's advisable
+    to install either one of them before using the dotfiles here. `wget` can be
+    installed by running the `sudo apt install wget -y` command.
 
-2. Each WSL distro can be configured individually. These configurations are
-   specific to a WSL environment & won't work on native Linux environments. For
-   more info on the topic, refer to the
-   [official Microsoft WSL docs](https://docs.microsoft.com/en-us/windows/wsl/wsl-config#configure-settings-with-wslconfig-and-wslconf).
-   Besides, here's an
-   [example `wsl.conf` file](https://raw.githubusercontent.com/Jarmos-san/dotfiles-windows/master/configs/wsl/wsl.conf)
-   which should placed under `/etc`.
+2.  Each WSL distro can be configured individually. These configurations are
+    specific to a WSL environment & won't work on native Linux environments. For
+    more info on the topic, refer to the
+    [official Microsoft WSL docs](https://docs.microsoft.com/en-us/windows/wsl/wsl-config#configure-settings-with-wslconfig-and-wslconf).
+    Besides, here's an
+    [example `wsl.conf` file](https://raw.githubusercontent.com/Jarmos-san/dotfiles-windows/master/configs/wsl/wsl.conf)
+    which should placed under `/etc`.
 
-3. If using Debian, by default most third-party packages other than core updates
-   can be installed. Hence, it's important to update the `/etc/apt/sources.list`
-   file with necessary info. A detailed writeup on the same is available in
-   [this article](https://www.tecmint.com/fix-unable-to-locate-package-error-in-debian-9/).
+3.  If using Debian, by default most third-party packages other than core
+    updates can be installed. Hence, it's important to update the
+    `/etc/apt/sources.list` file with necessary info. A detailed writeup on the
+    same is available in
+    [this article](https://www.tecmint.com/fix-unable-to-locate-package-error-in-debian-9/).
+
+4.  WSL2 even though is a significant improvement over it's predecessor is still
+    riddled with bugs. For example, this issue wherein
+    [the user can't access `localhost` from within WSL2](https://github.com/microsoft/WSL/issues/4619).
+    [This SO answer](https://stackoverflow.com/a/68106973/8604951) does provide
+    an explanation but I'm not sure if it's worth maintaining more headache.
+    Rather the easier & most straightforward way to fix this issue is to restart
+    WSL2 sessions by running the following command:
+
+        ```powershell
+        wsl --shutdow
+
+        # Start a new WSL2 session afterwards
+        ```
 
 ...more such caveats will be noted as & when I come across any.
 
