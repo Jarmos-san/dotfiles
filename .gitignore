@@ -69,5 +69,7 @@ tags
 **/nvim/scratch
 
 Brewfile.lock.json
+.exports
+garbage.sh
 
 # End of https://www.toptal.com/developers/gitignore/api/powershell,visualstudiocode,vim,git
