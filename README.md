@@ -73,6 +73,27 @@ Following are some of caveats to take notice of while using these dotfiles:
 
 TODO: Detail steps to use the configurations
 
+Setting up a dev environment for yourself should be easy without much manual
+work. As such, the `bootstrap.sh` script in the repository takes care of pretty
+much most of the automated setup. The remaining manual process that you'll need
+is for setting up personal credentials.
+
+That said, the following line of code pretty much takes care of setting up the
+dev environment:
+
+```console
+curl -fsSL https://raw.githubusercontent.com/Jarmos-san/dotfiles/main/bootstrap.sh | bash
+```
+
+**NOTE**: **DO NOT** run the aforementioned line of code as-is. Take a look at
+the script & understand what it does. Make the necessary changes as per your
+needs before executing it on your machine.
+
+The following section details some of the manual steps mentioned earlier. These
+steps takes care of the final procedures of setting up personal authentication
+credentials like - email & name for `git`. These manual steps can be automated
+as well so if you got ideas on how to do it, then your PRs are welcome!
+
 ### Setting Up `git` Version Control System
 
 While the "bootstrap" script takes care of automating most of the configuration
@@ -115,7 +136,9 @@ More will be added as & when I come across any.
 
 ## Resources For Learning to Use This Project
 
-- [The Ultimate Guide to SSH - Setting Up SSH Keys | freeCodeCamp](https://www.freecodecamp.org/news/the-ultimate-guide-to-ssh-setting-up-ssh-keys) to learn about setting up SSH on a local machine.
+- [The Ultimate Guide to SSH - Setting Up SSH Keys | freeCodeCamp](https://www.freecodecamp.org/news/the-ultimate-guide-to-ssh-setting-up-ssh-keys)
+  to learn about setting up SSH on a local machine.
+
 ## Support the Project
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/jarmos)
