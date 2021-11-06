@@ -113,6 +113,9 @@ inspiration.
 
 More will be added as & when I come across any.
 
+## Resources For Learning to Use This Project
+
+- [The Ultimate Guide to SSH - Setting Up SSH Keys | freeCodeCamp](https://www.freecodecamp.org/news/the-ultimate-guide-to-ssh-setting-up-ssh-keys) to learn about setting up SSH on a local machine.
 ## Support the Project
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/jarmos)
