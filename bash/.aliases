@@ -13,6 +13,10 @@ alias dots="cd ~/.dotfiles"
 alias p="cd ~/projects"
 alias w="cd ~/work"
 
+# Blog-specific shortcuts for easier navigation & usage
+alias blog="cd ~/projects/blog"
+alias blogd="blog && hugo -D --disableFastRender"
+
 # Better "ls" command
 alias ll='ls -aAl'
 
