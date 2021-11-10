@@ -1,5 +1,4 @@
 local utils = require('utils')  -- Utility wrapper functions
-
 local fn = vim.fn               -- Alias to execute Neovim-specific functions
 local opt = vim.opt             -- Alias to setup Neovim options
 local cmd = vim.cmd             --Alias for vim.cmd
@@ -28,7 +27,7 @@ opt.termguicolors = true
 opt.numberwidth = 2
 opt.cursorline = true
 opt.wrap = false
-opt.showmode = true             -- Will change it to "false" later on
+opt.showmode = false
 opt.lazyredraw = true
 opt.emoji = false
 opt.list = true
@@ -92,10 +91,14 @@ packer.startup({
             event = { 'BufRead', },
             config = require('conf.indentline').config
         }
+        use {
+            'famiu/feline.nvim',
+            config = require('feline').setup()
+        }
     end,
-    config = {
-        git = { default_url_format = "https://hub.fastgit.org/%s" }
-    }
+   config = {
+       git = { default_url_format = "https://hub.fastgit.org/%s" }
+   }
 })
 
 -- Global configurations related to plugins
