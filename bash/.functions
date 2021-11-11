@@ -27,8 +27,14 @@ function fs() {
 # TODO: Use "git" colored diff when available over the "batdiff"
 # Refer to: https://github.com/mathiasbynens/dotfiles/blob/66ba9b3cc0ca1b29f04b8e39f84e5b034fdb24b6/.functions#L61
 
-# TODO: Normalized function for opening directories.
-# Refer to: https://github.com/mathiasbynens/dotfiles/blob/66ba9b3cc0ca1b29f04b8e39f84e5b034fdb24b6/.functions#L144
+if [ ! $(uname -s) = 'Linux' ]; then
+    if [ $(uname -r) | grep -i 'microsoft' ]; then
+    # Linux on Windows using WSL2
+    alias open='explorer.exe';
+  else
+    alias open='xdg-open'
+  fi
+fi
 
 # A better "tree" wrapper with hidden files & color enabled. The ".git"
 # directory will be ignored as well. And thereafter the directories will be
