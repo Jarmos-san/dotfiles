@@ -18,6 +18,8 @@ brew 'bat-extras-batdiff'
 brew 'gcc'
 brew 'tree'
 brew 'stow'
+brew 'fish'
+brew 'exa'
 
 # Dev needs (such as programming languages & their tools)
 brew 'python3'
