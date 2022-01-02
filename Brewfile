@@ -27,6 +27,7 @@ brew 'poetry'
 
 brew 'node'
 brew 'prettier'
+brew 'unzip'
 
 # This Brewfile was created after taking inspiration from the following
 # examples:
