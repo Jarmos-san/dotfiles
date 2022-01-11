@@ -76,17 +76,17 @@ an explanation but I'm not sure if it's worth maintaining more headache.
 Rather the easier & most straightforward way to fix this issue is to restart
 WSL2 sessions by running the following command:
 
-        ```powershell
-        wsl --shutdow
+    ```powershell
+    wsl --shutdown
 
-        # Start a new WSL2 session afterwards
-        ```
+    # Start a new WSL2 session afterwards
+    ```
 
 5. Installing `gcc` using Homebrew for Linux doesn't work as expected. As for why does it not work still needs to be investigated some day. Until then it's important to add the following lines of code to the automatic installation script.
 
-        ```bash
-        sudo apt install --reinstall gcc build-essential -y
-        ```
+    ```bash
+    sudo apt install --reinstall gcc build-essential -y
+    ```
 
 ...more such caveats will be noted as & when I come across any.
 
