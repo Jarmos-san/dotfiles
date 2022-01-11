@@ -159,7 +159,8 @@ More will be added as & when I come across any.
 
 - [The Ultimate Guide to SSH - Setting Up SSH Keys | freeCodeCamp](https://www.freecodecamp.org/news/the-ultimate-guide-to-ssh-setting-up-ssh-keys)
   to learn about setting up SSH on a local machine.
-  - [Git for Professionals - freeCodeCamp | YouTube](https://youtu.be/Uszj_k0DGsg) to learn about using Git as a professional software developer
+
+- [Git for Professionals - freeCodeCamp | YouTube](https://youtu.be/Uszj_k0DGsg) to learn about using Git as a professional software developer
 
 ## Support the Project
 
