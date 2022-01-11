@@ -102,7 +102,9 @@ is for setting up personal credentials.
 That said, the following line of code pretty much takes care of setting up the
 dev environment:
 
-    curl -fsSL https://raw.githubusercontent.com/Jarmos-san/dotfiles/main/bootstrap.sh | bash
+  ```bash
+  curl -fsSL https://raw.githubusercontent.com/Jarmos-san/dotfiles/main/bootstrap.sh | bash
+  ```
 
 **NOTE**: **DO NOT** run the aforementioned line of code as-is. Take a look at
 the script & understand what it does. Make the necessary changes as per your
@@ -121,15 +123,19 @@ steps you might've to after executing the "bootstrap" script.
 
 1. Append the following environment variables to the `~/.exports` file.
 
-        GIT_AUTHOR_NAME="your-name"
-        GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
-        GIT_AUTHOR_EMAIL="you-email-address"
-        GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+      ```bash
+      GIT_AUTHOR_NAME="your-name"
+      GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+      GIT_AUTHOR_EMAIL="you-email-address"
+      GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+      ```
 
 2. Run the following commands after setting up those environment variables.
 
-        git config --global user.name "$GIT_AUTHOR_NAME"
-        git config --global user.email "$GIT_AUTHOR_EMAIL"
+      ```bash
+      git config --global user.name "$GIT_AUTHOR_NAME"
+      git config --global user.email "$GIT_AUTHOR_EMAIL"
+      ```
 
 3. Add GPG keys to GitHub. Follow the
    [official guide](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-new-gpg-key-to-your-github-account)
@@ -153,6 +159,7 @@ More will be added as & when I come across any.
 
 - [The Ultimate Guide to SSH - Setting Up SSH Keys | freeCodeCamp](https://www.freecodecamp.org/news/the-ultimate-guide-to-ssh-setting-up-ssh-keys)
   to learn about setting up SSH on a local machine.
+  - [Git for Professionals - freeCodeCamp | YouTube](https://youtu.be/Uszj_k0DGsg) to learn about using Git as a professional software developer
 
 ## Support the Project
 
