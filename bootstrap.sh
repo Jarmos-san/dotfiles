@@ -10,6 +10,8 @@ sleep 3
 
 echo "Installing Homebrew"
 curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
+echo "Homebrew installation complete!"
+sleep 3
 
 echo "Creating necessary folders"
 mkdir -p "projects" "work"
