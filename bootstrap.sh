@@ -2,12 +2,16 @@
 
 echo "Boostrapping your machine now! Beware, some files could be overwritten"
 
+echo "The system will be updated right now! Other prerequisite tools like Git & cURL will be installed as well."
+sudo apt-get update && sudo apt-get upgrade -y
+sudo apt-get install git curl
+echo "System update complete!"
+sleep 3
+
 read -p "Please provide a password for authenticating SSH connections: " -s password
 
 echo "Installing Homebrew"
 curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
-
-# TODO: Check if "git" exists, if not install using Homebrew
 
 echo "Creating necessary folders"
 mkdir -p "projects" "work"
