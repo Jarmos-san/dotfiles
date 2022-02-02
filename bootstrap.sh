@@ -13,6 +13,7 @@ curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | 
 echo "Homebrew installation complete!"
 sleep 3
 
+# TODO: Check if $PROJECT_DIR exists & is a directory, else create it
 echo "Creating necessary folders"
 mkdir -p "projects" "work"
 
@@ -25,7 +26,7 @@ function clone_repo {
 PROJECT_DIR="$HOME/projects"
 DOTFILES_DIR="$HOME/.dotfiles"
 
-# Attempted a refactor but need more guidance on how to do ie
+# TODO: Create an array of "projects" & loop through it to execute the "clone_repo" function on
 echo "Downloading personal projects"
 clone_repo "blog" $PROJECT_DIR
 clone_repo "jarvim" $PROJECT_DIR
