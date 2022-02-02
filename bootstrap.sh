@@ -16,15 +16,24 @@ sleep 3
 echo "Creating necessary folders"
 mkdir -p "projects" "work"
 
-# TODO: Refactor into a function
+# Function for cloning remote repositories to a specified location in the local repository
+function clone_repo {
+  repo=$1
+  git clone git@github.com:Jarmos-san/$repo $2
+}
+
+PROJECT_DIR="$HOME/projects"
+DOTFILES_DIR="$HOME/.dotfiles"
+
+# Attempted a refactor but need more guidance on how to do ie
 echo "Downloading personal projects"
-git clone git@github.com:Jarmos-san/blog $HOME/projects
-git clone git@github.com:Jarmos-san/jarvim $HOME/projects
+clone_repo "blog" $PROJECT_DIR
+clone_repo "jarvim" $PROJECT_DIR
 
 echo "Downloading dotfiles from remote repository"
-git clone git@github.com:Jarmos-san/dotfiles $HOME/.dotfiles
+clone_repo "dotfiles" $DOTFILES_DIR
 
 echo "Install necessary software as listed in Brewfile"
-brew bundle --no-lock --file=$HOME/.dotfiles/Brewfile
+brew bundle --no-lock --file=$DOTFILES_DIR/Brewfile
 
 # TODO: Create symlinks using "stow"
