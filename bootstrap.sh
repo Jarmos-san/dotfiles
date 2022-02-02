@@ -18,13 +18,11 @@ mkdir -p "projects" "work"
 
 # TODO: Refactor into a function
 echo "Downloading personal projects"
-cd projects
-git clone git@github.com:Jarmos-san/blog
-git clone git@github.com:Jarmos-san/jarvim
+git clone git@github.com:Jarmos-san/blog $HOME/projects
+git clone git@github.com:Jarmos-san/jarvim $HOME/projects
 
 echo "Downloading dotfiles from remote repository"
 git clone git@github.com:Jarmos-san/dotfiles $HOME/.dotfiles
-cd $HOME/.dotfiles
 
 echo "Install necessary software as listed in Brewfile"
 brew bundle --no-lock --file=$HOME/.dotfiles/Brewfile
