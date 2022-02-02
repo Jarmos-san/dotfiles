@@ -23,10 +23,10 @@ git clone git@github.com:Jarmos-san/blog
 git clone git@github.com:Jarmos-san/jarvim
 
 echo "Downloading dotfiles from remote repository"
-git clone git@github.com:Jarmos-san/dotfiles ~/.dotfiles
-cd ~/.dotfiles
+git clone git@github.com:Jarmos-san/dotfiles $HOME/.dotfiles
+cd $HOME/.dotfiles
 
 echo "Install necessary software as listed in Brewfile"
-brew bundle
+brew bundle --no-lock --file=$HOME/.dotfiles/Brewfile
 
 # TODO: Create symlinks using "stow"
