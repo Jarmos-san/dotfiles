@@ -49,40 +49,43 @@ environment on Windows 10 (and Windows 11 when it's available publicly).
 
 Following are some of caveats to take notice of while using these dotfiles:
 
-1. On WSL, Debian comes with a very minimal set of installed packages. And
-surprisingly, it doesn't include `wget` or `curl` either! So, it's advisable
-to install either one of them before using the dotfiles here. `wget` can be
-installed by running the `sudo apt install wget -y` command.
+1.  On WSL, Debian comes with a very minimal set of installed packages. And
+    surprisingly, it doesn't include `wget` or `curl` either! So, it's advisable
+    to install either one of them before using the dotfiles here. `wget` can be
+    installed by running the `sudo apt install wget -y` command.
 
-2. Each WSL distro can be configured individually. These configurations are
-specific to a WSL environment & won't work on native Linux environments. For
-more info on the topic, refer to the
-[official Microsoft WSL docs](https://docs.microsoft.com/en-us/windows/wsl/wsl-config#configure-settings-with-wslconfig-and-wslconf).
-Besides, here's an
-[example `wsl.conf` file](https://raw.githubusercontent.com/Jarmos-san/dotfiles-windows/master/configs/wsl/wsl.conf)
-which should placed under `/etc`.
+2.  Each WSL distro can be configured individually. These configurations are
+    specific to a WSL environment & won't work on native Linux environments. For
+    more info on the topic, refer to the
+    [official Microsoft WSL docs](https://docs.microsoft.com/en-us/windows/wsl/wsl-config#configure-settings-with-wslconfig-and-wslconf).
+    Besides, here's an
+    [example `wsl.conf` file](https://raw.githubusercontent.com/Jarmos-san/dotfiles-windows/master/configs/wsl/wsl.conf)
+    which should placed under `/etc`.
 
-3. If using Debian, by default most third-party packages other than core
-updates can be installed. Hence, it's important to update the
-`/etc/apt/sources.list` file with necessary info. A detailed writeup on the
-same is available in
-[this article](https://www.tecmint.com/fix-unable-to-locate-package-error-in-debian-9/).
+3.  If using Debian, by default most third-party packages other than core
+    updates can be installed. Hence, it's important to update the
+    `/etc/apt/sources.list` file with necessary info. A detailed writeup on the
+    same is available in
+    [this article](https://www.tecmint.com/fix-unable-to-locate-package-error-in-debian-9/).
 
-4. WSL2 even though is a significant improvement over it's predecessor is still
-riddled with bugs. For example, this issue wherein
-[the user can't access `localhost` from within WSL2](https://github.com/microsoft/WSL/issues/4619).
-[This SO answer](https://stackoverflow.com/a/68106973/8604951) does provide
-an explanation but I'm not sure if it's worth maintaining more headache.
-Rather the easier & most straightforward way to fix this issue is to restart
-WSL2 sessions by running the following command:
+4.  WSL2 even though is a significant improvement over it's predecessor is still
+    riddled with bugs. For example, this issue wherein
+    [the user can't access `localhost` from within WSL2](https://github.com/microsoft/WSL/issues/4619).
+    [This SO answer](https://stackoverflow.com/a/68106973/8604951) does provide
+    an explanation but I'm not sure if it's worth maintaining more headache.
+    Rather the easier & most straightforward way to fix this issue is to restart
+    WSL2 sessions by running the following command:
 
-    ```powershell
-    wsl --shutdown
+        ```powershell
+        wsl --shutdown
 
-    # Start a new WSL2 session afterwards
-    ```
+        # Start a new WSL2 session afterwards
+        ```
 
-5. Installing `gcc` using Homebrew for Linux doesn't work as expected. As for why does it not work still needs to be investigated some day. Until then it's important to add the following lines of code to the automatic installation script.
+5.  Installing `gcc` using Homebrew for Linux doesn't work as expected. As for
+    why does it not work still needs to be investigated some day. Until then
+    it's important to add the following lines of code to the automatic
+    installation script.
 
     ```bash
     sudo apt install --reinstall gcc build-essential -y
@@ -92,7 +95,9 @@ WSL2 sessions by running the following command:
 
 ## How to Use This Project
 
-TODO: Detail steps to use the configurations
+**TODO**: We'll be using [Chezmoi](https://chezmoi.io) to manage our dotfiles
+across all machines (including Unix-based ones & Windows)! I've only started
+using the project & it'll take a me while to figure out how to use it.
 
 Setting up a dev environment for yourself should be easy without much manual
 work. As such, the `bootstrap.sh` script in the repository takes care of pretty
@@ -102,9 +107,9 @@ is for setting up personal credentials.
 That said, the following line of code pretty much takes care of setting up the
 dev environment:
 
-  ```bash
-  curl -fsSL https://raw.githubusercontent.com/Jarmos-san/dotfiles/main/bootstrap.sh | bash
-  ```
+```bash
+curl -fsSL https://raw.githubusercontent.com/Jarmos-san/dotfiles/main/bootstrap.sh | bash
+```
 
 **NOTE**: **DO NOT** run the aforementioned line of code as-is. Take a look at
 the script & understand what it does. Make the necessary changes as per your
@@ -123,19 +128,19 @@ steps you might've to after executing the "bootstrap" script.
 
 1. Append the following environment variables to the `~/.exports` file.
 
-      ```bash
-      GIT_AUTHOR_NAME="your-name"
-      GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
-      GIT_AUTHOR_EMAIL="you-email-address"
-      GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
-      ```
+   ```bash
+   GIT_AUTHOR_NAME="your-name"
+   GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+   GIT_AUTHOR_EMAIL="you-email-address"
+   GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+   ```
 
 2. Run the following commands after setting up those environment variables.
 
-      ```bash
-      git config --global user.name "$GIT_AUTHOR_NAME"
-      git config --global user.email "$GIT_AUTHOR_EMAIL"
-      ```
+   ```bash
+   git config --global user.name "$GIT_AUTHOR_NAME"
+   git config --global user.email "$GIT_AUTHOR_EMAIL"
+   ```
 
 3. Add GPG keys to GitHub. Follow the
    [official guide](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-new-gpg-key-to-your-github-account)
@@ -160,7 +165,10 @@ More will be added as & when I come across any.
 - [The Ultimate Guide to SSH - Setting Up SSH Keys | freeCodeCamp](https://www.freecodecamp.org/news/the-ultimate-guide-to-ssh-setting-up-ssh-keys)
   to learn about setting up SSH on a local machine.
 
-- [Git for Professionals - freeCodeCamp | YouTube](https://youtu.be/Uszj_k0DGsg) to learn about using Git as a professional software developer
+- [Git for Professionals - freeCodeCamp | YouTube](https://youtu.be/Uszj_k0DGsg)
+  to learn about using Git as a professional software developer
+
+- [Chezmoi | To Manage Dotfiles Across Many Machines Securely](https://www.chezmoi.io/links/articles-podcasts-and-videos/)
 
 ## Support the Project
 
