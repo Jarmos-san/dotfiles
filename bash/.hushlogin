@@ -1,7 +1,0 @@
-# Just the presence of this file is more than enough. It disables the system
-# copyright notice, the date & time of last login, the message of the day as
-# well as other info that may otherwise appear on login. One such info is the
-# login & system resource usage info displayed when loging in for the first
-# time in a day on a WSL environment.
-
-# Refer to "man login" for detailed explanation about this file.
