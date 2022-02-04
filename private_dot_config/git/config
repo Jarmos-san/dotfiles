@@ -42,12 +42,12 @@
     localBranch = cyan bold
     remoteBranch = red bold
 
-[commit]
-    gpgSign = true
+# [commit]
+#     gpgSign = true
 
 [status]
     showStash = true
-    relativepaths = false			# All paths are show relative to repository root rather than the current directory
+    relativepaths = false	
 
 [tag]
     forceSignAnnotated = true
