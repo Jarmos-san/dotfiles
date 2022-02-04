@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# Easier navigation in the CLI instead of typing "cd" all the time
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ~="cd $HOME"
+alias -- -="cd -"
+
+# Useful shortcuts to different folders
+alias dots="cd $(chezmoi source-path)"
+alias p="cd $HOME/projects"
+alias w="cd $HOME/work"
+
+# Blog-specific shortcuts for easier navigation & usage
+alias blog="cd $HOME/projects/blog"
+alias blogd="blog && hugo -D --disableFastRender"
+
+# Better "ls" command
+alias ll='ls -aAl'
+
+# Update whole system with an alias instead of invoking multiple commands
+alias update='sudo apt-get update && sudo apt-get upgrade -y; brew update && brew upgrade && brew autoremove;'
+
+# Reload the shell (not sure why would it be required anyway)
+alias reload="exec ${SHELL} -l"
+
+# Print each PATH entry on a separate line
+alias path="echo -e ${PATH//:/\\n}"
+
+# Better diffing tool
+# More info available at: https://github.com/eth-p/bat-extras/blob/master/doc/batdiff.md
+alias bdiff="batdiff --color --terminal-width=120 --pager=bat"
