@@ -1,0 +1,4 @@
+# This file doesn't require anything more than the following contents!
+if [ -f "$HOME/.bashrc" ]; then
+. "$HOME/.bashrc"
+fi

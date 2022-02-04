@@ -1,0 +1,118 @@
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+# Append PATH with additional directories which will might or mightn't
+# contain binaries to be invoked from the CLI.
+export PATH="$HOME/.local/bin:$PATH:$HOME/bin"
+
+# Load certain shell dotfiles for better user info
+for file in ~/.{aliases, functions, exports}; do
+  [ -r "$file" ] && [ -f "$file" ] && source "$file";
+done;
+
+unset file;
+
+# Enable Homebrew to work somehow!
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# Don't put duplicate lines or lines starting with space in the history.
+# Avoid duplicate entries
+HISTCONTROL="erasedups:ignoreboth"
+
+# Set to huge values since it doesn't slow down the machine anyway
+HISTSIZE=500000
+HISTFILESIZE=100000
+
+# Record each line as it gets issued
+PROMPT_COMMAND='history -a'
+
+# Don't record certain sets of commands
+export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear"
+
+# Use standard ISO 8601 timestamps
+# %F = %Y-%m-%d
+# %T = %H:%M:%S
+HISTTIMEFORMAT='%F %T '
+
+# Add directories for fast access.
+# TODO: Need to experiment & optimized behaviour as per personal requirements
+CDPATH="."
+
+# Enable "bookmarks" for quick access to certain folders in the system
+shopt -s cdable_vars
+
+# The aforementioned "bookmarks" are below
+export dotfiles="$HOME/.local/share/chezmoi"
+export projects="$HOME/Projects"
+
+# Append to the history file, don't overwrite it
+shopt -s histappend
+
+# Check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# Case insenstive globbing used for filename path expansion
+shopt -s nocaseglob
+
+# Autocorrect typos in path names when using "cd"
+shopt -s cdspell 2> /dev/null
+
+# Correct speiing errors during tab-completion
+shopt -s dirspell 2> /dev/null
+
+# Following settings enables Bash to enter a dir, say "~/.config/kitty"
+# by simply typing "**/kitty"
+shopt -s autocd 2> /dev/null
+
+# Recursive globbing e.g. "echo **/*.etc"
+shopt -s globstar 2> /dev/null
+
+# Save multi-line commands as one command
+shopt -s cmdhist
+
+# Perform file completion in a case insensitive manner
+bind "set completion-ignore-case on"
+
+# Treat hyphens & underscores as equivalents
+bind "set completion-map-case on"
+
+# Display matches for ambiguous patterns at first tab press
+bind "set show-all-if-ambiguous on"
+
+# Immediately add a `/` when autocompleting symlinks to directories
+bind "set mark-symlinked-directories on"
+
+# Prevent file overwrite on stdout redirection
+# Use `>|` to force redirection to an existing file
+set -o noclobber
+
+# Enable incremental history search with up/down arrows (also Readline goodness)
+# Learn more about this here: http://codeinthehole.com/writing/the-most-important-command-line-tip-incremental-history-searching-with-inputrc/
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+bind '"\e[C": forward-char'
+bind '"\e[D": backward-char'
+
+# Add tab-completions for many Bash commands
+if which brew &> /dev/null && [ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]; then
+  export BASH_COMPLETION_COMPAT_DIR="$(brew --prefix)/etc/profile.d/bash_completion.sh"
+  source "$(brew --prefix)/etc/profile.d/bash_completion.sh"
+elif [ -f /etc/bash_completion ]; then
+  source /etc/bash_completion
+fi
+
+# Enable Homebrew
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# Enable Starship for custom prompt experience
+eval "$(starship init bash)"
+
+# BEGIN_KITTY_SHELL_INTEGRATION
+if test -n "$KITTY_INSTALLATION_DIR" -a -e "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; then source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; fi
+# END_KITTY_SHELL_INTEGRATION
+
+export EDITOR="nvim"
