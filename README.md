@@ -91,6 +91,10 @@ Following are some of caveats to take notice of while using these dotfiles:
     sudo apt install --reinstall gcc build-essential -y
     ```
 
+6. GNOME is bugged for whatever reason it's `kitty.desktop` file can't find the
+   `kitty` binary on `PATH`. A workaround is available on: [GNOME menu entry is
+   gone for whatever reason](https://github.com/kovidgoyal/kitty/discussions/4640).
+
 ...more such caveats will be noted as & when I come across any.
 
 ## How to Use This Project
