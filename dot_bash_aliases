@@ -9,7 +9,6 @@ alias ~="cd $HOME"
 alias -- -="cd -"
 
 # Useful shortcuts to different folders
-alias dots="cd $(chezmoi source-path)"
 alias p="cd $HOME/projects"
 alias w="cd $HOME/work"
 
