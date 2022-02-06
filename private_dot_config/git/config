@@ -1,6 +1,12 @@
 [init]
     defaultBranch = main
 
+[user]
+    name = Somraj Saha
+    email = somraj.1994@gmail.com
+    # GPG key for Jarmos Desktop (Ubuntu)
+    signingkey = 8D4E813222ED3EAC
+
 [merge]
     tool = vimdiff
 
@@ -42,8 +48,8 @@
     localBranch = cyan bold
     remoteBranch = red bold
 
-# [commit]
-#     gpgSign = true
+[commit]
+    gpgSign = true
 
 [status]
     showStash = true
