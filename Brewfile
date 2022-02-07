@@ -7,6 +7,7 @@
 # directory as well.
 
 # Binaries & CLI tools
+brew 'mdbook'
 brew 'hugo'
 brew 'gh'
 brew 'glow'
