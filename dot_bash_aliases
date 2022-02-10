@@ -17,7 +17,7 @@ alias blog="cd $HOME/projects/blog"
 alias blogd="blog && hugo -D --disableFastRender"
 
 # Better "ls" command
-alias ll='ls -aAl'
+alias ll="exa --long --all --classify --git --ignore-glob='.git'"
 
 # Update whole system with an alias instead of invoking multiple commands
 alias update='sudo apt-get update && sudo apt-get upgrade -y; brew update && brew upgrade && brew autoremove;'
