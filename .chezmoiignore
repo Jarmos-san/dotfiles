@@ -1,0 +1,11 @@
+README.md
+LICENSE
+Brewfile
+
+.prettierrc.json
+.gitignore
+.gitattributes
+.editorconfig
+.github
+
+assets/**/*
