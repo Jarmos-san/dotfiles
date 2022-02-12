@@ -1,0 +1,8 @@
+# Specify desired highlighting theme (e.g. "TwoDark"). Run `bat --list-themes`
+# for a list of all available themes
+--theme="gruvbox-dark"
+
+# Uncomment the following line if you are using less version >= 551 and want to
+# enable mouse scrolling support in `bat` when running inside tmux. This might
+# disable text selection, unless you press shift.
+--pager="less -R"
