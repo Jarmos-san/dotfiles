@@ -9,3 +9,4 @@ Brewfile
 .github
 
 assets/**/*
+settings.json
