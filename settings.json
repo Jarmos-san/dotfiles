@@ -1,0 +1,210 @@
+{
+  // ! Global Settings
+  // Editor
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "breadcrumbs.enabled": false,
+  "css.validate": false,
+  "editor.cursorBlinking": "smooth",
+  "editor.cursorSmoothCaretAnimation": true,
+  "editor.cursorStyle": "block",
+  "editor.cursorSurroundingLines": 1,
+  "editor.detectIndentation": true,
+  "editor.fontFamily": "'FiraCode NF', 'Cascadia Code SemiBold', Consolas, 'Courier New' monospace",
+  "editor.fontSize": 14,
+  "editor.fontLigatures": true,
+  "editor.fontWeight": "800",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.lineHeight": 0,
+  "editor.lineNumbers": "relative",
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "all",
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": false
+  },
+  "editor.quickSuggestionsDelay": 2,
+  "editor.snippetSuggestions": "top",
+  "editor.smoothScrolling": true,
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  "editor.suggestSelection": "first",
+  "editor.tabCompletion": "onlySnippets",
+  "editor.tabSize": 4,
+  "editor.wordBasedSuggestions": false,
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.wordWrapColumn": 220,
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  },
+  "problems.showCurrentInStatus": true,
+  // Extensions
+  "extensions.closeExtensionDetailsOnViewChange": true,
+  "extensions.ignoreRecommendations": false,
+  // Files
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 3000,
+  "files.associations": {
+    "*.ps1": "powershell"
+  },
+  "files.eol": "\n",
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/*coverage": true,
+    "**/coverage.*": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/.vscode/": true,
+    "**/.venv/": true,
+    "**/.*_cache/": true,
+    "**/__pycache__": true,
+    "**/node_modules/*": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/.hg/store/**": true,
+    "**/.venv/": true,
+    "**/node_modules/*": true
+  },
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  // File Explorer
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  // Window settings
+  "window.title": "${dirty}${activeEditorShort}${separator}${rootName}",
+  "window.titleSeparator": " | (>_<) | ",
+  "window.menuBarVisibility": "toggle",
+  // Workbench
+  "workbench.colorTheme": "Gruvbox Dark Soft",
+  "workbench.editorAssociations": {
+    "*.ipynb": "jupyter.notebook.ipynb"
+  },
+  "workbench.editor.closeOnFileDelete": true,
+  "workbench.editor.labelFormat": "short",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.list.smoothScrolling": true,
+  "workbench.panel.defaultLocation": "right",
+  "workbench.settings.editor": "json",
+  "workbench.sideBar.location": "right",
+  "workbench.startupEditor": "none",
+  // IntelliSense Settings
+  "debug.openDebug": "openOnDebugBreak",
+  // Git
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  // "git.enableCommitSigning": true,
+  "git.suggestSmartCommit": false,
+  "git.ignoreMissingGitWarning": true,
+  "git.ignoreRebaseWarning": true,
+  "git.inputValidationLength": 80,
+  "git.inputValidationSubjectLength": null,
+  "merge-conflict.autoNavigateNextConflict.enabled": true,
+  //
+  // ! Extensions
+  // Eslint
+  "eslint.alwaysShowStatus": true,
+  "eslint.packageManager": "yarn",
+  "eslint.run": "onSave",
+  // HTML Configurations
+  "html.format.wrapLineLength": 0,
+  "html.format.templating": true,
+  // Markdown Linter configurations
+  "markdownlint.config": {
+    "MD013": false,
+    "MD030": false,
+    "MD033": false,
+    "MD046": false
+  },
+  // Python
+  "python.analysis.completeFunctionParens": true,
+  "python.autoComplete.addBrackets": true,
+  "python.defaultInterpreterPath": "/bin/python3",
+  "python.formatting.provider": "black",
+  "python.languageServer": "Pylance",
+  "python.linting.ignorePatterns": [
+    ".vscode/*.py",
+    ".venv/**/*.py",
+    ".pytest_cache/**/*.py",
+    "**/site-packages/**/*.py"
+  ],
+  "python.linting.pylintEnabled": true,
+  "python.linting.pylintArgs": [],
+  "python.poetryPath": "poetry",
+  "python.showStartPage": false,
+  "python.testing.pytestEnabled": true,
+  // Prettier
+  "prettier.htmlWhitespaceSensitivity": "strict",
+  "security.workspace.trust.untrustedFiles": "open",
+  // ! Vim-specific settings
+  "vim.cursorStylePerMode.insert": "line-thin",
+  "vim.highlightedyank.enable": true,
+  "vim.cursorStylePerMode.normal": "block",
+  "vim.insertModeKeyBindings": [
+    {
+      "before": ["j", "k"],
+      "after": ["<Esc>"]
+    }
+  ],
+  // ! Language-specific Settings
+  "[markdown]": {
+    // "edtor.defaultFormatter": "esbenp.prettier-vscode",
+    // "editor.formatOnSave": true,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.wordWrap": "bounded",
+    "editor.wordWrapColumn": 80,
+    "editor.quickSuggestions": false
+  },
+  "[powershell]": {
+    "editor.wordWrap": "bounded",
+    "debug.saveBeforeStart": "nonUntitledEditorsInActiveGroup",
+    "editor.semanticHighlighting.enabled": false,
+    "editor.wordSeparators": "`~!@#%^&*()=+[{]}\\|;:'\",.<>/?"
+  },
+  "[python]": {
+    "editor.formatOnPaste": false,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    },
+    "editor.wordWrapColumn": 88
+  },
+  "[html]": {
+    "editor.suggest.insertMode": "replace",
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.wordWrap": "off",
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yaml]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "remoteHub.commitDirectlyWarning": "off"
+}
