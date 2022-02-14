@@ -6,8 +6,8 @@ Change the settings here to configure Neovim for your specific needs
 local opt = vim.opt     -- Alias to setup Neovim options
 
 -- Miscellaneous Neovim stuff that cant be programmed with native Lua code yet {{{2
-cmd [[ colorscheme gruvbox ]]
-cmd [[ highlight Normal guibg=NONE ctermbg=NONE ]]
+vim.cmd [[ colorscheme gruvbox ]]
+vim.cmd [[ highlight Normal guibg=NONE ctermbg=NONE ]]
 
 -- Indentation configs
 opt.expandtab = true    -- Use Spaces instead of tabs when <Tab> is pressed
