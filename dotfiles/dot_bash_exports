@@ -28,3 +28,6 @@ export PATH="$PATH:$HOME/.local/bin:$HOME/bin"
 # Avoid issues with `gpg` if installed via Homebrew
 # Refer to: https://stackoverflow.com/a/42265848/8604951
 export GPG_TTY=$(tty)
+
+# Change default config file location for the Starship prompt
+export STARSHIP_CONFIG=$HOME/.config/starship/starship.toml
