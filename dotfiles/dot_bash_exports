@@ -21,10 +21,6 @@ export LC_ALL="en_IN.UTF-8"
 
 export MANPAGER="less"
 
-# Append PATH with additional directories which will might or mightn't
-# contain binaries to be invoked from the CLI.
-export PATH="$PATH:$HOME/.local/bin:$HOME/bin"
-
 # Avoid issues with `gpg` if installed via Homebrew
 # Refer to: https://stackoverflow.com/a/42265848/8604951
 export GPG_TTY=$(tty)
