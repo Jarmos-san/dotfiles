@@ -2,3 +2,5 @@
 if [ -f "$HOME/.bashrc" ]; then
 . "$HOME/.bashrc"
 fi
+
+vim:ft=sh:ts=4:sw=4:et
