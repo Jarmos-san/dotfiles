@@ -7,4 +7,4 @@ fi
 # contain binaries to be invoked from the CLI.
 PATH=$HOME/.local/bin:$HOME/bin:$PATH
 
-vim:ft=sh:ts=4:sw=4:et
+# vim:ft=sh:ts=4:sw=4:et

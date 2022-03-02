@@ -35,4 +35,4 @@ alias path="echo -e ${PATH//:/\\n}"
 # More info available at: https://github.com/eth-p/bat-extras/blob/master/doc/batdiff.md
 alias bdiff="batdiff --color --terminal-width=120 --pager=bat"
 
-vim:ft=sh:ts=4:sw=4:et
+# vim:ft=sh:ts=4:sw=4:et
