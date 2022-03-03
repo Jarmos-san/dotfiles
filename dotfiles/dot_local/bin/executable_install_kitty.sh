@@ -5,5 +5,3 @@
 # TODO: Write the script
 
 echo "Hello, world!"
-
-# vim:ft=sh:ts=4:sw=4:et
