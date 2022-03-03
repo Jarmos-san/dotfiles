@@ -71,5 +71,7 @@ tags
 Brewfile.lock.json
 .extras
 garbage.sh
+dotfiles/dot_bash_logout
+dotfiles/private_dot_bash_history
 
 # End of https://www.toptal.com/developers/gitignore/api/powershell,visualstudiocode,vim,git
