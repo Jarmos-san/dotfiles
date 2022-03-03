@@ -1,10 +1,9 @@
 # This file doesn't require anything more than the following contents!
 if [ -f "$HOME/.bashrc" ]; then
-. "$HOME/.bashrc"
+    . "$HOME/.bashrc"
 fi
 
 # Append PATH with additional directories which will might or mightn't
 # contain binaries to be invoked from the CLI.
-PATH=$HOME/.local/bin:$HOME/bin:$PATH
+PATH=~/.local/bin:~/bin:$PATH
 
-# vim:ft=sh:ts=4:sw=4:et
