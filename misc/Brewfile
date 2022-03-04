@@ -24,6 +24,7 @@ brew "exa"
 # Dev needs (such as programming languages & their tools)
 brew "python3"
 brew "poetry"
+brew "pre-commit"
 
 brew "node"
 brew "prettier"
