@@ -4,6 +4,8 @@ tap "homebrew/bundle"
 tap "eth-p/software"
 
 # Binaries & CLI tools
+brew "shellcheck"
+brew "shfmt"
 brew "jq"
 brew "mdbook"
 brew "hugo"
