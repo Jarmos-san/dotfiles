@@ -34,3 +34,6 @@ alias path="echo -e ${PATH//:/\\n}"
 # Better diffing tool
 # More info available at: https://github.com/eth-p/bat-extras/blob/master/doc/batdiff.md
 alias bdiff="batdiff --color --terminal-width=120 --pager=bat"
+
+# Read lines of code in a given file
+alias loc="wc -l"
