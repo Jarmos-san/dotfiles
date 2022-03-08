@@ -20,6 +20,7 @@ brew "gcc"
 brew "stow"
 brew "fish"
 brew "exa"
+brew "bitwarden-cli"
 
 # Dev needs (such as programming languages & their tools)
 brew "python3"
