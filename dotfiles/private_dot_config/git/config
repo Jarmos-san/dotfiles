@@ -103,3 +103,5 @@
     vb = branch -vv
     rv = remote -v
     ra = remote add origin
+    tar = archive --format=tar
+    zip = archive --format=zip
