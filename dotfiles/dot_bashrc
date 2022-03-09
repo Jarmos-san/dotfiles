@@ -107,6 +107,3 @@ gpgconf --launch gpg-agent
 
 # Configure completion for the GitHub CLI tool
 eval "$(gh completion -s bash)"
-
-# Configure completion for Chezmoi (the dotfiles manager)
-eval "$(chezmoi completion bash)"
