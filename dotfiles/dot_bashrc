@@ -8,6 +8,7 @@ esac
 source ~/.bash_aliases
 source ~/.bash_exports
 source ~/.bash_functions
+source ~/.bash_secrets
 
 # Enable Homebrew to work somehow!
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
