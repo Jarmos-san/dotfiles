@@ -1,3 +1,5 @@
+{{- $personalEmail := promptString "personalEmail" -}}
+
 encryption = "age"
 
 [age]
@@ -11,3 +13,6 @@ encryption = "age"
 
 [secret]
   command = "passage"
+
+[data]
+  personalEmail: {{ $email | quote }}
