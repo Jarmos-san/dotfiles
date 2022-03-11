@@ -5,7 +5,7 @@ case $- in
 esac
 
 # Load certain shell dotfiles for better user info
-for BASH_FILES in .bash_{aliases,exports,functions}; do
+for BASH_FILES in $HOME/.bash_{aliases,exports,functions}; do
     source $BASH_FILES
 done 
 
