@@ -5,10 +5,9 @@ case $- in
 esac
 
 # Load certain shell dotfiles for better user info
-source ~/.bash_aliases
-source ~/.bash_exports
-source ~/.bash_functions
-source ~/.bash_secrets
+for BASH_FILES in .bash_{aliases,exports,functions}; do
+    source $BASH_FILES
+done 
 
 # Enable Homebrew to work somehow!
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
