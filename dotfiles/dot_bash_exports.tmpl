@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
 # Make Neovim/Vim the default editor
-export EDITOR="nvim"
+if ! [[ -x ($command -v nvim) ]]; then
+    export EDITOR="vi"
+else
+    export EDITOR="nvim"
+fi
 
 # Make Python use UTF-8 encoding for output to stdin, stdout & stderr
 export PYTHONIOENCODING="UTF-8"
