@@ -27,3 +27,6 @@ export GPG_TTY=$(tty)
 
 # Change default config file location for the Starship prompt
 export STARSHIP_CONFIG=$HOME/.config/starship/starship.toml
+
+# Access tokens for using GitHub CLI
+export GH_TOKEN="{{ secret "show" "GH_TOKEN" }}"
