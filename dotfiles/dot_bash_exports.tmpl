@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Make Neovim/Vim the default editor
-if ! [[ -x ($command -v nvim) ]]; then
+if ! [[ -x "$(command -v nvim)" ]]; then
     export EDITOR="vi"
 else
     export EDITOR="nvim"
