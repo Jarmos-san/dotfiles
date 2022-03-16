@@ -38,3 +38,28 @@ fi
 
 # TODO: Create function wrapping Hugo, invoking which will "cd" into
 # "~/projects/blog" & start a dev server as well
+
+################################################################################
+################################################################################
+#                                                                              #
+# Update the Kitty terminal by invoking a single command on the CLI            #
+#                                                                              #
+# GLOBALS:                                                                     #
+#   None                                                                       #
+#                                                                              #
+# ARGUMENTS:                                                                   #
+#   None                                                                       #
+#                                                                              #
+# OUTPUTS:                                                                     #
+#   None                                                                       #
+#                                                                              #
+# RETURNS:                                                                     #
+#   None                                                                       #
+#                                                                              #
+################################################################################
+################################################################################
+function update_kitty() {
+  # TODO: Customise the installation procedure as detailed in the docs below:
+  # https://sw.kovidgoyal.net/kitty/binary/#customizing-the-installation
+  curl -fsSL https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
+}
