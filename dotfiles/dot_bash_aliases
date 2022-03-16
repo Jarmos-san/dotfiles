@@ -37,3 +37,13 @@ alias bdiff="batdiff --color --terminal-width=120 --pager=bat"
 
 # Read lines of code in a given file
 alias loc="wc -l"
+
+# Open browsers and/or file explorers depending on the system
+# if [[ ! $(uname -s) = "Linux" ]]; then
+#   if [[ $(uname -r) | grep -i "microsoft" ]]; then
+#    # Linux on Windows using WSL2
+#    alias open="explorer.exe";
+#  else
+#    alias open="xdg-open"
+#  fi
+#fi

@@ -24,21 +24,6 @@ function fs() {
   fi
 }
 
-# TODO: Use "git" colored diff when available over the "batdiff"
-# Refer to: https://github.com/mathiasbynens/dotfiles/blob/66ba9b3cc0ca1b29f04b8e39f84e5b034fdb24b6/.functions#L61
-
-if [ ! $(uname -s) = 'Linux' ]; then
-    if [ $(uname -r) | grep -i 'microsoft' ]; then
-    # Linux on Windows using WSL2
-    alias open='explorer.exe';
-  else
-    alias open='xdg-open'
-  fi
-fi
-
-# TODO: Create function wrapping Hugo, invoking which will "cd" into
-# "~/projects/blog" & start a dev server as well
-
 ################################################################################
 ################################################################################
 #                                                                              #
