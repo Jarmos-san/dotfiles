@@ -5,6 +5,7 @@ For more info on Vim Runtimepath check out h: rtp
 
 require('core.settings')
 require('core.keymaps')
+require('core.plugins')
 
 --[[
 Use resources for future references:
