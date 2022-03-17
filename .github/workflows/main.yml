@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/JohnnyMorganz/stylua-action@1.0.0
+        uses: JohnnyMorganz/stylua-action@1.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --check dotfiles/private_dot_config/nvim/**/*.lua
