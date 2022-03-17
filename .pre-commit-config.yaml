@@ -12,3 +12,5 @@ repos:
     rev: v0.12.5
     hooks:
       - id: stylua-system
+        args: [--verbose]
+        verbose: true
