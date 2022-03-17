@@ -3,8 +3,6 @@ Module for installing plugins
 Add, remove or configure plugins as per your needs over here
 --]]
 
-local execute = vim.nvim_exec_command
-
 -- "packer.nvim" installation path
 local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/opt/packer.nvim'
 
@@ -29,7 +27,10 @@ require('packer').startup(function(use)
 
     use {
         'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate'
+        run = ':TSUpdate',
+        config = function()
+            require('confs.treesitter').config()
+        end
     }
 
     if packer_boostrap then
