@@ -26,6 +26,7 @@ brew "bitwarden-cli"
 brew "python3"
 brew "poetry"
 brew "pre-commit"
+brew "stylua"
 
 brew "node"
 brew "prettier"
