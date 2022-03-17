@@ -33,6 +33,12 @@ jobs:
         env:
           SHELLCHECK_OPTS: -e SC1004
           SHFMT_OPTS: -s -w
-# TODO: Add a job for formatting Lua code as well which is used for
-# configuring Neovim.
 
+  runStyLua:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/JohnnyMorganz/stylua-action@1.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --check dotfiles/private_dot_config/nvim/**/*.lua
