@@ -3,9 +3,9 @@ Main module that Neovim reads & executes in the runtimepath.
 For more info on Vim Runtimepath check out h: rtp
 --]]
 
-require('core.settings')
-require('core.keymaps')
-require('core.plugins')
+require("core.settings")
+require("core.keymaps")
+require("core.plugins")
 
 --[[
 Use resources for future references:
