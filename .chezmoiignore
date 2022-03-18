@@ -10,3 +10,5 @@ key.txt.age
 
 assets/**/*
 misc/**/*
+
+**/packer_compiled.lua
