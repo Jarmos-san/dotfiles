@@ -9,6 +9,7 @@ local M = {}
 
 function M.config()
     require("mini.statusline").setup({})
+    require("mini.indentscope").setup({})
 end
 
 return M
