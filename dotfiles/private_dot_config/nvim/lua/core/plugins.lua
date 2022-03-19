@@ -47,6 +47,10 @@ require("packer").startup(function(use)
         config = function()
             require("confs.mini_nvim").config()
         end,
+        requires = {
+            "kyazdani42/nvim-web-devicons",
+            after = "echasnovski/mini.nvim",
+        },
     })
 
     if packer_boostrap then
