@@ -10,6 +10,7 @@ local M = {}
 function M.config()
     require("mini.statusline").setup({})
     require("mini.indentscope").setup({})
+    require("mini.tabline").setup({})
 end
 
 return M
