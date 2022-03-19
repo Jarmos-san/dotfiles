@@ -35,9 +35,10 @@ opt.list = true -- Show invisible characters
 opt.listchars = {
     eol = "↲",
     tab = "→ ",
+    space = "·",
     extends = "…",
     precedes = "…",
-    trail = "·",
+    trail = ".",
 }
 opt.shortmess:append("I") -- Disables the startup screen & info
 opt.iskeyword:prepend({ "-" }) -- Treat dash-separated words as a single word textobject
