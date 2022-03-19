@@ -42,6 +42,7 @@ require("packer").startup({
             end,
         })
 
+        -- TODO: Configure "mini.indentscope to ignore certain buffer types"
         use({
             "echasnovski/mini.nvim",
             branch = "stable",
