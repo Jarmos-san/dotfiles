@@ -33,11 +33,11 @@ opt.lazyredraw = true
 opt.emoji = false
 opt.list = true -- Show invisible characters
 opt.listchars = {
-	eol = "↲",
-	tab = "→ ",
-	extends = "…",
-	precedes = "…",
-	trail = "·",
+    eol = "↲",
+    tab = "→ ",
+    extends = "…",
+    precedes = "…",
+    trail = "·",
 }
 opt.shortmess:append("I") -- Disables the startup screen & info
 opt.iskeyword:prepend({ "-" }) -- Treat dash-separated words as a single word textobject
@@ -54,13 +54,13 @@ opt.hidden = true
 opt.splitbelow = true
 opt.splitright = true
 opt.fillchars = {
-	vert = "│",
-	fold = " ",
-	diff = "-", -- alternatives: ⣿ ░
-	msgsep = "‾",
-	foldopen = "▾",
-	foldsep = "│",
-	foldclose = "▸",
+    vert = "│",
+    fold = " ",
+    diff = "-", -- alternatives: ⣿ ░
+    msgsep = "‾",
+    foldopen = "▾",
+    foldsep = "│",
+    foldclose = "▸",
 }
 
 -- Wild & File-globbing patterns {{{2

@@ -21,49 +21,61 @@ end
 -- Load "packer.nvim"
 vim.cmd([[ packadd! packer.nvim ]])
 
-require("packer").startup(function(use)
-    use({
-        "wbthomason/packer.nvim",
-        opt = true,
-    })
+require("packer").startup({
+    function(use)
+        use({
+            "wbthomason/packer.nvim",
+            opt = true,
+        })
 
-    use({
-        "nvim-treesitter/nvim-treesitter",
-        requires = {
-            {
-                "p00f/nvim-ts-rainbow",
-                after = "nvim-treesitter",
+        use({
+            "nvim-treesitter/nvim-treesitter",
+            requires = {
+                {
+                    "p00f/nvim-ts-rainbow",
+                    after = "nvim-treesitter",
+                },
             },
-        },
-        run = ":TSUpdate",
-        config = function()
-            require("confs.treesitter").config()
-        end,
-    })
+            run = ":TSUpdate",
+            config = function()
+                require("confs.treesitter").config()
+            end,
+        })
 
-    use({
-        "echasnovski/mini.nvim",
-        branch = "stable",
-        config = function()
-            require("confs.mini_nvim").config()
-        end,
-        requires = {
-            "kyazdani42/nvim-web-devicons",
-            after = "echasnovski/mini.nvim",
-        },
-    })
+        use({
+            "echasnovski/mini.nvim",
+            branch = "stable",
+            config = function()
+                require("confs.mini_nvim").config()
+            end,
+            requires = {
+                "kyazdani42/nvim-web-devicons",
+                after = "echasnovski/mini.nvim",
+            },
+        })
 
-    use({
-        "kyazdani42/nvim-tree.lua",
-        requires = {
-            "kyazdani42/nvim-web-devicons",
-        },
-        config = function()
-            require("nvim-tree").setup({})
-        end,
-    })
+        use({
+            "kyazdani42/nvim-tree.lua",
+            requires = {
+                "kyazdani42/nvim-web-devicons",
+            },
+            config = function()
+                require("nvim-tree").setup({})
+            end,
+        })
 
-    if packer_boostrap then
-        require("packer").sync()
-    end
-end)
+        if packer_boostrap then
+            require("packer").sync()
+        end
+    end,
+    config = {
+        profile = {
+            enable = true,
+        },
+        display = {
+            open_fn = function()
+                return require("packer.util").float()
+            end,
+        },
+    },
+})
