@@ -41,8 +41,10 @@ require("packer").startup(function(use)
         end,
     })
 
-    -- Use the "mini.nvim" for easier configurations.
-    -- More info is available at: https://github.com/echasnovski/mini.nvim
+    use({
+        "echasnovski/mini.nvim",
+        branch = "stable",
+    })
 
     if packer_boostrap then
         require("packer").sync()
