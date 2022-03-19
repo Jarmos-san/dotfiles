@@ -44,6 +44,9 @@ require("packer").startup(function(use)
     use({
         "echasnovski/mini.nvim",
         branch = "stable",
+        config = function()
+            require("confs.mini_nvim").config()
+        end,
     })
 
     if packer_boostrap then
