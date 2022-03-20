@@ -27,4 +27,8 @@ function M.config()
     require("mini.cursorword").setup({})
 end
 
+function M.setup()
+    -- TODO: Write a couple of autocommands to disable some of the submodules when needed
+end
+
 return M
