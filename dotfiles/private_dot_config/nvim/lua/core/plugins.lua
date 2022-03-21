@@ -30,6 +30,7 @@ require("packer").startup({
 
         use({
             "nvim-treesitter/nvim-treesitter",
+            event = { "VimEnter" },
             requires = {
                 {
                     "p00f/nvim-ts-rainbow",
@@ -44,6 +45,7 @@ require("packer").startup({
 
         use({
             "echasnovski/mini.nvim",
+            event = { "BufEnter" },
             branch = "stable",
             setup = function()
                 require("confs.mini_nvim").setup()
@@ -59,6 +61,9 @@ require("packer").startup({
 
         use({
             "kyazdani42/nvim-tree.lua",
+            opt = true,
+            module = "nvim-tree",
+            cmd = "NvimTreeToggle",
             requires = {
                 "kyazdani42/nvim-web-devicons",
             },
