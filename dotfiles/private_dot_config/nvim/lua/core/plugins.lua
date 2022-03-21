@@ -67,8 +67,11 @@ require("packer").startup({
             requires = {
                 "kyazdani42/nvim-web-devicons",
             },
+            setup = function()
+                require("confs.nvim_tree").setup()
+            end,
             config = function()
-                require("nvim-tree").setup({})
+                require("confs.nvim_tree").config()
             end,
         })
 
