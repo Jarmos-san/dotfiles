@@ -12,3 +12,4 @@ assets/**/*
 misc/**/*
 
 **/packer_compiled.lua
+**/startuptime.txt
