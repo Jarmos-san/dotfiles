@@ -75,10 +75,18 @@ require("packer").startup({
             end,
         })
 
+        use({
+            "lewis6991/gitsigns.nvim",
+            requires = {
+                "nvim-lua/plenary.nvim",
+            },
+        })
+
         if packer_boostrap then
             require("packer").sync()
         end
     end,
+
     config = {
         profile = {
             enable = true,
