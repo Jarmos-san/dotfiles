@@ -80,6 +80,9 @@ require("packer").startup({
             requires = {
                 "nvim-lua/plenary.nvim",
             },
+            config = function()
+                require("confs.gitsigns").config()
+            end,
         })
 
         if packer_boostrap then
