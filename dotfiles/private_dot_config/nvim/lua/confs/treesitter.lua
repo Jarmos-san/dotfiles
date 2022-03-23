@@ -13,10 +13,23 @@ function M.config()
     require("nvim-treesitter.configs").setup({
         -- Ensure the following parsers are installed by default
         ensure_installed = {
+            "bash",
             "lua",
             "markdown",
             "yaml",
             "jsonc",
+            "go",
+            "toml",
+            "typescript",
+            "python",
+            "tsx",
+            "vim",
+            "regex",
+            "javascript",
+            "gomod",
+            "html",
+            "dockerfile",
+            "comment",
         },
 
         -- Additional modules are also supported, to get a list of those, refer to
