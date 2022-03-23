@@ -24,6 +24,8 @@ brew "bitwarden-cli"
 
 # Dev needs (such as programming languages & their tools)
 brew "python3"
+brew "lua"
+brew "go"
 brew "poetry"
 brew "pre-commit"
 brew "stylua"
