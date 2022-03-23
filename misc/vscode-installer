@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+echo -e "Downloading GPG public key for Microsoft repos..."
+curl -fsSL "https://packages.microsoft.com/keys/microsoft.asc" \
+    | gpg --dearmor > "packages.microsoft.gpg"
+
+install -o root -g root -m 644 "packages.microsoft.gpg" "/etc/apt/trusted.gpg.d/"
+
+echo -e "deb [archamd64 signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" \
+    > "/etc/apt/sources.list.d/vscode.list"
+
+rm -f packages.microsoft.gpg
+
+echo -e "Installing Microsoft Visual Studio Code..."
+apt-get install code
