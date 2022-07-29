@@ -1,6 +1,5 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
-SETUVAR ASDF_DEFAULT_TOOL_VERSIONS_FILENAME:\x2econfig/asdf/tool\x2dversions
 SETUVAR --export STARSHIP_CONFIG:/home/space/\x2econfig/starship/starship\x2etoml
 SETUVAR __fish_initialized:3400
 SETUVAR _fish_abbr_dcp:docker\x2dcompose
