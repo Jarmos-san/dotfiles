@@ -1,0 +1,30 @@
+# Some "taps" for installing CLI apps
+# tap "homebrew/core"
+# tap "homebrew/bundle"
+tap "eth-p/software"
+tap "go-task/tap"
+
+# Binaries & CLI tools
+brew "latexindent"
+brew "asdf"
+brew "go-task"
+brew "shfmt"
+brew "mdbook"
+brew "glow"
+brew "neovim"
+brew "bat"
+brew "bat-extras-batman"
+brew "bat-extras-batdiff"
+brew "chezmoi"
+brew "gcc"
+brew "fish"
+brew "exa"
+
+brew "poetry"
+brew "pre-commit"
+brew "stylua"
+
+brew "unzip"
+brew "tectonic"
+brew "vale"
+brew "docker-compose"

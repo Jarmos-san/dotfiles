@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# List of LSP servers to install:
+#   1. pyright for Python projects.
+#   2. gopls for Golang projects
+#   3. typescript-language-server for TypeScript-based projects
+#   4. dockerls for Dockerfile
+#   5. sumneko_lua for Lua (but more like configuring Neovim).
+#   6. tailwindcss for TailwindCSS-based projects.
+#   7. texlab for working with LaTeX projects.
+#   8. yaml-language-server for working on YAML files.
+#   9. taplo-lsp for working on TOML files.
+#   10 vscode-langservers-extracted for HTML, CSS & JSON files.
+
+# Language Servers available on NPM:
+
+# npm install --location=global \
+#       vscode-langservers-extracted typescript-language-server \
+#       @tailwindcss/language-server dockerfile-language-server-nodejs
+
+# language servers available on Homebrew:
+
+# brew install gopls sumneko_lua texlab yaml-language-server pyright
+
+echo "Hello, World!"

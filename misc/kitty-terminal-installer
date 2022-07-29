@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+echo -e "Downloading Kitty terminal..."
+
+# Download the necessary files & folders to ~/.local/share
+# and don't lauch the terminal after download completes
+curl -fsSL "https://sw.kovidgoyal.net/kitty/installer.sh" \
+    | bash -s -- dest="$HOME/.local/share" launch="n"
+
+echo -e "Setting up Kitty..."
+ln --symbolic "$HOME/.local/share/kitty.app/bin/kitty" \
+    "$HOME/.local/bin"
+
+cp "$HOME/.local/share/kitty.app/share/applications/kitty.desktop" \
+    "$HOME/.local/share/applications"
+
+sed -i "s|Icon=kitty|Icon=$HOME/.local/share/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" \
+    "$HOME/.local/share/applications/kitty*.desktop"

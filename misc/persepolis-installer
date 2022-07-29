@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+echo "Installing the Persepolis Download Manager..."
+add-apt-repository -y ppa:persepolis/ppa
+
+apt-get update
+
+apt-get -y install persepolis
+
+echo "Persepolis Download Manager has been downloaded..."

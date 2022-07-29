@@ -1,0 +1,21 @@
+{{- $personalEmail := promptString "personalEmail" -}}
+
+encryption = "age"
+
+[cd]
+  command = "fish"
+
+[age]
+  identity = "{{- .chezmoi.homeDir -}}/key.txt"
+  recipient = "age1xsz896t8t2c9wayhydc34qg27yydc25tuklutcun5mqxxr5xx4vq59pry5"
+
+[diff]
+  pager = "bat"
+  command = "batdiff"
+  exclude = ["scripts", externals"]
+
+[secret]
+  command = "passage"
+
+[data]
+  personalEmail: {{- $personalEmail | quote -}}

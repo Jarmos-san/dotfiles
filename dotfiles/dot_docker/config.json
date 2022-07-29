@@ -1,0 +1,3 @@
+{
+  "psFormat": "table {{.Names}}\\t{{.ID}}\\t{{.Status}}\\t{{.Image}}\\t{{.Command}}"
+}

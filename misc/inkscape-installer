@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+echo -e "Adding new repositories to download Inkscape from\n"
+
+add-apt-repository universe --yes --update
+add-apt-repository ppa:inkscape.dev/stable --yes --update
+
+echo -e "Installing Inkscape...\n"
+
+apt-get install inkscape --assume-yes

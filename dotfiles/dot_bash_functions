@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+# Create a new directory & enter it
+function mkd() {
+  mkdir -p "$1" && cd "$1" || exit
+}
+
+# TODO: Create a .tar.gz archive using gzip compression
+# Refer to: https://github.com/mathiasbynens/dotfiles/blob/66ba9b3cc0ca1b29f04b8e39f84e5b034fdb24b6/.functions#L13
+
+# Determine size of a file or total size of a directory
+# TODO: Explain what's going on in the function code
+function fs() {
+  if du -b /dev/null >/dev/null 2>&1; then
+    local arg=-sbh
+  else
+    local arg=-sb
+  fi
+
+  if [[ -n $* ]]; then
+    du $arg -- "$@"
+  else
+    du $arg .[^.]* ./*
+  fi
+}
+
+################################################################################
+################################################################################
+#                                                                              #
+# Update the Kitty terminal by invoking a single command on the CLI            #
+#                                                                              #
+# GLOBALS:                                                                     #
+#   None                                                                       #
+#                                                                              #
+# ARGUMENTS:                                                                   #
+#   None                                                                       #
+#                                                                              #
+# OUTPUTS:                                                                     #
+#   None                                                                       #
+#                                                                              #
+# RETURNS:                                                                     #
+#   None                                                                       #
+#                                                                              #
+################################################################################
+################################################################################
+function update_kitty() {
+  # TODO: Customise the installation procedure as detailed in the docs below:
+  # https://sw.kovidgoyal.net/kitty/binary/#customizing-the-installation
+  curl -fsSL https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
+}
+
+################################################################################
+################################################################################
+#                                                                              #
+# Pretty Print all the directories available on $PATH                          #
+#                                                                              #
+# GLOBALS:                                                                     #
+#   None                                                                       #
+#                                                                              #
+# ARGUMENTS:                                                                   #
+#   None                                                                       #
+#                                                                              #
+# OUTPUTS:                                                                     #
+#   None                                                                       #
+#                                                                              #
+# RETURNS:                                                                     #
+#   None                                                                       #
+#                                                                              #
+################################################################################
+################################################################################
+function path() {
+    echo -e "${PATH//:/\\n}"
+}

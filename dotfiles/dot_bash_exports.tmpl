@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Make Neovim/Vim the default editor
+export EDITOR="nvim"
+
+# Make Python use UTF-8 encoding for output to stdin, stdout & stderr
+export PYTHONIOENCODING="UTF-8"
+
+# Increase the Bash history size. Allow 32³ entries wherein the default
+# is 500
+export HISTSIZE="32768"
+export HISTFILESIZE="${HISTSIZE}"
+export HISTCONTROL="erasedups:ignoreboth"
+
+# Don't record certain sets of commands
+export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear"
+
+# Prefer UK English but use UTF-8
+export LANG="en_IN.UTF-8"
+export LC_ALL="en_IN.UTF-8"
+
+export MANPAGER="less"
+
+# Avoid issues with `gpg` if installed via Homebrew
+# Refer to: https://stackoverflow.com/a/42265848/8604951
+export GPG_TTY=$(tty)
+
+# Change default config file location for the Starship prompt
+export STARSHIP_CONFIG=$HOME/.config/starship/starship.toml
+
+# Access tokens for using GitHub CLI
+export GH_TOKEN="{{ secret "show" "GH_TOKEN" }}"

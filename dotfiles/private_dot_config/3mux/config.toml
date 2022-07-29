@@ -1,0 +1,65 @@
+[general]
+
+enable-help-bar = false
+enable-status-bar = true
+
+[keys]
+
+new-pane  = ['Alt+N', 'Alt+Enter']
+kill-pane = ['Alt+Shift+Q']
+
+toggle-fullscreen = ['Alt+Shift+F']
+toggle-search = ['Alt+/']
+
+hide-help-bar = ['Alt+\']
+
+move-pane-up    = ['Alt+Shift+Up',    'Alt+Shift+K']
+move-pane-down  = ['Alt+Shift+Down',  'Alt+Shift+J']
+move-pane-left  = ['Alt+Shift+Left',  'Alt+Shift+H']
+move-pane-right = ['Alt+Shift+Right', 'Alt+Shift+L']
+
+move-selection-up    = ['Alt+Up',    'Alt+K']
+move-selection-down  = ['Alt+Down',  'Alt+J']
+move-selection-left  = ['Alt+Left',  'Alt+H']
+move-selection-right = ['Alt+Right', 'Alt+L']
+
+# NAME has no meaning apart from what may be displayed in a status bar
+# [modes.NAME]
+# mode-start = ['KEYCODE'] # type KEYCODE to start this mode
+# mode-sticky = STICKY
+# # if STICKY:
+# #   stay in this mode until we see an unrecognized key
+# # else:
+# #   exit this mode after the first keypress
+#
+# # do ACTION when we see KEYCODE while in this mode
+# ACTION = ['KEYCODE']
+# ACTION = ['KEYCODE']
+# ACTION = ['KEYCODE']
+# ...
+
+[modes.resize]
+mode-start  = ['Alt+R']
+mode-sticky = true
+
+resize-up    = ['Up',    'j']
+resize-down  = ['Down',  'k']
+resize-left  = ['Left',  'h']
+resize-right = ['Right', 'l']
+
+[modes.tmux]
+mode-start  = ['Ctrl+B']
+mode-sticky = false
+
+split-pane-vert  = ['%']
+split-pane-horiz = ['"']
+move-pane-left   = ['{']
+move-pane-right  = ['}']
+
+# [modes.screen]
+# mode-start  = ['Ctrl+A']
+# mode-sticky = false
+#
+# split-pane-vert  = ['S']
+# split-pane-horiz = ['|']
+# cycle-selection-forward = ['Tab']
