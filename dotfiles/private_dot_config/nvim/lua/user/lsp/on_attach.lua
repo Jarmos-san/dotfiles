@@ -5,7 +5,5 @@
 local servers = { "jsonls", "sumneko_lua", "tsserver" }
 
 return function(client)
-  if vim.tbl_contains(servers, client.name) then
-    astronvim.lsp.disable_formatting(client)
-  end
+  if vim.tbl_contains(servers, client.name) then astronvim.lsp.disable_formatting(client) end
 end
