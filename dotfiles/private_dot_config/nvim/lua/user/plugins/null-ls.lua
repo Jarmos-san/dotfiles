@@ -4,9 +4,11 @@ return function(config)
 
   config.sources = {
     -- INFO: Following entries are all formatters
-    null_ls.builtins.formatting.prettierd,
+    null_ls.builtins.formatting.prettierd.with({
+      extra_args = { "--print-width", 80 },
+    }),
     null_ls.builtins.formatting.stylua.with({
-      extra_args = { "column-width", "80" },
+      extra_args = { "--column-width", "80" },
     }),
     null_ls.builtins.formatting.black,
     null_ls.builtins.formatting.isort.with({
@@ -33,7 +35,9 @@ return function(config)
       vim.api.nvim_create_autocmd("BufWritePre", {
         desc = "Auto format before save",
         pattern = "<buffer>",
-        callback = function() vim.lsp.buf.formatting_sync(nil, 10000) end,
+        callback = function()
+          vim.lsp.buf.formatting_sync(nil, 10000)
+        end,
       })
     end
   end
