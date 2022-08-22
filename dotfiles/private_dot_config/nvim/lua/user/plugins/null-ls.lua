@@ -10,8 +10,11 @@ return function(config)
     null_ls.builtins.formatting.stylua.with({
       extra_args = { "--column-width", "80" },
     }),
-    null_ls.builtins.formatting.black,
+    null_ls.builtins.formatting.black.with({
+      prefer_local = ".venv/bin",
+    }),
     null_ls.builtins.formatting.isort.with({
+      prefer_local = ".venv/bin",
       extra_args = { "--multi-line", "3", "--profile", "black" },
     }),
 
@@ -23,9 +26,14 @@ return function(config)
     -- INFO: The following two Python linters aren't necessary when Flake8 is used.
     -- null_ls.builtins.diagnostics.pylint,
     -- null_ls.builtins.diagnostics.pydocstyle,
-    null_ls.builtins.diagnostics.mypy,
+    null_ls.builtins.diagnostics.mypy.with({
+      prefer_local = ".venv/bin",
+    }),
     null_ls.builtins.diagnostics.vale,
-    null_ls.builtins.diagnostics.flake8,
+    null_ls.builtins.diagnostics.flake8.with({
+      prefer_local = ".venv/bin",
+      extra_args = { "--max-line-length", "88", "--extend-ignore", "E203" },
+    }),
   }
 
   -- set up null-ls's on_attach function
