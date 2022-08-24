@@ -5,6 +5,7 @@ SETUVAR __fish_initialized:3400
 SETUVAR _fish_abbr_dcp:docker\x2dcompose
 SETUVAR _fish_abbr_loc:wc\x20\x2dl
 SETUVAR _fish_abbr_mkexe:chmod\x20u\x2bx
+SETUVAR _fish_abbr_mkvenv:python3\x20\x2dm\x20venv\x20\x2evenv
 SETUVAR _fish_abbr_tec:tectonic\x20\x2dX
 SETUVAR fish_color_autosuggestion:555\x1ebrblack
 SETUVAR fish_color_cancel:\x2dr
