@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+############################################################################
+# Simple script to clone a remote repo locally & changing directory in to it.
+############################################################################
+
+# git clone "git@github.com:{$1}"
+
+REMOTE_REPO=$1
+LOCAL_REPO=$(echo -n REMOTE_REPO | sed -e "s/\/.*\///g")
+
+echo -n "git@github.com:${REMOTE_REPO}"
+echo -n "Changing directory into ${LOCAL_REPO}"
