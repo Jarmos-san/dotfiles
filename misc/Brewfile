@@ -6,7 +6,6 @@ tap "go-task/tap"
 
 # Binaries & CLI tools
 brew "latexindent"
-brew "asdf"
 brew "go-task"
 brew "shfmt"
 brew "mdbook"
@@ -28,3 +27,5 @@ brew "unzip"
 brew "tectonic"
 brew "vale"
 brew "docker-compose"
+
+brew "fsouza/prettierd/prettierd"
