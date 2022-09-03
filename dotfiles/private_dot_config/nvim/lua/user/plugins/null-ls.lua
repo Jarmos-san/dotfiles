@@ -23,7 +23,9 @@ return function(config)
     null_ls.builtins.diagnostics.eslint,
     -- INFO: The following two Python linters aren't necessary when Flake8 is used.
     -- null_ls.builtins.diagnostics.pylint,
-    -- null_ls.builtins.diagnostics.pydocstyle,
+    null_ls.builtins.diagnostics.pydocstyle.with({
+      prefer_local = ".venv/bin",
+    }),
     null_ls.builtins.diagnostics.mypy.with({
       prefer_local = ".venv/bin",
     }),
