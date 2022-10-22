@@ -186,6 +186,20 @@ packer.startup({
         require("neoscroll").setup()
       end,
     })
+
+    use({
+      "folke/which-key.nvim",
+      config = function()
+        require("jarmos.plugins.which-key").config()
+      end,
+    })
+
+    use({
+      "norcalli/nvim-colorizer.lua",
+      config = function()
+        require("colorizer").setup()
+      end,
+    })
   end,
   config = {
     display = {
