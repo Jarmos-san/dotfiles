@@ -76,6 +76,7 @@ packer.startup({
       config = function()
         require("jarmos.plugins.mason").install_servers()
       end,
+      cmd = { "MasonToolsUpdate", "MasonToolsInstall" },
     })
 
     -- Plugin for managing LSP-based diagnostics, code actions & much more capabilities.
@@ -180,6 +181,13 @@ packer.startup({
       ft = { "typescript", "typescriptreact" },
       config = function()
         require("jarmos.plugins.lsp").setup_typescript_lsp()
+      end,
+    })
+
+    use({
+      "karb94/neoscroll.nvim",
+      config = function()
+        require("neoscroll").setup()
       end,
     })
   end,
