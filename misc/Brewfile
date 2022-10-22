@@ -5,9 +5,7 @@ tap "eth-p/software"
 tap "go-task/tap"
 
 # Binaries & CLI tools
-brew "latexindent"
 brew "go-task"
-brew "shfmt"
 brew "mdbook"
 brew "glow"
 brew "neovim"
@@ -18,14 +16,10 @@ brew "chezmoi"
 brew "gcc"
 brew "fish"
 brew "exa"
+brew "gh"
 
 brew "poetry"
 brew "pre-commit"
-brew "stylua"
 
 brew "unzip"
-brew "tectonic"
-brew "vale"
 brew "docker-compose"
-
-brew "fsouza/prettierd/prettierd"
