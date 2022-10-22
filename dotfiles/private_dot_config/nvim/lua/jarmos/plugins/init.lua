@@ -199,6 +199,7 @@ packer.startup({
       config = function()
         require("colorizer").setup()
       end,
+      ft = { "scss", "css", "javascript", "typescript", "typescriptreact", "html" },
     })
   end,
   config = {
