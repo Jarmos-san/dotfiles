@@ -58,7 +58,6 @@ packer.startup({
       config = function()
         require("jarmos.plugins.lsp").setup_lsp()
       end,
-      tag = "*", -- Download the latest tagged version instead of the latest commits.
     })
 
     use({
@@ -82,9 +81,6 @@ packer.startup({
     -- Plugin for managing LSP-based diagnostics, code actions & much more capabilities.
     use({
       "jose-elias-alvarez/null-ls.nvim",
-      -- FIXME: This plugin needs to be pinned to this commit due to the following error:
-      -- https://github.com/jose-elias-alvarez/null-ls.nvim/issues/1106
-      commit = "cdef04dfad2d1a6d76f596ac63600e7430baaabe",
       config = function()
         require("jarmos.plugins.null-ls").config()
       end,
