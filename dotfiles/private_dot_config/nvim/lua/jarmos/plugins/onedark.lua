@@ -13,7 +13,7 @@ function M.config()
   -- More configuration information are available at:
   -- https://github.com/navarasu/onedark.nvim#default-configuration
   onedark.setup({
-    style = "darker",
+    style = "deep",
   })
 
   onedark.load()

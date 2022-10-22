@@ -11,7 +11,43 @@ function M.setup_lsp()
 
   local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-  require("lspconfig").sumneko_lua.setup({
+  -- INFO: Necessary configuration for the JSON LSP server. See the following URL for more information:
+  -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#jsonls
+  capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+  local lspconfig = require("lspconfig")
+
+  -- Initialisation for the Bash LSP server.
+  lspconfig.bashls.setup({})
+
+  -- Initialisation for the Docker LSP server.
+  lspconfig.dockerls.setup({})
+
+  -- Initialisation for the JSON LSP server.
+  lspconfig.jsonls.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+  })
+
+  -- Initialisation for the Python LSP server.
+  lspconfig.pyright.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+  })
+
+  -- Initialisation for the YAML LSP server.
+  lspconfig.yamlls.setup({
+    settings = {
+      yaml = {
+        schemas = {
+          ["https://json.schemastore.org/github-workflow,json"] = ".github/workflows/*",
+        },
+      },
+    },
+  })
+
+  -- Initialisation for the Lua LSP server.
+  lspconfig.sumneko_lua.setup({
     on_attach = on_attach,
     capabilities = capabilities,
     settings = {
@@ -33,6 +69,20 @@ function M.setup_lsp()
           enable = false,
         },
       },
+    },
+  })
+end
+
+-- Special initialisation for the TypeScript LSP server. See the following repository for more information:
+-- https://github.com/jose-elias-alvarez/typescript.nvim
+function M.setup_typescript_lsp()
+  local on_attach = function()
+    -- TODO: Add some keymaps & other LSP-based logic over here.
+  end
+
+  require("typescript").setup({
+    server = {
+      on_attach = on_attach,
     },
   })
 end

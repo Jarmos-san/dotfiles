@@ -47,6 +47,9 @@ packer.startup({
       "L3MON4D3/LuaSnip",
       after = "nvim-cmp",
       tag = "*", -- Download the latest tagged version of the plugin.
+      config = function()
+        require("luasnip.loaders.from_vscode").lazy_load()
+      end,
     })
 
     -- Install plugin for configuring the LSP client.
@@ -75,7 +78,17 @@ packer.startup({
       end,
     })
 
-    -- Plugin for managing LSP-based diagnostics, code actions & much more!
+    -- Plugin for managing LSP-based diagnostics, code actions & much more capabilities.
+    use({
+      "jose-elias-alvarez/null-ls.nvim",
+      -- FIXME: This plugin needs to be pinned to this commit due to the following error:
+      -- https://github.com/jose-elias-alvarez/null-ls.nvim/issues/1106
+      commit = "cdef04dfad2d1a6d76f596ac63600e7430baaabe",
+      config = function()
+        require("jarmos.plugins.null-ls").config()
+      end,
+      requires = { "nvim-lua/plenary.nvim" },
+    })
 
     -- Plugin for better syntax highlighting & among other goodies!
     use({
@@ -90,11 +103,11 @@ packer.startup({
       end,
       requires = {
         -- Necessary plugin for proper commenting in JSX/TSX files.
-        "JoosepAlviste/nvim-ts-context-commentstring",
+        { "JoosepAlviste/nvim-ts-context-commentstring", after = "nvim-treesitter" },
         -- Treesitter-based plugin for colourising brackets.
-        "p00f/nvim-ts-rainbow",
+        { "p00f/nvim-ts-rainbow", after = "nvim-treesitter" },
         -- Treesitter-based plugin for automatically inserting/renaming HTML tags.
-        "windwp/nvim-ts-autotag",
+        { "windwp/nvim-ts-autotag", after = "nvim-treesitter" },
       },
     })
 
@@ -105,6 +118,7 @@ packer.startup({
         require("jarmos.plugins.comment").config()
       end,
       tag = "*", -- Download the latest release instead of the latest breaking changes.
+      after = "nvim-ts-context-commentstring",
     })
 
     -- Treesitter-based plugin for automatic brackets insertion.
@@ -158,6 +172,14 @@ packer.startup({
       },
       config = function()
         require("jarmos.plugins.lualine").config()
+      end,
+    })
+
+    use({
+      "jose-elias-alvarez/typescript.nvim",
+      ft = { "typescript", "typescriptreact" },
+      config = function()
+        require("jarmos.plugins.lsp").setup_typescript_lsp()
       end,
     })
   end,

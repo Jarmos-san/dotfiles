@@ -27,28 +27,25 @@ function M.install_servers()
   -- as a must've after the core "mason.nvim" plugin ins installed.
   installer.setup({
     ensure_installed = {
-      "lua-language-server", -- Lua LSP server.
-      "bash-language-server", -- Bash LSP server.
-      "black", -- Formatter for Python.
-      "dockerfile-language-server", -- Docker LSP server.
-      "editorconfig-checker", -- Tool to check EditorConfig inconsistencies.
-      "eslint_d", -- Faster version of ESLint.
-      "flake8", -- Tool to check for the coding standards inconsistencies.
-      "isort", -- Python formatter for sorting imports.
-      "json-lsp", -- JSON LSP server.
-      "mypy", -- Static Checker for Python code.
-      "prettierd", -- Faster version of Prettier.
-      "pydocstyle", -- Tool to check for inconsistencies in Python docstrings.
-      "pyright", -- Python LSP server.
-      "selene", -- Linter for Lua code.
-      "shellcheck", -- Linter for Bash scripts.
-      "stylua", -- Formatter for Lua code.
-      "taplo", -- TOML LSP server.
-      "texlab", -- LaTeX LSP server.
-      "typescript-language-server", -- TypeScript LSP server.
-      "vale", -- Linting tool to check for grammatical inconsistencies in prose content.
-      "yaml-language-server", -- YAML LSP server.
-      "yamllint", -- Linter for YAML files.
+      "bash-language-server",
+      -- "editorconfig-check",
+      "eslint_d",
+      "flake8",
+      "isort",
+      "json-lsp",
+      "lua-language-server",
+      "mypy",
+      "prettierd",
+      "pydocstyle",
+      "pyright",
+      "selene",
+      "shellcheck",
+      "stylua",
+      "taplo",
+      "typescript-language-server",
+      "vale",
+      "yaml-language-server",
+      "yamllint",
     },
   })
 end
