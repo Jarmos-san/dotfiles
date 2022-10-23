@@ -210,6 +210,11 @@ packer.startup({
       end,
       ft = { "scss", "css", "javascript", "typescript", "typescriptreact", "html" },
     })
+
+    -- Plugin for advanced notifications about various stuff.
+    -- use({
+    -- 	"rcarriga/nvim-notify",
+    -- })
   end,
   config = {
     display = {

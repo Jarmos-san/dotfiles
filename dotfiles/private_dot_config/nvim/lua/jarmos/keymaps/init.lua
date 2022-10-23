@@ -41,4 +41,9 @@ wk.register({
     c = { "<CMD>bdelete<CR>", "Close & delete the current buffer." },
     n = { "<CMD>bnext<CR>", "Switch to the next buffer currently open in the buffer list." },
   },
+  ["<leader>l"] = {
+    name = "LSP",
+    i = { "<CMD>LspInfo<CR>", "Open the LSP info floating window." },
+    d = { vim.diagnostic.open_float, "Open the diagnostics window." },
+  },
 })
