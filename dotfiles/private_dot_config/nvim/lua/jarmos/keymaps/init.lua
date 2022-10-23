@@ -34,7 +34,7 @@ map.set("n", "<C-c>", "<CMD>tabclose<CR>") -- Press "Ctrl + c" to close an open 
 wk.register({
   ["<leader>f"] = {
     name = "file",
-    e = { "<CMD>Neotree toggle<CR>", "Toggle the File Explorer." },
+    e = { "<CMD>Neotree float toggle<CR>", "Toggle the File Explorer." },
   },
   ["<leader>b"] = {
     name = "buffer",

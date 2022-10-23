@@ -132,6 +132,7 @@ packer.startup({
     use({
       "nvim-neo-tree/neo-tree.nvim",
       tag = "*", -- Download the latest tagged version instead of the latest commits.
+      cmd = { "Neotree" }, -- Lazy-load only when the ":Neotree" command is invoked.
       requires = {
         "nvim-lua/plenary.nvim",
         "kyazdani42/nvim-web-devicons",
@@ -158,6 +159,14 @@ packer.startup({
         require("jarmos.plugins.gitsigns").config()
       end,
       tag = "*", -- Download the latest tagged version instead of the latest commits.
+      -- FIXME: Configure "gitsigns" to load only when the current working directory is a git repository.
+      -- For a detailed discussion on a possible fix, refer to the following thread for more information:
+      -- https://neovim.discourse.group/t/how-to-conditionally-load-gitsigns-only-when-current-working-directory-is-a-git-repository/3284
+      cond = function()
+        if vim.api.nvim_command_output("!git rev-parse --is-inside-work-tree") == true then
+          return true
+        end
+      end,
     })
 
     -- Custom statusline with additional features like version-control information.

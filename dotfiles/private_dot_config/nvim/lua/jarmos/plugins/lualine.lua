@@ -15,6 +15,7 @@ function M.config()
     disabled_filetypes = {
       "packer",
       "filesystem",
+      "neo-tree",
     },
   })
 end

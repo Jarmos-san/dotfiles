@@ -34,7 +34,10 @@ function M.config()
     end,
 
     sources = {
-      null_ls.builtins.formatting.stylua, -- formatter for Lua code.
+      null_ls.builtins.formatting.stylua.with({ -- formatter for Lua code.
+        -- INFO: Configure Stylua to format Lua code with two Space characters.
+        extra_args = { "indent-type", "Spaces", "indent-width", "2" },
+      }),
       null_ls.builtins.diagnostics.selene.with({ -- linter for Lua code.
         -- INFO: Load the "selene" linter only if its configuration file exists in the project directory.
         condition = function(utils)

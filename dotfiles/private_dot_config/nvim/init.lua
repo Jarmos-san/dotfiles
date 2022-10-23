@@ -19,5 +19,4 @@ end
 
 protected_call("jarmos.settings")
 protected_call("jarmos.keymaps")
-protected_call("jarmos.autocommands")
 protected_call("jarmos.plugins")
