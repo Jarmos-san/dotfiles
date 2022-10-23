@@ -14,7 +14,7 @@ function M.config()
     show_end_of_line = true,
     show_trailing_blankline_indent = true,
     show_current_context = true,
-    show_current_context_start = true,
+    -- show_current_context_start = true,
   })
 end
 
