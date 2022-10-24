@@ -23,6 +23,7 @@ function M.config()
           buffer = bufnr,
           callback = function()
             vim.lsp.buf.format({
+              timeout_ms = 2000,
               bufnr = bufnr,
               filter = function()
                 return client.name == "null-ls"
