@@ -9,6 +9,7 @@ function M.config()
   local commentstring_integrations = require("ts_context_commentstring.integrations.comment_nvim")
 
   require("Comment").setup({
+    ignore = "^$", -- Ignore empty lines
     -- The only necessary configurations for commenting to work well in JSX/TSX files.
     pre_hook = commentstring_integrations.create_pre_hook(),
   })
