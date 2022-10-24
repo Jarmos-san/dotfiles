@@ -215,6 +215,30 @@ packer.startup({
     -- use({
     -- 	"rcarriga/nvim-notify",
     -- })
+
+    -- Plugin for providing a floating-window based UI for various functionalities.
+    use({
+      "nvim-telescope/telescope.nvim",
+      branch = "0.1.x",
+      -- FIXME: Cann't lazy-load without running in to issues.
+      -- cmd = { "Telescope" },
+      config = function()
+        require("jarmos.plugins.telescope").config()
+      end,
+      requires = {
+        "nvim-lua/plenary.nvim",
+        "chip/telescope-software-licenses.nvim",
+      },
+    })
+
+    -- A more useful UI greeter.
+    use({
+      "goolord/alpha-nvim",
+      requires = { "kyazdani42/nvim-web-devicons" },
+      config = function()
+        require("jarmos.plugins.alpha").config()
+      end,
+    })
   end,
   config = {
     display = {

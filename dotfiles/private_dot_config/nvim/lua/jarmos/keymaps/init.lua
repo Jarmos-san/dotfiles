@@ -35,15 +35,27 @@ wk.register({
   ["<leader>f"] = {
     name = "file",
     e = { "<CMD>Neotree float toggle<CR>", "Toggle the File Explorer." },
+    f = { "<CMD>Telescope find_files<CR>", "Open a search prompt for files in the project." },
+    h = { "<CMD>Telescope help_tags<CR>", "Open search prompt for the help tags." },
+    l = { "<CMD>Telescope software-licenses find<CR>", "Lookup various FOSS licenses for usage." },
+    o = { "<CMD>Telescope oldfiles<CR>", "List the recently edited files." },
   },
   ["<leader>b"] = {
     name = "buffer",
-    c = { "<CMD>bdelete<CR>", "Close & delete the current buffer." },
+    b = { "<CMD>Telescope buffers<CR>", "Show the list of buffer windows." },
+    d = { "<CMD>bdelete<CR>", "Close & delete the current buffer." },
     n = { "<CMD>bnext<CR>", "Switch to the next buffer currently open in the buffer list." },
   },
   ["<leader>l"] = {
     name = "LSP",
     i = { "<CMD>LspInfo<CR>", "Open the LSP info floating window." },
     d = { vim.diagnostic.open_float, "Open the diagnostics window." },
+  },
+  ["<leader>p"] = {
+    name = "Packer",
+    i = { "<CMD>PackerInstall<CR>", "Install all the configured plugins" },
+    s = { "<CMD>PackerSync<CR>", "Install/Update all configured plugins & compile them." },
+    u = { "<CMD>PackerUpdate<CR>", "Update all the installed plugins" },
+    c = { "<CMD>PackerCompile<CR", "Compile all the installed/updated plugins" },
   },
 })
