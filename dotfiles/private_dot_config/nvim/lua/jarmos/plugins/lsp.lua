@@ -5,8 +5,24 @@ Module for configuring the builti-in LSP client.
 local M = {}
 
 function M.setup_lsp()
-  local on_attach = function()
-    -- TODO: Add the LSP-based keymaps over here.
+  local on_attach = function(_, bufnr)
+    local map = vim.keymap
+    local opts = { noremap = true, silent = true, buffer = bufnr }
+
+    map.set("n", "gD", vim.lsp.buf.declaration, opts)
+    map.set("n", "gd", vim.lsp.buf.definition, opts)
+    map.set("n", "K", vim.lsp.buf.hover, opts)
+    map.set("n", "gi", vim.lsp.buf.implementation, opts)
+    map.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+    map.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
+    map.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
+    map.set("n", "<leader>wl", function()
+      print(vim.inspect(vim.lsp.buf.list_workspace_folders))
+    end, opts)
+    map.set("n", "<leader>D", vim.lsp.buf.type_definition, opts)
+    map.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+    map.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+    map.set("n", "gr", vim.lsp.buf.references, opts)
   end
 
   local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -18,10 +34,16 @@ function M.setup_lsp()
   local lspconfig = require("lspconfig")
 
   -- Initialisation for the Bash LSP server.
-  lspconfig.bashls.setup({})
+  lspconfig.bashls.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+  })
 
   -- Initialisation for the Docker LSP server.
-  lspconfig.dockerls.setup({})
+  lspconfig.dockerls.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+  })
 
   -- Initialisation for the JSON LSP server.
   lspconfig.jsonls.setup({
@@ -37,6 +59,8 @@ function M.setup_lsp()
 
   -- Initialisation for the YAML LSP server.
   lspconfig.yamlls.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
     settings = {
       yaml = {
         schemas = {
