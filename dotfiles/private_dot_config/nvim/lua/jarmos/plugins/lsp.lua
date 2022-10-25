@@ -5,6 +5,25 @@ Module for configuring the builti-in LSP client.
 local M = {}
 
 function M.setup_lsp()
+  local sign = function(severity, icon)
+    local highlight = "Diagnostics" .. severity
+
+    vim.fn.sign_define("DiagnosticsSign" .. severity, { text = icon, texthl = highlight, numhl = highlight })
+  end
+
+  sign("Error", "")
+  sign("Warn", "")
+  sign("Info", "")
+  sign("Hint", "")
+
+  vim.diagnostic.config({
+    underline = true,
+    signs = true,
+    float = { header = false, source = "always" },
+    update_in_insert = true,
+    severity_sort = true,
+  })
+
   local on_attach = function(_, bufnr)
     local map = vim.keymap
     local opts = { noremap = true, silent = true, buffer = bufnr }

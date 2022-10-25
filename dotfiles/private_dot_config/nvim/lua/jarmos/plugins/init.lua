@@ -169,6 +169,19 @@ packer.startup({
       end,
     })
 
+    -- TODO: Uncomment the following lines of code after customising it properly.
+    -- use({
+    --     "rebelot/heirline.nvim",
+    --     config = function()
+    --         -- local statusline = {}
+    --         -- local winbar = {}
+    --         -- local tabline = {}
+
+    --         require("heirline").setup()
+    --     end,
+    -- })
+
+    -- TODO: Replace it with "rebelot/heirline.nvim" instead.
     -- Custom statusline with additional features like version-control information.
     use({
       "nvim-lualine/lualine.nvim",
