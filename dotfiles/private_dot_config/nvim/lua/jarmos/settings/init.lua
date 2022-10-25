@@ -52,7 +52,7 @@ vim.g.mapleader = " " -- Remap the leader to "Space".
 -- Assign what each type of whitespace should look like.
 -- FIXME: It still doesn't work as I expect it to.
 vim.opt.listchars = {
-  eol = "↴",
+  -- eol = "↴",
   tab = "→ ",
   -- space = "·",
   extends = "…",

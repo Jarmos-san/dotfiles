@@ -52,5 +52,5 @@ jobs:
         uses: NTBBloodbath/selene-action@v1.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: ./dotfiles/private_dot_config/nvim/lua/user/init.lua
+          args: ./dotfiles/private_dot_config/nvim
           version: 0.16.0
