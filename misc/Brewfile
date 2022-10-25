@@ -24,3 +24,5 @@ brew "pre-commit"
 brew "unzip"
 brew "docker-compose"
 brew "tmux"
+# TODO: Try out & see which one works better "tmux" or "3mux".
+# brew "3mux"
