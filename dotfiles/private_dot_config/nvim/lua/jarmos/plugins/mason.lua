@@ -30,6 +30,7 @@ function M.install_servers()
       "bash-language-server",
       -- "editorconfig-check",
       "eslint_d",
+      "css-lsp",
       "flake8",
       "isort",
       "json-lsp",
