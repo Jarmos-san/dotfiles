@@ -1,6 +1,6 @@
 # Jarmos's Dotfiles
 
-[![Automated Quality Control Checks](https://github.com/Jarmos-san/dotfiles/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/Jarmos-san/dotfiles/actions/workflows/main.yml)
+[![Automated Quality Control Checks](https://github.com/Jarmos-san/dotfiles/actions/workflows/main.yml/badge.svg)](https://github.com/Jarmos-san/dotfiles/actions/workflows/main.yml)
 ![GitHub repo size](https://img.shields.io/github/repo-size/Jarmos-san/dotfiles?label=Repo%20Size&logo=GitHub&style=flat-square)
 ![GitHub](https://img.shields.io/github/license/Jarmos-san/dotfiles?label=License&logo=GitHub&style=flat-square)
 ![Twitter Follow](https://img.shields.io/twitter/follow/Jarmosan?style=social)
