@@ -46,7 +46,10 @@ function M.config()
         end,
       }),
       null_ls.builtins.diagnostics.eslint_d, -- A faster version of ESLint (linter for TS/JS code).
-      null_ls.builtins.formatting.prettierd, -- A faster version of Prettier (formatter for TS/JS code).
+      null_ls.builtins.formatting.prettierd.with({
+        -- INFO: Configure "prettierd" to add 2 spaces since it doesn't follow the ".prettierrc" configurations
+        extra_args = { "tab-width", "2" },
+      }), -- A faster version of Prettier (formatter for TS/JS code).
       null_ls.builtins.formatting.black, -- formatter for Python code.
       null_ls.builtins.diagnostics.mypy, -- static type checker for Python code.
       null_ls.builtins.diagnostics.pydocstyle, -- linter for checking standard practices in Python code.

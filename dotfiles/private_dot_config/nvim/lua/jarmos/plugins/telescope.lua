@@ -9,12 +9,12 @@ function M.config()
   local telescope = require("telescope")
 
   -- Configure Telescope to behave according to my personal needs.
-  telescope.setup({
-    defaults = {
-      -- Ignore some unnecessary files/folder to reduce clutter
-      file_ignore_patterns = { "node_modules", ".venv" },
-    },
-  })
+  -- telescope.setup({
+  -- 	defaults = {
+  -- 		-- Ignore some unnecessary files/folder to reduce clutter
+  -- 		file_ignore_patterns = { "node_modules", ".venv" },
+  -- 	},
+  -- })
 
   -- Load the many install Telescope extensions.
   telescope.load_extension("software-licenses")

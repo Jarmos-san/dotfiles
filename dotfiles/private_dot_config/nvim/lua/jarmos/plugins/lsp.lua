@@ -52,6 +52,10 @@ function M.setup_lsp()
 
   local lspconfig = require("lspconfig")
 
+  lspconfig.cssls.setup({
+    capabilities = capabilities,
+  })
+
   -- Initialisation for the Bash LSP server.
   lspconfig.bashls.setup({
     on_attach = on_attach,
