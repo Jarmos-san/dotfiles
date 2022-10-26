@@ -35,7 +35,10 @@ wk.register({
   ["<leader>f"] = {
     name = "file",
     e = { "<CMD>Neotree float toggle<CR>", "Toggle the File Explorer." },
-    f = { "<CMD>Telescope find_files<CR>", "Open a search prompt for files in the project." },
+    f = {
+      "<CMD>lua require('telescope.builtin').find_files({layout_config={prompt_position='top'}})<CR>",
+      "Open a search prompt for files in the project.",
+    },
     h = { "<CMD>Telescope help_tags<CR>", "Open search prompt for the help tags." },
     l = { "<CMD>Telescope software-licenses find<CR>", "Lookup various FOSS licenses for usage." },
     o = { "<CMD>Telescope oldfiles<CR>", "List the recently edited files." },

@@ -241,6 +241,7 @@ packer.startup({
       requires = {
         "nvim-lua/plenary.nvim",
         "chip/telescope-software-licenses.nvim",
+        { "nvim-telescope/telescope-fzf-native.nvim", run = "make" },
       },
     })
 

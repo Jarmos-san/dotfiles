@@ -15,6 +15,7 @@ vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
 
 -- Basic Neovim options which improves my quality of life when writing code.
+vim.opt.showmode = false -- Disable the "mode"-line message since its taken care of by the statusline itself.
 vim.opt.number = true -- Enable the current row number of the left side.
 vim.opt.autoindent = true -- Copy indent from the current line when starting a newline.
 vim.opt.smartindent = true -- Make the indents smarter based on the "autoindents".
