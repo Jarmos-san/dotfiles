@@ -257,6 +257,7 @@ packer.startup({
     -- Plugin for improved buffer deletion capabilities.
     use({
       "famiu/bufdelete.nvim",
+      cmd = { "Bdelete" },
     })
   end,
   config = {
