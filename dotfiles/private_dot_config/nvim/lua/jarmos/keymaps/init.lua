@@ -46,7 +46,7 @@ wk.register({
   ["<leader>b"] = {
     name = "buffer",
     b = { "<CMD>Telescope buffers<CR>", "Show the list of buffer windows." },
-    d = { "<CMD>bdelete<CR>", "Close & delete the current buffer." },
+    d = { "<CMD>Bdelete<CR>", "Close & delete the current buffer." },
     n = { "<CMD>bnext<CR>", "Switch to the next buffer currently open in the buffer list." },
   },
   ["<leader>l"] = {
