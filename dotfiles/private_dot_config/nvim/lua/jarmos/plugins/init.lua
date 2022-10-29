@@ -253,6 +253,11 @@ packer.startup({
         require("jarmos.plugins.alpha").config()
       end,
     })
+
+    -- Plugin for improved buffer deletion capabilities.
+    use({
+      "famiu/bufdelete.nvim",
+    })
   end,
   config = {
     display = {

@@ -6,17 +6,15 @@
 -- =================================================================================
 --]
 
--- A simple wrapper function around the inbuilt "pcall" function. It ensure the other
--- user-defined modules are invoked safely in case one of them contains a syntax error
--- or something similar.
-local protected_call = function(module_name)
+-- List of files located at "~/.config/nvim/lua/jarmos"
+local files = { "settings", "keymaps", "plugins" }
+
+-- Iterate through the list of files inside "~/.config/nvim/lua/jarmos" & load them.
+for _, file in ipairs(files) do
+  local module_name = "jarmos" .. "." .. file
   local ok, status = pcall(require, module_name)
 
   if not ok then
     print(module_name .. " not loaded because: " .. status)
   end
 end
-
-protected_call("jarmos.settings")
-protected_call("jarmos.keymaps")
-protected_call("jarmos.plugins")

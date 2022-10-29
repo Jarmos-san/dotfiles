@@ -47,18 +47,18 @@ vim.opt.backspace = { "start", "eol", "indent" } -- Perform appropriate actions 
 vim.opt.path:append({ "**" }) -- Search down subfolders when looking for files.
 vim.opt.wildignore:append({ "**/node_modules/*" }) -- Ignore set of files & folders.
 
-vim.opt.list = true -- Show invisible characters like whitespace in a buffer.
+-- vim.opt.list = true -- Show invisible characters like whitespace in a buffer.
 
 vim.g.mapleader = " " -- Remap the leader to "Space".
 -- Assign what each type of whitespace should look like.
 -- FIXME: It still doesn't work as I expect it to.
-vim.opt.listchars = {
-  -- eol = "↴",
-  tab = "→ ",
-  -- space = "·",
-  extends = "…",
-  precedes = "…",
-  trail = ".",
-}
+-- vim.opt.listchars = {
+-- eol = "↴",
+-- tab = "→ ",
+-- space = "·",
+-- extends = "…",
+-- precedes = "…",
+-- trail = ".",
+-- }
 
 vim.g.completeopt = { "menu", "menuone", "noselect" }
