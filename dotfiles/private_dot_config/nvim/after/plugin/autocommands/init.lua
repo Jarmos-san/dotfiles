@@ -84,3 +84,69 @@ vim.api.nvim_create_autocmd("User", {
     end
   end,
 })
+
+-- TODO: Move these autocommands to their respective filetype plugin folders.
+-- INFO: A bunch of autocommands for creating "skeletons" (see ":h skeleton" for more info on this regards.)
+local create_skeleton_group = vim.api.nvim_create_augroup("create_skeletons", { clear = true })
+-- INFO: Create a template file for "READMEs".
+vim.api.nvim_create_autocmd("BufNewFile", {
+  pattern = "README.md",
+  group = create_skeleton_group,
+  command = "0r ~/.config/nvim/templates/readme.md",
+})
+
+-- INFO: Generate the template file for Bash/Shell files.
+vim.api.nvim_create_autocmd("BufNewFile", {
+  pattern = "*.sh",
+  group = create_skeleton_group,
+  command = "0r ~/.config/nvim/templates/bash.sh",
+})
+
+-- INFO: Generate a base template for Dependabot config files.
+vim.api.nvim_create_autocmd("BufNewFile", {
+  pattern = "**/.github/dependabot.yml",
+  group = create_skeleton_group,
+  command = "0r ~/.config/nvim/templates/dependabot.yml",
+})
+
+-- INFO: Generate a base template for "Dockerfile".
+vim.api.nvim_create_autocmd("BufNewFile", {
+  pattern = "Dockerfile",
+  group = create_skeleton_group,
+  command = "0r ~/.config/nvim/templates/dockerfile",
+})
+
+-- INFO: Generate a bare minimum EditorConfig file.
+vim.api.nvim_create_autocmd("BufNewFile", {
+  pattern = ".editorconfig",
+  group = create_skeleton_group,
+  command = "0r ~/.config/nvim/templates/editorconfig",
+})
+
+-- INFO: Generate a bare minimum GH Actions workflow file to build upon.
+vim.api.nvim_create_autocmd("BufNewFile", {
+  pattern = "**/.github/workflows/*.yml",
+  group = create_skeleton_group,
+  command = "0r ~/.config/nvim/templates/gh-action.yml",
+})
+
+-- INFO: Generate a bare minimum MIT License template for my personal projects.
+vim.api.nvim_create_autocmd("BufNewFile", {
+  pattern = "LICENSE",
+  group = create_skeleton_group,
+  command = "0r ~/.config/nvim/templates/license",
+})
+
+-- INFO: Template for the "Stale" bot configuration file.
+vim.api.nvim_create_autocmd("BufNewFile", {
+  pattern = "**/.github/stale.yml",
+  group = create_skeleton_group,
+  command = "0r ~/.config/nvim/templates/stale.yml",
+})
+
+-- INFO: Template for a bare minimum Task config file.
+vim.api.nvim_create_autocmd("BufNewFile", {
+  pattern = "Taskfile.yml",
+  group = create_skeleton_group,
+  command = "0r ~/.config/nvim/templates/taskfile.yml",
+})
