@@ -1,0 +1,8 @@
+# The base image to build the container on.
+FROM baseImage
+
+# Invoke commands like "apt-get update" & so on to prepare the container.
+RUN command
+
+# CLI command to invoke before allowing interactive access to the container.
+ENTRYPOINT [ "executable" ]

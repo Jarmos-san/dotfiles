@@ -1,0 +1,12 @@
+version: "3"
+
+silent: true
+
+tasks:
+  default:
+    desc: Describe the task runner in a single line.
+    summary: |
+      Provide a more in-depth explanation of the task runner.
+    cmds:
+      - echo "List all the commands which the task runner should invoke
+        sequentially."
