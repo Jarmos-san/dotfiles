@@ -68,22 +68,7 @@ vim.api.nvim_create_autocmd("FocusLost", {
 -- 	command = "%s/\\s\\+$//e",
 -- })
 
--- FIXME: Doesn't work for whatever reason.
--- INFO: Open the alpha.nvim dashboard when the last buffer is also closed down. See the following thread for more
--- reference: https://github.com/goolord/alpha-nvim/discussions/85#discussioncomment-2798017
--- local function get_listed_buffers()
---   local buffers = {}
---   local len = 0
---   for buffer = 1, vim.fn.bufnr("$") do
---     if vim.fn.buflisted(buffer) == 1 then
---       len = len + 1
---       buffers[len] = buffer
---     end
---   end
-
---   return buffers
--- end
-
+-- INFO: Open the "alpha.nvim" dashboard when the last buffer is also closed/deleted.
 vim.api.nvim_create_autocmd("User", {
   pattern = "BDeletePre*",
   group = vim.api.nvim_create_augroup("alpha_on_empty", { clear = true }),
