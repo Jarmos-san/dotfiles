@@ -85,22 +85,8 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
--- TODO: Move these autocommands to their respective filetype plugin folders.
 -- INFO: A bunch of autocommands for creating "skeletons" (see ":h skeleton" for more info on this regards.)
 local create_skeleton_group = vim.api.nvim_create_augroup("create_skeletons", { clear = true })
--- INFO: Create a template file for "READMEs".
-vim.api.nvim_create_autocmd("BufNewFile", {
-  pattern = "README.md",
-  group = create_skeleton_group,
-  command = "0r ~/.config/nvim/templates/readme.md",
-})
-
--- INFO: Generate the template file for Bash/Shell files.
-vim.api.nvim_create_autocmd("BufNewFile", {
-  pattern = "*.sh",
-  group = create_skeleton_group,
-  command = "0r ~/.config/nvim/templates/bash.sh",
-})
 
 -- INFO: Generate a base template for Dependabot config files.
 vim.api.nvim_create_autocmd("BufNewFile", {
@@ -144,9 +130,32 @@ vim.api.nvim_create_autocmd("BufNewFile", {
   command = "0r ~/.config/nvim/templates/stale.yml",
 })
 
+-- INFO: Generate a bare minimum template when working on Lua module for configuring Neovim.
+vim.api.nvim_create_autocmd("BufNewFile", {
+  pattern = "**/nvim/lua/**/*.lua",
+  group = create_skeleton_group,
+  command = "0r ~/.config/nvim/templates/nvim-lua-module.lua",
+})
+
 -- INFO: Template for a bare minimum Task config file.
 vim.api.nvim_create_autocmd("BufNewFile", {
   pattern = "Taskfile.yml",
   group = create_skeleton_group,
   command = "0r ~/.config/nvim/templates/taskfile.yml",
+})
+
+-- INFO: Create a template file for "READMEs".
+vim.api.nvim_create_autocmd("BufNewFile", {
+  pattern = "README.md",
+  group = create_skeleton_group,
+  command = "0r ~/.config/nvim/templates/readme.md",
+})
+--
+-- Generate a base template to build upon when working with Shell files.
+local create_skeleton_group = vim.api.nvim_create_augroup("create_skeletons", { clear = true })
+-- INFO: Generate the template file for Bash/Shell files.
+vim.api.nvim_create_autocmd("BufNewFile", {
+  pattern = "*.sh",
+  group = create_skeleton_group,
+  command = "0r ~/.config/nvim/templates/bash.sh",
 })
