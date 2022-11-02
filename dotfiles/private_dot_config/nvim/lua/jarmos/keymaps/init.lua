@@ -61,4 +61,8 @@ wk.register({
     u = { "<CMD>PackerUpdate<CR>", "Update all the installed plugins" },
     c = { "<CMD>PackerCompile<CR", "Compile all the installed/updated plugins" },
   },
+  ["<leader>t"] = {
+    name = "Terminal",
+    t = { "<CMD>ToggleTerm direction=float<CR>", "Open a terminal as a floating window." },
+  },
 })

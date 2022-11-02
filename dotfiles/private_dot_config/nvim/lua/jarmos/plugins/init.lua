@@ -259,6 +259,15 @@ packer.startup({
       "famiu/bufdelete.nvim",
       cmd = { "Bdelete" },
     })
+
+    -- Plugin for better terminal management right within Neovim.
+    use({
+      "akinsho/toggleterm.nvim",
+      tag = "*",
+      config = function()
+        require("toggleterm").setup()
+      end,
+    })
   end,
   config = {
     display = {
