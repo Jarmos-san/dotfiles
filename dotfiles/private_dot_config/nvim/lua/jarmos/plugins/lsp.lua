@@ -224,7 +224,7 @@ function M.setup_completions()
   })
 
   -- Disable certain completion capabilities when working on Markdown files.
-  cmp.setup.filetype({ "markdown" }, { sources = { name = "path" }, { name = "buffer" } })
+  cmp.setup.filetype({ "markdown" }, { sources = { name = "buffer" } })
 
   cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 end
