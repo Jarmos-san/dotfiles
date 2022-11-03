@@ -167,6 +167,10 @@ function M.setup_completions()
   }
 
   cmp.setup({
+    -- Customise the appearance of the completion menu.
+    view = {
+      entries = { name = "custom", selection_order = "near_cursor" },
+    },
     -- INFO: Disable the autocompletion popup menu when typing comments.
     enabled = function()
       local context = require("cmp.config.context")
@@ -178,6 +182,7 @@ function M.setup_completions()
     end,
     -- INFO: Make the completion menu more informative & good-looking.
     formatting = {
+      fields = { "kind", "abbr", "menu" },
       format = function(entry, vim_item)
         vim_item.kind = string.format("%s %s", lspkind_icons[vim_item.kind], vim_item.kind)
         vim_item.menu = ({
@@ -217,6 +222,9 @@ function M.setup_completions()
       { name = "path" },
     }),
   })
+
+  -- Disable certain completion capabilities when working on Markdown files.
+  cmp.setup.filetype({ "markdown" }, { sources = { name = "path" }, { name = "buffer" } })
 
   cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 end
