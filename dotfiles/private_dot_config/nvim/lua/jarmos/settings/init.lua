@@ -62,3 +62,5 @@ vim.g.mapleader = " " -- Remap the leader to "Space".
 -- }
 
 vim.g.completeopt = { "menu", "menuone", "noselect" }
+
+vim.opt.clipboard = "unnamedplus"
