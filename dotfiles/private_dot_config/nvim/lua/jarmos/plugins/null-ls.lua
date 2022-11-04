@@ -65,11 +65,39 @@ function M.config()
           })
         end,
       }),
-      null_ls.builtins.formatting.black, -- formatter for Python code.
-      null_ls.builtins.diagnostics.mypy, -- static type checker for Python code.
-      null_ls.builtins.diagnostics.pydocstyle, -- linter for checking standard practices in Python code.
-      null_ls.builtins.formatting.isort, -- import sorter for Python code.
-      null_ls.builtins.diagnostics.flake8, -- linter for ensuring uniform coding practices in Python code.
+      null_ls.builtins.formatting.black.with({ -- Formatter for Python code.
+        prefer_local = ".venv/bin",
+      }),
+      null_ls.builtins.diagnostics.mypy.with({ -- Static type checker for Python code.
+        prefer_local = ".venv/bin",
+        condition = function(utils)
+          -- INFO: Only load "mypy" when a "pyproject.toml" file exists in the root directory.
+          return utils.root_has_file({
+            "pyproject.toml",
+          })
+        end,
+      }),
+      null_ls.builtins.diagnostics.pydocstyle.with({ -- Linter for Python docstrings.
+        prefer_local = ".venv/bin",
+        condition = function(utils)
+          -- INFO: Only load "pydocstyle" when a "pyproject.toml" file exists in the root directory.
+          return utils.root_has_file({
+            "pyproject.toml",
+          })
+        end,
+      }),
+      null_ls.builtins.formatting.isort.with({ -- Formatter for sorting Python import statements.
+        prefer_local = ".venv/bin",
+      }),
+      null_ls.builtins.diagnostics.flake8.with({ -- Linter for general Pyhon code.
+        prefer_local = ".venv/bin",
+        condition = function(utils)
+          -- INFO: Only load "flake8" when a ".flake8" file exists in the root directory.
+          return utils.root_has_file({
+            ".flake8",
+          })
+        end,
+      }),
     },
   })
 end
