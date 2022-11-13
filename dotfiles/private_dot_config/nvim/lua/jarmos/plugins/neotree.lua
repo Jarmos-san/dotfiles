@@ -38,7 +38,7 @@ function M.config()
       hijack_netrw_behavior = "open_current",
       filtered_items = {
         hide_dotfiles = false,
-        hide_by_name = { ".git", ".mypy_cache", "node_modules", "__pycache__", ".venv" },
+        hide_by_name = { ".git", ".mypy_cache", "node_modules", "__pycache__", ".venv", "plugin" },
       },
     },
     git_status = {

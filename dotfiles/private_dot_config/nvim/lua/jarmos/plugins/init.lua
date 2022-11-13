@@ -90,6 +90,8 @@ packer.startup({
     -- Plugin for better syntax highlighting & among other goodies!
     use({
       "nvim-treesitter/nvim-treesitter",
+      -- FIXME: Lazy-loading it causes a lot of unforeseen issues.
+      -- event = { "BufRead", "BufNewFile" },
       run = function()
         require("nvim-treesitter.install").update({
           with_sync = true,
@@ -105,6 +107,10 @@ packer.startup({
         { "p00f/nvim-ts-rainbow", after = "nvim-treesitter" },
         -- Treesitter-based plugin for automatically inserting/renaming HTML tags.
         { "windwp/nvim-ts-autotag", after = "nvim-treesitter" },
+        -- Treesitter-based plugin for better navigation around code blocks & text objects.
+        { "nvim-treesitter/nvim-treesitter-textobjects", after = "nvim-treesitter" },
+        -- Plugin for checking out highlight definitions, proper navigation & better rename capabilities.
+        { "nvim-treesitter/nvim-treesitter-refactor", after = "nvim-treesitter" },
       },
     })
 
@@ -134,9 +140,9 @@ packer.startup({
       tag = "*", -- Download the latest tagged version instead of the latest commits.
       cmd = { "Neotree" }, -- Lazy-load only when the ":Neotree" command is invoked.
       requires = {
-        "nvim-lua/plenary.nvim",
-        "kyazdani42/nvim-web-devicons",
-        "MunifTanjim/nui.nvim",
+        { "nvim-lua/plenary.nvim", opt = true },
+        { "kyazdani42/nvim-web-devicons" },
+        { "MunifTanjim/nui.nvim" },
       },
       config = function()
         require("jarmos.plugins.neotree").config()
@@ -233,8 +239,6 @@ packer.startup({
     use({
       "nvim-telescope/telescope.nvim",
       branch = "0.1.x",
-      -- FIXME: Cann't lazy-load without running in to issues.
-      -- cmd = { "Telescope" },
       config = function()
         require("jarmos.plugins.telescope").config()
       end,
@@ -243,6 +247,7 @@ packer.startup({
         "chip/telescope-software-licenses.nvim",
         { "nvim-telescope/telescope-fzf-native.nvim", run = "make" },
       },
+      cmd = { "Telescope" },
     })
 
     -- A more useful UI greeter.
@@ -252,6 +257,7 @@ packer.startup({
       config = function()
         require("jarmos.plugins.alpha").config()
       end,
+      event = { "BufEnter" },
     })
 
     -- Plugin for improved buffer deletion capabilities.
@@ -267,6 +273,15 @@ packer.startup({
       config = function()
         require("toggleterm").setup()
       end,
+      cmd = { "ToggleTerm" },
+    })
+
+    -- Plugin for improving the load times.
+    use({
+      "lewis6991/impatient.nvim",
+      config = function()
+        require("impatient")
+      end,
     })
   end,
   config = {
@@ -275,7 +290,7 @@ packer.startup({
     },
     profile = {
       enable = true,
-      threshold = 1,
+      -- threshold = 1,
     },
   },
 })
