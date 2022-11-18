@@ -35,6 +35,8 @@ function M.config()
     end,
 
     sources = {
+      --INFO: LSP-based code actions for TypeScript files using "null-ls".
+      require("typescript.extensions.null-ls.code-actions"),
       null_ls.builtins.formatting.stylua.with({ -- formatter for Lua code.
         -- INFO: Configure Stylua to format Lua code with two Space characters.
         extra_args = { "--indent-type", "Spaces", "--indent-width", "2" },
