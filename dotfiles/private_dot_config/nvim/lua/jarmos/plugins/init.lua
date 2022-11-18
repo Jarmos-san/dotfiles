@@ -168,23 +168,19 @@ packer.startup({
       -- FIXME: Configure "gitsigns" to load only when the current working directory is a git repository.
       -- For a detailed discussion on a possible fix, refer to the following thread for more information:
       -- https://neovim.discourse.group/t/how-to-conditionally-load-gitsigns-only-when-current-working-directory-is-a-git-repository/3284
-      cond = function()
-        if vim.api.nvim_command_output("!git rev-parse --is-inside-work-tree") == true then
-          return true
-        end
-      end,
+      -- cond = function()
+      --     if vim.api.nvim_command_output("!git rev-parse --is-inside-work-tree") == true then
+      --         return true
+      --     end
+      -- end,
     })
 
     -- TODO: Uncomment the following lines of code after customising it properly.
     -- use({
-    --     "rebelot/heirline.nvim",
-    --     config = function()
-    --         -- local statusline = {}
-    --         -- local winbar = {}
-    --         -- local tabline = {}
-
-    --         require("heirline").setup()
-    --     end,
+    --   "rebelot/heirline.nvim",
+    --   config = function()
+    --     require("jarmos.plugins.heirline").config()
+    --   end,
     -- })
 
     -- TODO: Replace it with "rebelot/heirline.nvim" instead.
@@ -231,9 +227,9 @@ packer.startup({
     })
 
     -- Plugin for advanced notifications about various stuff.
-    -- use({
-    -- 	"rcarriga/nvim-notify",
-    -- })
+    use({
+      "rcarriga/nvim-notify",
+    })
 
     -- Plugin for providing a floating-window based UI for various functionalities.
     use({
@@ -283,6 +279,24 @@ packer.startup({
         require("impatient")
       end,
     })
+
+    -- Plugin for better navigation around LSP diagnostic errors
+    use({
+      "folke/trouble.nvim",
+      requires = "kyazdani42/nvim-web-devicons",
+      config = function()
+        require("jarmos.plugins.trouble").config()
+      end,
+    })
+
+    -- Plugin for better UI/UX within Neovim.
+    use({
+      "folke/noice.nvim",
+      config = function()
+        require("jarmos.plugins.noice").config()
+      end,
+      requires = { "MunifTanjim/nui.nvim", "rcarriga/nvim-notify" },
+    })
   end,
   config = {
     display = {
@@ -290,7 +304,9 @@ packer.startup({
     },
     profile = {
       enable = true,
-      -- threshold = 1,
+    },
+    git = {
+      default_url_format = "https://hub.fastgit.xyz/%s",
     },
   },
 })

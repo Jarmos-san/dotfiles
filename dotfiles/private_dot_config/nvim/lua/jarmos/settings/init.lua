@@ -65,4 +65,6 @@ vim.g.completeopt = { "menu", "menuone", "noselect" }
 
 vim.opt.clipboard = "unnamedplus"
 
-vim.opt.laststatus = 3
+vim.opt.laststatus = 3 -- Configure Neovim with only a single statusline to keep things clean.
+
+vim.notify = require("notify") -- Configure Neovim to use the better "nvim-notify plugin."
