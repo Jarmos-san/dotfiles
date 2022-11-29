@@ -305,8 +305,8 @@ packer.startup({
     profile = {
       enable = true,
     },
-    git = {
-      default_url_format = "https://hub.fastgit.xyz/%s",
-    },
+    -- git = {
+    --     default_url_format = "https://hub.fastgit.xyz/%s",
+    -- },
   },
 })

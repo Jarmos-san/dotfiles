@@ -13,6 +13,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
+-- FIXME: Uncomment this later on since it causes issues while in development.
 -- Source the "init.lua" file on save.
 vim.api.nvim_create_autocmd("BufWritePost", {
   desc = "Source the 'init.lua' file on save.",
@@ -149,7 +150,9 @@ vim.api.nvim_create_autocmd("BufNewFile", {
   group = create_skeleton_group,
   command = "0r ~/.config/nvim/templates/readme.md",
 })
-
+--
+-- Generate a base template to build upon when working with Shell files.
+local create_skeleton_group = vim.api.nvim_create_augroup("create_skeletons", { clear = true })
 -- INFO: Generate the template file for Bash/Shell files.
 vim.api.nvim_create_autocmd("BufNewFile", {
   pattern = "*.sh",
