@@ -1,1 +1,1 @@
-vim.opt.colorcolumn = { 88 }
+vim.opt.colorcolumn = { 93 }
