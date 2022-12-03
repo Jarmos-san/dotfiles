@@ -130,9 +130,7 @@ packer.startup({
     use({
       "windwp/nvim-autopairs",
       config = function()
-        require("nvim-autopairs").setup({
-          check_ts = true,
-        })
+        require("jarmos.plugins.autopairs").config()
       end,
     })
 
