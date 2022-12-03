@@ -111,6 +111,8 @@ packer.startup({
         { "nvim-treesitter/nvim-treesitter-textobjects", after = "nvim-treesitter" },
         -- Plugin for checking out highlight definitions, proper navigation & better rename capabilities.
         { "nvim-treesitter/nvim-treesitter-refactor", after = "nvim-treesitter" },
+        -- Plugin for playing around with Treesitter queries.
+        { "nvim-treesitter/playground", after = "nvim-treesitter" },
       },
     })
 
