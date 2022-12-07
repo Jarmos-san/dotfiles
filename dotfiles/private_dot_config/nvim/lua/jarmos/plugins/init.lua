@@ -12,9 +12,10 @@ packer.startup({
     use({
       -- Allow "packer.nvim" to keep itself updated!
       "wbthomason/packer.nvim",
-      opt = true,
+      -- FIXME: Lazy-loading doesn't work as expected & causes unnecessary issues.
+      -- opt = true,
       -- Only lazy-load the plugin when the following commands are invoked!
-      cmd = { "PackerSync", "PackerCompile", "PackerInstall", "PackerUpdate", "PackerSnapshot" },
+      -- cmd = { "PackerSync", "PackerCompile", "PackerInstall", "PackerUpdate", "PackerSnapshot" },
     })
 
     use({
