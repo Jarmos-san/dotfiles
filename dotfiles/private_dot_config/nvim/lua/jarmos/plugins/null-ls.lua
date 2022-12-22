@@ -50,6 +50,7 @@ function M.config()
       }),
       null_ls.builtins.diagnostics.eslint_d, -- A faster version of ESLint (linter for TS/JS code).
       null_ls.builtins.formatting.prettier.with({
+        extra_args = { "--tab-wdith", "2" },
         prefer_local = "node_modules/.bin",
         condition = function(utils)
           -- INFO: Only load the "prettier" source if the following files exists in the project root.

@@ -39,6 +39,7 @@ function M.config()
       filtered_items = {
         hide_dotfiles = false,
         hide_by_name = { ".git", ".mypy_cache", "node_modules", "__pycache__", ".venv", "plugin" },
+        always_show = { ".env" },
       },
     },
     git_status = {
