@@ -6,32 +6,8 @@ case $- in
       *) return;;
 esac
 
-# Load certain shell dotfiles for better user info
-for BASH_FILES in $HOME/.bash_{aliases,exports,functions}; do
-    # shellcheck source=/dev/null
-    source "$BASH_FILES"
-done
-
-# Enable Homebrew to work somehow!
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
-# Record each line as it gets issued
-PROMPT_COMMAND='history -a'
-
-# Use standard ISO 8601 timestamps
-# %F = %Y-%m-%d
-# %T = %H:%M:%S
-HISTTIMEFORMAT='%F %T '
-
-# Add directories for fast access.
-# TODO: Need to experiment & optimized behaviour as per personal requirements
-CDPATH="."
-
 # Enable "bookmarks" for quick access to certain folders in the system
 shopt -s cdable_vars
-
-# The aforementioned "bookmarks" are below
-export projects="$HOME/Projects"
 
 # Append to the history file, don't overwrite it
 shopt -s histappend
@@ -105,7 +81,9 @@ eval "$(starship init bash)"
 
 # BEGIN_KITTY_SHELL_INTEGRATION
 # shellcheck source=/dev/null
-if test -n "$KITTY_INSTALLATION_DIR" -a -e "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; then source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; fi
+if test -n "$KITTY_INSTALLATION_DIR" -a -e "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; then
+    source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
+fi
 # END_KITTY_SHELL_INTEGRATION
 
 # Necessary configurations for GPG to work properly
@@ -113,9 +91,16 @@ GPG_TTY=$(tty)
 export GPG_TTY
 gpgconf --launch gpg-agent
 
-# Configure completion for the GitHub CLI tool
-eval "$(gh completion -s bash)"
-
 # Append PATH with additional directories which will might or mightn't
 # contain binaries to be invoked from the CLI.
 PATH=$PATH:$HOME/.local/bin
+
+# Configure Bash to load Fish as a subprocess. See the following Arch Wiki page for more information:
+# https://wiki.archlinux.org/title/fish#Modify_.bashrc_to_drop_into_fish
+# if [[ $(ps --no-header --pid=$PPID --format=comm) != "fish" && -z ${BASH_EXECUTION_STRING} ]]; then
+#     exec fish
+# fi
+
+if [ -x "$(command -v tmux)" ] && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
+    tmux -u attach || tmux -u >/dev/null 2>&1
+fi
