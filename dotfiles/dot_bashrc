@@ -95,12 +95,10 @@ gpgconf --launch gpg-agent
 # contain binaries to be invoked from the CLI.
 PATH=$PATH:$HOME/.local/bin
 
-# Configure Bash to load Fish as a subprocess. See the following Arch Wiki page for more information:
-# https://wiki.archlinux.org/title/fish#Modify_.bashrc_to_drop_into_fish
-# if [[ $(ps --no-header --pid=$PPID --format=comm) != "fish" && -z ${BASH_EXECUTION_STRING} ]]; then
-#     exec fish
-# fi
-
+# See the following Arch Wiki documentation for an explanation of the following code.
+# https://wiki.archlinux.org/title/tmux#Start_tmux_on_every_shell_login
 if [ -x "$(command -v tmux)" ] && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
-    tmux -u attach || tmux -u >/dev/null 2>&1
+    # Attach to an existing tmux session (if possible) or create a new one (and close
+    # the parent process after the tmux session is closed too).
+    tmux -u attach || tmux -u >/dev/null 2>&1; exit
 fi
