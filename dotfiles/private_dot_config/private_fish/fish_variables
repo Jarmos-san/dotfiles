@@ -3,11 +3,14 @@
 SETUVAR --export STARSHIP_CONFIG:/home/space/\x2econfig/starship/starship\x2etoml
 SETUVAR __fish_initialized:3400
 SETUVAR _fish_abbr_dcp:docker\x2dcompose
+SETUVAR _fish_abbr_ll:exa\x20\x2d\x2dlong\x20\x2d\x2dall\x20\x2d\x2dclassify\x20\x2d\x2dicons\x20\x2d\x2dgit\x20\x2d\x2dignore\x2dglob\x3d\x22\x2egit\x22
 SETUVAR _fish_abbr_loc:wc\x20\x2dl
 SETUVAR _fish_abbr_mkexe:chmod\x20u\x2bx
 SETUVAR _fish_abbr_mkvenv:python3\x20\x2dm\x20venv\x20\x2evenv
 SETUVAR _fish_abbr_mx:tmux\x20\x2du
 SETUVAR _fish_abbr_tec:tectonic\x20\x2dX
+SETUVAR _fish_abbr_tree:exa\x20\x2d\x2dtree\x20\x2d\x2dall\x20\x2d\x2dicons\x20\x2d\x2dignore\x2dglob\x3d\x22\x2egit\x22\x20\x2d\x2dgit\x2dignore
+SETUVAR _fish_abbr_update:sudo\x20apt\x2dget\x20update\x20\x26\x26\x20sudo\x20apt\x2dget\x20upgrade\x20\x2dy\x3b\x20brew\x20update\x20\x26\x26\x20brew\x20upgrade\x20\x26\x26\x20brew\x20autoremove
 SETUVAR fish_color_autosuggestion:555\x1ebrblack
 SETUVAR fish_color_cancel:\x2dr
 SETUVAR fish_color_command:blue
