@@ -79,6 +79,10 @@ More will be added as & when I come across any.
 
 - [Chezmoi | Articles, Podcasts, Videos on Using Chezmoi](https://www.chezmoi.io/links/articles-podcasts-and-videos)
 
+- [Declarative Management of Dotfiles With Nix & Home Manager](https://www.bekk.christmas/post/2021/16/dotfiles-with-nix-and-home-manager)
+
+- [Managing Dotfiles With Nix](https://alexpearce.me/2021/07/managing-dotfiles-with-nix)
+
 ## Support the Project
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/jarmos)
