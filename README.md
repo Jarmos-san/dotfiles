@@ -83,6 +83,12 @@ More will be added as & when I come across any.
 
 - [Managing Dotfiles With Nix](https://alexpearce.me/2021/07/managing-dotfiles-with-nix)
 
+- [Tmux GitHub Wikia](https://github.com/tmux/tmux/wiki)
+
+- [The Tao of Tmux](https://leanpub.com/the-tao-of-tmux/read)
+
+- [Making Tmux Pretty & Usable](https://www.hamvocke.com/blog/a-guide-to-customizing-your-tmux-conf)
+
 ## Support the Project
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/jarmos)
