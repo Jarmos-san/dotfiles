@@ -89,6 +89,8 @@ More will be added as & when I come across any.
 
 - [Making Tmux Pretty & Usable](https://www.hamvocke.com/blog/a-guide-to-customizing-your-tmux-conf)
 
+- [Unofficial Nix Wikia](https://nix.wiki)
+
 ## Support the Project
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/jarmos)
