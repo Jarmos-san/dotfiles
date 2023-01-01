@@ -5,6 +5,10 @@ Module for configuring the builti-in LSP client.
 local M = {}
 
 function M.setup_lsp()
+  -- Necessary for Neovim to show the diagnostic hover window as quick as possible.
+  vim.o.updatetime = 250
+
+  -- Utlity function to make assigning diagnostic symbols more easily.
   local sign = function(severity, icon)
     local highlight = "Diagnostics" .. severity
 
@@ -17,9 +21,9 @@ function M.setup_lsp()
   sign("Hint", "")
 
   vim.diagnostic.config({
+    virtual_text = false,
     underline = true,
     signs = true,
-    float = { header = false, source = "always" },
     update_in_insert = true,
     severity_sort = true,
   })
@@ -42,6 +46,23 @@ function M.setup_lsp()
     map.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
     map.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
     map.set("n", "gr", vim.lsp.buf.references, opts)
+
+    -- Configurations for showing diagnostics in a hover window instead. See the documentations at:
+    -- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#show-line-diagnostics-automatically-in-hover-window
+    vim.api.nvim_create_autocmd("CursorHold", {
+      buffer = bufnr,
+      callback = function()
+        local hover_window_configs = {
+          focusable = true,
+          close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+          border = "rounded",
+          source = "always",
+          prefix = " ",
+          scope = "cursor",
+        }
+        vim.diagnostic.open_float(nil, hover_window_configs)
+      end,
+    })
   end
 
   local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -51,6 +72,9 @@ function M.setup_lsp()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
 
   local lspconfig = require("lspconfig")
+  -- Separate Lua plugin necessary for proper TypeScript LSP support. For more information on this plugin, refer to:
+  -- https://github.com/jose-elias-alvarez/typescript.nvim
+  local typescript_lspconfig = require("typescript")
 
   lspconfig.cssls.setup({
     capabilities = capabilities,
@@ -118,16 +142,8 @@ function M.setup_lsp()
       },
     },
   })
-end
 
--- Special initialisation for the TypeScript LSP server. See the following repository for more information:
--- https://github.com/jose-elias-alvarez/typescript.nvim
-function M.setup_typescript_lsp()
-  local on_attach = function()
-    -- TODO: Add some keymaps & other LSP-based logic over here.
-  end
-
-  require("typescript").setup({
+  typescript_lspconfig.setup({
     server = {
       on_attach = on_attach,
     },

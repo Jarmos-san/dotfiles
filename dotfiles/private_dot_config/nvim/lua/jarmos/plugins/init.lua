@@ -200,9 +200,6 @@ packer.startup({
     use({
       "jose-elias-alvarez/typescript.nvim",
       ft = { "typescript", "typescriptreact" },
-      config = function()
-        require("jarmos.plugins.lsp").setup_typescript_lsp()
-      end,
     })
 
     use({
