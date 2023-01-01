@@ -16,3 +16,4 @@ misc/**/*
 **/plugin/**/*
 **/startuptime.txt
 **/scratch/**/*
+**/.luarc.json
