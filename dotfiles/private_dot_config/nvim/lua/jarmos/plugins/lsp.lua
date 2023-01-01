@@ -5,6 +5,8 @@ Module for configuring the builti-in LSP client.
 local M = {}
 
 function M.setup_lsp()
+  local notify = require("notify")
+
   -- Necessary for Neovim to show the diagnostic hover window as quick as possible.
   vim.o.updatetime = 250
 
@@ -16,7 +18,7 @@ function M.setup_lsp()
     severity_sort = true, -- Configure Neovim to sort the error messages according to its severity.
   })
 
-  local on_attach = function(client, bufnr)
+  local on_attach = function(_, bufnr)
     local map = vim.keymap
     local opts = { noremap = true, silent = true, buffer = bufnr }
 
@@ -51,37 +53,6 @@ function M.setup_lsp()
         vim.diagnostic.open_float(nil, hover_window_configs)
       end,
     })
-
-    -- Highlight the symbol under cursor. See the official docs for information at:
-    -- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#highlight-symbol-under-cursor
-    if client.server_capabilities.documentHighlightProvider then
-      vim.cmd([[
-        hi! LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
-        hi! LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
-        hi! LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
-    ]])
-
-      vim.api.nvim_create_augroup("lsp_document_highlight", {
-        clear = false,
-      })
-
-      vim.api.nvim_clear_autocmds({
-        buffer = bufnr,
-        group = "lsp_document_highlight",
-      })
-
-      vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-        group = "lsp_document_highlight",
-        buffer = bufnr,
-        callback = vim.lsp.buf.document_highlight,
-      })
-
-      vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-        group = "lsp_document_highlight",
-        buffer = bufnr,
-        callback = vim.lsp.buf.clear_references,
-      })
-    end
   end
 
   local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -115,6 +86,12 @@ function M.setup_lsp()
   lspconfig.jsonls.setup({
     on_attach = on_attach,
     capabilities = capabilities,
+    settings = {
+      json = {
+        schemas = require("schemastore").json.schemas(),
+        validate = { enable = true },
+      },
+    },
   })
 
   -- Initialisation for the Python LSP server.

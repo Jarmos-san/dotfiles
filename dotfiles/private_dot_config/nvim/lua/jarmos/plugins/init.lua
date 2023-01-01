@@ -199,7 +199,8 @@ packer.startup({
 
     use({
       "jose-elias-alvarez/typescript.nvim",
-      ft = { "typescript", "typescriptreact" },
+      -- FIXME: Can't lazy-load else Neovim complains when starting the LSP server.
+      -- ft = { "typescript", "typescriptreact" },
     })
 
     use({
@@ -295,7 +296,13 @@ packer.startup({
       end,
       requires = { "MunifTanjim/nui.nvim", "rcarriga/nvim-notify" },
     })
+
+    -- Plugin for JSON schemas.
+    use({
+      "b0o/schemastore.nvim",
+    })
   end,
+
   config = {
     display = {
       open_fn = require("packer.util").float,
@@ -303,8 +310,5 @@ packer.startup({
     profile = {
       enable = true,
     },
-    -- git = {
-    --     default_url_format = "https://hub.fastgit.xyz/%s",
-    -- },
   },
 })
