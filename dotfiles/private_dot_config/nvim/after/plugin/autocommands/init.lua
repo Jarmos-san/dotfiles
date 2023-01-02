@@ -150,12 +150,23 @@ vim.api.nvim_create_autocmd("BufNewFile", {
   group = create_skeleton_group,
   command = "0r ~/.config/nvim/templates/readme.md",
 })
---
--- Generate a base template to build upon when working with Shell files.
-local create_skeleton_group = vim.api.nvim_create_augroup("create_skeletons", { clear = true })
+
 -- INFO: Generate the template file for Bash/Shell files.
 vim.api.nvim_create_autocmd("BufNewFile", {
   pattern = "*.sh",
   group = create_skeleton_group,
   command = "0r ~/.config/nvim/templates/bash.sh",
+})
+
+-- Jumpt to last known location on a file before exiting it. See the following link for information:
+-- https://this-week-in-neovim.org/2023/Jan/02#tips
+vim.api.nvim_create_autocmd("BufReadPost", {
+  callback = function()
+    local mark = vim.api.nvim_buf_get_mark(0, '"')
+    local line_count = vim.api.nvim_buf_line_count(0)
+
+    if mark[1] > 0 and mark[1] <= line_count then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    end
+  end,
 })
