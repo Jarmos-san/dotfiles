@@ -10,6 +10,8 @@ end
 packer.startup({
   function(use)
     use({
+      -- TODO: Replace packer.nvim with lazy.nvim instead. See the official repository below for more information:
+      -- https://github.com/folke/lazy.nvim
       -- Allow "packer.nvim" to keep itself updated!
       "wbthomason/packer.nvim",
       -- FIXME: Lazy-loading doesn't work as expected & causes unnecessary issues.
@@ -178,10 +180,10 @@ packer.startup({
 
     -- TODO: Uncomment the following lines of code after customising it properly.
     -- use({
-    --   "rebelot/heirline.nvim",
-    --   config = function()
-    --     require("jarmos.plugins.heirline").config()
-    --   end,
+    --     "rebelot/heirline.nvim",
+    --     config = function()
+    --         require("jarmos.plugins.heirline").config()
+    --     end,
     -- })
 
     -- TODO: Replace it with "rebelot/heirline.nvim" instead.
@@ -301,6 +303,10 @@ packer.startup({
     use({
       "b0o/schemastore.nvim",
     })
+
+    -- TODO: Add the following plugins;
+    -- 1. https://github.com/chrisgrieser/nvim-various-textobjs
+    -- 2. https://github.com/roobert/search-replace.nvim
   end,
 
   config = {

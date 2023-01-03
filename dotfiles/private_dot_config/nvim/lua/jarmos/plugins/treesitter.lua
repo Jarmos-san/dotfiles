@@ -14,6 +14,7 @@ function M.setup()
       "dockerfile",
       "gitattributes",
       "gitignore",
+      "help",
       "javascript",
       "json",
       "lua",
