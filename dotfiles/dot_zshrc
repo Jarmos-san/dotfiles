@@ -1,0 +1,17 @@
+
+# The following lines were added by compinstall
+
+zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
+zstyle ':completion:*' matcher-list '' '' 'm:{[:lower:]}={[:upper:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'
+zstyle :compinstall filename '/home/space/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+# Lines configured by zsh-newuser-install
+setopt autocd beep extendedglob nomatch notify
+# End of lines configured by zsh-newuser-install
+
+# Enable Starship
+eval "$(starship init zsh)"
+export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
