@@ -307,6 +307,14 @@ packer.startup({
     -- TODO: Add the following plugins;
     -- 1. https://github.com/chrisgrieser/nvim-various-textobjs
     -- 2. https://github.com/roobert/search-replace.nvim
+
+    -- Plugin for a "better-looking" cursor column.
+    use({
+      "lukas-reineke/virt-column.nvim",
+      config = function()
+        require("virt-column").setup()
+      end,
+    })
   end,
 
   config = {

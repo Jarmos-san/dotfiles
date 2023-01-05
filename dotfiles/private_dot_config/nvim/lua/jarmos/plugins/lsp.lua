@@ -5,7 +5,7 @@ Module for configuring the builti-in LSP client.
 local M = {}
 
 function M.setup_lsp()
-  local notify = require("notify")
+  -- local notify = require("notify")
 
   -- Necessary for Neovim to show the diagnostic hover window as quick as possible.
   vim.o.updatetime = 250
