@@ -15,3 +15,14 @@ setopt autocd beep extendedglob nomatch notify
 # Enable Starship
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+
+# A bunch of custom aliases for easier terminal usage.
+alias ll="exa --long --all --classify --icons --git --ignore-glob='.git'"
+alias dcp="docker-compose"
+alias loc="wc -l"
+alias mkvenv="python -m venv .venv"
+alias update="sudo apt-get update && sudo apt-get upgrade -y && brew update && brew upgrade && brew autoremove"
+
+# Plugin for syntax highlighting when using Zsh as a login shell. For more info,
+# refer to the docs at: https://github.com/zsh-users/zsh-syntax-highlighting
+source "${ZDOTDIR:-$HOME}/.local/share/zsh/plugins/zsh-syntax-highlighting.zsh"
