@@ -21,6 +21,7 @@ function M.setup()
       "markdown",
       "markdown_inline",
       "python",
+      "rst",
       "toml",
       "tsx",
       "typescript",
