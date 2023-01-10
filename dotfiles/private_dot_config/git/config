@@ -19,6 +19,8 @@
     keepTemporaries = false
 
 [mergetool "nvim"]
+    ; INFO: More information about the following suggestions can be found at:
+    ; https://smittie.de/posts/git-mergetool
     ; cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c '$wincmd J'
     cmd = "nvim -d -c \"wincmd l\" -c \"normal ]c\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\""
 
