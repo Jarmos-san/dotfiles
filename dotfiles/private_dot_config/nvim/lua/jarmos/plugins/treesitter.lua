@@ -12,6 +12,7 @@ function M.setup()
       "css",
       "diff",
       "dockerfile",
+      "git_rebase",
       "gitattributes",
       "gitignore",
       "help",
