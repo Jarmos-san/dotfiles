@@ -5,18 +5,22 @@
     name = Somraj Saha
     email = somraj.1994@gmail.com
     # GPG key for Jarmos Desktop (Ubuntu)
-    signingkey = {{ secret "show" "GitSignature" }}
+    signingkey = 9A3291DED12A1FD6
+
+[includeIf "gitdir:~/Work/"]
+    path = ~/.config/git/config.augwir
 
 [merge]
-    tool = vimdiff
-
-[mergetool "vimdiff"]
-    cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c '$wincmd J'
+    tool = nvim
 
 [mergetool]
     keepBackup = false
     prompt = false
     keepTemporaries = false
+
+[mergetool "nvim"]
+    ; cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c '$wincmd J'
+    cmd = "nvim -d -c \"wincmd l\" -c \"normal ]c\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\""
 
 [push]
     default = current
