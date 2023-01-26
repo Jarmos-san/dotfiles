@@ -38,17 +38,25 @@ function M.config()
       -- FIXME: Figure a way out to load it conditionally only when working on TypeScript projects.
       -- INFO: LSP-based code actions for TypeScript files using "null-ls".
       -- require("typescript.extensions.null-ls.code-actions"),
-      null_ls.builtins.formatting.stylua.with({ -- formatter for Lua code.
+
+      -- formatter for Lua code.
+      null_ls.builtins.formatting.stylua.with({
         -- INFO: Configure Stylua to format Lua code with two Space characters.
         extra_args = { "--indent-type", "Spaces", "--indent-width", "2" },
       }),
-      null_ls.builtins.diagnostics.selene.with({ -- linter for Lua code.
+
+      -- linter for Lua code.
+      null_ls.builtins.diagnostics.selene.with({
         -- INFO: Load the "selene" linter only if its configuration file exists in the project directory.
         condition = function(utils)
           return utils.root_has_file({ "selene.toml", "vim.toml" })
         end,
       }),
-      null_ls.builtins.diagnostics.eslint_d, -- A faster version of ESLint (linter for TS/JS code).
+
+      -- A faster version of ESLint (linter for TS/JS code).
+      null_ls.builtins.diagnostics.eslint_d,
+
+      -- Prettier formatter for frontend projects.
       null_ls.builtins.formatting.prettier.with({
         extra_args = { "--tab-wdith", "2" },
         prefer_local = "node_modules/.bin",
@@ -69,10 +77,14 @@ function M.config()
           })
         end,
       }),
-      null_ls.builtins.formatting.black.with({ -- Formatter for Python code.
+
+      -- Formatter for Python code.
+      null_ls.builtins.formatting.black.with({
         prefer_local = ".venv/bin",
       }),
-      null_ls.builtins.diagnostics.mypy.with({ -- Static type checker for Python code.
+
+      -- Static type checker for Python code.
+      null_ls.builtins.diagnostics.mypy.with({
         prefer_local = ".venv/bin",
         condition = function(utils)
           -- INFO: Only load "mypy" when a "pyproject.toml" file exists in the root directory.
@@ -81,7 +93,9 @@ function M.config()
           })
         end,
       }),
-      null_ls.builtins.diagnostics.pydocstyle.with({ -- Linter for Python docstrings.
+
+      -- Linter for Python docstrings.
+      null_ls.builtins.diagnostics.pydocstyle.with({
         prefer_local = ".venv/bin",
         condition = function(utils)
           -- INFO: Only load "pydocstyle" when a "pyproject.toml" file exists in the root directory.
@@ -90,10 +104,14 @@ function M.config()
           })
         end,
       }),
-      null_ls.builtins.formatting.isort.with({ -- Formatter for sorting Python import statements.
+
+      -- Formatter for sorting Python import statements.
+      null_ls.builtins.formatting.isort.with({
         prefer_local = ".venv/bin",
       }),
-      null_ls.builtins.diagnostics.flake8.with({ -- Linter for general Pyhon code.
+
+      -- Linter for general Pyhon code.
+      null_ls.builtins.diagnostics.flake8.with({
         prefer_local = ".venv/bin",
         condition = function(utils)
           -- INFO: Only load "flake8" when a ".flake8" file exists in the root directory.
@@ -102,6 +120,9 @@ function M.config()
           })
         end,
       }),
+
+      -- Formmatter for Rust code.
+      null_ls.builtins.formatting.rustfmt,
     },
   })
 end

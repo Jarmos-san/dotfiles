@@ -66,6 +66,9 @@ function M.setup_lsp()
   -- https://github.com/jose-elias-alvarez/typescript.nvim
   local typescript_lspconfig = require("typescript")
 
+  -- Seperate plugin for setting up LSP for Rust development.
+  local rust_lspconfig = require("rust-tools")
+
   lspconfig.cssls.setup({
     capabilities = capabilities,
   })
@@ -141,6 +144,13 @@ function M.setup_lsp()
 
   typescript_lspconfig.setup({
     server = {
+      on_attach = on_attach,
+    },
+  })
+
+  rust_lspconfig.setup({
+    server = {
+      -- TODO: Configure this "on_attach" function for Rust development properly.
       on_attach = on_attach,
     },
   })

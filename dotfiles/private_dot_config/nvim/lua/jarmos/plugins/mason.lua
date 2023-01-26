@@ -39,6 +39,7 @@ function M.install_servers()
       "prettierd",
       "pydocstyle",
       "pyright",
+      "rust-analyzer",
       "selene",
       "shellcheck",
       "stylua",

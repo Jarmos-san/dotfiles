@@ -315,6 +315,10 @@ packer.startup({
         require("virt-column").setup()
       end,
     })
+
+    use({
+      "simrat39/rust-tools.nvim",
+    })
   end,
 
   config = {
