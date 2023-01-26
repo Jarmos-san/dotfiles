@@ -28,9 +28,12 @@ function M.install_servers()
   installer.setup({
     ensure_installed = {
       "bash-language-server",
+      -- "beautysh",
       -- "editorconfig-check",
       "eslint_d",
+      -- "checkmate",
       "css-lsp",
+      -- "dotenv_linter",
       "flake8",
       "isort",
       "json-lsp",
@@ -40,6 +43,8 @@ function M.install_servers()
       "pydocstyle",
       "pyright",
       "rust-analyzer",
+      "rustfmt",
+      "rustywind",
       "selene",
       "shellcheck",
       "stylua",
@@ -48,6 +53,7 @@ function M.install_servers()
       "vale",
       "yaml-language-server",
       "yamllint",
+      -- "zsh",
     },
   })
 end
