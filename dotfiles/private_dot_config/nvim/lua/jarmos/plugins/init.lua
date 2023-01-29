@@ -107,7 +107,7 @@ packer.startup({
         -- Necessary plugin for proper commenting in JSX/TSX files.
         { "JoosepAlviste/nvim-ts-context-commentstring", after = "nvim-treesitter" },
         -- Treesitter-based plugin for colourising brackets.
-        { "p00f/nvim-ts-rainbow", after = "nvim-treesitter" },
+        { "mrjones2014/nvim-ts-rainbow", after = "nvim-treesitter" },
         -- Treesitter-based plugin for automatically inserting/renaming HTML tags.
         { "windwp/nvim-ts-autotag", after = "nvim-treesitter" },
         -- Treesitter-based plugin for better navigation around code blocks & text objects.
@@ -304,10 +304,6 @@ packer.startup({
       "b0o/schemastore.nvim",
     })
 
-    -- TODO: Add the following plugins;
-    -- 1. https://github.com/chrisgrieser/nvim-various-textobjs
-    -- 2. https://github.com/roobert/search-replace.nvim
-
     -- Plugin for a "better-looking" cursor column.
     use({
       "lukas-reineke/virt-column.nvim",
@@ -318,6 +314,34 @@ packer.startup({
 
     use({
       "simrat39/rust-tools.nvim",
+    })
+
+    -- FIXME: Doesn't work for now.
+    -- use({
+    --     "barrett-ruth/import-cost.nvim",
+    --     run = "sh install.sh npm",
+    --     config = function()
+    --         require("import-cost").setup()
+    --     end,
+    -- })
+
+    use({
+      "chrisgrieser/nvim-various-textobjs",
+      config = function()
+        require("various-textobjs").setup({
+          useDefaultKeymaps = true,
+        })
+      end,
+    })
+
+    use({
+      "roobert/search-replace.nvim",
+      config = function()
+        require("search-replace").setup({
+          default_replace_single_buffer_options = "gcI",
+          default_replace_multi_buffer_options = "egcI",
+        })
+      end,
     })
   end,
 
