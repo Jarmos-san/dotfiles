@@ -42,6 +42,7 @@ function M.install_servers()
       "prettierd",
       "pydocstyle",
       "pyright",
+      "ruff",
       "rust-analyzer",
       "rustfmt",
       "rustywind",

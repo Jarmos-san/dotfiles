@@ -1,7 +1,6 @@
 --[[
 Module for configuring the "null-ls" plugin.
 --]]
-
 local M = {}
 
 function M.config()
@@ -33,7 +32,6 @@ function M.config()
         })
       end
     end,
-
     sources = {
       -- FIXME: Figure a way out to load it conditionally only when working on TypeScript projects.
       -- INFO: LSP-based code actions for TypeScript files using "null-ls".
@@ -57,8 +55,7 @@ function M.config()
       null_ls.builtins.diagnostics.eslint_d,
 
       -- Prettier formatter for frontend projects.
-      null_ls.builtins.formatting.prettier.with({
-        extra_args = { "--tab-wdith", "2" },
+      null_ls.builtins.formatting.prettierd.with({
         prefer_local = "node_modules/.bin",
         condition = function(utils)
           -- INFO: Only load the "prettier" source if the following files exists in the project root.
@@ -123,6 +120,18 @@ function M.config()
 
       -- Formmatter for Rust code.
       null_ls.builtins.formatting.rustfmt,
+
+      -- Diagnostics for prose (like Markdown & other text files).
+      null_ls.builtins.diagnostics.vale.with({
+        condition = function(utils)
+          return utils.root_has_file({
+            ".vale.ini",
+          })
+        end,
+      }),
+
+      -- Linter for Python projects.
+      null_ls.builtins.diagnostics.ruff,
     },
   })
 end
