@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-LUNARVIM_INSTALLER="https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh"
-
-curl --fail --silent --show-error --location $LUNARVIM_INSTALLER | bash -s
