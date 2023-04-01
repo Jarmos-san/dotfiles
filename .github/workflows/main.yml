@@ -13,7 +13,7 @@ jobs:
           fetch-depth: 0
 
       - name: Prettify Markdown, JSON & YAML Files
-        uses: creyD/prettier_action@v4.2
+        uses: creyD/prettier_action@v4.3
         with:
           prettier_options: --check **/*.{json,md,yml}
           only_changed: true
