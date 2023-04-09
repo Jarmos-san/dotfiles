@@ -1,0 +1,45 @@
+name: Automated Quality Control Checks
+
+on:
+  - push
+
+jobs:
+  runShellCheck:
+    name: Lint Shell Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Run the Shell Checker
+        uses: luizm/action-sh-checker@master
+        with:
+          sh_checker_shfmt_disable: true
+          sh_checker_comment: true
+
+  runStyLua:
+    name: Format Lua Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Run the Stylua formatter for Lua code
+        uses: JohnnyMorganz/stylua-action@v2.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --check .
+
+  runSeleneLinter:
+    name: Lint Lua Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run Selene to lint Lua code
+        uses: NTBBloodbath/selene-action@v1.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: dotfiles
+          version: 0.16.0

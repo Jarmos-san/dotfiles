@@ -1,0 +1,25 @@
+# Global/prompt-wide configurations
+command_timeout = 20000                 # Increase the default timeout duration for long-running applications
+
+# Replace the "❯" symbol in the prompt with "➜"
+[character]                             # The name of the module we are configuring is "character"
+success_symbol = "[->](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+error_symbol = "[->](bold red)"         # Similar to the "sucess_symbol" but in bright red
+
+# Prompt customizations for Docker projects
+[docker_context]
+symbol = " "                           # Replaces the default emoji "🐳 "
+
+# Prompt customizations for projects which are packages
+# For more info on this module refer to the documentations at:
+# https://starship.rs/config/#package-version
+[package]
+symbol = " "                           # Replaces the default emoji "📦 "
+
+# Prompt customizations for Python projects
+[python]
+symbol = " "                           # Replaces the defailt emoji "🐍 "
+
+# Prompt customization for Version Control info with Git
+[git_branch]
+symbol = " "                           # Replaces the default emoji " "
