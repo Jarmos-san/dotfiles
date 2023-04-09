@@ -65,6 +65,12 @@ return {
     },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts) -- Load the plugin with the config values mentioned above
+      -- INFO: Disable LSP-based semantic highlighting since Treesitter is faster & more precise
+      -- See this Reddit discussion for more information on the same:
+      -- https://www.reddit.com/r/neovim/comments/12fidjh/comment/jffipte
+      for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
+        vim.api.nvim_set_hl(0, group, {})
+      end
     end,
   },
 }
