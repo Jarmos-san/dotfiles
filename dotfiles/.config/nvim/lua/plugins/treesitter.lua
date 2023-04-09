@@ -48,8 +48,8 @@ return {
       highlight = { -- Enable syntax highlighting using the Treesitter parsers
         enable = true,
       },
-      indent = { -- Enable Treesitter-based indentation
-        enable = true,
+      indent = { -- Disable Treesitter-based indentation since its errorneous
+        enable = false,
       },
       context_commentstring = {
         -- Enable easier commenting using Treesitter
