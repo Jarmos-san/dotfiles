@@ -41,8 +41,8 @@ return {
     --   end
     -- end,
     cmd = { "Gitignore" },
-    requires = {
-      "nvim-telescope/nvim-telescope",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
     },
   },
 
