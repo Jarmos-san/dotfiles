@@ -28,7 +28,7 @@ return {
   {
     -- Extra plugin for a more VSCode-like snippets behaviour.
     "rafamadriz/friendly-snippets",
-    events = "InsertEnter", -- Lazy-load the plugin only when the buffer is in an Insert mode.
+    event = "InsertEnter", -- Lazy-load the plugin only when the buffer is in an Insert mode.
   },
 
   {
