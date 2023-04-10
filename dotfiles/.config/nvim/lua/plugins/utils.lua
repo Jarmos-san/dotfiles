@@ -31,6 +31,7 @@ return {
         "sh",
         "json",
         "tmux",
+        "gitattributes",
       },
       -- Configure the character length at which to show the colorcolumn.
       custom_colorcolumn = { lua = 120, dockerfile = 120, python = 88, yaml = 90, markdown = 80 },
