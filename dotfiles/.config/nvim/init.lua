@@ -69,3 +69,4 @@ vim.cmd([[
 
 -- Additional features to look into later on:
 -- https://github.com/neovim/neovim/pull/22668
+-- https://github.com/rafcamlet/nvim-luapad
