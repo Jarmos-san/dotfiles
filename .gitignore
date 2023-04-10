@@ -62,5 +62,9 @@ tags
 
 .luarc.json
 **/gh/hosts.yml
+scratch
+.venv
+.mypy_cache
+.ruff_cache
 
 # End of https://www.toptal.com/developers/gitignore/api/powershell,visualstudiocode,vim,git
