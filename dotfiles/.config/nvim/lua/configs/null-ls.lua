@@ -4,6 +4,8 @@ local formatting = null_ls.builtins.formatting
 local code_actions = null_ls.builtins.code_actions
 
 null_ls.setup({
+  -- Uncomment to enable debugging logging information
+  -- debug = true,
   border = "rounded", -- Enable a nice-looking UI for the plugin's floating window
   on_attach = function(client, bufnr) -- Functionality for the LSP when it attaches to the buffer
     -- Check if the server supports LSP-based formatting
