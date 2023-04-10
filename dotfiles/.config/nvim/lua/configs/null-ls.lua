@@ -43,30 +43,25 @@ null_ls.setup({
     formatting.black.with({ -- Formatter for Python files
       prefer_local = ".venv/bin",
     }),
-    -- Diagnostics for ESLint files
-    diagnostics.eslint_d.with({
+    diagnostics.eslint_d.with({ -- Diagnostics for ESLint files
       condition = function(utils)
         -- Load this tool only if its configuration file exists in the current working directory
         return utils.root_has_file({ ".eslintrc", ".eslintrc.js", ".eslintrc.json", "package.json" })
       end,
     }),
-    diagnostics.ruff.with({
-      -- Super fast diagnostics tool for Python files
-      extra_args = { "--fix" }, -- Automatically attempt to fix linting concerns using Ruff's rules
+    diagnostics.ruff.with({ -- Super fast diagnostics tool for Python files
       prefer_local = ".venv/bin", -- Prefer using the virtual environment local binary for better project identification
     }),
     diagnostics.mypy.with({ -- Static type check for Python files
       prefer_local = ".venv/bin", -- Use the project local binary instead of the system one
     }),
-    formatting.prettier.with({
-      -- Formatter for web dev files
+    formatting.prettier.with({ -- Formatter for web dev files
       prefer_local = "node_modules/.bin",
       extra_args = { "--prose-wrap", "always" },
     }),
     -- FIXME: Reports false-negatives when working with certain TOML files like "pyproject.toml"
     -- formatting.taplo, -- Formatter for TOML files
-    diagnostics.vale.with({
-      -- Diagnostics tool for spell checking
+    diagnostics.vale.with({ -- Diagnostics tool for spell checking
       condition = function(utils)
         -- Only enable the Vale diagnostic tool if the Vale config file exists in the project root directory
         return utils.root_has_file({ ".vale.ini" })
