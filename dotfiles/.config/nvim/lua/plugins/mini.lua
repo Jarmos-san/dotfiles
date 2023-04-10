@@ -51,4 +51,12 @@ return {
       require("mini.pairs").setup(opts)
     end,
   },
+
+  {
+    "echasnovski/mini.surround", -- Plugin for easier insertion of pairs like quotations & more
+    event = "BufReadPost",
+    config = function()
+      require("mini.surround").setup() -- Initialise the plugin with default settings
+    end,
+  },
 }
