@@ -35,7 +35,7 @@ opt.updatetime = 200 -- Save swap file & trigger CursorHold
 opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Maximum window width
 opt.iskeyword:append("-") -- Make Neovim recognise dash-seperated words as a single word
-
-opt.cursorline = true
+opt.wrap = false -- Configure Neovim to not wrap the contents of the buffer
+opt.cursorline = true -- Configure Neovim to highlight the current location of the cursor
 
 vim.notify = require("notify")
