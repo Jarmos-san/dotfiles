@@ -1,5 +1,25 @@
 -- Module for configuring some utilitarian plugins
 
+-- Table of options for configuring the "smartcolumn" plugin
+local smartcolumn_options = {
+  disable_filetypes = {
+    "help",
+    "text",
+    "markdown",
+    "alpha",
+    "checkhealth",
+    "Trouble",
+    "toml",
+    "zsh",
+    "gitignore",
+    "sh",
+    "json",
+    "tmux",
+    "gitattributes",
+  },
+  custom_colorcolumn = { lua = 120, dockerfile = 120, python = 88, yaml = 90, markdown = 80 },
+}
+
 return {
   { "famiu/bufdelete.nvim" }, -- Plugin for deleting & removing buffers without messing up the window layout
 
@@ -18,23 +38,9 @@ return {
     event = "FileType", -- Load the plugin only when the filetype of the buffer is recognised.
     opts = {
       -- Disable the colorcolum in certain filetypes like Vim help files.
-      disabled_filetypes = {
-        "help",
-        "text",
-        "markdown",
-        "alpha",
-        "checkhealth",
-        "Trouble",
-        "toml",
-        "zsh",
-        "gitignore",
-        "sh",
-        "json",
-        "tmux",
-        "gitattributes",
-      },
+      disabled_filetypes = smartcolumn_options.disable_filetypes,
       -- Configure the character length at which to show the colorcolumn.
-      custom_colorcolumn = { lua = 120, dockerfile = 120, python = 88, yaml = 90, markdown = 80 },
+      custom_colorcolumn = smartcolumn_options.custom_colorcolumn,
     },
   },
 
