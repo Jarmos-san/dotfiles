@@ -54,10 +54,7 @@ return {
     -- A friendly plugin for managing the LSP servers more easily.
     "williamboman/mason.nvim",
     config = function()
-      require("mason").setup({
-        ui = { border = "rounded" }, -- Enable a nice-looking UI for the Mason floating window
-        log_level = vim.log.levels.INFO, -- Enable DEBUG mode when LSP things needs a bit of debugging
-      })
+      require("configs.mason").setup() -- Load the module which contains mostly aesthetic configurations for the plugin
     end,
     cmd = "Mason", -- Lazy-load the plugin only when this command is invoked.
     -- Load this dependency when the plugin is loaded as well.
@@ -68,34 +65,8 @@ return {
     -- Extension for "mason.nvim" which makes it VERY easy to auto-install LSP servers.
     "WhoIsSethDaniel/mason-tool-installer.nvim",
     config = function()
-      require("mason-tool-installer").setup({
-        -- Ensure the following LSP servers are always installed & made available on $PATH.
-        ensure_installed = {
-          "lua-language-server",
-          "stylua",
-          -- FIXME: Is broken on Ubuntu 20.04
-          -- "selene",
-          "shfmt",
-          "shellcheck",
-          "bash-language-server",
-          "black",
-          "dockerfile-language-server",
-          "eslint_d",
-          "mypy",
-          "prettier",
-          "pyright",
-          "ruff",
-          -- "taplo", -- TODO: Figure out how to make it identify the "pyproject.toml" file
-          "tailwindcss-language-server",
-          "typescript-language-server",
-          "rust-analyzer",
-          "rustfmt",
-          "vale",
-          "yaml-language-server",
-          "json-lsp",
-        },
-        auto_update = true, -- Ensure the installed LSP servers are always up-to-date.
-      })
+      -- Load the module which contains the list of LSP servers & other related tools to install
+      require("configs.mason").installer()
     end,
     cmd = { "MasonToolsInstall", "MasonToolsUpdate" }, -- Lazy-load the extension only when these commands are invoked.
   },
