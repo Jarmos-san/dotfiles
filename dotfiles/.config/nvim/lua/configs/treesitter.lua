@@ -31,6 +31,7 @@ local configs = {
   },
   highlight = { -- Enable syntax highlighting using the Treesitter parsers
     enable = true,
+    additional_vim_regex_highlighting = false,
   },
   indent = { -- Disable Treesitter-based indentation since its errorneous
     enable = false,
