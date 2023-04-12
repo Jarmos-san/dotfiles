@@ -57,7 +57,10 @@ require("configs.options")
 require("configs.autocmds")
 require("configs.keymaps")
 
-vim.cmd([[ colorscheme onedark ]])
+-- Uncomment it sometime in the near future after it supports semantic highlighting
+-- vim.cmd([[ colorscheme onedark ]])
+-- vim.cmd([[ colorscheme tokyonight]])
+vim.cmd.colorscheme("catppuccin")
 
 -- TODO: Figure a way out to move these highlights to a separate file elsewhere(?)
 highlight(0, "CursorLineNr", { guibg = nil, guifg = nil })
