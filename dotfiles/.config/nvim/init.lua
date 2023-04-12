@@ -1,6 +1,8 @@
 -- Path to install "lazy.nvim" at
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
+local highlight = vim.api.nvim_set_hl
+
 -- Small snippet to install "lazy.nvim" from within Neovim.
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -58,14 +60,8 @@ require("configs.keymaps")
 vim.cmd([[ colorscheme onedark ]])
 
 -- TODO: Figure a way out to move these highlights to a separate file elsewhere(?)
--- INFO: These highlights are responsible for making the current line number more prominent
-vim.cmd([[
-  " Add no background colour to the current line number & instead make it white to stand out more
-  highlight CursorLineNr guibg=none guifg=white
-
-  " Remove whatever colour was added by default to the cursorline to avoid clutter
-  highlight CursorLine guibg=none
-]])
+highlight(0, "CursorLineNr", { guibg = nil, guifg = nil })
+highlight(0, "CursorLine", { guibg = nil })
 
 -- Additional features to look into later on:
 -- https://github.com/neovim/neovim/pull/22668
