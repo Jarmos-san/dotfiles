@@ -24,6 +24,8 @@ return {
       lualine = { transparent = true },
     },
     event = "VimEnter",
+    -- Disable this plugin, since it breaks with the recent introduction of Semantic Highlighting in Neovim v0.9
+    disable = true,
   },
 
   {
