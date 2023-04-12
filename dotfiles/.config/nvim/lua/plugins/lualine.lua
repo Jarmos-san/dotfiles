@@ -11,7 +11,7 @@ local options = {
   -- Leaving an empty table renders the square-edged components, else the default angled ones are loaded
   section_separators = {},
   component_separator = "|",
-  theme = "codedark", -- Set the theme
+  theme = "catppuccin", -- Set the theme
   globalstatus = true,
   disabled_filetypes = { -- Disable the statusline for certain filetypes mentioned below
     statusline = {
