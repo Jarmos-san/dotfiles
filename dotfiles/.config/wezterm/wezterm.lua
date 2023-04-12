@@ -14,7 +14,7 @@ config.keys = {
 }
 
 -- Set the colorscheme to something which is usable
-config.color_scheme = "Ocean Dark (Gogh)"
+config.color_scheme = "Catppuccin Mocha"
 
 -- Set a monospaced font for easier time when writing code
 config.font = wezterm.font("CaskaydiaCove Nerd Font Mono", {
