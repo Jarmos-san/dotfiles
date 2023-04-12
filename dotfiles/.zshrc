@@ -49,3 +49,6 @@ unset plugins
 bindkey "^[[4~" end-of-line
 # Move to the start of the line when pressing the "Home" key
 bindkey "^[[1~" beginning-of-line
+
+# Disable hint prompts on Homebrew to reduce clutter
+export HOMEBREW_NO_ENV_HINTS=1
