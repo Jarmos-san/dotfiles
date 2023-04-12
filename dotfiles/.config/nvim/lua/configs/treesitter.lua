@@ -50,11 +50,31 @@ local configs = {
 
 M.setup = function()
   require("nvim-treesitter.configs").setup(configs)
-  -- INFO: Disable LSP-based semantic highlighting since Treesitter is faster & more precise
+  -- INFO: This is a stupid hack until the colorscheme plugin I use supports semantic highligting as well.
+  -- See this issue thread to keep track of semantic highlighting on the "navarasu/onedark.nvim" colorscheme;
+  -- https://github.com/navarasu/onedark.nvim
+
   -- See this Reddit discussion for more information on the same:
-  -- https://www.reddit.com/r/neovim/comments/12fidjh/comment/jffipte
-  for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
-    vim.api.nvim_set_hl(0, group, {})
+  -- https://www.reddit.com/r/neovim/comments/12gvms4/this_is_why_your_higlights_look_different_in_90
+  local links = {
+    ["@lsp.type.namespace"] = "@namespace",
+    ["@lsp.type.type"] = "@type",
+    ["@lsp.type.class"] = "@type",
+    ["@lsp.type.enum"] = "@type",
+    ["@lsp.type.interface"] = "@type",
+    ["@lsp.type.struct"] = "@structure",
+    ["@lsp.type.parameter"] = "@parameter",
+    ["@lsp.type.variable"] = "@variable",
+    ["@lsp.type.property"] = "@property",
+    ["@lsp.type.enumMember"] = "@constant",
+    ["@lsp.type.function"] = "@function",
+    ["@lsp.type.method"] = "@method",
+    ["@lsp.type.macro"] = "@macro",
+    ["@lsp.type.decorator"] = "@function",
+  }
+
+  for newgroup, oldgroup in pairs(links) do
+    vim.api.nvim_set_hl(0, newgroup, { link = oldgroup, default = true })
   end
 end
 
