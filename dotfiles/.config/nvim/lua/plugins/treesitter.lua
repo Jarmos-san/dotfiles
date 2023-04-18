@@ -15,8 +15,8 @@ return {
       "nvim-treesitter/nvim-treesitter-textobjects", -- Navigate around code blocks more easily with this extension.
       "nvim-treesitter/playground", -- Extension for visualising the Treesitter nodes & graph.
     },
-    config = function ()
-      require('configs.treesitter').setup() -- Load the module which container some configuration & the parsers to install
-    end
+    config = function()
+      require("configs.treesitter").setup() -- Load the module which container some configuration & the parsers to install
+    end,
   },
 }
