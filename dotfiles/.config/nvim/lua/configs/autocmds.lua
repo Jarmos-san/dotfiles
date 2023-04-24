@@ -164,3 +164,20 @@ vim.cmd(
   ]],
   false
 )
+
+-- TODO: Use this example Lua API autocommand for brevity & better readability
+-- autocmd("BufNewFile", {
+--   desc = "Create a sample template.",
+--   group = augroup("sample_template"),
+--   pattern = "markdown",
+--   callback = function()
+--     -- Read the contents of the skeleton file (or the template)
+--     local readlines = vim.fn.readfile(vim.env.HOME .. "/.config/skeletons/sample.md")
+--
+--     -- Load the buffer to replace the contents of with the template instead.
+--     local bufnr = vim.api.nvim_get_current_buf()
+--
+--     -- Write the contents of the template to the buffer instead.
+--     vim.api.nvim_buf_set_lines(bufnr, 0, 0, false, readlines)
+--   end,
+-- })
