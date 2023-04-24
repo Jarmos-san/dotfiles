@@ -106,3 +106,61 @@ autocmd({ "CursorMoved", "CursorMovedI" }, {
     end
   end,
 })
+
+-- TODO: Convert these lines of code to use the new Lua API instead.
+-- Autocommand to create a template README.md file.
+vim.cmd(
+  [[
+    augroup README.md
+      autocmd!
+      autocmd BufNewFile README.md 0r ~/.config/nvim/skeletons/readme.md
+    augroup END
+  ]],
+  false
+)
+
+-- Autocommand to create a template Bash script.
+vim.cmd(
+  [[
+    augroup BashScripts
+      autocmd!
+      autocmd BufNewFile *.sh 0r ~/.config/nvim/skeletons/bash.sh
+    augroup END
+  ]],
+  false
+)
+
+-- Autocommand to create a template "main.py" Python file for backend projects.
+vim.cmd(
+  [[
+    augroup PythonEntrypoint
+      autocmd!
+      autocmd BufNewFile main.py 0r ~/.config/nvim/skeletons/main.py
+    augroup END
+  ]],
+  false
+)
+
+-- Autocommand to create a template LICENSE Plain-Text file for GitHub projects.
+vim.cmd(
+  [[
+    augroup LicenseTemplate
+      autocmd!
+      autocmd BufNewFile LICENSE 0r ~/.config/nvim/skeletons/license.txt
+    augroup END
+  ]],
+  false
+)
+
+-- TODO: Create an autocommand for an EditorConfig template as well!
+
+-- Autocommand to create a template Dependabot config file.
+vim.cmd(
+  [[
+    augroup DependabotConfig
+      autocmd!
+      autocmd BufNewFile **/dependabot.yml 0r ~/.config/nvim/skeletons/dependabot.yml
+    augroup END
+  ]],
+  false
+)
