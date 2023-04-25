@@ -11,7 +11,7 @@ end)
 -- customise the aesthetics of the terminal.
 return {
   -- Reduce unnecessary padding on the window
-  window_padding = { left = 1, right = 0, top = 1, bottom = -4 },
+  window_padding = { left = 1, right = 0, top = 8, bottom = 0 },
 
   -- Some bare basic key bindings for managing the terminal
   keys = {
@@ -38,4 +38,7 @@ return {
 
   -- Make the font size of the terminal contents legible
   font_size = 11.0,
+
+  -- Hide the tab bar if there's only one tab open
+  hide_tab_bar_if_only_one_tab = true,
 }
