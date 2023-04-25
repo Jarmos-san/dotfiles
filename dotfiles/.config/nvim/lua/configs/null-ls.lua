@@ -36,9 +36,14 @@ local sources = {
       return utils.root_has_file({ "selene.toml", "vim.toml" })
     end,
   }),
-  formatting.shfmt, -- Formatter for Bash/Shell files
+  formatting.shfmt.with({ -- Formatter for Bash/Shell files
+    -- INFO: Configure "shfmt" to adhere to Google style guide.
+    -- See the examples as shared in the official repository below:
+    -- https://github.com/mvdan/sh/blob/master/cmd/shfmt/shfmt.1.scd#examples
+    extra_args = { "-i", "2", "-ci", "-bn" },
+  }),
   code_actions.shellcheck, -- Code Actions for Bash/Shell files
-  diagnostics.shellcheck, -- Formatter for Bash/Shell files
+  diagnostics.shellcheck, -- Diagnostics for Bash/Shell files
   formatting.black.with({ -- Formatter for Python files
     prefer_local = ".venv/bin",
   }),
