@@ -7,9 +7,6 @@
     # GPG key for Jarmos Desktop (Ubuntu)
     signingkey = 9A3291DED12A1FD6
 
-[includeIf "gitdir:~/Work/"]
-    path = ~/.config/git/config.augwir
-
 [merge]
     tool = nvim
 
@@ -103,7 +100,7 @@
     plain = white bold
 
 [submodule]
-		recurse = true
+    recurse = true
 
 [alias]
     st = status -sb
