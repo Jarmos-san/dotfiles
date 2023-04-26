@@ -41,4 +41,13 @@ return {
 
   -- Hide the tab bar if there's only one tab open
   hide_tab_bar_if_only_one_tab = true,
+
+  -- Make the window background transparent
+  window_background_opacity = 0.94,
+
+  -- Make the cursor to blink on the terminal
+  default_cursor_style = "BlinkingBlock",
+
+  -- Set the rate at which the cursor will blink
+  cursor_blink_rate = 600,
 }
