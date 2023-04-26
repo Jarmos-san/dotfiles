@@ -79,6 +79,3 @@ map(
 
 -- Keymap to quickly generate ".gitignore" files
 vim.keymap.set("n", "<Leader>gi", gitignore.generate)
-
--- local terminal_mappings = require("terminal.mappings")
--- map("n", "<leader>tt", terminal_mappings.toggle)
