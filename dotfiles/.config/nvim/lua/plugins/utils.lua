@@ -18,6 +18,7 @@ local smartcolumn_options = {
     "sh",
     "json",
     "tmux",
+    "gitconfig",
     "gitattributes",
   },
   custom_colorcolumn = { lua = 120, dockerfile = 120, python = 88, yaml = 90, markdown = 80, typescriptreact = 81 },
