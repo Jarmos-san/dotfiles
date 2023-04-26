@@ -14,13 +14,6 @@ return {
   },
 
   {
-    -- TODO: Might replace it with the "rebelot/terminal.nvim" plugin
-    "akinsho/toggleterm.nvim", -- Plugin for a better more accessible terminal
-    event = { "VeryLazy" }, -- Load the plugin only afer reading the contents of the buffer
-    config = true, -- Initialise the plugin with default values
-  },
-
-  {
     "chrisgrieser/nvim-various-textobjs", -- Plugin which provides some extra keybinds for easier navigation
     event = { "BufReadPost" },
     config = function()
