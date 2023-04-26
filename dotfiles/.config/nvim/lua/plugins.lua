@@ -4,9 +4,6 @@
 
 -- TODO: Move all the plugins from the "lua/plugins" folder over here instead
 
--- TODO: Plugins to add later on
--- 1. "rebelot/terminal.nvim"
-
 -- Module containing configuration options for the colour column plugin ("m4xshen/smartcolumn.nvim")
 local smartcolumn_options = require("configs.smartcolumn")
 
@@ -51,6 +48,20 @@ local plugins = {
       -- Configure the character length at which to show the colorcolumn.
       custom_colorcolumn = smartcolumn_options.filetype_column_width,
     },
+  },
+
+  {
+    -- FIXME: Lazy-loading & keymapping using "lazy.nvim" doesn't work, might have to try "which-key" instead
+    -- A better functioning & minimal terminal for usage within Neovim itself
+    "rebelot/terminal.nvim",
+    -- Some initialisation options like the shell to use & so on to load the plugin with
+    opts = {
+      -- Close the terminal as well when the shell process is exited
+      autoclose = true,
+      -- Use ZSH as the interactive shell for the terminal
+      open_cmd = "zsh",
+    },
+    config = true,
   },
 }
 
