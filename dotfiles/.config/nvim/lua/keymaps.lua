@@ -69,9 +69,6 @@ map("v", ">", ">gv")
 -- Open a new file by pressing "Space + f + n"
 map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "Open a new file" })
 
--- Toggle open/close the terminal plugin
-map("n", "<leader>tt", "<cmd>ToggleTerm<cr>", { desc = "Toggle the terminal open/close" })
-
 -- Press "Space + b + d" to quickly delete & remove the current buffer
 map(
   "n",
@@ -82,3 +79,6 @@ map(
 
 -- Keymap to quickly generate ".gitignore" files
 vim.keymap.set("n", "<Leader>gi", gitignore.generate)
+
+-- local terminal_mappings = require("terminal.mappings")
+-- map("n", "<leader>tt", terminal_mappings.toggle)
