@@ -83,13 +83,37 @@ local plugins = {
       })
     end,
     -- Some initialisation options like the shell to use & so on to load the plugin with
-    opts = {
-      -- Close the terminal as well when the shell process is exited
-      autoclose = true,
-      -- Use ZSH as the interactive shell for the terminal
-      open_cmd = "zsh",
-    },
-    config = true,
+    config = function()
+      require("terminal").setup({
+        -- Close the terminal as well when the shell process is exited
+        autoclose = true,
+      })
+    end,
+  },
+
+  {
+    -- A UI plugin for registering and managing keymaps under a single place
+    "folke/which-key.nvim",
+    -- Lazy load the plugin after the initial Neovim UI is loaded
+    event = "VeryLazy",
+    -- Load the plugin with a couple of initialisation parameters
+    config = function()
+      -- Enable Neovim to wait a couple of milliseconds after a key is pressed to trigger the plugin
+      vim.o.timeout = true
+      -- Configure a high enough timeout length so that the plugin does not trigger all the time
+      vim.o.timeoutlen = 500
+      require("which-key").setup({
+        -- A list of plugins & their configurations (only the default ones are used, for now)
+        plugins = {
+          -- Disable the "spelling" plugin since it can be annoying at times
+          spelling = { enabled = false },
+        },
+        -- Configure the floating window to have a window for clearly distinguishing between which is what
+        window = { border = "single" },
+        -- Disable showing keymaps w/o any descriptions to avoid unnecessary clutter
+        ignore_missing = true,
+      })
+    end,
   },
 }
 
