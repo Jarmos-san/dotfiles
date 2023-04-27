@@ -53,6 +53,35 @@ local plugins = {
   {
     -- A better functioning & minimal terminal for usage within Neovim itself
     "rebelot/terminal.nvim",
+    -- Ensure the plugin is only loaded when the following commands are invoked (can even be invoked through a keymap)
+    cmd = { "TermOpen", "TermRun" },
+    -- Initialisation callback which is invoked right before the plugin is loaded
+    init = function()
+      -- Autocommand to ensure the Neovim gets into Insert mode automatically when
+      -- the terminal is toggled open.
+      vim.api.nvim_create_autocmd("TermOpen", {
+        desc = "Get into Insert mode automatically when the terminal is open",
+        group = vim.api.nvim_create_augroup("terminal_insert_mode", { clear = true }),
+        callback = function(args)
+          if vim.startswith(vim.api.nvim_buf_get_name(args.buf), "term://") then
+            vim.cmd("startinsert")
+          end
+        end,
+      })
+
+      -- Disable the number column & enable some highlights for the terminal
+      vim.api.nvim_create_autocmd("TermOpen", {
+        desc = "Disable number coloum on the terminal",
+        group = vim.api.nvim_create_augroup("terminal_highlights", { clear = true }),
+        callback = function()
+          -- Disable the number column in the terminal
+          vim.opt.number = false
+          vim.opt.relativenumber = false
+          -- Set some highlightings for the floating window
+          vim.api.nvim_win_set_option(0, "winhl", "Normal:NormalFloat")
+        end,
+      })
+    end,
     -- Some initialisation options like the shell to use & so on to load the plugin with
     opts = {
       -- Close the terminal as well when the shell process is exited
