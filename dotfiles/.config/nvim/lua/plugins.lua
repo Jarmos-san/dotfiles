@@ -51,7 +51,6 @@ local plugins = {
   },
 
   {
-    -- FIXME: Lazy-loading & keymapping using "lazy.nvim" doesn't work, might have to try "which-key" instead
     -- A better functioning & minimal terminal for usage within Neovim itself
     "rebelot/terminal.nvim",
     -- Some initialisation options like the shell to use & so on to load the plugin with
