@@ -1,4 +1,34 @@
-local gitignore = require("gitignore")
+-- Module of keymaps & bindings which makes using Neovim a pleasure
+
+local wk = require("which-key")
+
+wk.register({
+  -- Keymaps to manage the inbuilt terminal within Neovim itself
+  ["<leader>t"] = {
+    name = "+Terminal",
+    t = { "<cmd>TermRun zsh<cr>", "Toggle the terminal open/close" },
+  },
+  -- VSCode-like quick file management UI
+  ["<leader>f"] = {
+    name = "+File",
+    f = { "<cmd>Telescope find_files<cr>", "Find files" },
+    o = { "<cmd>Telescope oldfiles<cr>", "Open recent files" },
+    n = { "<cmd>enew<cr>", "Open a new file" },
+    h = { "<cmd>Telescope help_tags<cr>", "Open the help tags menu" },
+  },
+  -- Easier & quicker buffer management keymaps
+  ["<leader>b"] = {
+    name = "+Buffer",
+    d = { "<cmd>lua require('bufdelete').bufdelete(o, true)<cr>", "Delete the current buffer" },
+    l = { "<cmd>Telescope buffers<cr>", "List all loaded buffers" },
+    n = { "<cmd>bnext<cr>", "Load the next hidden buffer" },
+  },
+  -- Keymaps to manage & show LSP stuff
+  ["<leader>l"] = {
+    name = "+LSP",
+    d = { "<cmd>TroubleToggle<cr>", "Toggle open/close the diagnostics list" },
+  },
+})
 
 -- Utlity function to make keybind mappings easier & DRY
 local map = function(mode, lhs, rhs, opts)
@@ -65,17 +95,3 @@ map({ "i", "v", "n", "s" }, "<C-s>", "<cmd>write<cr><esc>", { desc = "Save the c
 -- Better & easier indenting
 map("v", "<", "<gv")
 map("v", ">", ">gv")
-
--- Open a new file by pressing "Space + f + n"
-map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "Open a new file" })
-
--- Press "Space + b + d" to quickly delete & remove the current buffer
-map(
-  "n",
-  "<leader>bd",
-  "<cmd>lua require('bufdelete').bufdelete(o, true)<cr>",
-  { desc = "Delete & remove the current buffer forcibly" }
-)
-
--- Keymap to quickly generate ".gitignore" files
-vim.keymap.set("n", "<Leader>gi", gitignore.generate)
