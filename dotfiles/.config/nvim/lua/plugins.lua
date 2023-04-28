@@ -115,6 +115,51 @@ local plugins = {
       })
     end,
   },
+
+  {
+    -- Plugin to display the diagnostic messages in a floating window
+    "folke/trouble.nvim",
+    -- Lazy load the plugin only when an LSP server is attached to the client and/or when its
+    -- respective command is called
+    event = { "LspAttach" },
+    cmd = { "Trouble" },
+    -- Initialise the plugin with some default configurations
+    config = true,
+    -- Dependency plugin for Nerd Font icon support
+    dependencies = { "kyazdani42/nvim-web-devicons" },
+  },
+
+  {
+    -- Plugin to easily search for files using fuzzy-search & more behaviour like one would find
+    -- one other GUI Text Editors like VSCode & so on
+    "nvim-telescope/telescope.nvim",
+    -- Lazy-load the plugin after the initial UI is loaded by Neovim and/or when the relevant
+    -- commands are called for it
+    event = { "BufRead" },
+    cmd = { "Telescope" },
+    -- Initialise the plugin with default settings
+    -- FIXME: Opens the Telescope UI after the buffer is loaded which is an unintended behaviour.
+    -- config = function()
+    --   Configure Telescope to list version-controlled files in a Git directory else fallback
+    --   to OG listing the contents of a directory.
+    --   Picked the code snippet from the official documentations at the following URL:
+    --   https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes#falling-back-to-find_files-if-git_files-cant-find-a-git-directory
+    --   local opts = {}
+    --   vim.fn.system("git rev-parse --is-inside-work-tree")
+    --   if vim.v.shell_error == 0 then
+    --     require("telescope.builtin").git_files(opts)
+    --   else
+    --     require("telescope.builtin").find_files(opts)
+    --   end
+    -- end,
+    -- These dependencies (some of these are optional) are necessary for proper functioning of the plugin
+    dependencies = {
+      "kyazdani42/nvim-web-devicons",
+      "nvim-lua/plenary.nvim",
+      "neovim/nvim-lspconfig",
+      "nvim-treesitter/nvim-treesitter",
+    },
+  },
 }
 
 return plugins

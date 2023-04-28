@@ -23,30 +23,6 @@ return {
   },
 
   {
-    "nvim-telescope/telescope.nvim",
-    event = { "VeryLazy" },
-    cmd = { "Telescope" },
-    config = function()
-      require("telescope").setup()
-    end,
-  },
-
-  {
-    "wintermute-cell/gitignore.nvim", -- Plugin to create ".gitignore" files right from within Neovim itself
-    event = { "VeryLazy" },
-    -- FIXME: Configure the plugin to only load inside local Git repositories
-    -- cond = function()
-    --   if not vim.loop.fs_stat(vim.loop.cwd() .. "./git") then
-    --     return false
-    --   end
-    -- end,
-    cmd = { "Gitignore" },
-    dependencies = {
-      "nvim-telescope/telescope.nvim",
-    },
-  },
-
-  {
     -- TODO: Experimental plugin to take Markdown notes
     -- "JellyApple102/flote.nvim", -- Plugin to take simple & disposable Markdown notes
   },
