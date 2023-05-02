@@ -14,7 +14,6 @@ setopt autocd beep extendedglob nomatch notify
 
 # Enable Starship
 eval "$(starship init zsh)"
-export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 
 # A bunch of custom aliases for easier terminal usage.
 alias ll="exa --long --all --classify --icons --git --ignore-glob='.git'"
@@ -53,8 +52,3 @@ if [[ $TERM == "kitty-xterm" ]]; then
     # Move to the start of the line when pressing the "Home" key
     bindkey "^[[1~" beginning-of-line
 fi
-
-# Disable hint prompts on Homebrew to reduce clutter
-export HOMEBREW_NO_ENV_HINTS=1
-# Disable auto-updates on Homebrew to make it functionally faster
-export HOMEBREW_NO_AUTO_UPDATE=1
