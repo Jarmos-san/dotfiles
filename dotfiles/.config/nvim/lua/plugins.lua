@@ -4,6 +4,9 @@
 
 -- TODO: Move all the plugins from the "lua/plugins" folder over here instead
 
+-- TODO: Explore the following plugins & decide to use them or not
+-- "JellyApple102/flote.nvim", -- Plugin to take simple & disposable Markdown notes
+
 -- Module containing configuration options for the colour column plugin ("m4xshen/smartcolumn.nvim")
 local smartcolumn_options = require("configs.smartcolumn")
 
@@ -135,23 +138,12 @@ local plugins = {
     "nvim-telescope/telescope.nvim",
     -- Lazy-load the plugin after the initial UI is loaded by Neovim and/or when the relevant
     -- commands are called for it
-    event = { "BufRead" },
+    event = "BufRead",
     cmd = { "Telescope" },
-    -- Initialise the plugin with default settings
-    -- FIXME: Opens the Telescope UI after the buffer is loaded which is an unintended behaviour.
-    -- config = function()
-    --   Configure Telescope to list version-controlled files in a Git directory else fallback
-    --   to OG listing the contents of a directory.
-    --   Picked the code snippet from the official documentations at the following URL:
-    --   https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes#falling-back-to-find_files-if-git_files-cant-find-a-git-directory
-    --   local opts = {}
-    --   vim.fn.system("git rev-parse --is-inside-work-tree")
-    --   if vim.v.shell_error == 0 then
-    --     require("telescope.builtin").git_files(opts)
-    --   else
-    --     require("telescope.builtin").find_files(opts)
-    --   end
-    -- end,
+    opts = {
+      file_ignore_patterns = { "%.git", "node_modules", "venv", ".venv", "env", ".env" },
+    },
+    config = true,
     -- These dependencies (some of these are optional) are necessary for proper functioning of the plugin
     dependencies = {
       "kyazdani42/nvim-web-devicons",
@@ -159,6 +151,173 @@ local plugins = {
       "neovim/nvim-lspconfig",
       "nvim-treesitter/nvim-treesitter",
     },
+  },
+
+  {
+    -- Plugin for showing nice popup UI, can be used in conjunction with LSP & others
+    "rcarriga/nvim-notify",
+    event = "BufRead",
+    opts = {
+      -- Set the background colour since the main Neovim background is transparent
+      background_colour = "#262626",
+      -- Set the maximum width & height a notification bar can occupy to avoid clutter
+      max_width = 60,
+      max_height = 40,
+      -- Set the animation to something subtle to avoid distractions
+      stages = "fade",
+    },
+    config = true,
+  },
+
+  {
+    -- Plugin for quickly visualising Git VCS info right within the buffer
+    "lewis6991/gitsigns.nvim",
+    event = "BufRead",
+    config = true,
+  },
+
+  {
+    -- Plugin to showcase the color code based on Hex/RGB/HSL & more
+    "norcalli/nvim-colorizer.lua",
+    event = "BufRead",
+    ft = { "typescriptreact", "typescript", "javascript", "javascriptreact", "scss", "css", "html" },
+  },
+
+  {
+    -- Plugin to manage & access the file system using an explorer
+    "nvim-neo-tree/neo-tree.nvim",
+    cmd = "Neotree", -- Lazy-load the plugin only when the "Neotree" command is invoked
+    deactivate = function() -- Callback function to deactivate the plugin when necessary.
+      vim.cmd([[ Neotree close]])
+    end,
+    init = function()
+      vim.g.neo_tree_remove_legacy_commands = 1
+
+      local autocmd = vim.api.nvim_create_autocmd
+      local augroup = vim.api.nvim_create_augroup
+      local highlight = vim.api.nvim_set_hl
+
+      -- Autocommand to highlight the current line if the buffer is a "neo-tree" filetype
+      autocmd("FileType", {
+        pattern = "neo-tree,*",
+        group = augroup("highlight_cursorline", { clear = true }),
+        callback = function()
+          -- FIXME: Configure the plugin to highlighting the current line for accessiblity concerns
+          highlight(0, "CursorLine", { ctermfg = nil, ctermbg = "White" })
+        end,
+      })
+
+      -- Check if there's only one file opened with Neovim
+      if vim.fn.argc() == 1 then
+        -- Assign the first file opened with Neovim to the "stat" variable
+        local stat = vim.loop.fs_stat(vim.fn.argv(0))
+
+        -- Import the "Neotree" module if the "stat" variable is a directory
+        if stat and stat.type == "directory" then
+          require("neo-tree")
+        end
+      end
+    end,
+    config = true,
+    opts = {
+      close_if_last_window = true, -- Don't leave the plugin's window open as the last window
+      enable_git_status = true, -- Enable Git VCS information for the current working directory
+      enable_diagnostics = true, -- Enable diagnostic feedback for all files in the working directory
+      filesystem = {
+        hijack_netrw_behaviour = "open_current", -- Use the plugin instead of the default "netrw" plugin
+        bind_to_cwd = false,
+        follow_current_file = true,
+        filtered_items = {
+          hide_dotfiles = false,
+          hide_gitignored = true,
+          never_show = { ".git", ".null-ls_*" },
+        },
+      },
+      window = {
+        width = "30", -- Hard-code the size of the window width
+      },
+    },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "kyazdani42/nvim-web-devicons",
+      "MunifTanjim/nui.nvim",
+    },
+  },
+
+  {
+    -- Plugin to load JSON schemas
+    "b0o/schemastore.nvim",
+    event = "BufRead",
+    ft = "json",
+  },
+
+  {
+    -- Plugin which provides some extra keybinds for easier navigation
+    "chrisgrieser/nvim-various-textobjs",
+    event = "BufRead",
+    -- Use the plugin with default keymappings
+    opts = { useDefaultKeymaps = true },
+    config = true,
+  },
+
+  {
+    -- Plugin for better Rust LSP support & more
+    "simrat39/rust-tools.nvim",
+    event = "BufRead",
+    ft = "rust",
+  },
+
+  {
+    -- Plugin for better TypeScript LSP support & more
+    "jose-elias-alvarez/typescript.nvim",
+    event = "BufRead",
+    -- Load the plugin only when working on TypeScript projects
+    ft = { "typescript", "typescriptreact" },
+  },
+
+  {
+    -- Plugin to automatically insert HTML/JSX tags where necessary
+    "windwp/nvim-ts-autotag",
+    event = "BufRead",
+    -- Load the plugin only for webdev project files
+    ft = { "typescriptreact", "javascriptreact", "html" },
+  },
+
+  {
+    -- Plugin for configuring a nice looking statusline
+    "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
+    config = function()
+      local options = {
+        -- Leaving an empty table renders the square-edged components, else the default angled ones are loaded
+        section_separators = {},
+        component_separator = "|",
+        theme = "onedark", -- Set the theme
+        globalstatus = true,
+        disabled_filetypes = { -- Disable the statusline for certain filetypes mentioned below
+          statusline = {
+            "filesytem",
+            "neo-tree",
+            "dashboard",
+            "lazy",
+            "alpha",
+            "null-ls-info",
+            "lspinfo",
+            "mason",
+            "neo-tree-popup",
+          },
+        },
+      }
+
+      local sections = {
+        -- Statusline components to showcase on the right-most end
+        lualine_x = { "filetype" },
+        lualine_y = { "progress" },
+        lualine_z = { "location" },
+      }
+
+      require("lualine").setup({ options = options, sections = sections })
+    end,
   },
 }
 
