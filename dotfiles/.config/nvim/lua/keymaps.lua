@@ -15,6 +15,7 @@ wk.register({
     o = { "<cmd>Telescope oldfiles<cr>", "Open recent files" },
     n = { "<cmd>enew<cr>", "Open a new file" },
     h = { "<cmd>Telescope help_tags<cr>", "Open the help tags menu" },
+    e = { "<cmd>Neotree toggle<cr>", "Toggle the file explorer open/close" },
   },
   -- Easier & quicker buffer management keymaps
   ["<leader>b"] = {
