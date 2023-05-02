@@ -50,4 +50,7 @@ return {
 
   -- Set the rate at which the cursor will blink
   cursor_blink_rate = 600,
+
+  -- Disable checking for updates every day (which is annoying af!)
+  check_for_updates = false,
 }
