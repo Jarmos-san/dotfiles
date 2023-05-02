@@ -45,11 +45,14 @@ done
 # Ensure the "plugins" array to removed from memory for safety reasons
 unset plugins
 
-# NOTE: On Kitty, the escape codes could be different.
-# Move to the end of the line when pressing the "End" key
-bindkey "^[[4~" end-of-line
-# Move to the start of the line when pressing the "Home" key
-bindkey "^[[1~" beginning-of-line
+# Configure some ZSH keybinds only if using the Kitty terminal
+if [[ $TERM == "kitty-xterm" ]]; then
+    # Move to the end of the line when pressing the "End" key
+    bindkey "^[[4~" end-of-line
+
+    # Move to the start of the line when pressing the "Home" key
+    bindkey "^[[1~" beginning-of-line
+fi
 
 # Disable hint prompts on Homebrew to reduce clutter
 export HOMEBREW_NO_ENV_HINTS=1
