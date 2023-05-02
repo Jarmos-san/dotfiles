@@ -57,11 +57,10 @@ require("options")
 require("autocmds")
 require("keymaps")
 
--- Uncomment it sometime in the near future after it supports semantic highlighting
--- vim.cmd([[ colorscheme onedark ]])
+vim.cmd.colorscheme("onedark")
 -- The follow two colourschems are the most popular ones right now with support for semantic highlighting
 -- vim.cmd([[ colorscheme tokyonight]])
-vim.cmd.colorscheme("catppuccin")
+-- vim.cmd.colorscheme("catppuccin")
 
 -- TODO: Figure a way out to move these highlights to a separate file elsewhere(?)
 highlight(0, "CursorLineNr", { guibg = nil, guifg = nil })
