@@ -162,6 +162,7 @@ local plugins = {
   {
     -- Plugin for showing nice popup UI, can be used in conjunction with LSP & others
     "rcarriga/nvim-notify",
+    -- Lazy load the plugin after the contents of the buffer are read
     event = "BufRead",
     opts = {
       -- Set the background colour since the main Neovim background is transparent
@@ -172,7 +173,13 @@ local plugins = {
       -- Set the animation to something subtle to avoid distractions
       stages = "fade",
     },
-    config = true,
+    -- Initialise the plugin with some configurations AFTER its loaded
+    config = function(opts)
+      require("notify").setup(opts)
+
+      -- Configure Neovim's notification capabilities to use the plugin instead
+      vim.notify = require("notify")
+    end,
   },
 
   {
