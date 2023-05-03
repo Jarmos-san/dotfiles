@@ -6,6 +6,10 @@
 
 -- TODO: Explore the following plugins & decide to use them or not
 -- "JellyApple102/flote.nvim", -- Plugin to take simple & disposable Markdown notes
+-- "echasnovski/mini.starter", -- Plugin to show a nice, simple & minimal startup screen and a dashboard
+-- "echanovski/mini.bufremove" -- Simple plugin to remove/delete buffers
+-- "echanovski/mini.move"  -- Plugin to move a selected text object around in any direction
+-- "echanovski/mini.splitjoin"  -- Plugin to split & join a list of arguments properly
 
 -- Module containing configuration options for the colour column plugin ("m4xshen/smartcolumn.nvim")
 local smartcolumn_options = require("configs.smartcolumn")
@@ -334,12 +338,6 @@ local plugins = {
   },
 
   {
-    -- TODO: Figure a way out to make it work
-    -- Plugin to show a nice, simple & minimal startup screen and a dashboard
-    -- "echasnovski/mini.starter",
-  },
-
-  {
     -- Plugin for better (un)commenting of code
     "echasnovski/mini.comment",
     -- Load the plugin only after the contents of a buffer are read or a new file
@@ -398,6 +396,21 @@ local plugins = {
     config = function()
       require("mini.indentscope").setup()
     end,
+  },
+
+  {
+    -- Plugin to load a nice dashboard with utilities in the startup screen
+    "goolord/alpha-nvim",
+    -- Load the plugin after the initial UI is loaded
+    event = "VimEnter",
+    -- Load the plugin configurations
+    config = function()
+      -- Load a default provided dashboard for easy access to recently opened files
+      local dashboard = require("alpha.themes.dashboard")
+      require("alpha").setup(dashboard.config)
+    end,
+    -- List of dependencies for the plugin
+    dependencies = "kyazdani42/nvim-web-devicons",
   },
 }
 
