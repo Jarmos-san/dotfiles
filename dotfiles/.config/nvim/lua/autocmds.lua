@@ -38,47 +38,6 @@ autocmd("BufReadPost", {
   end,
 })
 
--- INFO: See the documentations below for an explanation on it works:
--- https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim#events
-autocmd("User", {
-  desc = "Print a helpful message when Mason is about to install the LSP servers",
-  group = augroup("mason"),
-  pattern = "MasonToolsStartingInstall",
-  callback = function()
-    vim.schedule(function()
-      vim.notify("Mason is starting...")
-    end)
-  end,
-})
-
-autocmd("User", {
-  desc = "Print a helpful message when Mason is done updating the LSP servers",
-  group = augroup("mason"),
-  pattern = "MasonToolsUpdateCompleted",
-  callback = function()
-    vim.schedule(function()
-      vim.notify("Mason completed updating LSP servers...")
-    end)
-  end,
-})
-
-autocmd("User", {
-  desc = "Open Alpha dashboard when all buffers are removed",
-  group = augroup("open_alpha_on_buffer_removal"),
-  pattern = "BDeletePost*",
-  callback = function(event)
-    local fallback_name = vim.api.nvim_buf_get_name(event.buf)
-    local fallback_filetype = vim.api.nvim_buf_get_option(event.buf, "filetype")
-    local fallback_on_empty = fallback_name == "" and fallback_filetype == ""
-
-    if fallback_on_empty then
-      vim.cmd("Neotree close")
-      vim.cmd("Alpha")
-      vim.cmd(event.buf .. "bwipeout")
-    end
-  end,
-})
-
 autocmd("VimResized", {
   desc = "Resize the splits if the window is resized",
   group = augroup("resize_splits"),
