@@ -338,6 +338,28 @@ local plugins = {
     -- Plugin to show a nice, simple & minimal startup screen and a dashboard
     -- "echasnovski/mini.starter",
   },
+
+  {
+    -- Plugin for better (un)commenting of code
+    "echasnovski/mini.comment",
+    -- Load the plugin only after the contents of a buffer are read or a new file
+    -- is created with some contents in the buffer
+    event = { "BufNewFile", "BufRead" },
+    opts = {
+      -- Ensure blanklines don't have unnecessary comments to avoid clutter
+      ignore_blank_lines = true,
+      hooks = {
+        pre = function()
+          -- Necessary hook for commenting source code based on Treesitter queries.
+          require("ts_context_commentstring.internal").update_commentstring({})
+        end,
+      },
+    },
+    config = function(opts)
+      -- Configure the plugin with the configuration options provided above
+      require("mini.comment").setup(opts)
+    end,
+  },
 }
 
 return plugins
