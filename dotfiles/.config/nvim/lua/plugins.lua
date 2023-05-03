@@ -360,6 +360,21 @@ local plugins = {
       require("mini.comment").setup(opts)
     end,
   },
+
+  {
+    -- Simple & minimal plugin for pairing brackets, quotes & more!
+    "echasnovski/mini.pairs",
+    -- Load the plugin only after entering Insert mode
+    event = "InsertEnter",
+    opts = {
+      -- Enable some extra modes where this plugin should be useable
+      modes = {
+        insert = true, -- "Insert" mode
+        command = true, -- "Command" mode
+        terminal = true, -- "Terminal" mode
+      },
+    },
+  },
 }
 
 return plugins
