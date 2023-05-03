@@ -15,7 +15,7 @@ local plugins = {
     -- Plugin for deleting & removing buffers without messing up the window layout
     "famiu/bufdelete.nvim",
     -- Load the plugin right before the current buffer is about to be deleted.
-    event = "BufDelete",
+    event = "BufEnter",
   },
 
   {
@@ -318,6 +318,25 @@ local plugins = {
 
       require("lualine").setup({ options = options, sections = sections })
     end,
+  },
+
+  {
+    -- The default colorscheme used right now
+    "navarasu/onedark.nvim",
+    -- Load the colorscheme right after the "nvim" command is invoked
+    event = "VimEnter",
+    -- Configure the colorscheme according to personal preferences
+    opts = {
+      style = "darker",
+      transparent = true,
+      lualine = { transparent = true },
+    },
+  },
+
+  {
+    -- TODO: Figure a way out to make it work
+    -- Plugin to show a nice, simple & minimal startup screen and a dashboard
+    -- "echasnovski/mini.starter",
   },
 }
 
