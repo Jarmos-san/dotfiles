@@ -51,27 +51,6 @@ return {
   },
 
   {
-    -- A friendly plugin for managing the LSP servers more easily.
-    "williamboman/mason.nvim",
-    config = function()
-      require("configs.mason").setup() -- Load the module which contains mostly aesthetic configurations for the plugin
-    end,
-    cmd = "Mason", -- Lazy-load the plugin only when this command is invoked.
-    -- Load this dependency when the plugin is loaded as well.
-    dependencies = "WhoIsSethDaniel/mason-tool-installer.nvim",
-  },
-
-  {
-    -- Extension for "mason.nvim" which makes it VERY easy to auto-install LSP servers.
-    "WhoIsSethDaniel/mason-tool-installer.nvim",
-    config = function()
-      -- Load the module which contains the list of LSP servers & other related tools to install
-      require("configs.mason").installer()
-    end,
-    cmd = { "MasonToolsInstall", "MasonToolsUpdate" }, -- Lazy-load the extension only when these commands are invoked.
-  },
-
-  {
     -- Plugin for using the builtin LSP client to hook into other non-LSP tools like Prettier & ESLint.
     "jose-elias-alvarez/null-ls.nvim",
     event = "BufReadPost", -- Load the plugin only when the buffer is read & filetype is known.
