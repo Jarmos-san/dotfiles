@@ -1,6 +1,6 @@
 local M = {}
 
-local mason_packages = {
+M.mason_packages = {
   "bash-language-server",
   "black",
   "debugpy",
@@ -24,19 +24,5 @@ local mason_packages = {
   "vale",
   "yaml-language-server",
 }
-
-M.setup = function()
-  require("mason").setup({
-    ui = { border = "rounded" },
-    log_level = vim.log.levels.WARN,
-  })
-end
-
-M.installer = function()
-  require("mason-tool-installer").setup({
-    ensure_installed = mason_packages,
-    auto_update = true,
-  })
-end
 
 return M
