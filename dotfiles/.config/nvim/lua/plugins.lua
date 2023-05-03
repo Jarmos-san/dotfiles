@@ -390,6 +390,15 @@ local plugins = {
       require("mini.surround").setup()
     end,
   },
+
+  {
+    -- Plugin to visualise indentation of source code in a better way
+    "echasnovski/mini.indentscope",
+    event = "BufReadPost",
+    config = function()
+      require("mini.indentscope").setup()
+    end,
+  },
 }
 
 return plugins
