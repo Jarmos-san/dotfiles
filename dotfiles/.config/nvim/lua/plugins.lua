@@ -12,7 +12,9 @@
 -- "echanovski/mini.splitjoin"  -- Plugin to split & join a list of arguments properly
 
 local autocmd = vim.api.nvim_create_autocmd
-local augroup = vim.api.nvim_create_augroup
+local augroup = function(name)
+  return vim.api.nvim_create_augroup("augroup" .. name, { clear = true })
+end
 
 local plugins = {
   {
@@ -68,7 +70,7 @@ local plugins = {
       -- the terminal is toggled open.
       autocmd("TermOpen", {
         desc = "Get into Insert mode automatically when the terminal is open",
-        group = augroup("terminal_insert_mode", { clear = true }),
+        group = augroup("terminal_insert_mode"),
         callback = function(args)
           if vim.startswith(vim.api.nvim_buf_get_name(args.buf), "term://") then
             vim.cmd("startinsert")
@@ -79,7 +81,7 @@ local plugins = {
       -- Disable the number column & enable some highlights for the terminal
       autocmd("TermOpen", {
         desc = "Disable number coloum on the terminal",
-        group = augroup("terminal_highlights", { clear = true }),
+        group = augroup("terminal_highlights"),
         callback = function()
           -- Disable the number column in the terminal
           vim.opt.number = false
@@ -202,7 +204,7 @@ local plugins = {
       -- Autocommand to highlight the current line if the buffer is a "neo-tree" filetype
       autocmd("FileType", {
         pattern = "neo-tree,*",
-        group = augroup("highlight_cursorline", { clear = true }),
+        group = augroup("highlight_cursorline"),
         callback = function()
           -- FIXME: Configure the plugin to highlighting the current line for accessiblity concerns
           highlight(0, "CursorLine", { ctermfg = nil, ctermbg = "White" })
@@ -403,6 +405,24 @@ local plugins = {
     "goolord/alpha-nvim",
     -- Load the plugin after the initial UI is loaded
     event = "VimEnter",
+    init = function()
+      autocmd("User", {
+        desc = "Open Alpha dashboard when all buffers are removed",
+        group = augroup("open_alpha_on_buffer_removal"),
+        pattern = "BDeletePost*",
+        callback = function(event)
+          local fallback_name = vim.api.nvim_buf_get_name(event.buf)
+          local fallback_filetype = vim.api.nvim_buf_get_option(event.buf, "filetype")
+          local fallback_on_empty = fallback_name == "" and fallback_filetype == ""
+
+          if fallback_on_empty then
+            vim.cmd("Neotree close")
+            vim.cmd("Alpha")
+            vim.cmd(event.buf .. "bwipeout")
+          end
+        end,
+      })
+    end,
     -- Load the plugin configurations
     config = function()
       -- Load a default provided dashboard for easy access to recently opened files
@@ -441,6 +461,7 @@ local plugins = {
       autocmd("User", {
         pattern = "MasonToolsUpdateComplete",
         desc = "Invoke a notification when Mason has completed installing/updating the servers",
+        group = augroup("mason_notifications"),
         callback = function()
           vim.schedule(function()
             vim.notify("Mason has completed installing the servers...")
