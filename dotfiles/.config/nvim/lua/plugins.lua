@@ -374,6 +374,10 @@ local plugins = {
         terminal = true, -- "Terminal" mode
       },
     },
+    config = function(opts)
+      -- Configure the plugin with the configuration options provided above
+      require("mini.pairs").setup(opts)
+    end,
   },
 }
 
