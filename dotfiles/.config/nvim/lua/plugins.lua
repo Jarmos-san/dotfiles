@@ -392,8 +392,10 @@ local plugins = {
   {
     -- Plugin to visualise indentation of source code in a better way
     "echasnovski/mini.indentscope",
-    event = "BufReadPost",
+    -- Load the plugin only after the contents of the buffer are read
+    event = "BufRead",
     config = function()
+      -- Configure the plugin with default settings
       require("mini.indentscope").setup()
     end,
   },
