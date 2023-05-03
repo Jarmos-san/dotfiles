@@ -175,11 +175,11 @@ local plugins = {
     },
     -- Initialise the plugin with some configurations AFTER its loaded
     config = function(opts)
-      -- Configure Neovim's notification capabilities to use the plugin instead
-      vim.notify = require("notify")
-
       -- Initialise the plugin with the configuration options provided above
       require("notify").setup(opts)
+
+      -- Configure Neovim's notification capabilities to use the plugin instead
+      vim.notify = require("notify")
     end,
   },
 
