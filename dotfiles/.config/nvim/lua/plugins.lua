@@ -379,6 +379,17 @@ local plugins = {
       require("mini.pairs").setup(opts)
     end,
   },
+
+  {
+    -- Plugin for easier insertion of pairs like quotations & more
+    "echasnovski/mini.surround",
+    -- Load the plugin only after the contents of the buffer are read
+    event = "BufReadPost",
+    config = function()
+      -- Initialise the plugin with default settings
+      require("mini.surround").setup()
+    end,
+  },
 }
 
 return plugins
