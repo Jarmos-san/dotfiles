@@ -11,8 +11,8 @@
 -- "echanovski/mini.move"  -- Plugin to move a selected text object around in any direction
 -- "echanovski/mini.splitjoin"  -- Plugin to split & join a list of arguments properly
 
--- Module containing configuration options for the colour column plugin ("m4xshen/smartcolumn.nvim")
-local smartcolumn_options = require("configs.smartcolumn")
+local autocmd = vim.api.nvim_create_autocmd
+local augroup = vim.api.nvim_create_augroup
 
 local plugins = {
   {
@@ -51,9 +51,9 @@ local plugins = {
     -- Initialise the plugin with some configurations for easier readability & usability
     opts = {
       -- Disable the colorcolum in certain filetypes like vimdoc & certain configuration files.
-      disabled_filetypes = smartcolumn_options.disable_filetypes,
+      disabled_filetypes = require("configs.smartcolumn").disable_filetypes,
       -- Configure the character length at which to show the colorcolumn.
-      custom_colorcolumn = smartcolumn_options.filetype_column_width,
+      custom_colorcolumn = require("configs.smartcolumn").filetype_column_width,
     },
   },
 
@@ -66,9 +66,9 @@ local plugins = {
     init = function()
       -- Autocommand to ensure the Neovim gets into Insert mode automatically when
       -- the terminal is toggled open.
-      vim.api.nvim_create_autocmd("TermOpen", {
+      autocmd("TermOpen", {
         desc = "Get into Insert mode automatically when the terminal is open",
-        group = vim.api.nvim_create_augroup("terminal_insert_mode", { clear = true }),
+        group = augroup("terminal_insert_mode", { clear = true }),
         callback = function(args)
           if vim.startswith(vim.api.nvim_buf_get_name(args.buf), "term://") then
             vim.cmd("startinsert")
@@ -77,9 +77,9 @@ local plugins = {
       })
 
       -- Disable the number column & enable some highlights for the terminal
-      vim.api.nvim_create_autocmd("TermOpen", {
+      autocmd("TermOpen", {
         desc = "Disable number coloum on the terminal",
-        group = vim.api.nvim_create_augroup("terminal_highlights", { clear = true }),
+        group = augroup("terminal_highlights", { clear = true }),
         callback = function()
           -- Disable the number column in the terminal
           vim.opt.number = false
@@ -197,8 +197,6 @@ local plugins = {
     init = function()
       vim.g.neo_tree_remove_legacy_commands = 1
 
-      local autocmd = vim.api.nvim_create_autocmd
-      local augroup = vim.api.nvim_create_augroup
       local highlight = vim.api.nvim_set_hl
 
       -- Autocommand to highlight the current line if the buffer is a "neo-tree" filetype
@@ -413,6 +411,49 @@ local plugins = {
     end,
     -- List of dependencies for the plugin
     dependencies = "kyazdani42/nvim-web-devicons",
+  },
+
+  {
+    -- A friendly plugin for managing the LSP servers more easily.
+    "williamboman/mason.nvim",
+    -- Lazy-load the plugin only when this command is invoked.
+    cmd = "Mason",
+    -- Configuration options which will be passed to the config key when the plugin will be initialised
+    opts = {
+      -- Configure the plugin to have rounded borders
+      ui = { border = "rounded" },
+      -- Configure the log levels for the plugin
+      log_level = vim.log.levels.WARN,
+    },
+    -- Initialise the plugin
+    config = true,
+    -- Load this dependency when the plugin is loaded as well.
+    dependencies = "WhoIsSethDaniel/mason-tool-installer.nvim",
+  },
+
+  {
+    -- Extension for "mason.nvim" which makes it VERY easy to auto-install LSP servers.
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    -- Lazy-load the extension only when these commands are invoked.
+    cmd = { "MasonToolsInstall", "MasonToolsUpdate" },
+    -- Initialisation function to invoke right before the plugin is loaded
+    init = function()
+      autocmd("User", {
+        pattern = "MasonToolsUpdateComplete",
+        desc = "Invoke a notification when Mason has completed installing/updating the servers",
+        callback = function()
+          vim.schedule(function()
+            vim.notify("Mason has completed installing the servers...")
+          end)
+        end,
+      })
+    end,
+    -- Load the list of LSP servers for Mason to download & install
+    opts = require("configs.mason").mason_packages,
+    config = function(opts)
+      -- Load the plugin with the list of packages imported above
+      require("mason-tool-installer").setup(opts)
+    end,
   },
 }
 
