@@ -9,6 +9,10 @@
 -- "echanovski/mini.move"  -- Plugin to move a selected text object around in any direction
 -- "echanovski/mini.splitjoin"  -- Plugin to split & join a list of arguments properly
 
+-- FIXME: Some of the init callback functions in this module are implicitly importing
+-- their respective plugins as well. This is increasing the startup by some
+-- set amount of time so that needs to be fixed some time soon.
+
 local plugins = {
   {
     -- Plugin for deleting & removing buffers without messing up the window layout
@@ -156,6 +160,8 @@ local plugins = {
   {
     -- Plugin for configuring a nice looking statusline
     "nvim-lualine/lualine.nvim",
+    -- This needs to be loaded after the "VeryLazy" event otherwise an ugly
+    -- unstyled statusline is created after Neovim startup
     event = "VeryLazy",
     config = require("configs.lualine").config,
   },
@@ -265,6 +271,7 @@ local plugins = {
   {
     -- UI plugin for showing notifications appropriately instead of taking up the message space
     "rcarriga/nvim-notify",
+    event = "VeryLazy",
     init = require("configs.notify").init,
     opts = require("configs.notify").options,
   },
@@ -272,6 +279,7 @@ local plugins = {
   {
     -- Official plugin for more ease in configuring the in-built LSP client.
     "neovim/nvim-lspconfig",
+    event = "LspAttach",
     init = require("configs.lsp").init,
     config = require("configs.lsp").config,
     dependencies = {
