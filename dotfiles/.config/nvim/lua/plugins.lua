@@ -21,7 +21,7 @@ local plugins = {
     -- Plugin for deleting & removing buffers without messing up the window layout
     "famiu/bufdelete.nvim",
     -- Load the plugin right before the current buffer is about to be deleted.
-    event = "BufEnter",
+    event = "BufRead",
   },
 
   {
@@ -49,7 +49,7 @@ local plugins = {
     -- Functionally better plugin for showing a nice colorcolum
     "m4xshen/smartcolumn.nvim",
     -- Load the plugin only when the filetype of the buffer is recognised.
-    event = "FileType",
+    event = "BufRead",
     -- Initialise the plugin with some configurations for easier readability & usability
     opts = {
       -- Disable the colorcolum in certain filetypes like vimdoc & certain configuration files.
@@ -366,7 +366,7 @@ local plugins = {
     -- Plugin for easier insertion of pairs like quotations & more
     "echasnovski/mini.surround",
     -- Load the plugin only after the contents of the buffer are read
-    event = "BufReadPost",
+    event = "BufRead",
     config = function()
       -- Initialise the plugin with default settings
       require("mini.surround").setup()
