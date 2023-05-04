@@ -277,20 +277,8 @@ local plugins = {
   {
     -- UI plugin for showing notifications appropriately instead of taking up the message space
     "rcarriga/nvim-notify",
-    init = function()
-      -- Set Neovim to use 24-bit colours
-      vim.opt.termguicolors = true
-
-      -- Set various other Neovim features to use the "notify" plugin instead
-      vim.notify = require("notify")
-    end,
-    opts = {
-      -- Configure the plugin to fade in/out w/o distractions
-      stages = "fade",
-
-      -- Add a "transparent" background to stop the plugin from complaining too much
-      background_colour = "#000000",
-    },
+    init = require("configs.notify").init,
+    opts = require("configs.notify").options,
   },
 
   {
