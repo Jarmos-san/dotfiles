@@ -501,8 +501,8 @@ local plugins = {
   {
     -- Official plugin for more ease in configuring the in-built LSP client.
     "neovim/nvim-lspconfig",
-    -- event = "BufReadPost", -- Lazy-load the plugin only after the Neovim UI is loaded.
-    config = function() -- Configurations for the many LSP servers used within Neovim.
+    config = function()
+      -- Configurations for the many LSP servers used within Neovim.
       require("configs.lsp")
     end,
     dependencies = {
@@ -514,8 +514,9 @@ local plugins = {
   {
     -- Plugin for VSCode-like snippets powered by Neovim's in-built LSP.
     "L3MON4D3/LuaSnip",
-    event = "InsertEnter", -- Lazy-load the plugin only when the buffer is in Insert mode.
-    dependencies = { -- Load these dependencies when the snippet plugin is used.
+    -- Lazy-load the plugin only when the buffer is in Insert mode.
+    event = "InsertEnter",
+    dependencies = {
       "neovim/nvim-lspconfig",
       "hrsh7th/nvim-cmp",
       "rafamadriz/friendly-snippets",
@@ -525,13 +526,20 @@ local plugins = {
   {
     -- Extra plugin for a more VSCode-like snippets behaviour.
     "rafamadriz/friendly-snippets",
-    event = "InsertEnter", -- Lazy-load the plugin only when the buffer is in an Insert mode.
+    -- Lazy-load the plugin only when the buffer is in an Insert mode.
+    event = "InsertEnter",
   },
 
   {
     -- Better autocompletion support for Neovim.
     "hrsh7th/nvim-cmp",
-    dependencies = { -- A bunch of extra extensions for the autocompletions plugin.
+    -- Lazy-load the plugin only when the buffer is in Insert mode.
+    event = "InsertEnter",
+    config = function()
+      -- Configuration module for the autocompletion module.
+      require("configs.cmp")
+    end,
+    dependencies = {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-nvim-lsp-signature-help",
@@ -541,10 +549,6 @@ local plugins = {
       "hrsh7th/cmp-nvim-lsp-document-symbol",
       "saadparwaiz1/cmp_luasnip",
     },
-    config = function() -- Configuration module for the autocompletion module.
-      require("configs.cmp")
-    end,
-    event = "InsertEnter", -- Lazy-load the plugin only when the buffer is in Insert mode.
   },
 }
 
