@@ -247,12 +247,7 @@ local plugins = {
     -- A friendly plugin for managing the LSP servers more easily.
     "williamboman/mason.nvim",
     cmd = "Mason",
-    opts = {
-      -- Configure the plugin to have rounded borders
-      ui = { border = "rounded" },
-      -- Configure the log levels for the plugin
-      log_level = vim.log.levels.WARN,
-    },
+    opts = require("configs.mason").config,
     config = true,
     dependencies = "WhoIsSethDaniel/mason-tool-installer.nvim",
   },
@@ -261,22 +256,8 @@ local plugins = {
     -- Extension for "mason.nvim" which makes it VERY easy to auto-install LSP servers.
     "WhoIsSethDaniel/mason-tool-installer.nvim",
     cmd = { "MasonToolsInstall", "MasonToolsUpdate" },
-    init = function()
-      autocmd("User", {
-        pattern = "MasonToolsUpdateComplete",
-        desc = "Invoke a notification when Mason has completed installing/updating the servers",
-        group = augroup("mason_notifications"),
-        callback = function()
-          vim.schedule(function()
-            vim.notify("Mason has completed installing the servers...")
-          end)
-        end,
-      })
-    end,
-    opts = require("configs.mason").mason_packages,
-    config = function(opts)
-      require("mason-tool-installer").setup(opts)
-    end,
+    init = require("configs.mason").init,
+    config = require("configs.mason").tools,
   },
 
   {
