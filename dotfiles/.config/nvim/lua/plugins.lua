@@ -160,29 +160,6 @@ local plugins = {
   },
 
   {
-    -- Plugin for showing nice popup UI, can be used in conjunction with LSP & others
-    "rcarriga/nvim-notify",
-    -- Lazy load the plugin after the contents of the buffer are read
-    event = "BufRead",
-    -- Initialise the plugin with some configurations AFTER its loaded
-    config = function()
-      -- FIXME: For some unforeseen reason this plugin behaves weirdly if the
-      -- configuration options are passed through a "opts" table instead
-
-      -- Initialise the plugin with the configuration options provided above
-      require("notify").setup({
-        -- Set the background colour since the main Neovim background is transparent
-        background_colour = "#000000",
-        -- Set the maximum width & height a notification bar can occupy to avoid clutter
-        max_width = 60,
-        max_height = 40,
-        -- Set the animation to something subtle to avoid distractions
-        stages = "fade",
-      })
-    end,
-  },
-
-  {
     -- Plugin for quickly visualising Git VCS info right within the buffer
     "lewis6991/gitsigns.nvim",
     event = "BufRead",
@@ -498,6 +475,27 @@ local plugins = {
       -- Configuration module for the plugin.
       require("configs.null-ls")
     end,
+  },
+
+  {
+    -- UI plugin for showing notifications appropriately instead of taking up the message space
+    "rcarriga/nvim-notify",
+    -- Callback function to initialise the plugin with certain Neovim options
+    init = function()
+      -- Set Neovim to use 24-bit colours
+      vim.opt.termguicolors = true
+
+      -- Set various other Neovim features to use the "notify" plugin instead
+      vim.notify = require("notify")
+    end,
+    -- Configuration options for the plugin
+    opts = {
+      -- Configure the plugin to fade in/out w/o distractions
+      stages = "fade",
+
+      -- Add a "transparent" background to stop the plugin from complaining too much
+      background_colour = "#000000",
+    },
   },
 }
 
