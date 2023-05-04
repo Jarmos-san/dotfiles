@@ -63,39 +63,9 @@ local plugins = {
     -- Ensure the plugin is only loaded when the following commands are invoked (can even be invoked through a keymap)
     cmd = { "TermOpen", "TermRun" },
     -- Initialisation callback which is invoked right before the plugin is loaded
-    init = function()
-      -- Autocommand to ensure the Neovim gets into Insert mode automatically when
-      -- the terminal is toggled open.
-      autocmd("TermOpen", {
-        desc = "Get into Insert mode automatically when the terminal is open",
-        group = augroup("terminal_insert_mode"),
-        callback = function(args)
-          if vim.startswith(vim.api.nvim_buf_get_name(args.buf), "term://") then
-            vim.cmd("startinsert")
-          end
-        end,
-      })
-
-      -- Disable the number column & enable some highlights for the terminal
-      autocmd("TermOpen", {
-        desc = "Disable number coloum on the terminal",
-        group = augroup("terminal_highlights"),
-        callback = function()
-          -- Disable the number column in the terminal
-          vim.opt.number = false
-          vim.opt.relativenumber = false
-          -- Set some highlightings for the floating window
-          vim.api.nvim_win_set_option(0, "winhl", "Normal:NormalFloat")
-        end,
-      })
-    end,
+    init = require("configs.terminal").init,
     -- Some initialisation options like the shell to use & so on to load the plugin with
-    config = function()
-      require("terminal").setup({
-        -- Close the terminal as well when the shell process is exited
-        autoclose = true,
-      })
-    end,
+    config = require("configs.terminal").config,
   },
 
   {
