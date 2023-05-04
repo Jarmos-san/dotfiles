@@ -1,3 +1,5 @@
+-- Module for configuring the "mason.nvim" plugin
+
 local M = {}
 
 local mason_packages = {

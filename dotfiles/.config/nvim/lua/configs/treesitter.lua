@@ -1,3 +1,5 @@
+-- Module configuring the Treesitter capabilities of Neovim
+
 local M = {}
 
 local configs = {
