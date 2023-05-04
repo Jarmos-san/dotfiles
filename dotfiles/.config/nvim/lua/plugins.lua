@@ -9,11 +9,6 @@
 -- "echanovski/mini.move"  -- Plugin to move a selected text object around in any direction
 -- "echanovski/mini.splitjoin"  -- Plugin to split & join a list of arguments properly
 
-local autocmd = vim.api.nvim_create_autocmd
-local augroup = function(name)
-  return vim.api.nvim_create_augroup("augroup" .. name, { clear = true })
-end
-
 local plugins = {
   {
     -- Plugin for deleting & removing buffers without messing up the window layout
@@ -43,12 +38,7 @@ local plugins = {
     -- Functionally better plugin for showing a nice colorcolum
     "m4xshen/smartcolumn.nvim",
     event = "BufRead",
-    opts = {
-      -- Disable the colorcolum in certain filetypes like vimdoc & certain configuration files.
-      disabled_filetypes = require("configs.smartcolumn").disable_filetypes,
-      -- Configure the character length at which to show the colorcolumn.
-      custom_colorcolumn = require("configs.smartcolumn").filetype_column_width,
-    },
+    opts = require("configs.smartcolumn").options,
   },
 
   {
@@ -269,9 +259,7 @@ local plugins = {
       "neovim/nvim-lspconfig",
       "williamboman/mason.nvim",
     },
-    config = function()
-      require("configs.null-ls")
-    end,
+    config = require("configs.null-ls").config,
   },
 
   {
@@ -284,9 +272,8 @@ local plugins = {
   {
     -- Official plugin for more ease in configuring the in-built LSP client.
     "neovim/nvim-lspconfig",
-    config = function()
-      require("configs.lsp")
-    end,
+    init = require("configs.lsp").init,
+    config = require("configs.lsp").config,
     dependencies = {
       -- This plugin needs to be loaded as well otherwise Neovim can't find the LSP binary on $PATH.
       "williamboman/mason.nvim",
@@ -314,9 +301,7 @@ local plugins = {
     -- Better autocompletion support for Neovim.
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
-    config = function()
-      require("configs.cmp")
-    end,
+    config = require("configs.cmp").config,
     dependencies = {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-nvim-lsp",
