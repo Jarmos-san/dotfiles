@@ -49,18 +49,4 @@ return {
     end,
     event = "InsertEnter", -- Lazy-load the plugin only when the buffer is in Insert mode.
   },
-
-  {
-    -- Plugin for using the builtin LSP client to hook into other non-LSP tools like Prettier & ESLint.
-    "jose-elias-alvarez/null-ls.nvim",
-    event = "BufReadPost", -- Load the plugin only when the buffer is read & filetype is known.
-    dependencies = { -- Load some necessary dependencies for the plugin.
-      "nvim-lua/plenary.nvim",
-      "neovim/nvim-lspconfig",
-      "williamboman/mason.nvim",
-    },
-    config = function() -- Configuration module for the plugin.
-      require("configs.null-ls")
-    end,
-  },
 }

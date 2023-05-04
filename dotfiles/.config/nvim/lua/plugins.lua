@@ -483,6 +483,22 @@ local plugins = {
       require("mason-tool-installer").setup(opts)
     end,
   },
+
+  {
+    -- Plugin for using the builtin LSP client to hook into other non-LSP tools like Prettier & ESLint.
+    "jose-elias-alvarez/null-ls.nvim",
+    -- Load the plugin only when the buffer is read & filetype is known.
+    event = "BufRead",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "neovim/nvim-lspconfig",
+      "williamboman/mason.nvim",
+    },
+    config = function()
+      -- Configuration module for the plugin.
+      require("configs.null-ls")
+    end,
+  },
 }
 
 return plugins
