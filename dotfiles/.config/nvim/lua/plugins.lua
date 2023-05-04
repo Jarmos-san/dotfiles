@@ -238,29 +238,8 @@ local plugins = {
     -- Plugin to load a nice dashboard with utilities in the startup screen
     "goolord/alpha-nvim",
     event = "VimEnter",
-    init = function()
-      autocmd("User", {
-        desc = "Open Alpha dashboard when all buffers are removed",
-        group = augroup("open_alpha_on_buffer_removal"),
-        pattern = "BDeletePost*",
-        callback = function(event)
-          local fallback_name = vim.api.nvim_buf_get_name(event.buf)
-          local fallback_filetype = vim.api.nvim_buf_get_option(event.buf, "filetype")
-          local fallback_on_empty = fallback_name == "" and fallback_filetype == ""
-
-          if fallback_on_empty then
-            vim.cmd("Neotree close")
-            vim.cmd("Alpha")
-            vim.cmd(event.buf .. "bwipeout")
-          end
-        end,
-      })
-    end,
-    config = function()
-      -- Load a default provided dashboard for easy access to recently opened files
-      local dashboard = require("alpha.themes.dashboard")
-      require("alpha").setup(dashboard.config)
-    end,
+    init = require("configs.alpha").init,
+    config = require("configs.alpha").config,
     dependencies = "kyazdani42/nvim-web-devicons",
   },
 
