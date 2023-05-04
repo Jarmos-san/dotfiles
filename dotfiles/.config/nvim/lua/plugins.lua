@@ -18,23 +18,19 @@ local plugins = {
   {
     -- Plugin for deleting & removing buffers without messing up the window layout
     "famiu/bufdelete.nvim",
-    -- Load the plugin right before the current buffer is about to be deleted.
     event = "BufRead",
   },
 
   {
     -- Plugin for a better & quicker "Escape" mechanism.
     "max397574/better-escape.nvim",
-    -- Load the plugin right before leaving Insert mode.
     event = "InsertLeavePre",
   },
 
   {
     -- Plugin to enable a smoother scroll animation
     "karb94/neoscroll.nvim",
-    -- Load the plugin only after the contents of the buffer are read.
     event = "BufRead",
-    -- Initialise the plugin with some configurations
     opts = {
       -- Respect the scrolloff marging (see ":h scrolloff" for more info)
       respect_scrolloff = true,
@@ -46,9 +42,7 @@ local plugins = {
   {
     -- Functionally better plugin for showing a nice colorcolum
     "m4xshen/smartcolumn.nvim",
-    -- Load the plugin only when the filetype of the buffer is recognised.
     event = "BufRead",
-    -- Initialise the plugin with some configurations for easier readability & usability
     opts = {
       -- Disable the colorcolum in certain filetypes like vimdoc & certain configuration files.
       disabled_filetypes = require("configs.smartcolumn").disable_filetypes,
@@ -60,33 +54,31 @@ local plugins = {
   {
     -- A better functioning & minimal terminal for usage within Neovim itself
     "rebelot/terminal.nvim",
-    -- Ensure the plugin is only loaded when the following commands are invoked (can even be invoked through a keymap)
     cmd = { "TermOpen", "TermRun" },
-    -- Initialisation callback which is invoked right before the plugin is loaded
     init = require("configs.terminal").init,
-    -- Some initialisation options like the shell to use & so on to load the plugin with
     config = require("configs.terminal").config,
   },
 
   {
     -- A UI plugin for registering and managing keymaps under a single place
     "folke/which-key.nvim",
-    -- Lazy load the plugin after the initial Neovim UI is loaded
     event = "VeryLazy",
-    -- Load the plugin with a couple of initialisation parameters
     config = function()
       -- Enable Neovim to wait a couple of milliseconds after a key is pressed to trigger the plugin
       vim.o.timeout = true
+
       -- Configure a high enough timeout length so that the plugin does not trigger all the time
       vim.o.timeoutlen = 500
+
       require("which-key").setup({
-        -- A list of plugins & their configurations (only the default ones are used, for now)
         plugins = {
           -- Disable the "spelling" plugin since it can be annoying at times
           spelling = { enabled = false },
         },
+
         -- Configure the floating window to have a window for clearly distinguishing between which is what
         window = { border = "single" },
+
         -- Disable showing keymaps w/o any descriptions to avoid unnecessary clutter
         ignore_missing = true,
       })
@@ -96,29 +88,22 @@ local plugins = {
   {
     -- Plugin to display the diagnostic messages in a floating window
     "folke/trouble.nvim",
-    -- Lazy load the plugin only when an LSP server is attached to the client and/or when its
-    -- respective command is called
-    event = { "LspAttach" },
-    cmd = { "Trouble" },
-    -- Initialise the plugin with some default configurations
+    event = "LspAttach",
+    cmd = "Trouble",
     config = true,
-    -- Dependency plugin for Nerd Font icon support
-    dependencies = { "kyazdani42/nvim-web-devicons" },
+    dependencies = "kyazdani42/nvim-web-devicons",
   },
 
   {
     -- Plugin to easily search for files using fuzzy-search & more behaviour like one would find
     -- one other GUI Text Editors like VSCode & so on
     "nvim-telescope/telescope.nvim",
-    -- Lazy-load the plugin after the initial UI is loaded by Neovim and/or when the relevant
-    -- commands are called for it
     event = "BufRead",
-    cmd = { "Telescope" },
+    cmd = "Telescope",
     opts = {
       file_ignore_patterns = { "%.git", "node_modules", "venv", ".venv", "env", ".env" },
     },
     config = true,
-    -- These dependencies (some of these are optional) are necessary for proper functioning of the plugin
     dependencies = {
       "kyazdani42/nvim-web-devicons",
       "nvim-lua/plenary.nvim",
@@ -144,8 +129,9 @@ local plugins = {
   {
     -- Plugin to manage & access the file system using an explorer
     "nvim-neo-tree/neo-tree.nvim",
-    cmd = "Neotree", -- Lazy-load the plugin only when the "Neotree" command is invoked
-    deactivate = function() -- Callback function to deactivate the plugin when necessary.
+    cmd = "Neotree",
+    deactivate = function()
+      -- Callback function to deactivate the plugin when necessary.
       vim.cmd([[ Neotree close]])
     end,
     init = function()
@@ -227,7 +213,6 @@ local plugins = {
     -- Plugin for better TypeScript LSP support & more
     "jose-elias-alvarez/typescript.nvim",
     event = "BufRead",
-    -- Load the plugin only when working on TypeScript projects
     ft = { "typescript", "typescriptreact" },
   },
 
@@ -235,7 +220,6 @@ local plugins = {
     -- Plugin to automatically insert HTML/JSX tags where necessary
     "windwp/nvim-ts-autotag",
     event = "BufRead",
-    -- Load the plugin only for webdev project files
     ft = { "typescriptreact", "javascriptreact", "html" },
   },
 
@@ -248,9 +232,9 @@ local plugins = {
         -- Leaving an empty table renders the square-edged components, else the default angled ones are loaded
         section_separators = {},
         component_separator = "|",
-        theme = "onedark", -- Set the theme
+        theme = "onedark",
         globalstatus = true,
-        disabled_filetypes = { -- Disable the statusline for certain filetypes mentioned below
+        disabled_filetypes = {
           statusline = {
             "filesytem",
             "neo-tree",
@@ -279,9 +263,7 @@ local plugins = {
   {
     -- The default colorscheme used right now
     "navarasu/onedark.nvim",
-    -- Load the colorscheme right after the "nvim" command is invoked
     event = "VimEnter",
-    -- Configure the colorscheme according to personal preferences
     opts = {
       style = "darker",
       transparent = true,
@@ -292,8 +274,6 @@ local plugins = {
   {
     -- Plugin for better (un)commenting of code
     "echasnovski/mini.comment",
-    -- Load the plugin only after the contents of a buffer are read or a new file
-    -- is created with some contents in the buffer
     event = { "BufNewFile", "BufRead" },
     opts = {
       -- Ensure blanklines don't have unnecessary comments to avoid clutter
@@ -306,7 +286,6 @@ local plugins = {
       },
     },
     config = function(opts)
-      -- Configure the plugin with the configuration options provided above
       require("mini.comment").setup(opts)
     end,
   },
@@ -314,10 +293,8 @@ local plugins = {
   {
     -- Simple & minimal plugin for pairing brackets, quotes & more!
     "echasnovski/mini.pairs",
-    -- Load the plugin only after entering Insert mode
     event = "InsertEnter",
     opts = {
-      -- Enable some extra modes where this plugin should be useable
       modes = {
         insert = true, -- "Insert" mode
         command = true, -- "Command" mode
@@ -325,7 +302,6 @@ local plugins = {
       },
     },
     config = function(opts)
-      -- Configure the plugin with the configuration options provided above
       require("mini.pairs").setup(opts)
     end,
   },
@@ -333,10 +309,8 @@ local plugins = {
   {
     -- Plugin for easier insertion of pairs like quotations & more
     "echasnovski/mini.surround",
-    -- Load the plugin only after the contents of the buffer are read
     event = "BufRead",
     config = function()
-      -- Initialise the plugin with default settings
       require("mini.surround").setup()
     end,
   },
@@ -344,10 +318,8 @@ local plugins = {
   {
     -- Plugin to visualise indentation of source code in a better way
     "echasnovski/mini.indentscope",
-    -- Load the plugin only after the contents of the buffer are read
     event = "BufRead",
     config = function()
-      -- Configure the plugin with default settings
       require("mini.indentscope").setup()
     end,
   },
@@ -355,7 +327,6 @@ local plugins = {
   {
     -- Plugin to load a nice dashboard with utilities in the startup screen
     "goolord/alpha-nvim",
-    -- Load the plugin after the initial UI is loaded
     event = "VimEnter",
     init = function()
       autocmd("User", {
@@ -375,40 +346,32 @@ local plugins = {
         end,
       })
     end,
-    -- Load the plugin configurations
     config = function()
       -- Load a default provided dashboard for easy access to recently opened files
       local dashboard = require("alpha.themes.dashboard")
       require("alpha").setup(dashboard.config)
     end,
-    -- List of dependencies for the plugin
     dependencies = "kyazdani42/nvim-web-devicons",
   },
 
   {
     -- A friendly plugin for managing the LSP servers more easily.
     "williamboman/mason.nvim",
-    -- Lazy-load the plugin only when this command is invoked.
     cmd = "Mason",
-    -- Configuration options which will be passed to the config key when the plugin will be initialised
     opts = {
       -- Configure the plugin to have rounded borders
       ui = { border = "rounded" },
       -- Configure the log levels for the plugin
       log_level = vim.log.levels.WARN,
     },
-    -- Initialise the plugin
     config = true,
-    -- Load this dependency when the plugin is loaded as well.
     dependencies = "WhoIsSethDaniel/mason-tool-installer.nvim",
   },
 
   {
     -- Extension for "mason.nvim" which makes it VERY easy to auto-install LSP servers.
     "WhoIsSethDaniel/mason-tool-installer.nvim",
-    -- Lazy-load the extension only when these commands are invoked.
     cmd = { "MasonToolsInstall", "MasonToolsUpdate" },
-    -- Initialisation function to invoke right before the plugin is loaded
     init = function()
       autocmd("User", {
         pattern = "MasonToolsUpdateComplete",
@@ -421,10 +384,8 @@ local plugins = {
         end,
       })
     end,
-    -- Load the list of LSP servers for Mason to download & install
     opts = require("configs.mason").mason_packages,
     config = function(opts)
-      -- Load the plugin with the list of packages imported above
       require("mason-tool-installer").setup(opts)
     end,
   },
@@ -432,7 +393,6 @@ local plugins = {
   {
     -- Plugin for using the builtin LSP client to hook into other non-LSP tools like Prettier & ESLint.
     "jose-elias-alvarez/null-ls.nvim",
-    -- Load the plugin only when the buffer is read & filetype is known.
     event = "BufRead",
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -440,7 +400,6 @@ local plugins = {
       "williamboman/mason.nvim",
     },
     config = function()
-      -- Configuration module for the plugin.
       require("configs.null-ls")
     end,
   },
@@ -448,7 +407,6 @@ local plugins = {
   {
     -- UI plugin for showing notifications appropriately instead of taking up the message space
     "rcarriga/nvim-notify",
-    -- Callback function to initialise the plugin with certain Neovim options
     init = function()
       -- Set Neovim to use 24-bit colours
       vim.opt.termguicolors = true
@@ -456,7 +414,6 @@ local plugins = {
       -- Set various other Neovim features to use the "notify" plugin instead
       vim.notify = require("notify")
     end,
-    -- Configuration options for the plugin
     opts = {
       -- Configure the plugin to fade in/out w/o distractions
       stages = "fade",
@@ -470,7 +427,6 @@ local plugins = {
     -- Official plugin for more ease in configuring the in-built LSP client.
     "neovim/nvim-lspconfig",
     config = function()
-      -- Configurations for the many LSP servers used within Neovim.
       require("configs.lsp")
     end,
     dependencies = {
@@ -482,7 +438,6 @@ local plugins = {
   {
     -- Plugin for VSCode-like snippets powered by Neovim's in-built LSP.
     "L3MON4D3/LuaSnip",
-    -- Lazy-load the plugin only when the buffer is in Insert mode.
     event = "InsertEnter",
     dependencies = {
       "neovim/nvim-lspconfig",
@@ -494,17 +449,14 @@ local plugins = {
   {
     -- Extra plugin for a more VSCode-like snippets behaviour.
     "rafamadriz/friendly-snippets",
-    -- Lazy-load the plugin only when the buffer is in an Insert mode.
     event = "InsertEnter",
   },
 
   {
     -- Better autocompletion support for Neovim.
     "hrsh7th/nvim-cmp",
-    -- Lazy-load the plugin only when the buffer is in Insert mode.
     event = "InsertEnter",
     config = function()
-      -- Configuration module for the autocompletion module.
       require("configs.cmp")
     end,
     dependencies = {
