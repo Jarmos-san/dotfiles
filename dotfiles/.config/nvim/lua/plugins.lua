@@ -164,22 +164,21 @@ local plugins = {
     "rcarriga/nvim-notify",
     -- Lazy load the plugin after the contents of the buffer are read
     event = "BufRead",
-    opts = {
-      -- Set the background colour since the main Neovim background is transparent
-      background_colour = "#262626",
-      -- Set the maximum width & height a notification bar can occupy to avoid clutter
-      max_width = 60,
-      max_height = 40,
-      -- Set the animation to something subtle to avoid distractions
-      stages = "fade",
-    },
     -- Initialise the plugin with some configurations AFTER its loaded
-    config = function(opts)
-      -- Initialise the plugin with the configuration options provided above
-      require("notify").setup(opts)
+    config = function()
+      -- FIXME: For some unforeseen reason this plugin behaves weirdly if the
+      -- configuration options are passed through a "opts" table instead
 
-      -- Configure Neovim's notification capabilities to use the plugin instead
-      vim.notify = require("notify")
+      -- Initialise the plugin with the configuration options provided above
+      require("notify").setup({
+        -- Set the background colour since the main Neovim background is transparent
+        background_colour = "#000000",
+        -- Set the maximum width & height a notification bar can occupy to avoid clutter
+        max_width = 60,
+        max_height = 40,
+        -- Set the animation to something subtle to avoid distractions
+        stages = "fade",
+      })
     end,
   },
 
