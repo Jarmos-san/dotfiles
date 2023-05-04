@@ -2,8 +2,6 @@
 -- Its does not need to be manually reloaded nor sourced. See the docs below for more information on this regards:
 -- https://github.com/folke/lazy.nvim#-structuring-your-plugins
 
--- TODO: Move all the plugins from the "lua/plugins" folder over here instead
-
 -- TODO: Explore the following plugins & decide to use them or not
 -- "JellyApple102/flote.nvim", -- Plugin to take simple & disposable Markdown notes
 -- "echasnovski/mini.starter", -- Plugin to show a nice, simple & minimal startup screen and a dashboard
