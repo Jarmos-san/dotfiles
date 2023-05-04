@@ -13,15 +13,15 @@ M.init = function()
     update_in_insert = true, -- Update the diagnostic message even when in Insert mode
     severity_sort = true, -- Configure Neovim to sort the error messages according to the severity.
   })
-
-  -- Add rounded borders to the LSP flaoting windows
-  require("lspconfig.ui.windows").default_options.border = "rounded"
 end
 
 M.config = function()
   local lspconfig = require("lspconfig")
   local typescript_ls = require("typescript")
   local rust_ls = require("rust-tools")
+
+  -- Add rounded borders to the LSP flaoting windows
+  require("lspconfig.ui.windows").default_options.border = "rounded"
 
   local on_attach = function(_, bufnr)
     local map = vim.keymap.set
