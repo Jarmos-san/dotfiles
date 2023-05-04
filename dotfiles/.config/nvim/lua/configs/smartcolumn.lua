@@ -3,7 +3,7 @@
 local M = {}
 
 -- List of filetypes where the colour column should be disabled for readability concerns.
-M.disable_filetypes = {
+local disable_filetypes = {
   "alpha",
   "checkhealth",
   "gitattributes",
@@ -24,13 +24,20 @@ M.disable_filetypes = {
 }
 
 -- List of filtypes & their specific column width at which the colour column should be shown.
-M.filetype_column_width = {
+local filetype_column_width = {
   lua = 120,
   dockerfile = 120,
   python = 88,
   yaml = 90,
   markdown = 80,
   typescriptreact = 81,
+}
+
+M.options = {
+  -- Disable the colorcolum in certain filetypes like vimdoc & certain configuration files.
+  disabled_filetypes = disable_filetypes,
+  -- Configure the character length at which to show the colorcolumn.
+  custom_colorcolumn = filetype_column_width,
 }
 
 return M
