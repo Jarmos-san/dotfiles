@@ -18,8 +18,15 @@ readonly NOCOLOR="\033[0m"
 # Location of the local directory to store the dotfiles in
 readonly DOTFILES_DIR="$HOME/.dotfiles"
 
-set -e
-trap "cleanup" EXIT
+###############################################################################
+# Remove all unnecessary artifacts created by the script upon
+# successful execution.
+###############################################################################
+cleanup() {
+  # Remove the font files which were downloaded for pre-setup of
+  # the local machine.
+  rm --recursive --force cascadia cascadia.zip
+}
 
 readonly DOTFILES_DIR="$HOME/.dotfiles"
 
