@@ -28,45 +28,137 @@ cleanup() {
   rm --recursive --force cascadia cascadia.zip
 }
 
-readonly DOTFILES_DIR="$HOME/.dotfiles"
+###############################################################################
+# Wrapper function to more easily output an error message to STDERR.
+#
+# Arguments:
+#   The message to echo to STDERR.
+#
+# Outputs:
+#   An ANSI colour code formatted message to print to STDERR based on
+#   the message which is passed to the function as a parameter.
+###############################################################################
+function error() {
+  echo -e "${RED}[ERROR]${NOCOLOR} $1"
+}
 
-echo -e "##############################--STARTING AUTOMATIC SYSTEM SETUP NOW!!--##############################\n\n"
+###############################################################################
+# Wrapper function to easily print a warning to STDOUT.
+#
+# Arguments:
+#   The message to echo to STDOUT.
+#
+# Outputs:
+#   An ANSI colour code formatted message to print to STDOUT based on
+#   the message which is passed to the function as a parameter.
+###############################################################################
+function warn() {
+  echo -e "${YELLOW}[WARN]${NOCOLOR} $1"
+}
 
-# Logic to identify what sort of OS is the script running on.
-# This is logic will be used in the script elsewhere to configure further logic
-# like whether to install certain packages or not
-case "$(uname -a)" in
-*Microsoft*) OS="WSL" ;;
-Linux*) OS="Linux" ;;
-Darwin*) OS="MacOS" ;;
-*) OS="" ;;
-esac
+###############################################################################
+# Wrapper function to easily print a success to STDOUT.
+#
+# Arguments:
+#   The message to echo to STDOUT.
+#
+# Outputs:
+#   An ANSI colour code formatted message to print to STDOUT based on
+#   the message which is passed to the function as a parameter.
+###############################################################################
+function success() {
+  echo -e "${GREEN}[SUCCESS]${NOCOLOR} $1"
+}
 
-if [[ "$OS" == "WSL" ]] && [[ "$OS" == "Linux" ]] && command -v apt-get; then
-  echo -e "##############################--UPDATING SYSTEM PACKAGES--##############################\n\n"
-  apt-get update --yes && apt-get upgrade --yes
-  echo -e "##############################--SYSTEM PACKAGE UPDATE COMPLETE--##############################\n\n"
-else
-  echo -e "Sytem update failed, please be sure to do so afterwards..."
-fi
+###############################################################################
+# Wrapper function to easily print a success to STDOUT.
+#
+# Arguments:
+#   The message to echo to STDOUT.
+#
+# Outputs:
+#   An ANSI colour code formatted message to print to STDOUT based on
+#   the message which is passed to the function as a parameter.
+###############################################################################
+function info() {
+  echo -e "${BLUE}[INFO]${NOCOLOR} $1"
+}
 
-# TODO: Refactor the Docker setup section of the script
-# Download & setup Docker for the local system
-DOCKER_GPG_KEY="https://download.docker.com/linux/ubuntu/gpg"
-KEYRINGS="/etc/apt/keyrings"
-mkdir --parents "$KEYRINGS"
-chmod 0755 "$KEYRINGS"
-curl --fail --silent --show-error --location "$DOCKER_GPG_KEY" |
-  gpg --dearmour -o "$KEYRINGS/docker.gpg"
-# Fix some annoying ShellCheck errors. See the docs for more info: https://www.shellcheck.net/wiki/SC1091
-# shellcheck source=/dev/null
-echo "deb [arch='$(dpkg --print-architecture)' signed-by=$KEYRINGS/docker.gpg] https://download.docker.com/linux/ubuntu \
-  '$(. /etc/os-release && echo "$VERSION_CODENAME")' stable" | tee /etc/apt/sources.list.d/docker.list >/dev/null
-apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-groupadd docker && usermod --append --groups docker "$USER" && newgrp docker
+###############################################################################
+# Download Docker and set it up on the local machine to be useable as
+# a non-root user.
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+###############################################################################
+function install_docker() {
+  readonly docker_download_url="https://download.docker.com/linux/ubuntu"
 
-unset DOCKER_GPG_KEY
-unset KEYRINGS
+  # Check what version of Ubuntu is used
+  ubuntu_release="$(lsb_release --codename --short)"
+
+  # Add the Docker GPG key to the APT key lists
+  curl --fail --silent --show-error --location "$docker_download_url/gpg" \
+    | apt-key add -
+
+  # Add the Docker APT repository for downloading the Docker binary
+  add-apt-repository "deb [arch=amd64] $docker_download_url $ubuntu_release stable"
+
+  # Download Docker and related tools from the APT repository
+  apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin \
+    docker-compose-plugin
+
+  # Ensure the "docker" command can be invoked without using "sudo" each time
+  groupadd docker && usermod --append --groups docker "$USER" && newgrp docker
+}
+
+function install_fonts() {
+  # TODO: Write function to install fonts locally
+  echo "Hello World!"
+}
+
+function install_flatpak_packages() {
+  # TODO: Write function to install packages from Flatpak
+  echo "Hello World!"
+}
+
+function install_homebrew_package() {
+  # TODO: Write function to install Homebrew packages
+  echo "Hello World!"
+}
+
+function install_zsh_plugins() {
+  # TODO: Write function to install and setup ZSH plugins
+  echo "Hello World!"
+}
+
+function setup_dotfiles() {
+  # TODO: Write function to setup the dotfiles
+  echo "Hello World!"
+}
+
+function setup_gh_plugins() {
+  # TODO: Write function to setup the GitHub CLI plugins
+  echo "Hello World!"
+}
+
+function setup_rust() {
+  # TODO: Write function to download Rust (the programming language)
+  echo "Hello World!"
+}
+
+function setup_gpg() {
+  # TODO: Write function to setup the GPG keys to GitHub
+  echo "Hello World!"
+}
+
+function setup_ssh() {
+  # TODO: Write function to setup SSH keys to authenticate to GitHub
+  echo "Hello World!"
+}
 
 echo -e "##############################--SETTING UP NERD FONTS--##############################\n\n"
 # Download & install some Nerd Fonts on the system
@@ -215,8 +307,43 @@ function setup_gh() {
 
 # TODO: Download & setup Rust on the local system as well
 
-# TODO: Refactor the script to be "safe" by using functions & local variables
+#####################################################################
+# Entrypoint of the script to invoke with all the arbitrary
+# parameters the script can be invoked with.
+# Arguments:
+#   None
+# Outputs:
+#   None
+#####################################################################
 function main() {
+  # Refactored portion
+  info "Starting local development environment setup now..."
+
+  # Logic to identify what the OS type is for further execution logic
+  case "$(uname -a)" in
+    *Microsoft*) readonly OS="WSL" ;;
+    Linux*) readonly OS="Linux" ;;
+    Darwin*) readonly OS="MacOS" ;;
+    *) readonly OS="" ;;
+  esac
+
+  # Logic to update the system before setting up the development environment
+  if [[ "$OS" == "WSL" ]] && [[ "$OS" == "Linux" ]] && [[ $(command -v apt-get) ]]; then
+    info "Updating system packages..."
+    apt-get update --yes && apt-get upgrade --yes
+  else
+    warn "System update failed...please ensure to do afterwards"
+  fi
+
+  # Download Docker for native Linux development machines only
+  if ! [[ "$OS" == "WSL" ]] && ! [[ "$OS" == "MacOS" ]]; then
+    info "Installing and setting up Docker..."
+    install_docker
+    success "Docker installation complete!"
+  fi
+
+  # Grabage portion
+
   # List of essential packages
   local ESSENTIAL_PACKAGES=(
     'git'
@@ -279,11 +406,7 @@ function main() {
   echo -e "Please restart the system once to ensure everything works as its supposed to..."
 }
 
-function cleanup() {
-  rm --recursive --force cascadia cascadia.zip
-  unset DOTFILES_DIR
-  unset OS
-}
-
 # TODO: Configure the script to execute only if a "--dry-run" flag isn't passed to it
 main
+
+trap cleanup EXIT
