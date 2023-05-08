@@ -20,6 +20,12 @@ provided here to setup your system. I'll not be held responsible for any
 potential data loss or system corruption in case something goes south when using
 the contents of this repository.
 
+Running the automation script below to setup everything:
+
+```console
+curl -fsSL "https://tinyurl.com/setup-dots" | bash -c
+```
+
 ## Acknowledgements
 
 The configurations I used are heavily inspired from other giants of the
