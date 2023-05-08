@@ -1,4 +1,22 @@
 #!/usr/bin/env bash
+#
+# Script to install Neovimulus on a user's local machine automatically.
+#
+# Author: Somraj Saha
+# License: MIT License
+# (see https://github.com/Jarmos-san/neovimulus/blob/main/LICENSE for info).
+
+set -euo pipefail
+
+# Some colour codes to make the formatted output prettier.
+readonly RED="\033[0;31m"
+readonly GREEN="\033[0;32m"
+readonly YELLOW="\033[0;33m"
+readonly BLUE="\033[0;34m"
+readonly NOCOLOR="\033[0m"
+
+# Location of the local directory to store the dotfiles in
+readonly DOTFILES_DIR="$HOME/.dotfiles"
 
 set -e
 trap "cleanup" EXIT
