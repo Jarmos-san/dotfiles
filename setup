@@ -145,9 +145,37 @@ function install_fonts() {
   fc-cache --force -verbose
 }
 
+###############################################################################
+# Donwload Flatpak packages from FlatHub for certain Linux distros like Ubuntu.
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+###############################################################################
 function install_flatpak_packages() {
-  # TODO: Write function to install packages from Flatpak
-  echo "Hello World!"
+  # List of Flatpak GUI applications which cannot be installed through Homebrew on Linux
+  flatpak_packages=(
+    'com.microsoft.Edge'
+    'com.spotify.Client'
+    'com.discordapp.Discord'
+    'com.transmissionbt.Transmission'
+    'org.wezfurlong.wezterm'
+    'com.calibre_ebook.calibre'
+    'com.valvesoftware.Steam'
+    'org.flameshot.Flameshot'
+    'com.visualstudio.code'
+    'io.dbeaver.DBeaverCommunity'
+  )
+
+  # Loop through the aforementioned list of packages to install them only if
+  # the system is a Linux distro.
+  if [[ ! "$OS" == "WSL" ]] && [[ ! "$OS" == "Darwin" ]]; then
+    for package in "${flatpak_packages[@]}"; do
+      flatpak install --assumeyes flathub "$package"
+    done
+  fi
 }
 
 function install_homebrew_package() {
@@ -184,30 +212,6 @@ function setup_ssh() {
   # TODO: Write function to setup SSH keys to authenticate to GitHub
   echo "Hello World!"
 }
-
-# List of Flatpak GUI applications which cannot be installed through Homebrew on Linux
-FLATPAK_PACKAGES=(
-  'com.microsoft.Edge'
-  'com.spotify.Client'
-  'com.discordapp.Discord'
-  'com.transmissionbt.Transmission'
-  'org.wezfurlong.wezterm'
-  'com.calibre_ebook.calibre'
-  'com.valvesoftware.Steam'
-  'org.flameshot.Flameshot'
-  'com.visualstudio.code'
-  'io.dbeaver.DBeaverCommunity'
-)
-
-# Loop through the aforementioned list of packages to install them only if the system is a Linux distro.
-if [[ ! "$OS" == "WSL" ]] && [[ ! "$OS" == "Darwin" ]]; then
-  echo -e "##############################--DOWNLOADING FLATPAK APPLICATIONS--##############################\n\n"
-  for package in "${FLATPAK_PACKAGES[@]}"; do
-    flatpak install flathub "$package"
-  done
-fi
-
-unset FLATPAK_PACKAGES
 
 echo -e "##############################--DOWNLOADING ZSH PLUGINS--##############################\n\n"
 
@@ -342,6 +346,21 @@ function main() {
     info "Installing and setting up Docker..."
     install_docker
     success "Docker installation complete!"
+  fi
+
+  # Logic to download and setup some patched Nerd Font
+  if ! [[ "$OS" == "WSL" ]] || ! [[ "$OS" == "MacOS" ]]; then
+    info "Setting patched Nerd Fonts for local usage..."
+    install_fonts
+    success "Fonts installation and setup complete!"
+  fi
+
+  # Logic to download Flatpak packages from FlatHub
+  if ! command -v flatpack &>/dev/null; then
+    error "Flatpak was not found in your system!"
+  else
+    info "Installing Flatpak packages from FlatHub..."
+    install_flatpak_packages
   fi
 
   # Grabage portion
