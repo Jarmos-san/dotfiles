@@ -246,9 +246,38 @@ function install_zsh_plugins() {
   fi
 }
 
+###############################################################################
+# Fetch the dotfiles from the remote repository and set them up locally.
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+###############################################################################
 function setup_dotfiles() {
-  # TODO: Write function to setup the dotfiles
-  echo "Hello World!"
+  readonly dotfiles_dir="$HOME/.dotfiles"
+
+  # Check if Git is installed then clone the remote dotfiles repository
+  if ! command -v git >/dev/null 2>&1; then
+    error "Git not found...please ensure its installed & available on \$PATH!"
+  else
+    git clone git@github.com:Jarmos-san/dotfiles "$dotfiles_dir"
+  fi
+
+  # Check if the ".dotfiles" directory exists and if its contents are symlinks
+  if [[ -d "$dotfiles_dir" ]]; then
+    for file in "$dotfiles_dir"/*; do
+      if [[ ! -L "$file" ]]; then
+        unlink "$file"
+      fi
+    done
+  else
+    error "The $dotfiles_dir directory was not found..."
+  fi
+
+  # Create the symlinks from the dotfiles repository
+  cd "$dotfiles_dir" && stow dotfiles && cd -
 }
 
 function setup_gh_plugins() {
@@ -269,20 +298,6 @@ function setup_gpg() {
 function setup_ssh() {
   # TODO: Write function to setup SSH keys to authenticate to GitHub
   echo "Hello World!"
-}
-
-function setup_dotfiles_temp() {
-  # Check if the local dotfiles repository exists & if any of its contents are symlinked
-  if test -d "$DOTFILES_DIR"; then
-    for file in "$DOTFILES_DIR"/*; do
-      if ! test -h "$file"; then
-        unlink "$file"
-      fi
-    done
-  fi
-
-  # Create the symlinks from the dotfiles repository
-  stow dotfiles
 }
 
 function setup_gh_temp() {
@@ -418,13 +433,6 @@ function main() {
   unset ESSENTIAL_PACKAGES
 
   echo -e "##############################--DOWNLOADING DOTFILES FROM GITHUB--##############################\n\n"
-
-  # Check if Git is installed then download the dotfiles repository
-  if ! command -v git >/dev/null 2>&1; then
-    echo -e "Git not found...please its installed & available on \$PATH!"
-  else
-    git clone git@github.com:Jarmos-san/dotfiles "$DOTFILES_DIR"
-  fi
 
   if ! command brew; then
     echo -e "Failed to setup Homebrew...re-rerun the script after debugging the issue"
