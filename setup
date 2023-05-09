@@ -178,14 +178,72 @@ function install_flatpak_packages() {
   fi
 }
 
-function install_homebrew_package() {
-  # TODO: Write function to install Homebrew packages
-  echo "Hello World!"
+###############################################################################
+# Setup the Homebrew taps and download all necessary packages from Homebrew.
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+###############################################################################
+function install_homebrew_packages() {
+  readonly taps=(
+    "eth-p/software" "go-task/tap" "homebrew/bundle" "homebrew/core"
+  )
+
+  readonly formulae=(
+    "act" "azure-cli" "cmatrix" "exa" "fd" "gcc" "gh" "glow" "httpie" "htop"
+    "lua@5.1" "mdbook" "neofetch" "neovim" "poetry" "pre-commit" "ripgrep"
+    "starship" "tmux" "shellcheck" "stow" "zsh"
+  )
+
+  # Install some of the Homebrew taps
+  for tap in "${taps[@]}"; do
+    brew install "$tap"
+  done
+
+  # Install the Homebrew formulae
+  for formula in "${formulae[@]}"; do
+    brew install "$formula"
+  done
 }
 
+###############################################################################
+# Download and setup some ZSH plugins for local usage.
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+###############################################################################
 function install_zsh_plugins() {
-  # TODO: Write function to install and setup ZSH plugins
-  echo "Hello World!"
+  # List of ZSH plugins
+  readonly zsh_plugins=(
+    'zsh-users/zsh-syntax-highlighting'
+    'zsh-users/zsh-autosuggestions'
+    'zsh-users/zsh-completions'
+    'le0me55i/zsh-extract'
+    'ael-code/zsh-colored-man-pages'
+  )
+
+  # Location to store the ZSH plugins
+  readonly zsh_plugins_dir="${ZDOTDIR:-$HOME}/.zsh/plugins"
+
+  # Check for the existence of the local ZSH directory, if not then create it
+  if [[ ! -d $zsh_plugins_dir ]]; then
+    mkdir --parents "$zsh_plugins_dir"
+  fi
+
+  # Download the listed ZSH plugins to a local directory for usage
+  if command -v git >/dev/null 2>&1; then
+    for plugin in "${zsh_plugins[@]}"; do
+      git clone "git@github.com:${plugin}" "$zsh_plugins_dir"
+    done
+  else
+    error "Failed to download ZSH plugins..."
+  fi
 }
 
 function setup_dotfiles() {
@@ -213,59 +271,7 @@ function setup_ssh() {
   echo "Hello World!"
 }
 
-echo -e "##############################--DOWNLOADING ZSH PLUGINS--##############################\n\n"
-
-# List of ZSH plugins
-ZSH_PLUGINS=(
-  'zsh-users/zsh-syntax-highlighting'
-  'zsh-users/zsh-autosuggestions'
-  'zsh-users/zsh-completions'
-  'le0me55i/zsh-extract'
-  'ael-code/zsh-colored-man-pages'
-)
-
-# Location to store the ZSH plugins in the local directory
-ZSH_PLUGINS_LOCAL_DIR=$HOME/.local/share/zsh/plugins
-
-# Check for the existence of the local ZSH directory, if not then create it
-if ! test -d ZSH_PLUGINS_LOCAL_DIR; then
-  mkdir --parents "$ZSH_PLUGINS_LOCAL_DIR"
-fi
-
-# Download the listed ZSH plugins to a local directory for usage
-if command -v git >/dev/null 2>&1; then
-  for plugin in "${ZSH_PLUGINS[@]}"; do
-    git clone "git@github.com:${plugin}" "$ZSH_PLUGINS_LOCAL_DIR"
-  done
-fi
-
-unset ZSH_PLUGINS
-unset ZSH_PLUGINS_LOCAL_DIR
-
-function setup_homebrew() {
-  local HOMEBREW_INSTALL_SCRIPT="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
-
-  # Download Homebrew to the local system
-  curl --fail --silent --show-error --location $HOMEBREW_INSTALL_SCRIPT </dev/null
-
-  # Conditional to check if a Brewfile exists, then install the Homebrew packages if one exists.
-  if test -f "$DOTFILES_DIR/Brewfile"; then
-    echo -e "##############################--DOWNLOADING HOMEBREW PACKAGES--##############################\n\n"
-    if [[ ! "$OS" == "Darwin" ]]; then
-      brew bundle --file "$HOME/.dotfiles/Brewfile"
-    else
-      brew bundle --file "$HOME/.dotfiles/macOS.Brewfile"
-    fi
-  else
-    echo "Homebrew could not install any packages due to a missing Brewfile"
-    echo -e "Please download a Brewfile from your remote dotfiles repository & run the following command:\n"
-    echo "brew bundle --file <path-to-brewfile>"
-  fi
-
-  unset HOMEBREW_INSTALL_SCRIPT
-}
-
-function setup_dotfiles() {
+function setup_dotfiles_temp() {
   # Check if the local dotfiles repository exists & if any of its contents are symlinked
   if test -d "$DOTFILES_DIR"; then
     for file in "$DOTFILES_DIR"/*; do
@@ -279,7 +285,7 @@ function setup_dotfiles() {
   stow dotfiles
 }
 
-function setup_gh() {
+function setup_gh_temp() {
   local GH_COMPLETIONS="$HOME/.local/share/zsh/plugins/zsh-completions/src/_gh"
   local GH_PLUGINS=(
     "seachicken/gh-poi"
@@ -322,6 +328,8 @@ function setup_gh() {
 #   None
 #####################################################################
 function main() {
+  readonly homebrew_install_script="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+
   # Refactored portion
   info "Starting local development environment setup now..."
 
@@ -361,6 +369,19 @@ function main() {
   else
     info "Installing Flatpak packages from FlatHub..."
     install_flatpak_packages
+  fi
+
+  # Logic to download & setup ZSH plugins
+  info "Downloading and setting up ZSH plugins"
+  install_zsh_plugins
+
+  # Install Homebrew if its not already available
+  if ! command -v brew &>/dev/null; then
+    /bin/bash -c \
+      "$(curl --fail --silent --show-error --location $homebrew_install_script)"
+    install_homebrew_packages
+  else
+    error "Homebrew installation failed..."
   fi
 
   # Grabage portion
