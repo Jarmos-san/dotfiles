@@ -399,6 +399,13 @@ function main() {
     error "Homebrew installation failed..."
   fi
 
+  # Logic to setup the dotfiles on the local machine
+  if ! command -v stow &>/dev/null; then
+    info "Setting up the dotfiles..."
+    setup_dotfiles
+    success "Dotfiles setup complete..."
+  fi
+
   # Grabage portion
 
   # List of essential packages
@@ -431,20 +438,6 @@ function main() {
   fi
 
   unset ESSENTIAL_PACKAGES
-
-  echo -e "##############################--DOWNLOADING DOTFILES FROM GITHUB--##############################\n\n"
-
-  if ! command brew; then
-    echo -e "Failed to setup Homebrew...re-rerun the script after debugging the issue"
-  else
-    setup_homebrew
-  fi
-
-  if ! command stow; then
-    echo -e "Failed to setup the symlinks...check if Git & GNU/Stow are installed?"
-  else
-    setup_dotfiles
-  fi
 
   if ! command -v gh; then
     echo -e "Failed to setup GitHub CLI...check it out manually later on"
