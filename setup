@@ -115,9 +115,34 @@ function install_docker() {
   groupadd docker && usermod --append --groups docker "$USER" && newgrp docker
 }
 
+###############################################################################
+# Download the Cascadia Code Nerd Font & set it up for usage in the local
+# machine.
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+###############################################################################
 function install_fonts() {
-  # TODO: Write function to install fonts locally
-  echo "Hello World!"
+  cascadia_code_download_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.0/CascadiaCode.zip"
+  cascadia_code_zip_file="cascadia.zip"
+
+  # Command to download the zipped file containing the font assets
+  curl --fail --silent --show-error --location --output \
+    $cascadia_code_zip_file $cascadia_code_download_url
+
+  if [[ -d $cascadia_code_zip_file ]]; then
+    # Extract the contents of the downloaded zipped file
+    unzip $cascadia_code_zip_file -d cascadia
+
+    # Move the necessary font assets to the required location
+    mv cascadia/*.ttf "$HOME/.fonts"
+  fi
+
+  # Ensure the system is aware of the newly loaded fonts
+  fc-cache --force -verbose
 }
 
 function install_flatpak_packages() {
@@ -159,29 +184,6 @@ function setup_ssh() {
   # TODO: Write function to setup SSH keys to authenticate to GitHub
   echo "Hello World!"
 }
-
-echo -e "##############################--SETTING UP NERD FONTS--##############################\n\n"
-# Download & install some Nerd Fonts on the system
-# The URL to download the font assets from
-CASCADIA_CODE_DOWNLOAD_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/CascadiaCode.zip"
-CASCADIA_CODE_ZIP_FILE='cascadia.zip'
-
-# Command to download the zipped file containing the font assets
-curl --fail --silent --show-error --location --output $CASCADIA_CODE_ZIP_FILE $CASCADIA_CODE_DOWNLOAD_URL
-
-if test -d $CASCADIA_CODE_ZIP_FILE; then
-  # Extract the contents of the downloaded zipped file
-  unzip $CASCADIA_CODE_ZIP_FILE -d cascadia
-
-  # Move the necessary font assets to the required location
-  mv cascadia/*.ttf "$HOME/.fonts"
-fi
-
-unset CASCADIA_CODE_DOWNLOAD_URL
-unset CASCADIA_CODE_ZIP_FILE
-
-# Ensure the system is aware of the newly loaded fonts
-fc-cache --force -verbose
 
 # List of Flatpak GUI applications which cannot be installed through Homebrew on Linux
 FLATPAK_PACKAGES=(
