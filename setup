@@ -416,7 +416,7 @@ function main() {
   fi
 
   # Logic to download Flatpak packages from FlatHub
-  if ! command -v flatpack &>/dev/null; then
+  if ! command -v flatpak &>/dev/null; then
     error "Flatpak was not found in your system!"
   else
     info "Installing Flatpak packages from FlatHub..."
