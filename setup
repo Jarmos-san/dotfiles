@@ -328,10 +328,6 @@ function setup_ssh() {
   echo "Hello World!"
 }
 
-# TODO: Setup SSH & GPG keys with GitHub CLI.
-
-# TODO: Download & setup Rust on the local system as well
-
 #####################################################################
 # Entrypoint of the script to invoke with all the arbitrary
 # parameters the script can be invoked with.
@@ -343,8 +339,10 @@ function setup_ssh() {
 function main() {
   readonly homebrew_install_script="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
 
-  # Refactored portion
-  info "Starting local development environment setup now..."
+  # List of essential packages
+  readonly essential_packages=(
+    "git" "curl" "flatpak" "ca-certificates" "gnupg"
+  )
 
   # Logic to identify what the OS type is for further execution logic
   case "$(uname -a)" in
@@ -353,6 +351,29 @@ function main() {
     Darwin*) readonly OS="MacOS" ;;
     *) readonly OS="" ;;
   esac
+
+  # Download the list of essential tools if the distro is Ubuntu
+  if [[ ! "$OS" == "Darwin" ]] && [[ ! "$OS" == "" ]] && ! command -v apt-get; then
+    error "Some essential tools were not installed..."
+    info "Please install the following tools manually before invoking the automation script ..."
+
+    for package in "${essential_packages[@]}"; do
+      echo "$package"
+    done
+
+    exit 1
+  else
+    info "Downloading some essential tools before setting up the system..."
+
+    for package in "${essential_packages[@]}"; do
+      if ! command -v "$package"; then
+        apt-get install "$package"
+      fi
+    done
+  fi
+
+  # Refactored portion
+  info "Starting local development environment setup now..."
 
   # Logic to update the system before setting up the development environment
   if [[ "$OS" == "WSL" ]] && [[ "$OS" == "Linux" ]] && [[ $(command -v apt-get) ]]; then
@@ -411,44 +432,9 @@ function main() {
     setup_gh_plugins
   fi
 
-  # Grabage portion
-
-  # List of essential packages
-  local ESSENTIAL_PACKAGES=(
-    'git'
-    'curl'
-    'flatpak'
-    'ca-certificates'
-    'gnupg'
-  )
-
-  if [[ ! "$OS" == "Darwin" ]] && [[ ! "$OS" == "" ]] && ! command -v apt-get; then
-    echo -e "Some necessary commands cannot be installed by the automation script..."
-    echo -e "Please install these packages manually before invoking the automation script again..."
-
-    for package in "${ESSENTIAL_PACKAGES[@]}"; do
-      echo "$package"
-    done
-
-    exit 1
-  else
-    echo -e "##############################--DOWNLOADING SOME NECESSARY 3RD-PARTY TOOLS--##############################\n\n"
-
-    for package in "${ESSENTIAL_PACKAGES[@]}"; do
-      if ! command -v "$package"; then
-        apt-get install "$package"
-      fi
-    done
-
-  fi
-
-  unset ESSENTIAL_PACKAGES
-
-  echo -e "##############################--AUTOMATED SYSTEM SETUP COMPLETE!!--##############################\n\n"
-  echo -e "Please restart the system once to ensure everything works as its supposed to..."
+  success "Automated system setup complete...please restart the system now!"
 }
 
-# TODO: Configure the script to execute only if a "--dry-run" flag isn't passed to it
 main
 
 trap cleanup EXIT
