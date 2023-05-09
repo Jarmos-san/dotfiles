@@ -15,9 +15,6 @@ readonly YELLOW="\033[0;33m"
 readonly BLUE="\033[0;34m"
 readonly NOCOLOR="\033[0m"
 
-# Location of the local directory to store the dotfiles in
-readonly DOTFILES_DIR="$HOME/.dotfiles"
-
 ###############################################################################
 # Remove all unnecessary artifacts created by the script upon
 # successful execution.
