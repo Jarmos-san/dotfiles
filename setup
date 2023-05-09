@@ -280,9 +280,37 @@ function setup_dotfiles() {
   cd "$dotfiles_dir" && stow dotfiles && cd -
 }
 
+###############################################################################
+# Fetch the dotfiles from the remote repository and set them up locally.
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+###############################################################################
 function setup_gh_plugins() {
-  # TODO: Write function to setup the GitHub CLI plugins
-  echo "Hello World!"
+  readonly gh_completions="{$ZDOTDIR:-$HOME}.zsh/plugins/zsh-completions/src/_gh"
+  readonly gh_plugins=(
+    "seachicken/gh-poi"
+    "yusukebe/gh-markdown-preview"
+    "chelnak/gh-changelog"
+    "redraw/gh-install"
+    "vilmibm/gh-screensaver"
+    "k1LoW/gh-grep"
+    "HaywardMorihara/gh-tidy"
+  )
+
+  if [[ ! -f "$gh_completions" ]]; then
+    gh completion --shell zsh >"$gh_completions"
+  else
+    echo "GitHub CLI completions failed to generate...skipping"
+  fi
+
+  # Setup some GitHub CLI extensions (or "plugins")
+  for plugin in "${gh_plugins[@]}"; do
+    gh extension install "$plugin"
+  done
 }
 
 function setup_rust() {
@@ -298,36 +326,6 @@ function setup_gpg() {
 function setup_ssh() {
   # TODO: Write function to setup SSH keys to authenticate to GitHub
   echo "Hello World!"
-}
-
-function setup_gh_temp() {
-  local GH_COMPLETIONS="$HOME/.local/share/zsh/plugins/zsh-completions/src/_gh"
-  local GH_PLUGINS=(
-    "seachicken/gh-poi"
-    "yusukebe/gh-markdown-preview"
-    "chelnak/gh-changelog"
-    "redraw/gh-install"
-    "vilmibm/gh-screensaver"
-    "k1LoW/gh-grep"
-    "HaywardMorihara/gh-tidy"
-  )
-
-  # NOTE: This is a temporary workaround until the following issue thread is resolved:
-  # https://github.com/zsh-users/zsh-completions/issues/1005
-  # Setup completions for GitHub CLI
-  if ! test -f "$GH_COMPLETIONS"; then
-    gh completion --shell zsh >"$GH_COMPLETIONS"
-  else
-    echo "GitHub CLI completions failed to generate...skipping"
-  fi
-
-  # Setup some GitHub CLI extensions (or "plugins")
-  for plugin in "${GH_PLUGINS[@]}"; do
-    gh extension install "$plugin"
-  done
-
-  unset GH_COMPLETIONS
-  unset GH_PLUGINS
 }
 
 # TODO: Setup SSH & GPG keys with GitHub CLI.
@@ -406,6 +404,13 @@ function main() {
     success "Dotfiles setup complete..."
   fi
 
+  # Logic to install and setup GitHub CLI plugins
+  if ! command -v gh &>/dev/null; then
+    error "GitHub CLI not installed...skipping plugin installation as well!"
+  else
+    setup_gh_plugins
+  fi
+
   # Grabage portion
 
   # List of essential packages
@@ -438,12 +443,6 @@ function main() {
   fi
 
   unset ESSENTIAL_PACKAGES
-
-  if ! command -v gh; then
-    echo -e "Failed to setup GitHub CLI...check it out manually later on"
-  else
-    setup_gh
-  fi
 
   echo -e "##############################--AUTOMATED SYSTEM SETUP COMPLETE!!--##############################\n\n"
   echo -e "Please restart the system once to ensure everything works as its supposed to..."
