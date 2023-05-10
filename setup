@@ -343,11 +343,6 @@ function setup_node() {
   curl --silent --show-error --location $node_download_url | bash -c
 }
 
-function setup_gpg() {
-  # TODO: Write function to setup the GPG keys to GitHub
-  echo "Hello World!"
-}
-
 #####################################################################
 # Setup SSH keys on the local machine and set them up for
 # authentication to the remote GitHub repositories.
@@ -494,7 +489,11 @@ function main() {
   setup_rust
   success "Rust installation complete!"
 
-  success "Automated system setup complete...please restart the system now!"
+  info "Please perform these manual tasks to complete the setup:"
+  echo -e "\n-> Download the backup GPG keys & set them up..."
+  echo -e "\n-> Ensure GUI tools like VSCode are using the right font..."
+
+  success "Automated system setup complete...you can restart the system now!"
 }
 
 # Run the main component of the script to automatically setup everything
