@@ -1,4 +1,4 @@
-name: Automated Quality Control Checks
+name: QA Checks
 
 on:
   - push
