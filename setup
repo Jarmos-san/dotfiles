@@ -348,9 +348,32 @@ function setup_gpg() {
   echo "Hello World!"
 }
 
+#####################################################################
+# Setup SSH keys on the local machine and set them up for
+# authentication to the remote GitHub repositories.
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
 function setup_ssh() {
-  # TODO: Write function to setup SSH keys to authenticate to GitHub
-  echo "Hello World!"
+  if ! command -v gh &>/dev/null; then
+    error "GitHub CLI not found...failed to setup SSH authentication"
+  else
+    # Generate the SSH keys for the local machine
+    ssh-keygen -t "ed25519" -C "somraj.mle@gmail.com" \
+      -f "$HOME/.ssh/id_ed25519" -N ""
+
+    # Authenticate the local GitHub CLI session using a secret token
+    gh auth login --with-token <<<"$(printf 'Y/n')"
+
+    # Add the local SSH public keys to the GitHub servers for remote
+    # authentication.
+    gh ssh-key add "$HOME/.ssh/id_ed25519.pub" \
+      --title "Ubuntu Development Machine"
+  fi
 }
 
 #####################################################################
@@ -452,11 +475,12 @@ function main() {
     success "Dotfiles setup complete..."
   fi
 
-  # Logic to install and setup GitHub CLI plugins
+  # Logic to install GitHub CLI plugins and remote SSH authentication
   if ! command -v gh &>/dev/null; then
-    error "GitHub CLI not installed...skipping plugin installation as well!"
+    error "GitHub CLI not found...failed to install plugins & SSH authentication!"
   else
     setup_gh_plugins
+    setup_ssh
   fi
 
   if ! command -v node &>/dev/null; then
