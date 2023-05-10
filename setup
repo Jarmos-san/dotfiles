@@ -310,9 +310,21 @@ function setup_gh_plugins() {
   done
 }
 
+#####################################################################
+# Download Rust and its toolchain
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
 function setup_rust() {
-  # TODO: Write function to download Rust (the programming language)
-  echo "Hello World!"
+  if ! command -v rustup &>/dev/null; then
+    error "Failed to download Rust, the \"rustup\" not found!"
+  else
+    rustup update stable
+  fi
 }
 
 #####################################################################
@@ -452,6 +464,11 @@ function main() {
     setup_node
     success "Node.js installed..."
   fi
+
+  # Download and setup Rust along with its toolchain like "rustfmt" and such
+  info "Preparing to download Rust..."
+  setup_rust
+  success "Rust installation complete!"
 
   success "Automated system setup complete...please restart the system now!"
 }
