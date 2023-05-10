@@ -28,9 +28,10 @@ curl -fsSL "https://tinyurl.com/setup-dots" | bash -c
 
 <details>
   <summary>See screenshots of what the tools look like!</summary>
-  ![Neovim Screenshot](./assets/neovim.png)
-  ![Wezterm Screenshot](./assets/wezterm.png)
-  ![Starship Screenshot](./assets/starship.png)
+
+  <img src="./assets/neovim.png" alt="Neovim screenshot" />
+  <img src="./assets/wezterm.png" alt="Wezterm screenshot" />
+  <img src="./assets/starship.png" alt="Starship prompt screenshot" />
 </details>
 
 ## Acknowledgements
