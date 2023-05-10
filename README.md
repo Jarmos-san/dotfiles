@@ -26,6 +26,13 @@ Running the automation script below to setup everything:
 curl -fsSL "https://tinyurl.com/setup-dots" | bash -c
 ```
 
+<details>
+  <summary>See screenshots of what the tools look like!</summary>
+  ![Neovim Screenshot](./assets/neovim.png)
+  ![Wezterm Screenshot](./assets/wezterm.png)
+  ![Starship Screenshot](./assets/starship.png)
+</details>
+
 ## Acknowledgements
 
 The configurations I used are heavily inspired from other giants of the
