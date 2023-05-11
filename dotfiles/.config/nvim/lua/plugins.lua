@@ -321,6 +321,18 @@ local plugins = {
       "saadparwaiz1/cmp_luasnip",
     },
   },
+
+  {
+    -- Better syntax highlighting powered by Treesitter parsers
+    "nvim-treesitter/nvim-treesitter",
+    event = { "BufNewFile", "BufRead" },
+    config = require("configs.treesitter").setup,
+    build = function()
+      require("nvim-treesitter.install").update({
+        with_sync = true,
+      })
+    end,
+  },
 }
 
 return plugins
