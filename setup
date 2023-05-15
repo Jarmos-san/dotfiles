@@ -190,7 +190,7 @@ function install_homebrew_packages() {
   )
 
   readonly formulae=(
-    "act" "azure-cli" "cmatrix" "exa" "fd" "gcc" "gh" "glow" "httpie" "htop"
+    "act" "azure-cli" "btop" "cmatrix" "exa" "fd" "gcc" "gh" "glow" "httpie"
     "lua@5.1" "mdbook" "neofetch" "neovim" "poetry" "pre-commit" "ripgrep"
     "rustup-init" "starship" "tmux" "shellcheck" "stow" "zsh"
   )
