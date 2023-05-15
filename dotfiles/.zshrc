@@ -23,6 +23,7 @@ alias mkvenv="python -m venv .venv"
 alias update="sudo apt-get update && sudo apt-get upgrade -y && brew update && brew upgrade && brew autoremove"
 alias tree="exa --tree --all --icons --ignore-glob='.git' --git-ignore"
 alias dateiso="date +%Y-%m-%dT%H:%M:%S%z"
+alias top="btop --utf-force"
 
 # Various ZSH plugins to make the Shell usage experience better
 plugins=(
