@@ -140,3 +140,13 @@ vim.cmd(
 --     vim.api.nvim_buf_set_lines(bufnr, 0, 0, false, readlines)
 --   end,
 -- })
+
+autocmd({ "BufRead", "BufNewFile" }, {
+  desc = "Apply Markdown syntax highlighting to MDX files",
+  group = augroup("mdx_syntax"),
+  pattern = "*.mdx",
+  callback = function()
+    -- TODO: Use native Lua API functions instead.
+    vim.cmd([[ set filetype=markdown ]])
+  end,
+})
