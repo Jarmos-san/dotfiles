@@ -20,7 +20,6 @@ alias ll="exa --long --all --classify --icons --git --ignore-glob='.git'"
 alias dcp="docker-compose"
 alias loc="wc -l"
 alias mkvenv="python -m venv .venv"
-alias update="sudo apt-get update && sudo apt-get upgrade -y && brew update && brew upgrade && brew autoremove"
 alias tree="exa --tree --all --icons --ignore-glob='.git' --git-ignore"
 alias dateiso="date +%Y-%m-%dT%H:%M:%S%z"
 alias top="btop --utf-force"
@@ -53,3 +52,40 @@ if [[ $TERM == "kitty-xterm" ]]; then
     # Move to the start of the line when pressing the "Home" key
     bindkey "^[[1~" beginning-of-line
 fi
+
+#############################################################################
+# Update the local machine using the native system package manager (could be
+# "apt-get" for Debian based distros or "pacman/yay" for Arch Linux based
+# distros)
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#############################################################################
+function update() {
+    if [[ -f "/etc/os-release" ]]; then
+        source "/etc/os-release"
+        if [[ $ID == "ubuntu" ]] && command -v brew >/dev/null 2>&1; then
+            sudo apt update &&
+                sudo apt upgrade -y &&
+                brew update &&
+                brew upgrade &&
+                brew autoremove
+        elif [[ $ID == "arch" ]]; then
+            sudo pacman -Syu --noconfirm
+            if command -v yay >/dev/null 2>&1; then
+                yay -Syu --noconfirm
+            else
+                echo "yay not found. Skipping AUR updates."
+            fi
+        else
+            echo "Unsupported distribution: $ID"
+            return 1
+        fi
+    else
+        echo "Unable to determine the Linux distribution."
+        return 1
+    fi
+}
