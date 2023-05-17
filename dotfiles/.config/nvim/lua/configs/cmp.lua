@@ -18,9 +18,19 @@ M.config = function()
 
   require("luasnip.loaders.from_vscode").lazy_load()
 
+  -- Check if there any preceeding words to either autocomplete or place Tab characters
   local has_words_before = function()
-    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-    return col ~= 0 and vim.api.nvim_get_buf_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+    local _, col = unpack(vim.api.nvim_win_get_cursor(0))
+
+    -- Return false if the cursor is at the start of the line without any preceeding characters
+    if col == 0 then
+      return false
+    end
+
+    local line_content = vim.api.nvim_get_current_line()
+    local char_before_cursor = line_content:sub(col, col)
+
+    return char_before_cursor:match("%s") == nil
   end
 
   local lspkind_icons = {
@@ -106,7 +116,7 @@ M.config = function()
       ["<C-y>"] = cmp.config.disable,
       ["<C-e>"] = cmp.mapping.abort(),
       ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
-      ["<Tab>"] = cmp.mapping(function(fallback)
+      ["<Tab>"] = cmp.mapping(function()
         if cmp.visible() then
           cmp.select_next_item()
         elseif luasnip.expand_or_jumpable() then
@@ -114,16 +124,16 @@ M.config = function()
         elseif has_words_before() then
           cmp.complete()
         else
-          fallback()
+          vim.fn.feedkeys("\t", "n")
         end
       end, { "i", "s" }),
-      ["<S-Tab>"] = cmp.mapping(function(fallback)
+      ["<S-Tab>"] = cmp.mapping(function()
         if cmp.visible() then
           cmp.select_prev_item()
         elseif luasnip.expand_or_jumpable(-1) then
           luasnip.jump(-1)
         else
-          fallback()
+          vim.fn.feedkeys("\t", "n")
         end
       end, { "i", "s" }),
     },
