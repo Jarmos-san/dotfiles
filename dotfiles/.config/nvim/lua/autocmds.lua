@@ -133,13 +133,14 @@ vim.cmd(
 --   pattern = "markdown",
 --   callback = function()
 --     -- Read the contents of the skeleton file (or the template)
---     local readlines = vim.fn.readfile(vim.env.HOME .. "/.config/skeletons/sample.md")
+--     local readfile = vim.fn.readfile(vim.env.HOME .. "/.config/skeletons/sample.md")
+--     local contents = table.concat(readfile, "\n")
 --
 --     -- Load the buffer to replace the contents of with the template instead.
 --     local bufnr = vim.api.nvim_get_current_buf()
 --
 --     -- Write the contents of the template to the buffer instead.
---     vim.api.nvim_buf_set_lines(bufnr, 0, 0, false, readlines)
+--     vim.api.nvim_buf_set_lines(bufnr, 0, 0, true, vim.split(contents, "\n"))
 --   end,
 -- })
 
