@@ -77,7 +77,9 @@ local plugins = {
     event = "BufRead",
     cmd = "Telescope",
     opts = {
-      file_ignore_patterns = { "%.git", "node_modules", "venv", ".venv", "env", ".env" },
+      defaults = {
+        file_ignore_patterns = { "%.git", "node_modules", "venv", ".venv", "env", ".env" },
+      },
     },
     config = true,
     dependencies = {
