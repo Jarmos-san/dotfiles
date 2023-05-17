@@ -149,7 +149,6 @@ autocmd({ "BufRead", "BufNewFile" }, {
   group = augroup("mdx_syntax"),
   pattern = "*.mdx",
   callback = function()
-    -- TODO: Use native Lua API functions instead.
-    vim.cmd([[ set filetype=markdown ]])
+    vim.bo.filetype = "markdown"
   end,
 })
