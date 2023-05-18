@@ -15,7 +15,7 @@ The contents of this repository are **VERY** personalised & might not suit
 **YOUR** particular needs as-is. Hence, I strongly recommend to use the contents
 of this repository as a source of reference only.
 
-**DISCLAIMER**: Do not fork this repository & run the [scripts](./script.sh)
+**DISCLAIMER**: Do not fork this repository & run the [scripts](./setup)
 provided here to setup your system. I'll not be held responsible for any
 potential data loss or system corruption in case something goes south when using
 the contents of this repository.
