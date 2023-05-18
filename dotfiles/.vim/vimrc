@@ -15,3 +15,5 @@ set ruler
 set shortmess=atI
 set showcmd
 set scrolloff=6
+
+inoremap jk <esc>
