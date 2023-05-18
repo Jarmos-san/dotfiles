@@ -66,6 +66,13 @@ vim.cmd.colorscheme("onedark")
 highlight(0, "CursorLineNr", { guibg = nil, guifg = nil })
 highlight(0, "CursorLine", { guibg = nil })
 
+-- Register MDX files for the Treesitter plugin to understand
+vim.filetype.add({
+  extension = {
+    mdx = "mdx",
+  },
+})
+
 -- Additional features to look into later on:
 -- https://github.com/neovim/neovim/pull/22668
 -- https://github.com/rafcamlet/nvim-luapad
