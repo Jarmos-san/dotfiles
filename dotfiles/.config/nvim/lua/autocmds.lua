@@ -70,15 +70,15 @@ autocmd({ "CursorMoved", "CursorMovedI" }, {
 
 -- TODO: Convert these lines of code to use the new Lua API instead.
 -- Autocommand to create a template README.md file.
-vim.cmd(
-  [[
-    augroup README.md
-      autocmd!
-      autocmd BufNewFile README.md 0r ~/.config/nvim/skeletons/readme.md
-    augroup END
-  ]],
-  false
-)
+-- vim.cmd(
+--   [[
+--     augroup README.md
+--       autocmd!
+--       autocmd BufNewFile README.md 0r ~/.config/nvim/skeletons/readme.md
+--     augroup END
+--   ]],
+--   false
+-- )
 
 -- Autocommand to create a template Bash script.
 vim.cmd(
@@ -143,12 +143,3 @@ vim.cmd(
 --     vim.api.nvim_buf_set_lines(bufnr, 0, 0, true, vim.split(contents, "\n"))
 --   end,
 -- })
-
-autocmd({ "BufRead", "BufNewFile" }, {
-  desc = "Apply Markdown syntax highlighting to MDX files",
-  group = augroup("mdx_syntax"),
-  pattern = "*.mdx",
-  callback = function()
-    vim.bo.filetype = "markdown"
-  end,
-})
