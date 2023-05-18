@@ -52,7 +52,11 @@ local configs = {
 }
 
 M.setup = function()
+  -- Load the configurations table from above to initialise the plugin with
   require("nvim-treesitter.configs").setup(configs)
+
+  -- Configure MDX files to load the Markdown Treesitter parser
+  vim.treesitter.language.register("markdown", "mdx")
 end
 
 return M
