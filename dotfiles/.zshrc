@@ -68,15 +68,21 @@ function update() {
     if [[ -f "/etc/os-release" ]]; then
         source "/etc/os-release"
         if [[ $ID == "ubuntu" ]] && command -v brew >/dev/null 2>&1; then
-            sudo apt update &&
-                sudo apt upgrade -y &&
+            # Invoke the appropriate package manager to update the list of
+            # packages
+            sudo apt-get update &&
+                sudo apt-get upgrade --assume-yes &&
                 brew update &&
                 brew upgrade &&
                 brew autoremove
         elif [[ $ID == "arch" ]]; then
-            sudo pacman -Syu --noconfirm
+            # Invoke "pacman" to sync the system package list & update the
+            # packages
+            sudo pacman --sync --sysupgrade --refresh --noconfirm
             if command -v yay >/dev/null 2>&1; then
-                yay -Syu --noconfirm
+                # Invoke the "yay" to update the list of packages available
+                # through the AUR.
+                yay --sync --sysupgrade --refresh --noconfirm
             else
                 echo "yay not found. Skipping AUR updates."
             fi
