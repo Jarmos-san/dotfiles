@@ -68,22 +68,51 @@ autocmd({ "CursorMoved", "CursorMovedI" }, {
   end,
 })
 
--- TODO: Create an autocommand for an EditorConfig template as well!
+autocmd("BufNewFile", {
+  desc = "Create an EditorConfig file",
+  group = augroup("editorconfig_template"),
+  pattern = "**/.editorconfig",
+  command = "0r ~/.config/nvim/skeletons/editorconfig.txt",
+})
 
--- TODO: Use this example Lua API autocommand for brevity & better readability
--- autocmd("BufNewFile", {
---   desc = "Create a sample template.",
---   group = augroup("sample_template"),
---   pattern = "markdown",
---   callback = function()
---     -- Read the contents of the skeleton file (or the template)
---     local readfile = vim.fn.readfile(vim.env.HOME .. "/.config/skeletons/sample.md")
---     local contents = table.concat(readfile, "\n")
---
---     -- Load the buffer to replace the contents of with the template instead.
---     local bufnr = vim.api.nvim_get_current_buf()
---
---     -- Write the contents of the template to the buffer instead.
---     vim.api.nvim_buf_set_lines(bufnr, 0, 0, true, vim.split(contents, "\n"))
---   end,
--- })
+autocmd("BufNewFile", {
+  desc = "Create a simple README.md file",
+  group = augroup("readme_template"),
+  pattern = "**/README.md",
+  command = "0r ~/.config/nvim/skeletons/readme.md",
+})
+
+autocmd("BufNewFile", {
+  desc = "Create a Dependabot configuration file",
+  group = augroup("dependabot_template"),
+  pattern = "**/.github/dependabot.yml",
+  command = "0r ~/.config/nvim/skeletons/dependabot.yml",
+})
+
+autocmd("BufNewFile", {
+  desc = "Create a GitHub Workflow file",
+  group = augroup("github_workflow_template"),
+  pattern = "**/.github/workflows/*.yml",
+  command = "0r ~/.config/nvim/skeletons/github-workflow.yml",
+})
+
+autocmd("BufNewFile", {
+  desc = "Create a template Taskfile.yml",
+  group = augroup("taskfile_template"),
+  pattern = "**/Taskfile.yml",
+  command = "0r ~/.config/nvim/skeletons/taskfile.yml",
+})
+
+autocmd("BufNewFile", {
+  desc = "Create an entrypoint file for Python projects",
+  group = augroup("python_entrypoint_file"),
+  pattern = "**/main.py",
+  command = "0r ~/.config/nvim/skeletons/main.py",
+})
+
+autocmd("BufNewFile", {
+  desc = "Create a LICENSE Plain-Text file for projects on GitHub",
+  group = augroup("license_template"),
+  pattern = "**/LICENSE",
+  command = "0r ~/.config/nvim/skeletons/license.txt",
+})
