@@ -1,0 +1,14 @@
+name: GitHub Workflow Template
+
+on: [push]
+
+jobs:
+  workflow-job:
+    name: Sample GitHub Workflow
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Run "Hello World!"
+        run: echo "Hello World!"
