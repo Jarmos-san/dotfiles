@@ -70,17 +70,6 @@ autocmd({ "CursorMoved", "CursorMovedI" }, {
 
 -- TODO: Create an autocommand for an EditorConfig template as well!
 
--- Autocommand to create a template Dependabot config file.
-vim.cmd(
-  [[
-    augroup DependabotConfig
-      autocmd!
-      autocmd BufNewFile **/dependabot.yml 0r ~/.config/nvim/skeletons/dependabot.yml
-    augroup END
-  ]],
-  false
-)
-
 -- TODO: Use this example Lua API autocommand for brevity & better readability
 -- autocmd("BufNewFile", {
 --   desc = "Create a sample template.",
