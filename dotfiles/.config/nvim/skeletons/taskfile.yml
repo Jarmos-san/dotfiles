@@ -1,0 +1,7 @@
+version: "3"
+
+tasks:
+  build:
+    description: Build the project
+    cmds:
+      - echo "Running build command..."
