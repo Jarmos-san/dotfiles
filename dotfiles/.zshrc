@@ -121,3 +121,55 @@ function clone() {
         fi
     fi
 }
+
+#############################################################################
+# Create a base template Markdown file for blogging.
+#
+# Arguments:
+#   The filename for the Markdown file
+#
+# Outputs:
+#   None
+#############################################################################
+function mkblog() {
+    # Store the name of the Markdown file to write the blog in to
+    local filename="${1}.md"
+
+    # Check if the Markdown file already exists
+    if [[ -e "$filename" ]]; then
+        echo "File $filename already exists..."
+        return 1
+    fi
+
+    # The template contents of the Markdown file
+    local template=$(
+        cat <<EOF
+---
+title: The Title of the Blog Post
+date: $(date +%Y-%m-%d)
+slug: the-custom-url-of-the-blog-post
+description: The SEO optimised description of the blog post.
+summary: A brief summary of the blog post to showcase on OG Graphs and elsewhere!
+coverImage:
+  url: https://picsum.photos/200/300
+  alt: The tagline of the image used in the OG Graph showcase and more.
+---
+
+# The Title of the Blog Post
+
+![The alt message of the cover image](https://picsum.photos/200/300)
+
+Some content for the blog post...
+EOF
+    )
+
+    # Ensure the Markdown files are created only in the local blog repository
+    # to prevent unnecessary Markdown file generation.
+    if [[ "$(pwd)" != "$HOME/Projects/jarmos.dev" ]]; then
+        echo "ERROR: Not the ideal location to create a blog post..."
+        return 1
+    else
+        echo "$template" >"$HOME/Projects/jarmos.dev/_blog/$filename"
+        echo "Markdown file $filename successfully created!"
+    fi
+}
