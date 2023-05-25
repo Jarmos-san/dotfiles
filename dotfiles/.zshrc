@@ -136,7 +136,7 @@ function mkblog() {
     local filename="${1}.md"
 
     # Check if the Markdown file already exists
-    if [[ -e "$filename" ]]; then
+    if [[ -e "$HOME/Projects/jarmos.dev/_blog/$filename.md" ]]; then
         echo "File $filename already exists..."
         return 1
     fi
@@ -147,12 +147,15 @@ function mkblog() {
 ---
 title: The Title of the Blog Post
 date: $(date +%Y-%m-%d)
-slug: the-custom-url-of-the-blog-post
-description: The SEO optimised description of the blog post.
-summary: A brief summary of the blog post to showcase on OG Graphs and elsewhere!
+slug: $1
+description: |
+  The SEO optimised description of the blog post.
 coverImage:
   url: https://picsum.photos/200/300
   alt: The tagline of the image used in the OG Graph showcase and more.
+summary: |
+  A brief summary of the article (use ChatGPT to create a proper summary of
+  the article).
 ---
 
 # The Title of the Blog Post
