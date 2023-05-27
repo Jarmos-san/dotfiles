@@ -98,13 +98,6 @@ local plugins = {
   },
 
   {
-    -- Plugin to showcase the color code based on Hex/RGB/HSL & more
-    "norcalli/nvim-colorizer.lua",
-    event = "BufRead",
-    ft = { "typescriptreact", "typescript", "javascript", "javascriptreact", "scss", "css", "html" },
-  },
-
-  {
     -- Plugin to manage & access the file system using an explorer
     "nvim-neo-tree/neo-tree.nvim",
     cmd = "Neotree",
@@ -229,6 +222,28 @@ local plugins = {
     event = "BufRead",
     config = function()
       require("mini.indentscope").setup()
+    end,
+  },
+
+  {
+    -- Plugin to highlight certain patterns like TO-DO comments and RGB colour codes
+    "echasnovski/mini.hipatterns",
+    event = { "BufNewFile", "BufRead" },
+    config = function()
+      local hipatterns = require("mini.hipatterns")
+
+      hipatterns.setup({
+        highlighters = {
+          -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
+          fixme = { pattern = "%f[%w]()FIXME()%f[%W]", group = "MiniHipatternsFixme" },
+          hack = { pattern = "%f[%w]()HACK()%f[%W]", group = "MiniHipatternsHack" },
+          todo = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
+          note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
+
+          -- Highlight hex color strings (`#rrggbb`) using that color
+          hex_color = hipatterns.gen_highlighter.hex_color(),
+        },
+      })
     end,
   },
 
