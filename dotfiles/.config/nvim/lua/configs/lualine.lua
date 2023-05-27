@@ -11,15 +11,16 @@ M.config = function()
     globalstatus = true,
     disabled_filetypes = {
       statusline = {
-        "filesytem",
-        "neo-tree",
-        "dashboard",
-        "lazy",
         "alpha",
-        "null-ls-info",
-        "lspinfo",
+        "dashboard",
+        "filesytem",
         "mason",
+        "neo-tree",
         "neo-tree-popup",
+        "null-ls-info",
+        "lazy",
+        "lspinfo",
+        "TelescopePrompt",
       },
     },
   }
