@@ -8,6 +8,8 @@
 -- "echanovski/mini.bufremove" -- Simple plugin to remove/delete buffers
 -- "echanovski/mini.move"  -- Plugin to move a selected text object around in any direction
 -- "echanovski/mini.splitjoin"  -- Plugin to split & join a list of arguments properly
+-- Add TailwindCSS support for highlighting the colour codes. Take a look at the code below for inspiration:
+-- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/util/mini-hipatterns.lua
 
 -- FIXME: Some of the init callback functions in this module are implicitly importing
 -- their respective plugins as well. This is increasing the startup by some
