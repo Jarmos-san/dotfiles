@@ -344,6 +344,7 @@ local plugins = {
   {
     -- Better syntax highlighting powered by Treesitter parsers
     "nvim-treesitter/nvim-treesitter",
+    cmd = { "TSInstall", "TSUpdate", "TSUpdateSync" },
     event = { "BufNewFile", "BufRead" },
     config = require("configs.treesitter").setup,
     build = function()
