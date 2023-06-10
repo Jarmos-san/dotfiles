@@ -13,6 +13,7 @@ local disable_filetypes = {
   "json",
   "markdown",
   "mason",
+  "mdx",
   "lazy",
   "lspinfo",
   "sh",
