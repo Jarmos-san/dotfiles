@@ -1,9 +1,9 @@
 #!/usr/bin/env zsh
-#
+
 # The following lines were added by compinstall
 zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
 zstyle ':completion:*' matcher-list '' '' 'm:{[:lower:]}={[:upper:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'
-zstyle :compinstall filename '/home/space/.zshrc'
+zstyle :compinstall filename '$HOME/.zshrc'
 
 autoload -Uz compinit
 compinit
@@ -11,6 +11,12 @@ compinit
 # Lines configured by zsh-newuser-install
 setopt autocd beep extendedglob nomatch notify
 # End of lines configured by zsh-newuser-install
+
+# FIXME: Doesn't work for now. Take a look at the following Stack Exchange thread for further instructions
+# https://unix.stackexchange.com/a/33898
+if [[ -f "$HOME/.zsh/functions" ]]; then
+    source "$HOME/.zsh/functions"
+fi
 
 # Enable Starship
 eval "$(starship init zsh)"
@@ -111,7 +117,7 @@ function update() {
 #############################################################################
 function clone() {
     if [[ $# -ne 2 ]]; then
-        echo "The command accepts two arguments!"
+        echo "The command accepts two arguments - the short URL of the repo and the local repo."
         return 1
     else
         if ! command -v git 2 >/dev/null &>1; then
