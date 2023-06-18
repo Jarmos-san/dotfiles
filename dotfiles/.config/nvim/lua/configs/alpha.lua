@@ -34,8 +34,8 @@ M.config = function()
   dashboard.section.buttons.val = {
     dashboard.button("n", " " .. " Create & Open a New File", ":ene <BAR> startinsert <CR>"),
     dashboard.button("n", " " .. " Open the File Explorer", "<CMD>Neotree toggle<CR>"),
-    dashboard.button("c", " " .. " Configure Local Neovim environment", ":e $MYVIMRC <CR>"),
-    dashboard.button("l", "鈴" .. " Open the Lazy Dashboard", ":Lazy<CR>"),
+    dashboard.button("c", " " .. " Configure Local Neovim Environment", ":e $MYVIMRC <CR>"),
+    dashboard.button("s", "鈴" .. " Update and Sync Neovim Plugins", ":Lazy sync<CR>"),
     dashboard.button("q", " " .. " Quit Out of Neovim", ":qa<CR>"),
   }
 
