@@ -12,6 +12,8 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Download and Setup Shellcheck
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release download koalaman/shellcheck --pattern "*.linux.x86_x64.*"
           tar --extract --file "shellcheck*.tar.xz"
