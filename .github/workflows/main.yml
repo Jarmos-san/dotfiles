@@ -11,13 +11,15 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Run the Shell Checker
-        uses: luizm/action-sh-checker@master
-        with:
-          sh_checker_shfmt_disable: true
-          sh_checker_comment: true
-        env:
-          SHELLCHECK_OPTS: "./setup"
+      - name: Download and Setup Shellcheck
+        run: |
+          gh release download koalaman/shellcheck --pattern "*.linux.x86_x64.*"
+          tar --extract --file "shellcheck*.tar.xz"
+          cp shellcheck*/shellcheck /usr/local/bin/
+          echo "Downloaded Shellcheck v{$(shellcheck --version)}"
+
+      - name: Run Shellcheck
+        run: shellcheck "setup"
 
   runStyLua:
     name: Format Lua Files
