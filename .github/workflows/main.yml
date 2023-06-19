@@ -16,6 +16,8 @@ jobs:
         with:
           sh_checker_shfmt_disable: true
           sh_checker_comment: true
+        env:
+          SHELLCHECK_OPTS: "--shell=zsh"
 
   runStyLua:
     name: Format Lua Files
