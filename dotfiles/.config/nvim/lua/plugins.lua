@@ -11,10 +11,6 @@
 -- Add TailwindCSS support for highlighting the colour codes. Take a look at the code below for inspiration:
 -- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/util/mini-hipatterns.lua
 
--- FIXME: Some of the init callback functions in this module are implicitly importing
--- their respective plugins as well. This is increasing the startup by some
--- set amount of time so that needs to be fixed some time soon.
-
 local plugins = {
   {
     -- Plugin for deleting & removing buffers without messing up the window layout
