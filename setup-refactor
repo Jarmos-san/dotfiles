@@ -1,0 +1,280 @@
+#!/usr/bin/env bash
+#
+# Script to install Neovimulus on a user's local machine automatically.
+#
+# Author: Somraj Saha
+# License: MIT License
+# (see https://github.com/Jarmos-san/neovimulus/blob/main/LICENSE for info).
+
+# INFO: Necessary command for all Bash script to execute safely.
+# For a detailed explanation, check the following resource:
+# https://explainshell.com/explain?cmd=set+-euo+pipefail
+set -euo pipefail
+
+# Some colour codes to make the formatted output prettier.
+readonly RED="\033[0;31m"
+readonly GREEN="\033[0;32m"
+readonly YELLOW="\033[0;33m"
+readonly BLUE="\033[0;34m"
+readonly NOCOLOR="\033[0m"
+
+###############################################################################
+# Wrapper function to more easily output an error message to STDERR.
+#
+# Arguments:
+#   The message to echo to STDERR.
+#
+# Outputs:
+#   An ANSI colour code formatted message to print to STDERR based on
+#   the message which is passed to the function as a parameter.
+###############################################################################
+function error() {
+    echo -e "${RED}[ERROR]${NOCOLOR} $1"
+}
+
+###############################################################################
+# Wrapper function to easily print a warning to STDOUT.
+#
+# Arguments:
+#   The message to echo to STDOUT.
+#
+# Outputs:
+#   An ANSI colour code formatted message to print to STDOUT based on
+#   the message which is passed to the function as a parameter.
+###############################################################################
+function warn() {
+    echo -e "${YELLOW}[WARN]${NOCOLOR} $1"
+}
+
+###############################################################################
+# Wrapper function to easily print a success to STDOUT.
+#
+# Arguments:
+#   The message to echo to STDOUT.
+#
+# Outputs:
+#   An ANSI colour code formatted message to print to STDOUT based on
+#   the message which is passed to the function as a parameter.
+###############################################################################
+function success() {
+    echo -e "${GREEN}[SUCCESS]${NOCOLOR} $1"
+}
+
+###############################################################################
+# Wrapper function to easily print a success to STDOUT.
+#
+# Arguments:
+#   The message to echo to STDOUT.
+#
+# Outputs:
+#   An ANSI colour code formatted message to print to STDOUT based on
+#   the message which is passed to the function as a parameter.
+###############################################################################
+function info() {
+    echo -e "${BLUE}[INFO]${NOCOLOR} $1"
+}
+
+###############################################################################
+# Remove all unnecessary artifacts created by the script upon
+# successful execution.
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+###############################################################################
+function cleanup() {
+    rm --ecursive --force yay
+}
+
+#####################################################################
+# Detect the OS the system is running and return the name of the OS
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function detect_os() {
+    case "$(uname --all)" in
+    *Microsoft*) readonly os="WSL" ;;
+    *Linux*) if [[ -f "/etc/os-release" ]]; then
+        source /etc/os-release
+        readonly os="$NAME"
+    else
+        readonly os="Linux"
+    fi ;;
+    *Darwin*) readonly os="MacOS" ;;
+    *) readonly os="" ;;
+    esac
+}
+
+#####################################################################
+# Detect the OS and perform a preliminary system update using the
+# OS's native package manager
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function update_system() {
+    # Fetch the name of the OS for further logic and conditions
+    detect_os
+
+    case "$os" in
+    "WSL" | "Ubuntu") apt-get update --yes && apt-get upgrade ;;
+    "MacOS") softwareupdate --install --all ;;
+    "Fedora") dnf update && dnf upgrade ;;
+    "Arch Linux") pacman --sync --upgrades --refresh ;;
+    *) error "Unsupported or unknown OS. Unable to update system!" ;;
+    esac
+}
+
+#####################################################################
+# Detect the name of the OS and install some essentials programs
+# using the OS's native package manager
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_essentials() {
+    # Fetch the name of the OS for further logic and conditions
+    detect_os
+
+    # Logic to install the necessary essential programs
+    case "$os" in
+    "WSL" | "Ubuntu") apt-get install --yes git curl ca-certificates gnupg ;;
+    "Fedora") dnf install git ;;
+    "Arch Linux") pacman --sync --refresh --noconfirm base-devel git ;;
+    *) error "Unsupported or unknown OS. Unable to update system!" ;;
+    esac
+}
+
+#####################################################################
+# Detect the OS name and install the "yay" package manager only if
+# the system is running on an Arch Linux based OS
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_yay() {
+    # Clone the "yay" git repository and run its installer
+    git clone "https://aur.archlinux.org/yay.git"
+    cd yay && makepkg -si --noconfirm && cd -
+}
+
+#####################################################################
+# Install Homebrew using the installation script in a Bash subshell
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_homebrew() {
+    # Homebrew installation script
+    homebrew_url="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+
+    # Fetch the installation script and invoke it in a subshell
+    bash -c "$(curl --fail --silent --show-error --location $homebrew_url)"
+}
+
+#####################################################################
+# Install Flatpak using the OS's native package manager
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_flatpak() {
+    readonly flatpak_repo="https://flathub.org/repo/flathub.flatpakrepo"
+
+    # Install flatpak using APT (which is the native package manager
+    # for Debian/Ubuntu based OSes)
+    apt-get install flatpak
+
+    # Configure the repository to fetch the programs from using Flatpak
+    flatpak remote-add --if-not-exists flathub "$flatpak_repo"
+}
+
+#####################################################################
+# Entrypoint of the script to invoke with all the arbitrary
+# parameters the script can be invoked with.
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function main() {
+    # Fetch the OS name for certain conditional logic down the line
+    detect_os
+
+    info "Updating system..."
+    # update_system
+
+    info "Installing some essential programs..."
+    # install_essentials
+
+    # Install "yay" package manager to install programs from AUR for
+    # Arch Linux based OSes
+    if [[ "$os" == "Arch Linux" ]]; then
+        info "Installing \"yay\"..."
+        # install_yay
+    fi
+
+    # Install "Homebrew" package manager for Ubuntu and MacOS
+    if [[ "$os" == "Ubuntu" || "$os" == "MacOS" ]]; then
+        info "Installing \"Homebrew\"..."
+        # install_homebrew
+    fi
+
+    # Install Flatpak for Debian/Ubuntu based OSes since Fedora comes
+    # preinstalled with Flatpak!
+    if [[ "$os" == "Ubuntu" && ! $(command -v flatpak &>/dev/null) ]]; then
+        info "Installing \"Flatpak\"..."
+        # install_flatpak
+    fi
+
+    # TODO: Install the fonts
+    # TODO: Install the Homebrew packages
+    # TODO: Install the packages from AUR
+    # TODO: Install the RPM packages for Fedora
+    # TODO: Install the ZSH plugins
+    # TODO: Install the GitHub CLI plugins
+    # TODO: Download and setup the dotfiles on the system properly
+    # TODO: Setup SSH for the system
+    # TODO: Download and install Node.js, Rust, Docker
+    # TODO: Share some notes on some manual tasks to perform after the setup is complete
+}
+
+# Prompt for sudo password and store its exit code for further usage
+sudo -v
+sudo_exit_code=$?
+
+# Check if sudo credentials are cached then invoke the script to run
+if [ "$sudo_exit_code" -eq 0 ]; then
+    info "Setting up automated system setup now..."
+    main
+    success "Automated system setup is complete..."
+else
+    warn "Sudo privileges are required to run this script!"
+fi
+
+# Cleanup any generated artifacts and the system in general after the
+# scripts completes execution
+trap cleanup EXIT
