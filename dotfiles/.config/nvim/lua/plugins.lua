@@ -29,18 +29,6 @@ local plugins = {
   },
 
   {
-    -- Plugin to enable a smoother scroll animation
-    "karb94/neoscroll.nvim",
-    event = "BufRead",
-    opts = {
-      -- Respect the scrolloff marging (see ":h scrolloff" for more info)
-      respect_scrolloff = true,
-      -- Stop the cursor from scrolling further if the window cannot scroll any more.
-      cursor_scrolls_alone = false,
-    },
-  },
-
-  {
     -- Functionally better plugin for showing a nice colorcolum
     "m4xshen/smartcolumn.nvim",
     event = "BufRead",
@@ -246,6 +234,15 @@ local plugins = {
           hex_color = hipatterns.gen_highlighter.hex_color(),
         },
       })
+    end,
+  },
+
+  {
+    -- Plugin to animate some events within Neovim
+    "echasnovski/mini.animate",
+    event = "VeryLazy",
+    config = function()
+      require("mini.animate").setup()
     end,
   },
 
