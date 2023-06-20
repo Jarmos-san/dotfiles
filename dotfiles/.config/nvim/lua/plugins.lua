@@ -191,6 +191,10 @@ local plugins = {
         command = true, -- "Command" mode
         terminal = true, -- "Terminal" mode
       },
+      mappings = {
+        -- FIXME: Does not work for whatever reasons
+        ["<"] = { action = "open", pair = "<>", neigh_pattern = "[^\\]." },
+      },
     },
     config = function(opts)
       require("mini.pairs").setup(opts)
