@@ -313,6 +313,7 @@ local plugins = {
       "hrsh7th/nvim-cmp",
       "rafamadriz/friendly-snippets",
     },
+    build = "make jsregexp",
   },
 
   {
