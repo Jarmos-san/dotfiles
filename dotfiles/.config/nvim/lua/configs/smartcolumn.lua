@@ -32,6 +32,7 @@ local filetype_column_width = {
   yaml = 90,
   markdown = 80,
   typescriptreact = 81,
+  rust = 100,
 }
 
 M.options = {
