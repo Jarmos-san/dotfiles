@@ -29,7 +29,7 @@ readonly NOCOLOR="\033[0m"
 #   the message which is passed to the function as a parameter.
 ###############################################################################
 function error() {
-    echo -e "${RED}[ERROR]${NOCOLOR} $1"
+  echo -e "${RED}[ERROR]${NOCOLOR} $1"
 }
 
 ###############################################################################
@@ -43,7 +43,7 @@ function error() {
 #   the message which is passed to the function as a parameter.
 ###############################################################################
 function warn() {
-    echo -e "${YELLOW}[WARN]${NOCOLOR} $1"
+  echo -e "${YELLOW}[WARN]${NOCOLOR} $1"
 }
 
 ###############################################################################
@@ -57,7 +57,7 @@ function warn() {
 #   the message which is passed to the function as a parameter.
 ###############################################################################
 function success() {
-    echo -e "${GREEN}[SUCCESS]${NOCOLOR} $1"
+  echo -e "${GREEN}[SUCCESS]${NOCOLOR} $1"
 }
 
 ###############################################################################
@@ -71,7 +71,7 @@ function success() {
 #   the message which is passed to the function as a parameter.
 ###############################################################################
 function info() {
-    echo -e "${BLUE}[INFO]${NOCOLOR} $1"
+  echo -e "${BLUE}[INFO]${NOCOLOR} $1"
 }
 
 ###############################################################################
@@ -85,7 +85,7 @@ function info() {
 #   None
 ###############################################################################
 function cleanup() {
-    rm --recursive --force yay
+  rm --recursive --force yay
 }
 
 #####################################################################
@@ -98,17 +98,17 @@ function cleanup() {
 #   None
 #####################################################################
 function detect_os() {
-    case "$(uname --all)" in
+  case "$(uname --all)" in
     *Microsoft*) readonly os="WSL" ;;
     *Linux*) if [[ -f "/etc/os-release" ]]; then
-        source /etc/os-release
-        readonly os="$NAME"
+      source /etc/os-release
+      readonly os="$NAME"
     else
-        readonly os="Linux"
+      readonly os="Linux"
     fi ;;
     *Darwin*) readonly os="MacOS" ;;
     *) readonly os="" ;;
-    esac
+  esac
 }
 
 #####################################################################
@@ -122,16 +122,16 @@ function detect_os() {
 #   None
 #####################################################################
 function update_system() {
-    # Fetch the name of the OS for further logic and conditions
-    detect_os
+  # Fetch the name of the OS for further logic and conditions
+  detect_os
 
-    case "$os" in
+  case "$os" in
     "WSL" | "Ubuntu") apt-get update --yes && apt-get upgrade ;;
     "MacOS") softwareupdate --install --all ;;
     "Fedora") dnf update && dnf upgrade ;;
     "Arch Linux") pacman --sync --upgrades --refresh ;;
     *) error "Unsupported or unknown OS. Unable to update system!" ;;
-    esac
+  esac
 }
 
 #####################################################################
@@ -145,16 +145,16 @@ function update_system() {
 #   None
 #####################################################################
 function install_essentials() {
-    # Fetch the name of the OS for further logic and conditions
-    detect_os
+  # Fetch the name of the OS for further logic and conditions
+  detect_os
 
-    # Logic to install the necessary essential programs
-    case "$os" in
+  # Logic to install the necessary essential programs
+  case "$os" in
     "WSL" | "Ubuntu") apt-get install --yes git curl ca-certificates gnupg ;;
     "Fedora") dnf install git ;;
     "Arch Linux") pacman --sync --refresh --noconfirm base-devel git ;;
     *) error "Unsupported or unknown OS. Unable to update system!" ;;
-    esac
+  esac
 }
 
 #####################################################################
@@ -168,9 +168,9 @@ function install_essentials() {
 #   None
 #####################################################################
 function install_yay() {
-    # Clone the "yay" git repository and run its installer
-    git clone "https://aur.archlinux.org/yay.git"
-    cd yay && makepkg -si --noconfirm && cd -
+  # Clone the "yay" git repository and run its installer
+  git clone "https://aur.archlinux.org/yay.git"
+  cd yay && makepkg -si --noconfirm && cd -
 }
 
 #####################################################################
@@ -183,11 +183,11 @@ function install_yay() {
 #   None
 #####################################################################
 function install_homebrew() {
-    # Homebrew installation script
-    homebrew_url="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+  # Homebrew installation script
+  homebrew_url="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
 
-    # Fetch the installation script and invoke it in a subshell
-    bash -c "$(curl --fail --silent --show-error --location $homebrew_url)"
+  # Fetch the installation script and invoke it in a subshell
+  bash -c "$(curl --fail --silent --show-error --location $homebrew_url)"
 }
 
 #####################################################################
@@ -200,14 +200,145 @@ function install_homebrew() {
 #   None
 #####################################################################
 function install_flatpak() {
-    readonly flatpak_repo="https://flathub.org/repo/flathub.flatpakrepo"
+  readonly flatpak_repo="https://flathub.org/repo/flathub.flatpakrepo"
 
-    # Install flatpak using APT (which is the native package manager
-    # for Debian/Ubuntu based OSes)
-    apt-get install flatpak
+  # Install flatpak using APT (which is the native package manager
+  # for Debian/Ubuntu based OSes)
+  apt-get install flatpak
 
-    # Configure the repository to fetch the programs from using Flatpak
-    flatpak remote-add --if-not-exists flathub "$flatpak_repo"
+  # Configure the repository to fetch the programs from using Flatpak
+  flatpak remote-add --if-not-exists flathub "$flatpak_repo"
+}
+
+#####################################################################
+# Download and setup the fonts for further installation
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_fonts() {
+  readonly cascadia_code_download_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/CascadiaCode.zip"
+  readonly cascadia_code_zip_filename="cascadia_code.zip"
+
+  # Download the zipped files
+  curl --fail --silent --show-error --location --output \
+    $cascadia_code_zip_filename $cascadia_code_download_url
+
+  if [[ -d $cascadia_code_zip_filename ]]; then
+    # Extract the contents of the downloaded zip file
+    unzip $cascadia_code_zip_filename -d cascadia
+
+    # Move the extracted font assets to its appropriate location
+    mv cascadia/*.ttf "$HOME/.fonts"
+  fi
+
+  # Ensure the system is aware of the loaded fonts
+  fc-cache --force --verbose
+}
+
+#####################################################################
+# Install Homebrew packages based on the type of the OS used which is
+# either Ubuntu or MacOS.
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_homebrew_packages() {
+  # Taps are "repositories" to download the packages from
+  readonly taps=(
+    "eth-p/software" "go-task/tap" "homebrew/bundle" "homebrew/core"
+  )
+
+  # Casks are GUI tools (some proprietary) which can't be installed on
+  # Linuxbrew
+  readonly casks=(
+    "visual-studio-code" "spotify" "discord" "inkscape" "dbeaverlite"
+  )
+
+  # The formulae are mostly CLI tools easily installable through
+  # Linuxbrew
+  readonly formulae=(
+    "act" "azure-cli" "btop" "cmatrix" "exa" "fd" "gcc" "gh" "glow" "httpie"
+    "lua@5.1" "mdbook" "neofetch" "neovim" "oci-cli" "poetry" "pre-commit"
+    "ripgrep" "rustup-init" "starship" "shellcheck" "stow" "zsh"
+  )
+
+  # Setup the Homebrew taps
+  for tap in "${taps[@]}"; do
+    brew install "$tap"
+  done
+
+  # Detect the OS name for further conditional logic
+  detect_os
+
+  # Install only the formulae if the detected OS is Ubuntu/Debian
+  if [[ "$os" == "Ubuntu" && ! "$os" == "MacOS" ]]; then
+    for formula in "${formulae[@]}"; do
+      brew install "$formula"
+    done
+  fi
+
+  # Install both the formulae and the casks for MacOS
+  if [[ "$os" == "MacOS" ]]; then
+    # Loop through the "formulae" array to install the CLI tools
+    for formula in "${formulae[@]}"; do
+      brew install "$formula"
+    done
+
+    # Loop through the "casks" array to install the GUI tools
+    for cask in "${casks[@]}"; do
+      brew install "$cask"
+    done
+  fi
+}
+
+#####################################################################
+# Install packages for Arch Linux based distributions from the Arch
+# User Repository (AUR)
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_aur_packages() {
+  # FIXME: List of some missing packages - "pre-commit"
+
+  readonly aur_packages=(
+    "act" "azure-cli" "btop-git" "cmatrix-git" "exa-git" "fd-git"
+    "gcc11" "github-cli-git" "glow-git" "mdbook-git" "neofetch-gitn"
+    "neovim-git" "oci-cli" "python-poetry-git" "ripgrep-git"
+    "rustup-git" "starship-git" "shellcheck-bin" "stow-git" "zsh"
+    "zsh-completions"
+  )
+
+  readonly pacman_packages=("httpie")
+
+  # Check if "yay" is installed then install the programs mentioned
+  # above
+  if [[ -x $(command -v yay --version &>/dev/null) ]]; then
+    for package in "${aur_packages[@]}"; do
+      yay --sync --refresh --upgrade "$package"
+    done
+  else
+    error "Failed to install packages from AUR!"
+  fi
+
+  # Install the pacman packages if any are required
+  if [[ ! ${#pacman_packages[@]} -eq 0 ]]; then
+    for package in "${pacman_packages[@]}"; do
+      yay --sync --refresh --upgrade "$package"
+    done
+  else
+    error "Failed to install Pacman packages!"
+  fi
 }
 
 #####################################################################
@@ -221,45 +352,60 @@ function install_flatpak() {
 #   None
 #####################################################################
 function main() {
-    # Fetch the OS name for certain conditional logic down the line
-    detect_os
+  # Fetch the OS name for certain conditional logic down the line
+  detect_os
 
-    info "Updating system..."
-    # update_system
+  info "Updating system..."
+  # update_system
 
-    info "Installing some essential programs..."
-    # install_essentials
+  info "Installing some essential programs..."
+  # install_essentials
 
-    # Install "yay" package manager to install programs from AUR for
-    # Arch Linux based OSes
-    if [[ "$os" == "Arch Linux" ]]; then
-        info "Installing \"yay\"..."
-        # install_yay
-    fi
+  # TODO: Consider cloning the remote dotfiles repository and then
+  # executing the rest of the commands inside that local directory
 
-    # Install "Homebrew" package manager for Ubuntu and MacOS
-    if [[ "$os" == "Ubuntu" || "$os" == "MacOS" ]]; then
-        info "Installing \"Homebrew\"..."
-        # install_homebrew
-    fi
+  # Install "yay" package manager to install programs from AUR for
+  # Arch Linux based OSes
+  if [[ "$os" == "Arch Linux" ]]; then
+    info "Installing \"yay\"..."
+    # install_yay
+  fi
 
-    # Install Flatpak for Debian/Ubuntu based OSes since Fedora comes
-    # preinstalled with Flatpak!
-    if [[ "$os" == "Ubuntu" && ! $(command -v flatpak &>/dev/null) ]]; then
-        info "Installing \"Flatpak\"..."
-        # install_flatpak
-    fi
+  # Install "Homebrew" package manager for Ubuntu and MacOS
+  if [[ "$os" == "Ubuntu" || "$os" == "MacOS" ]]; then
+    info "Installing \"Homebrew\"..."
+    # install_homebrew
+  fi
 
-    # TODO: Install the fonts
-    # TODO: Install the Homebrew packages
-    # TODO: Install the packages from AUR
-    # TODO: Install the RPM packages for Fedora
-    # TODO: Install the ZSH plugins
-    # TODO: Install the GitHub CLI plugins
-    # TODO: Download and setup the dotfiles on the system properly
-    # TODO: Setup SSH for the system
-    # TODO: Download and install Node.js, Rust, Docker
-    # TODO: Share some notes on some manual tasks to perform after the setup is complete
+  # Install Flatpak for Debian/Ubuntu based OSes since Fedora comes
+  # preinstalled with Flatpak!
+  if [[ "$os" == "Ubuntu" && ! $(command -v flatpak --version &>/dev/null) ]]; then
+    info "Installing \"Flatpak\"..."
+    # install_flatpak
+  fi
+
+  if [[ ! "$os" == "WSL" ]]; then
+    info "Installing fonts (Cascadia Code)..."
+    # install_fonts
+  fi
+
+  if [[ -x $(command -v brew --version &>/dev/null) ]]; then
+    info "Installing Homebrew packages..."
+    # install_homebrew_packages
+  fi
+
+  if [[ "$os" == "Arch Linux" && -x $(command -v yay --version &>/dev/null) ]]; then
+    info "Installing AUR packages..."
+    # install_aur_packages
+  fi
+
+  # TODO: Install the RPM packages for Fedora
+  # TODO: Install the ZSH plugins
+  # TODO: Install the GitHub CLI plugins
+  # TODO: Download and setup the dotfiles on the system properly
+  # TODO: Setup SSH for the system
+  # TODO: Download and install Node.js, Rust, Docker
+  # TODO: Share some notes on some manual tasks to perform after the setup is complete
 }
 
 # Prompt for sudo password and store its exit code for further usage
@@ -268,11 +414,11 @@ sudo_exit_code=$?
 
 # Check if sudo credentials are cached then invoke the script to run
 if [ "$sudo_exit_code" -eq 0 ]; then
-    info "Setting up automated system setup now..."
-    main
-    success "Automated system setup is complete..."
+  info "Setting up automated system setup now..."
+  main
+  success "Automated system setup is complete..."
 else
-    warn "Sudo privileges are required to run this script!"
+  warn "Sudo privileges are required to run this script!"
 fi
 
 # Cleanup any generated artifacts and the system in general after the

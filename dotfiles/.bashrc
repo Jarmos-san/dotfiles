@@ -2,8 +2,8 @@
 
 # If not running interactively, don't do anything
 case $- in
-*i*) ;;
-*) return ;;
+  *i*) ;;
+  *) return ;;
 esac
 
 # Enable "bookmarks" for quick access to certain folders in the system
@@ -60,17 +60,17 @@ bind '"\e[D": backward-char'
 
 # Enable Bash Completion for CLI tools installed with Homebrew
 if type brew &>/dev/null; then
-    HOMEBREW_PREFIX="$(brew --prefix)"
-    if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
-        # shellcheck source=/dev/null
-        source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
-    else
-        # shellcheck disable=SC2066
-        for COMPLETION in "${HOMEBREW_PREFIX}/etc/bash_completion.d/*"; do
-            # shellcheck source=/dev/null
-            [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
-        done
-    fi
+  HOMEBREW_PREFIX="$(brew --prefix)"
+  if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
+    # shellcheck source=/dev/null
+    source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
+  else
+    # shellcheck disable=SC2066
+    for COMPLETION in "${HOMEBREW_PREFIX}/etc/bash_completion.d/*"; do
+      # shellcheck source=/dev/null
+      [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
+    done
+  fi
 fi
 
 # Enable Homebrew
@@ -82,7 +82,7 @@ eval "$(starship init bash)"
 # BEGIN_KITTY_SHELL_INTEGRATION
 # shellcheck source=/dev/null
 if test -n "$KITTY_INSTALLATION_DIR" -a -e "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; then
-    source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
+  source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
 fi
 # END_KITTY_SHELL_INTEGRATION
 

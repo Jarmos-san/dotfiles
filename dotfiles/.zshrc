@@ -15,7 +15,7 @@ setopt autocd beep extendedglob nomatch notify
 # FIXME: Doesn't work for now. Take a look at the following Stack Exchange thread for further instructions
 # https://unix.stackexchange.com/a/33898
 if [[ -f "$HOME/.zsh/functions" ]]; then
-    source "$HOME/.zsh/functions"
+  source "$HOME/.zsh/functions"
 fi
 
 # Enable Starship
@@ -32,11 +32,11 @@ alias top="btop --utf-force"
 
 # Various ZSH plugins to make the Shell usage experience better
 plugins=(
-    'zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh'
-    'zsh-autosuggestions/zsh-autosuggestions.plugin.zsh'
-    'zsh-colored-man-pages/colored-man-pages.plugin.zsh'
-    'zsh-extract/extract.plugin.zsh'
-    'zsh-completions/zsh-completions.plugin.zsh'
+  'zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh'
+  'zsh-autosuggestions/zsh-autosuggestions.plugin.zsh'
+  'zsh-colored-man-pages/colored-man-pages.plugin.zsh'
+  'zsh-extract/extract.plugin.zsh'
+  'zsh-completions/zsh-completions.plugin.zsh'
 )
 
 # Load the Catppuccin colour scheme for ZSH
@@ -44,7 +44,7 @@ source "${ZDOTDIR:-$HOME}/.local/share/zsh/plugins/zsh-syntax-highlighting/catpp
 
 # Loop through the list of plugins mentioned above & source them for usage
 for plugin in "${plugins[@]}"; do
-    source "${ZDOTDIR:-$HOME}/.local/share/zsh/plugins/${plugin}"
+  source "${ZDOTDIR:-$HOME}/.local/share/zsh/plugins/${plugin}"
 done
 
 # Ensure the "plugins" array to removed from memory for safety reasons
@@ -52,11 +52,11 @@ unset plugins
 
 # Configure some ZSH keybinds only if using the Kitty terminal
 if [[ $TERM == "kitty-xterm" ]]; then
-    # Move to the end of the line when pressing the "End" key
-    bindkey "^[[4~" end-of-line
+  # Move to the end of the line when pressing the "End" key
+  bindkey "^[[4~" end-of-line
 
-    # Move to the start of the line when pressing the "Home" key
-    bindkey "^[[1~" beginning-of-line
+  # Move to the start of the line when pressing the "Home" key
+  bindkey "^[[1~" beginning-of-line
 fi
 
 #############################################################################
@@ -71,35 +71,35 @@ fi
 #   None
 #############################################################################
 function update() {
-    if [[ -f "/etc/os-release" ]]; then
-        source "/etc/os-release"
-        if [[ $ID == "ubuntu" ]] && command -v brew >/dev/null 2>&1; then
-            # Invoke the appropriate package manager to update the list of
-            # packages
-            sudo apt-get update &&
-                sudo apt-get upgrade --assume-yes &&
-                brew update &&
-                brew upgrade &&
-                brew autoremove
-        elif [[ $ID == "arch" ]]; then
-            # Invoke "pacman" to sync the system package list & update the
-            # packages
-            sudo pacman --sync --sysupgrade --refresh --noconfirm
-            if command -v yay >/dev/null 2>&1; then
-                # Invoke the "yay" to update the list of packages available
-                # through the AUR.
-                yay --sync --sysupgrade --refresh --noconfirm
-            else
-                echo "yay not found. Skipping AUR updates."
-            fi
-        else
-            echo "Unsupported distribution: $ID"
-            return 1
-        fi
+  if [[ -f "/etc/os-release" ]]; then
+    source "/etc/os-release"
+    if [[ $ID == "ubuntu" ]] && command -v brew >/dev/null 2>&1; then
+      # Invoke the appropriate package manager to update the list of
+      # packages
+      sudo apt-get update \
+        && sudo apt-get upgrade --assume-yes \
+        && brew update \
+        && brew upgrade \
+        && brew autoremove
+    elif [[ $ID == "arch" ]]; then
+      # Invoke "pacman" to sync the system package list & update the
+      # packages
+      sudo pacman --sync --sysupgrade --refresh --noconfirm
+      if command -v yay >/dev/null 2>&1; then
+        # Invoke the "yay" to update the list of packages available
+        # through the AUR.
+        yay --sync --sysupgrade --refresh --noconfirm
+      else
+        echo "yay not found. Skipping AUR updates."
+      fi
     else
-        echo "Unable to determine the Linux distribution."
-        return 1
+      echo "Unsupported distribution: $ID"
+      return 1
     fi
+  else
+    echo "Unable to determine the Linux distribution."
+    return 1
+  fi
 }
 
 #############################################################################
@@ -116,16 +116,16 @@ function update() {
 #   None
 #############################################################################
 function clone() {
-    if [[ $# -ne 2 ]]; then
-        echo "The command accepts two arguments - the short URL of the repo and the local repo."
-        return 1
+  if [[ $# -ne 2 ]]; then
+    echo "The command accepts two arguments - the short URL of the repo and the local repo."
+    return 1
+  else
+    if ! command -v git 2 >/dev/null &>1; then
+      echo "Git not found...please ensure it is installed and on \$PATH!"
     else
-        if ! command -v git 2 >/dev/null &>1; then
-            echo "Git not found...please ensure it is installed and on \$PATH!"
-        else
-            git clone "git@github.com:$1" $2 && cd $2
-        fi
+      git clone "git@github.com:$1" $2 && cd $2
     fi
+  fi
 }
 
 #############################################################################
@@ -138,18 +138,18 @@ function clone() {
 #   None
 #############################################################################
 function mkblog() {
-    # Store the name of the Markdown file to write the blog in to
-    local filename="${1}.md"
+  # Store the name of the Markdown file to write the blog in to
+  local filename="${1}.md"
 
-    # Check if the Markdown file already exists
-    if [[ -e "$HOME/Projects/jarmos.dev/_blog/$filename.md" ]]; then
-        echo "File $filename already exists..."
-        return 1
-    fi
+  # Check if the Markdown file already exists
+  if [[ -e "$HOME/Projects/jarmos.dev/_blog/$filename.md" ]]; then
+    echo "File $filename already exists..."
+    return 1
+  fi
 
-    # The template contents of the Markdown file
-    local template=$(
-        cat <<EOF
+  # The template contents of the Markdown file
+  local template=$(
+    cat <<EOF
 ---
 title: The Title of the Blog Post
 date: $(date +%Y-%m-%d)
@@ -170,15 +170,15 @@ summary: |
 
 Some content for the blog post...
 EOF
-    )
+  )
 
-    # Ensure the Markdown files are created only in the local blog repository
-    # to prevent unnecessary Markdown file generation.
-    if [[ "$(pwd)" != "$HOME/Projects/jarmos.dev" ]]; then
-        echo "ERROR: Not the ideal location to create a blog post..."
-        return 1
-    else
-        echo "$template" >"$HOME/Projects/jarmos.dev/_blog/$filename"
-        echo "Markdown file $filename successfully created!"
-    fi
+  # Ensure the Markdown files are created only in the local blog repository
+  # to prevent unnecessary Markdown file generation.
+  if [[ "$(pwd)" != "$HOME/Projects/jarmos.dev" ]]; then
+    echo "ERROR: Not the ideal location to create a blog post..."
+    return 1
+  else
+    echo "$template" >"$HOME/Projects/jarmos.dev/_blog/$filename"
+    echo "Markdown file $filename successfully created!"
+  fi
 }
