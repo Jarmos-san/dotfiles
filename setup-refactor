@@ -342,6 +342,187 @@ function install_aur_packages() {
 }
 
 #####################################################################
+# Detect if the Flatpak package manager exists then install some
+# necessary packages from Flathub
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_flatpak_packages() {
+  readonly flatpak_packages=(
+    "com.microsoft.Edge"
+    "com.spotify.Client"
+    "com.discordapp.Discord"
+    "com.transmissionbt.Transmission"
+    "org.wezfurlong.wezterm"
+    "com.calibre_ebook.calibre"
+    "com.valvesoftware.Steam"
+    "org.flameshot.Flameshot"
+    "com.visualstudio.code"
+    "io.dbeaver.DBeaverCommunity"
+  )
+
+  if [[ -x $(command -v flatpak --version &>/dev/null) ]]; then
+    for package in "${flatpak_packages[@]}"; do
+      flatpak install --assumeyes flathub "$package"
+    done
+  else
+    error "Failed to install packages from Flathub!"
+  fi
+}
+
+#####################################################################
+# Install some RPM packages
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_rpm_packages() {
+  readonly rpm_packages=()
+
+  if [[ "$os" == "Fedora" ]]; then
+    for package in "${rpm_packages[@]}"; do
+      dnf install --assumeyes "$package"
+    done
+  else
+    error "Failed to install some RPM packages!"
+  fi
+}
+
+#####################################################################
+# Install some ZSH plugins
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_zsh_plugins() {
+  readonly zsh_plugins=(
+    "zsh-users/zsh-syntax-highlighting"
+    "zsh-users/zsh-autosuggestions"
+    "zsh-users/zsh-completions"
+    "le0me55i/zsh-extract"
+    "ael-code/zsh-colored-man-pages"
+  )
+
+  # Location to store the ZSH plugins
+  readonly zsh_plugins_dir="${ZDOTDIR:-$HOME}/.zsh/plugins"
+
+  # Check for the existence of the local ZSH directory, if not then create it
+  if [[ ! -d $zsh_plugins_dir ]]; then
+    mkdir --parents "$zsh_plugins_dir"
+  fi
+
+  # Download the listed ZSH plugins to a local directory for usage
+  for plugin in "${zsh_plugins[@]}"; do
+    git clone "git@github.com:${plugin}" "$zsh_plugins_dir"
+  done
+}
+
+#####################################################################
+# Install certain GitHub CLI plugins
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_gh_plugins() {
+  # Need to install the completions seperately because the upstream
+  # repo does not provide it
+  readonly gh_completions="{$ZDOTDIR:-$HOME}.zsh/plugins/zsh-completions/src/_gh"
+
+  readonly gh_plugins=(
+    "seachicken/gh-poi"
+    "yusukebe/gh-markdown-preview"
+    "chelnak/gh-changelog"
+    "redraw/gh-install"
+    "vilmibm/gh-screensaver"
+    "k1LoW/gh-grep"
+    "HaywardMorihara/gh-tidy"
+  )
+
+  if [[ ! -f "$gh_completions" ]]; then
+    gh completion --shell zsh >"$gh_completions"
+  else
+    echo "GitHub CLI completions failed to generate...skipping"
+  fi
+
+  # Setup some GitHub CLI extensions (or "plugins")
+  for plugin in "${gh_plugins[@]}"; do
+    gh extension install "$plugin"
+  done
+}
+
+#####################################################################
+# Download the dotfiles to the local repository and setup the
+# dotfiles
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function setup_dotfiles() {
+  # Local path to the dotfiles
+  readonly dotfiles_dir="$HOME/.dotfiles"
+
+  # Clone the remote dotfiles repository to the local repository
+  git clone git@github.com:Jarmos-san/dotfiles "$dotfiles_dir"
+
+  # Check if the contents of the dotfiles repository are symlinks
+  for file in "$dotfiles_dir"/*; do
+    if [[ ! -L "$file" ]]; then
+      unlink "$file"
+    fi
+  done
+
+  # Create the symlinks from the dotfiles repository
+  cd "$dotfiles_dir" && stow dotfiles && cd -
+}
+
+#####################################################################
+# Entrypoint of the script to invoke with all the arbitrary
+# parameters the script can be invoked with.
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function setup_ssh() {
+  # Detect the OS name for usage later down the line
+  detect_os
+
+  if ! command -v gh &>/dev/null; then
+    error "GitHub CLI not found...failed to setup SSH authentication"
+  else
+    # Generate the SSH keys for the local machine
+    ssh-keygen -t "ed25519" -C "somraj.mle@gmail.com" \
+      -f "$HOME/.ssh/id_ed25519" -N ""
+
+    # Authenticate the local GitHub CLI session using a secret token
+    gh auth login --with-token <<<"$(printf 'Y/n')"
+
+    # Add the local SSH public keys to the GitHub servers for remote
+    # authentication.
+    gh ssh-key add "$HOME/.ssh/id_ed25519.pub" \
+      --title "$os Development Machine"
+  fi
+}
+
+#####################################################################
 # Entrypoint of the script to invoke with all the arbitrary
 # parameters the script can be invoked with.
 #
@@ -389,9 +570,13 @@ function main() {
     # install_fonts
   fi
 
-  if [[ -x $(command -v brew --version &>/dev/null) ]]; then
+  # On Ubuntu/Debian install both Homebrew and Flatpak packages
+  if [[ "$os" == "Ubuntu" &&
+    -x $(command -v brew --version &>/dev/null) &&
+    -x $(command -v flatpak --version &>/dev/null) ]]; then
     info "Installing Homebrew packages..."
     # install_homebrew_packages
+    # install_flatpak_packages
   fi
 
   if [[ "$os" == "Arch Linux" && -x $(command -v yay --version &>/dev/null) ]]; then
@@ -399,13 +584,41 @@ function main() {
     # install_aur_packages
   fi
 
-  # TODO: Install the RPM packages for Fedora
-  # TODO: Install the ZSH plugins
-  # TODO: Install the GitHub CLI plugins
-  # TODO: Download and setup the dotfiles on the system properly
-  # TODO: Setup SSH for the system
+  if [[ "$os" == "Fedora" ]]; then
+    info "Installing RPM and Flatpak packages..."
+    # install_rpm_packages
+    # install_flatpak_packages
+  fi
+
+  info "Installing the ZSH plugins..."
+  # install_zsh_plugins
+
+  if [[ -x $(command -v gh --version &>/dev/null) ]]; then
+    info "Installing GitHub CLI plugins..."
+    # install_gh_plugins
+  fi
+
+  info "Setting up dotfiles and creating the necessary symlinks..."
+  # setup_dotfiles
+
+  info "Setting up SSH for authentication to remote servers..."
+  # setup_ssh
+
   # TODO: Download and install Node.js, Rust, Docker
-  # TODO: Share some notes on some manual tasks to perform after the setup is complete
+  info "Downloading and setting up Node.js..."
+  # setup_nodejs
+
+  info "Downloading and setting up Rust..."
+  # setup_rust
+
+  info "Downloading and setting up Docker..."
+  # setup_docker
+
+  info "Please perform these manual tasks to complete the setup:"
+  echo -e "\n-> Download the backup GPG keys & set them up..."
+  echo -e "\n-> Ensure GUI tools like VSCode are using the right font..."
+
+  success "Automated system setup complete...you can restart the system now!"
 }
 
 # Prompt for sudo password and store its exit code for further usage
