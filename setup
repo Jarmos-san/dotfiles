@@ -6,6 +6,9 @@
 # License: MIT License
 # (see https://github.com/Jarmos-san/neovimulus/blob/main/LICENSE for info).
 
+# INFO: Necessary command for all Bash script to execute safely.
+# For a detailed explanation, check the following resource:
+# https://explainshell.com/explain?cmd=set+-euo+pipefail
 set -euo pipefail
 
 # Some colour codes to make the formatted output prettier.
@@ -14,16 +17,6 @@ readonly GREEN="\033[0;32m"
 readonly YELLOW="\033[0;33m"
 readonly BLUE="\033[0;34m"
 readonly NOCOLOR="\033[0m"
-
-###############################################################################
-# Remove all unnecessary artifacts created by the script upon
-# successful execution.
-###############################################################################
-cleanup() {
-  # Remove the font files which were downloaded for pre-setup of
-  # the local machine.
-  rm --recursive --force cascadia cascadia.zip
-}
 
 ###############################################################################
 # Wrapper function to more easily output an error message to STDERR.
@@ -82,8 +75,8 @@ function info() {
 }
 
 ###############################################################################
-# Download Docker and set it up on the local machine to be useable as
-# a non-root user.
+# Remove all unnecessary artifacts created by the script upon
+# successful execution.
 #
 # Arguments:
 #   None
@@ -91,138 +84,333 @@ function info() {
 # Outputs:
 #   None
 ###############################################################################
-function install_docker() {
-  readonly docker_download_url="https://download.docker.com/linux/ubuntu"
-
-  # Check what version of Ubuntu is used
-  ubuntu_release="$(lsb_release --codename --short)"
-
-  # Add the Docker GPG key to the APT key lists
-  curl --fail --silent --show-error --location "$docker_download_url/gpg" \
-    | apt-key add -
-
-  # Add the Docker APT repository for downloading the Docker binary
-  add-apt-repository "deb [arch=amd64] $docker_download_url $ubuntu_release stable"
-
-  # Download Docker and related tools from the APT repository
-  apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin \
-    docker-compose-plugin
-
-  # Ensure the "docker" command can be invoked without using "sudo" each time
-  groupadd docker && usermod --append --groups docker "$USER" && newgrp docker
+function cleanup() {
+  rm --recursive --force yay
 }
 
-###############################################################################
-# Download the Cascadia Code Nerd Font & set it up for usage in the local
-# machine.
+#####################################################################
+# Detect the OS the system is running and return the name of the OS
 #
 # Arguments:
 #   None
 #
 # Outputs:
 #   None
-###############################################################################
+#####################################################################
+function detect_os() {
+  case "$(uname --all)" in
+    *Microsoft*) readonly os="WSL" ;;
+    *Linux*) if [[ -f "/etc/os-release" ]]; then
+      source /etc/os-release
+      readonly os="$NAME"
+    else
+      readonly os="Linux"
+    fi ;;
+    *Darwin*) readonly os="MacOS" ;;
+    *) readonly os="" ;;
+  esac
+}
+
+#####################################################################
+# Detect the OS and perform a preliminary system update using the
+# OS's native package manager
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function update_system() {
+  # Fetch the name of the OS for further logic and conditions
+  detect_os
+
+  case "$os" in
+    "WSL" | "Ubuntu") apt-get update --yes && apt-get upgrade ;;
+    "MacOS") softwareupdate --install --all ;;
+    "Fedora") dnf update && dnf upgrade ;;
+    "Arch Linux") pacman --sync --upgrades --refresh ;;
+    *) error "Unsupported or unknown OS. Unable to update system!" ;;
+  esac
+}
+
+#####################################################################
+# Detect the name of the OS and install some essentials programs
+# using the OS's native package manager
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_essentials() {
+  # Fetch the name of the OS for further logic and conditions
+  detect_os
+
+  # Logic to install the necessary essential programs
+  case "$os" in
+    "WSL" | "Ubuntu") apt-get install --yes git curl ca-certificates gnupg ;;
+    "Fedora") dnf install git ;;
+    "Arch Linux") pacman --sync --refresh --noconfirm base-devel git ;;
+    *) error "Unsupported or unknown OS. Unable to update system!" ;;
+  esac
+}
+
+#####################################################################
+# Detect the OS name and install the "yay" package manager only if
+# the system is running on an Arch Linux based OS
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_yay() {
+  # Clone the "yay" git repository and run its installer
+  git clone "https://aur.archlinux.org/yay.git"
+  cd yay && makepkg -si --noconfirm && cd -
+}
+
+#####################################################################
+# Install Homebrew using the installation script in a Bash subshell
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_homebrew() {
+  # Homebrew installation script
+  homebrew_url="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+
+  # Fetch the installation script and invoke it in a subshell
+  bash -c "$(curl --fail --silent --show-error --location $homebrew_url)"
+}
+
+#####################################################################
+# Install Flatpak using the OS's native package manager
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_flatpak() {
+  readonly flatpak_repo="https://flathub.org/repo/flathub.flatpakrepo"
+
+  # Install flatpak using APT (which is the native package manager
+  # for Debian/Ubuntu based OSes)
+  apt-get install flatpak
+
+  # Configure the repository to fetch the programs from using Flatpak
+  flatpak remote-add --if-not-exists flathub "$flatpak_repo"
+}
+
+#####################################################################
+# Download and setup the fonts for further installation
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
 function install_fonts() {
-  cascadia_code_download_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.0/CascadiaCode.zip"
-  cascadia_code_zip_file="cascadia.zip"
+  readonly cascadia_code_download_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/CascadiaCode.zip"
+  readonly cascadia_code_zip_filename="cascadia_code.zip"
 
-  # Command to download the zipped file containing the font assets
+  # Download the zipped files
   curl --fail --silent --show-error --location --output \
-    $cascadia_code_zip_file $cascadia_code_download_url
+    $cascadia_code_zip_filename $cascadia_code_download_url
 
-  if [[ -d $cascadia_code_zip_file ]]; then
-    # Extract the contents of the downloaded zipped file
-    unzip $cascadia_code_zip_file -d cascadia
+  if [[ -d $cascadia_code_zip_filename ]]; then
+    # Extract the contents of the downloaded zip file
+    unzip $cascadia_code_zip_filename -d cascadia
 
-    # Move the necessary font assets to the required location
+    # Move the extracted font assets to its appropriate location
     mv cascadia/*.ttf "$HOME/.fonts"
   fi
 
-  # Ensure the system is aware of the newly loaded fonts
-  fc-cache --force -verbose
+  # Ensure the system is aware of the loaded fonts
+  fc-cache --force --verbose
 }
 
-###############################################################################
-# Donwload Flatpak packages from FlatHub for certain Linux distros like Ubuntu.
+#####################################################################
+# Install Homebrew packages based on the type of the OS used which is
+# either Ubuntu or MacOS.
 #
 # Arguments:
 #   None
 #
 # Outputs:
 #   None
-###############################################################################
-function install_flatpak_packages() {
-  # List of Flatpak GUI applications which cannot be installed through Homebrew on Linux
-  flatpak_packages=(
-    'com.microsoft.Edge'
-    'com.spotify.Client'
-    'com.discordapp.Discord'
-    'com.transmissionbt.Transmission'
-    'org.wezfurlong.wezterm'
-    'com.calibre_ebook.calibre'
-    'com.valvesoftware.Steam'
-    'org.flameshot.Flameshot'
-    'com.visualstudio.code'
-    'io.dbeaver.DBeaverCommunity'
-  )
-
-  # Loop through the aforementioned list of packages to install them only if
-  # the system is a Linux distro.
-  if [[ ! "$OS" == "WSL" ]] && [[ ! "$OS" == "Darwin" ]]; then
-    for package in "${flatpak_packages[@]}"; do
-      flatpak install --assumeyes flathub "$package"
-    done
-  fi
-}
-
-###############################################################################
-# Setup the Homebrew taps and download all necessary packages from Homebrew.
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-###############################################################################
+#####################################################################
 function install_homebrew_packages() {
+  # Taps are "repositories" to download the packages from
   readonly taps=(
     "eth-p/software" "go-task/tap" "homebrew/bundle" "homebrew/core"
   )
 
+  # Casks are GUI tools (some proprietary) which can't be installed on
+  # Linuxbrew
+  readonly casks=(
+    "visual-studio-code" "spotify" "discord" "inkscape" "dbeaverlite"
+  )
+
+  # The formulae are mostly CLI tools easily installable through
+  # Linuxbrew
   readonly formulae=(
     "act" "azure-cli" "btop" "cmatrix" "exa" "fd" "gcc" "gh" "glow" "httpie"
     "lua@5.1" "mdbook" "neofetch" "neovim" "oci-cli" "poetry" "pre-commit"
-    "ripgrep" "rustup-init" "starship" "tmux" "shellcheck" "stow" "zsh"
+    "ripgrep" "rustup-init" "starship" "shellcheck" "stow" "zsh"
   )
 
-  # Install some of the Homebrew taps
+  # Setup the Homebrew taps
   for tap in "${taps[@]}"; do
     brew install "$tap"
   done
 
-  # Install the Homebrew formulae
-  for formula in "${formulae[@]}"; do
-    brew install "$formula"
-  done
+  # Detect the OS name for further conditional logic
+  detect_os
+
+  # Install only the formulae if the detected OS is Ubuntu/Debian
+  if [[ "$os" == "Ubuntu" && ! "$os" == "MacOS" ]]; then
+    for formula in "${formulae[@]}"; do
+      brew install "$formula"
+    done
+  fi
+
+  # Install both the formulae and the casks for MacOS
+  if [[ "$os" == "MacOS" ]]; then
+    # Loop through the "formulae" array to install the CLI tools
+    for formula in "${formulae[@]}"; do
+      brew install "$formula"
+    done
+
+    # Loop through the "casks" array to install the GUI tools
+    for cask in "${casks[@]}"; do
+      brew install "$cask"
+    done
+  fi
 }
 
-###############################################################################
-# Download and setup some ZSH plugins for local usage.
+#####################################################################
+# Install packages for Arch Linux based distributions from the Arch
+# User Repository (AUR)
 #
 # Arguments:
 #   None
 #
 # Outputs:
 #   None
-###############################################################################
+#####################################################################
+function install_aur_packages() {
+  # FIXME: List of some missing packages - "pre-commit"
+
+  readonly aur_packages=(
+    "act" "azure-cli" "btop-git" "cmatrix-git" "exa-git" "fd-git"
+    "gcc11" "github-cli-git" "glow-git" "mdbook-git" "neofetch-gitn"
+    "neovim-git" "oci-cli" "python-poetry-git" "ripgrep-git"
+    "rustup-git" "starship-git" "shellcheck-bin" "stow-git" "zsh"
+    "zsh-completions"
+  )
+
+  readonly pacman_packages=("httpie")
+
+  # Check if "yay" is installed then install the programs mentioned
+  # above
+  if [[ -x $(command -v yay --version &>/dev/null) ]]; then
+    for package in "${aur_packages[@]}"; do
+      yay --sync --refresh --upgrade "$package"
+    done
+  else
+    error "Failed to install packages from AUR!"
+  fi
+
+  # Install the pacman packages if any are required
+  if [[ ! ${#pacman_packages[@]} -eq 0 ]]; then
+    for package in "${pacman_packages[@]}"; do
+      yay --sync --refresh --upgrade "$package"
+    done
+  else
+    error "Failed to install Pacman packages!"
+  fi
+}
+
+#####################################################################
+# Detect if the Flatpak package manager exists then install some
+# necessary packages from Flathub
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_flatpak_packages() {
+  readonly flatpak_packages=(
+    "com.microsoft.Edge"
+    "com.spotify.Client"
+    "com.discordapp.Discord"
+    "com.transmissionbt.Transmission"
+    "org.wezfurlong.wezterm"
+    "com.calibre_ebook.calibre"
+    "com.valvesoftware.Steam"
+    "org.flameshot.Flameshot"
+    "com.visualstudio.code"
+    "io.dbeaver.DBeaverCommunity"
+  )
+
+  if [[ -x $(command -v flatpak --version &>/dev/null) ]]; then
+    for package in "${flatpak_packages[@]}"; do
+      flatpak install --assumeyes flathub "$package"
+    done
+  else
+    error "Failed to install packages from Flathub!"
+  fi
+}
+
+#####################################################################
+# Install some RPM packages
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function install_rpm_packages() {
+  readonly rpm_packages=()
+
+  if [[ "$os" == "Fedora" ]]; then
+    for package in "${rpm_packages[@]}"; do
+      dnf install --assumeyes "$package"
+    done
+  else
+    error "Failed to install some RPM packages!"
+  fi
+}
+
+#####################################################################
+# Install some ZSH plugins
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
 function install_zsh_plugins() {
-  # List of ZSH plugins
   readonly zsh_plugins=(
-    'zsh-users/zsh-syntax-highlighting'
-    'zsh-users/zsh-autosuggestions'
-    'zsh-users/zsh-completions'
-    'le0me55i/zsh-extract'
-    'ael-code/zsh-colored-man-pages'
+    "zsh-users/zsh-syntax-highlighting"
+    "zsh-users/zsh-autosuggestions"
+    "zsh-users/zsh-completions"
+    "le0me55i/zsh-extract"
+    "ael-code/zsh-colored-man-pages"
   )
 
   # Location to store the ZSH plugins
@@ -234,60 +422,25 @@ function install_zsh_plugins() {
   fi
 
   # Download the listed ZSH plugins to a local directory for usage
-  if command -v git >/dev/null 2>&1; then
-    for plugin in "${zsh_plugins[@]}"; do
-      git clone "git@github.com:${plugin}" "$zsh_plugins_dir"
-    done
-  else
-    error "Failed to download ZSH plugins..."
-  fi
+  for plugin in "${zsh_plugins[@]}"; do
+    git clone "git@github.com:${plugin}" "$zsh_plugins_dir"
+  done
 }
 
-###############################################################################
-# Fetch the dotfiles from the remote repository and set them up locally.
+#####################################################################
+# Install certain GitHub CLI plugins
 #
 # Arguments:
 #   None
 #
 # Outputs:
 #   None
-###############################################################################
-function setup_dotfiles() {
-  readonly dotfiles_dir="$HOME/.dotfiles"
-
-  # Check if Git is installed then clone the remote dotfiles repository
-  if ! command -v git >/dev/null 2>&1; then
-    error "Git not found...please ensure its installed & available on \$PATH!"
-  else
-    git clone git@github.com:Jarmos-san/dotfiles "$dotfiles_dir"
-  fi
-
-  # Check if the ".dotfiles" directory exists and if its contents are symlinks
-  if [[ -d "$dotfiles_dir" ]]; then
-    for file in "$dotfiles_dir"/*; do
-      if [[ ! -L "$file" ]]; then
-        unlink "$file"
-      fi
-    done
-  else
-    error "The $dotfiles_dir directory was not found..."
-  fi
-
-  # Create the symlinks from the dotfiles repository
-  cd "$dotfiles_dir" && stow dotfiles && cd -
-}
-
-###############################################################################
-# Fetch the dotfiles from the remote repository and set them up locally.
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-###############################################################################
-function setup_gh_plugins() {
+#####################################################################
+function install_gh_plugins() {
+  # Need to install the completions seperately because the upstream
+  # repo does not provide it
   readonly gh_completions="{$ZDOTDIR:-$HOME}.zsh/plugins/zsh-completions/src/_gh"
+
   readonly gh_plugins=(
     "seachicken/gh-poi"
     "yusukebe/gh-markdown-preview"
@@ -308,6 +461,99 @@ function setup_gh_plugins() {
   for plugin in "${gh_plugins[@]}"; do
     gh extension install "$plugin"
   done
+}
+
+#####################################################################
+# Download the dotfiles to the local repository and setup the
+# dotfiles
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function setup_dotfiles() {
+  # Local path to the dotfiles
+  readonly dotfiles_dir="$HOME/.dotfiles"
+
+  # Clone the remote dotfiles repository to the local repository
+  git clone git@github.com:Jarmos-san/dotfiles "$dotfiles_dir"
+
+  # Check if the contents of the dotfiles repository are symlinks
+  for file in "$dotfiles_dir"/*; do
+    if [[ ! -L "$file" ]]; then
+      unlink "$file"
+    fi
+  done
+
+  # Create the symlinks from the dotfiles repository
+  cd "$dotfiles_dir" && stow dotfiles && cd -
+}
+
+#####################################################################
+# Entrypoint of the script to invoke with all the arbitrary
+# parameters the script can be invoked with.
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function setup_ssh() {
+  # Detect the OS name for usage later down the line
+  detect_os
+
+  if ! command -v gh &>/dev/null; then
+    error "GitHub CLI not found...failed to setup SSH authentication"
+  else
+    # Generate the SSH keys for the local machine
+    ssh-keygen -t "ed25519" -C "somraj.mle@gmail.com" \
+      -f "$HOME/.ssh/id_ed25519" -N ""
+
+    # Authenticate the local GitHub CLI session using a secret token
+    gh auth login --with-token <<<"$(printf 'Y/n')"
+
+    # Add the local SSH public keys to the GitHub servers for remote
+    # authentication.
+    gh ssh-key add "$HOME/.ssh/id_ed25519.pub" \
+      --title "$os Development Machine"
+  fi
+}
+
+#####################################################################
+# Setup Docker CE for the local system only for Linux OSes
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function setup_docker() {
+  detect_os
+
+  if [[ ! "$os" == "MacOS" && ! "$os" == "WSL" ]]; then
+    readonly docker_download_url="https://download.docker.com/linux/$os"
+
+    # Check what version of Ubuntu is used
+    ubuntu_release="$(lsb_release --codename --short)"
+
+    # Add the Docker GPG key to the APT key lists
+    curl --fail --silent --show-error --location "$docker_download_url/gpg" \
+      | apt-key add -
+
+    # Add the Docker APT repository for downloading the Docker binary
+    add-apt-repository "deb [arch=amd64] $docker_download_url $ubuntu_release stable"
+
+    # Download Docker and related tools from the APT repository
+    apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin \
+      docker-compose-plugin
+
+    # Ensure the "docker" command can be invoked without using "sudo" each time
+    groupadd docker && usermod --append --groups docker "$USER" && newgrp docker
+  fi
 }
 
 #####################################################################
@@ -344,34 +590,6 @@ function setup_node() {
 }
 
 #####################################################################
-# Setup SSH keys on the local machine and set them up for
-# authentication to the remote GitHub repositories.
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function setup_ssh() {
-  if ! command -v gh &>/dev/null; then
-    error "GitHub CLI not found...failed to setup SSH authentication"
-  else
-    # Generate the SSH keys for the local machine
-    ssh-keygen -t "ed25519" -C "somraj.mle@gmail.com" \
-      -f "$HOME/.ssh/id_ed25519" -N ""
-
-    # Authenticate the local GitHub CLI session using a secret token
-    gh auth login --with-token <<<"$(printf 'Y/n')"
-
-    # Add the local SSH public keys to the GitHub servers for remote
-    # authentication.
-    gh ssh-key add "$HOME/.ssh/id_ed25519.pub" \
-      --title "Ubuntu Development Machine"
-  fi
-}
-
-#####################################################################
 # Entrypoint of the script to invoke with all the arbitrary
 # parameters the script can be invoked with.
 #
@@ -382,112 +600,86 @@ function setup_ssh() {
 #   None
 #####################################################################
 function main() {
-  readonly homebrew_install_script="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+  # Fetch the OS name for certain conditional logic down the line
+  detect_os
 
-  # List of essential packages
-  readonly essential_packages=(
-    "git" "curl" "flatpak" "ca-certificates" "gnupg"
-  )
+  info "Updating system..."
+  # update_system
 
-  # Logic to identify what the OS type is for further execution logic
-  case "$(uname -a)" in
-    *Microsoft*) readonly OS="WSL" ;;
-    Linux*) readonly OS="Linux" ;;
-    Darwin*) readonly OS="MacOS" ;;
-    *) readonly OS="" ;;
-  esac
+  info "Installing some essential programs..."
+  # install_essentials
 
-  # Download the list of essential tools if the distro is Ubuntu
-  if [[ ! "$OS" == "Darwin" ]] && [[ ! "$OS" == "" ]] && ! command -v apt-get; then
-    error "Some essential tools were not installed..."
-    info "Please install the following tools manually before invoking the automation script ..."
+  # TODO: Consider cloning the remote dotfiles repository and then
+  # executing the rest of the commands inside that local directory
 
-    for package in "${essential_packages[@]}"; do
-      echo "$package"
-    done
-
-    exit 1
-  else
-    info "Downloading some essential tools before setting up the system..."
-
-    for package in "${essential_packages[@]}"; do
-      if ! command -v "$package"; then
-        apt-get install "$package"
-      fi
-    done
+  # Install "yay" package manager to install programs from AUR for
+  # Arch Linux based OSes
+  if [[ "$os" == "Arch Linux" ]]; then
+    info "Installing \"yay\"..."
+    # install_yay
   fi
 
-  # Refactored portion
-  info "Starting local development environment setup now..."
-
-  # Logic to update the system before setting up the development environment
-  if [[ "$OS" == "WSL" ]] && [[ "$OS" == "Linux" ]] && [[ $(command -v apt-get) ]]; then
-    info "Updating system packages..."
-    apt-get update --yes && apt-get upgrade --yes
-  else
-    warn "System update failed...please ensure to do afterwards"
+  # Install "Homebrew" package manager for Ubuntu and MacOS
+  if [[ "$os" == "Ubuntu" || "$os" == "MacOS" ]]; then
+    info "Installing \"Homebrew\"..."
+    # install_homebrew
   fi
 
-  # Download Docker for native Linux development machines only
-  if ! [[ "$OS" == "WSL" ]] && ! [[ "$OS" == "MacOS" ]]; then
-    info "Installing and setting up Docker..."
-    install_docker
-    success "Docker installation complete!"
+  # Install Flatpak for Debian/Ubuntu based OSes since Fedora comes
+  # preinstalled with Flatpak!
+  if [[ "$os" == "Ubuntu" && ! $(command -v flatpak --version &>/dev/null) ]]; then
+    info "Installing \"Flatpak\"..."
+    # install_flatpak
   fi
 
-  # Logic to download and setup some patched Nerd Font
-  if ! [[ "$OS" == "WSL" ]] || ! [[ "$OS" == "MacOS" ]]; then
-    info "Setting patched Nerd Fonts for local usage..."
-    install_fonts
-    success "Fonts installation and setup complete!"
+  if [[ ! "$os" == "WSL" ]]; then
+    info "Installing fonts (Cascadia Code)..."
+    # install_fonts
   fi
 
-  # Logic to download Flatpak packages from FlatHub
-  if ! command -v flatpak &>/dev/null; then
-    error "Flatpak was not found in your system!"
-  else
-    info "Installing Flatpak packages from FlatHub..."
-    install_flatpak_packages
+  # On Ubuntu/Debian install both Homebrew and Flatpak packages
+  if [[ "$os" == "Ubuntu" &&
+    -x $(command -v brew --version &>/dev/null) &&
+    -x $(command -v flatpak --version &>/dev/null) ]]; then
+    info "Installing Homebrew packages..."
+    # install_homebrew_packages
+    # install_flatpak_packages
   fi
 
-  # Logic to download & setup ZSH plugins
-  info "Downloading and setting up ZSH plugins"
-  install_zsh_plugins
-
-  # Install Homebrew if its not already available
-  if ! command -v brew &>/dev/null; then
-    /bin/bash -c \
-      "$(curl --fail --silent --show-error --location $homebrew_install_script)"
-    install_homebrew_packages
-  else
-    error "Homebrew installation failed..."
+  if [[ "$os" == "Arch Linux" && -x $(command -v yay --version &>/dev/null) ]]; then
+    info "Installing AUR packages..."
+    # install_aur_packages
   fi
 
-  # Logic to setup the dotfiles on the local machine
-  if ! command -v stow &>/dev/null; then
-    info "Setting up the dotfiles..."
-    setup_dotfiles
-    success "Dotfiles setup complete..."
+  if [[ "$os" == "Fedora" ]]; then
+    info "Installing RPM and Flatpak packages..."
+    # install_rpm_packages
+    # install_flatpak_packages
   fi
 
-  # Logic to install GitHub CLI plugins and remote SSH authentication
-  if ! command -v gh &>/dev/null; then
-    error "GitHub CLI not found...failed to install plugins & SSH authentication!"
-  else
-    setup_gh_plugins
-    setup_ssh
+  info "Installing the ZSH plugins..."
+  # install_zsh_plugins
+
+  if [[ -x $(command -v gh --version &>/dev/null) ]]; then
+    info "Installing GitHub CLI plugins..."
+    # install_gh_plugins
   fi
 
-  if ! command -v node &>/dev/null; then
-    info "Installing Node.js..."
-    setup_node
-    success "Node.js installed..."
-  fi
+  info "Setting up dotfiles and creating the necessary symlinks..."
+  # setup_dotfiles
 
-  # Download and setup Rust along with its toolchain like "rustfmt" and such
-  info "Preparing to download Rust..."
-  setup_rust
-  success "Rust installation complete!"
+  info "Setting up SSH for authentication to remote servers..."
+  # setup_ssh
+
+  info "Downloading and setting up Node.js..."
+  # setup_nodejs
+
+  info "Downloading and setting up Rust..."
+  # setup_rust
+
+  info "Downloading and setting up Docker..."
+  # TODO: Refactor the "setup_docker" function to consider other Linux OSes as well
+  # setup_docker
 
   info "Please perform these manual tasks to complete the setup:"
   echo -e "\n-> Download the backup GPG keys & set them up..."
@@ -496,8 +688,19 @@ function main() {
   success "Automated system setup complete...you can restart the system now!"
 }
 
-# Run the main component of the script to automatically setup everything
-main
+# Prompt for sudo password and store its exit code for further usage
+sudo -v
+sudo_exit_code=$?
 
-# Cleanup any artifacts generated by this script
+# Check if sudo credentials are cached then invoke the script to run
+if [ "$sudo_exit_code" -eq 0 ]; then
+  info "Setting up automated system setup now..."
+  main
+  success "Automated system setup is complete..."
+else
+  warn "Sudo privileges are required to run this script!"
+fi
+
+# Cleanup any generated artifacts and the system in general after the
+# scripts completes execution
 trap cleanup EXIT

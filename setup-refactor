@@ -523,6 +523,73 @@ function setup_ssh() {
 }
 
 #####################################################################
+# Setup Docker CE for the local system only for Linux OSes
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function setup_docker() {
+  detect_os
+
+  if [[ ! "$os" == "MacOS" && ! "$os" == "WSL" ]]; then
+    readonly docker_download_url="https://download.docker.com/linux/$os"
+
+    # Check what version of Ubuntu is used
+    ubuntu_release="$(lsb_release --codename --short)"
+
+    # Add the Docker GPG key to the APT key lists
+    curl --fail --silent --show-error --location "$docker_download_url/gpg" \
+      | apt-key add -
+
+    # Add the Docker APT repository for downloading the Docker binary
+    add-apt-repository "deb [arch=amd64] $docker_download_url $ubuntu_release stable"
+
+    # Download Docker and related tools from the APT repository
+    apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin \
+      docker-compose-plugin
+
+    # Ensure the "docker" command can be invoked without using "sudo" each time
+    groupadd docker && usermod --append --groups docker "$USER" && newgrp docker
+  fi
+}
+
+#####################################################################
+# Download Rust and its toolchain
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function setup_rust() {
+  if ! command -v rustup &>/dev/null; then
+    error "Failed to download Rust, the \"rustup\" not found!"
+  else
+    rustup update stable
+  fi
+}
+
+#####################################################################
+# Download and setup Node.js for frontend development.
+#
+# Arguments:
+#   None
+#
+# Outputs:
+#   None
+#####################################################################
+function setup_node() {
+  readonly node_download_url="https://deb.nodesource.com/setup_lts.x"
+
+  # Download Node.js
+  curl --silent --show-error --location $node_download_url | bash -c
+}
+
+#####################################################################
 # Entrypoint of the script to invoke with all the arbitrary
 # parameters the script can be invoked with.
 #
@@ -604,7 +671,7 @@ function main() {
   info "Setting up SSH for authentication to remote servers..."
   # setup_ssh
 
-  # TODO: Download and install Node.js, Rust, Docker
+  # TODO: Download and install Node.js, Rust
   info "Downloading and setting up Node.js..."
   # setup_nodejs
 
@@ -612,6 +679,7 @@ function main() {
   # setup_rust
 
   info "Downloading and setting up Docker..."
+  # TODO: Refactor the "setup_docker" function to consider other Linux OSes as well
   # setup_docker
 
   info "Please perform these manual tasks to complete the setup:"
