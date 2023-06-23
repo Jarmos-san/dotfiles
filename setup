@@ -101,7 +101,8 @@ function detect_os() {
   case "$(uname --all)" in
     *Microsoft*) readonly os="WSL" ;;
     *Linux*) if [[ -f "/etc/os-release" ]]; then
-      source /etc/os-release
+      # shellcheck source=/dev/null
+      source "/etc/os-release"
       readonly os="$NAME"
     else
       readonly os="Linux"
