@@ -103,32 +103,6 @@ function update() {
 }
 
 #############################################################################
-# Clone a remote GitHub repository and change directory to the freshly cloned
-# local repository for further development!
-#
-# Arguments:
-#   The URL of the remote repo which should look something like -
-#   "Jarmos-san/dotfiles".
-#
-#   The name of the local repository to clone into before cd'ing into
-#
-# Outputs:
-#   None
-#############################################################################
-function clone() {
-  if [[ $# -ne 2 ]]; then
-    echo "The command accepts two arguments - the short URL of the repo and the local repo."
-    return 1
-  else
-    if ! command -v git 2 >/dev/null &>1; then
-      echo "Git not found...please ensure it is installed and on \$PATH!"
-    else
-      git clone "git@github.com:$1" $2 && cd $2
-    fi
-  fi
-}
-
-#############################################################################
 # Create a base template Markdown file for blogging.
 #
 # Arguments:
