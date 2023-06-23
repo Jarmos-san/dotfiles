@@ -18,6 +18,9 @@ if [[ -f "$HOME/.zsh/functions" ]]; then
   source "$HOME/.zsh/functions"
 fi
 
+# Update the default PATH
+export PATH="$HOME/.local/bin:$PATH"
+
 # Enable Starship
 eval "$(starship init zsh)"
 
