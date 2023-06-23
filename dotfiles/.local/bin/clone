@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+
+"""
+Simplied "git-clone" command.
+
+Quickly and easily clone a remote Git repository to the local development environment
+for further development. Creating a well-documented alias for the "clone" command using
+Shell scripts was unweildy and hard to manage. Hence, this script come handy in that
+regards!
+
+Usage guidelines:
+
+    Invoke the script like so "clone [remote repo] [local repo]" (assuming the script is
+    in "PATH"). More specifically following is a detailed help documentation for the
+    script.
+
+    clone:      The command to invoke the script
+    remote:     The name of the remote repository, on GitHub (example -
+                "Jarmos-san/dotfiles")
+    local:      The name of the local repository
+
+Author: Somraj Saha
+License: GPL-3.0 (see https://github.com/Jarmos-san/dotfiles/blob/main/LICENSE for more
+                  information)
+"""
+
+import argparse
+
+
+def main() -> None:
+    """Invoke the entrypoint of the script."""
+    parser = argparse.ArgumentParser(description="Process some integers.")
+    parser.add_argument(
+        "integers",
+        metavar="N",
+        type=int,
+        nargs="+",
+        help="an integer for the accumulator",
+    )
+    parser.add_argument(
+        "--sum",
+        dest="accumulate",
+        action="store_const",
+        const=sum,
+        default=max,
+        help="sum the integers (default: find the max)",
+    )
+
+    args = parser.parse_args()
+    print(args.accumulate(args.integers))
+
+
+if __name__ == "__main__":
+    main()
