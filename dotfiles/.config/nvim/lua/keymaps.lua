@@ -2,6 +2,25 @@
 
 local wk = require("which-key")
 
+-- Open the starter dashboard if the buffer list is empty
+-- local open_starter_if_empty_buffer = function()
+--   local buf_id = vim.api.nvim_get_current_buf()
+--   local is_empty = vim.api.nvim_buf_get_name(buf_id) == "" and vim.bo[buf_id].filetype == ""
+--   if not is_empty then
+--     return
+--   end
+--
+--   vim.cmd("Neotree close")
+--   require("mini.starter").open()
+--   vim.cmd(buf_id .. "bwipeout")
+-- end
+
+-- Delete all buffers and open the starter dashboard
+-- local bdelete = function()
+--   require("mini.bufremove").delete()
+--   open_starter_if_empty_buffer()
+-- end
+
 wk.register({
   -- Keymaps to manage the inbuilt terminal within Neovim itself
   ["<leader>t"] = {
@@ -21,6 +40,7 @@ wk.register({
   ["<leader>b"] = {
     name = "+Buffer",
     d = { "<cmd>lua require('bufdelete').bufdelete(o, true)<cr>", "Delete the current buffer" },
+    -- d = { bdelete, "Delete the current buffer" },
     l = { "<cmd>Telescope buffers<cr>", "List all loaded buffers" },
     n = { "<cmd>bnext<cr>", "Load the next hidden buffer" },
   },

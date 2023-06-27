@@ -251,6 +251,7 @@ local plugins = {
   {
     -- Plugin to load a nice dashboard with utilities in the startup screen
     "goolord/alpha-nvim",
+    enable = false,
     event = "VimEnter",
     init = require("configs.alpha").init,
     config = require("configs.alpha").config,
@@ -353,6 +354,22 @@ local plugins = {
       })
     end,
   },
+
+  -- TODO: Uncomment the following the plugins after this questions is answered properly
+  -- https://github.com/echasnovski/mini.nvim/discussions/389
+  -- {
+  --   "echasnovski/mini.bufremove",
+  --   config = function()
+  --     require("mini.bufremove").setup()
+  --   end,
+  -- },
+  --
+  -- {
+  --   "echasnovski/mini.starter",
+  --   config = function()
+  --     require("mini.starter").setup()
+  --   end,
+  -- },
 }
 
 return plugins
