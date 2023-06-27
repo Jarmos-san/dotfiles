@@ -4,8 +4,6 @@
 
 -- TODO: Explore the following plugins & decide to use them or not
 -- "JellyApple102/flote.nvim", -- Plugin to take simple & disposable Markdown notes
--- "echasnovski/mini.starter", -- Plugin to show a nice, simple & minimal startup screen and a dashboard
--- "echanovski/mini.bufremove" -- Simple plugin to remove/delete buffers
 -- "echanovski/mini.move"  -- Plugin to move a selected text object around in any direction
 -- "echanovski/mini.splitjoin"  -- Plugin to split & join a list of arguments properly
 -- Add TailwindCSS support for highlighting the colour codes. Take a look at the code below for inspiration:
