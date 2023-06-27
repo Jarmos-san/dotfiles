@@ -249,13 +249,20 @@ local plugins = {
   },
 
   {
-    -- Plugin to load a nice dashboard with utilities in the startup screen
-    "goolord/alpha-nvim",
-    enable = false,
+    -- Plugin to remove and/or delete buffers easily
+    "echasnovski/mini.bufremove",
+    config = function()
+      require("mini.bufremove").setup()
+    end,
+  },
+
+  {
+    -- Plugin to show a nice, minimal and easy-to-use startup screen
+    "echasnovski/mini.starter",
     event = "VimEnter",
-    init = require("configs.alpha").init,
-    config = require("configs.alpha").config,
-    dependencies = "kyazdani42/nvim-web-devicons",
+    config = function()
+      require("mini.starter").setup()
+    end,
   },
 
   {
@@ -314,15 +321,12 @@ local plugins = {
     dependencies = {
       "neovim/nvim-lspconfig",
       "hrsh7th/nvim-cmp",
-      "rafamadriz/friendly-snippets",
+      -- "rafamadriz/friendly-snippets",
     },
     build = "make jsregexp",
-  },
-
-  {
-    -- Extra plugin for a more VSCode-like snippets behaviour.
-    "rafamadriz/friendly-snippets",
-    event = "InsertEnter",
+    config = function()
+      require("luasnip.loaders.from_vscode").lazy_load()
+    end,
   },
 
   {
@@ -354,22 +358,6 @@ local plugins = {
       })
     end,
   },
-
-  -- TODO: Uncomment the following the plugins after this questions is answered properly
-  -- https://github.com/echasnovski/mini.nvim/discussions/389
-  -- {
-  --   "echasnovski/mini.bufremove",
-  --   config = function()
-  --     require("mini.bufremove").setup()
-  --   end,
-  -- },
-  --
-  -- {
-  --   "echasnovski/mini.starter",
-  --   config = function()
-  --     require("mini.starter").setup()
-  --   end,
-  -- },
 }
 
 return plugins
