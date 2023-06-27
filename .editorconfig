@@ -11,6 +11,9 @@ charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
+[*.lua]
+indent_size = 2
+
 [*.{json,md,toml,yml}]
 indent_size = 2
 
