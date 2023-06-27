@@ -239,6 +239,8 @@ local plugins = {
 
   {
     -- Plugin to animate some events within Neovim
+    -- FIXME: This plugin potentially causes an issue with the background to flicker
+    -- at times
     "echasnovski/mini.animate",
     event = "VeryLazy",
     config = function()
