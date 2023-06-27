@@ -245,6 +245,7 @@ local plugins = {
   {
     -- Plugin to remove and/or delete buffers easily
     "echasnovski/mini.bufremove",
+    event = "VeryLazy",
     config = function()
       require("mini.bufremove").setup()
     end,
