@@ -13,12 +13,6 @@
 
 local plugins = {
   {
-    -- Plugin for deleting & removing buffers without messing up the window layout
-    "famiu/bufdelete.nvim",
-    event = "BufRead",
-  },
-
-  {
     -- Plugin for a better & quicker "Escape" mechanism.
     "max397574/better-escape.nvim",
     event = "InsertLeavePre",
