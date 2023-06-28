@@ -252,7 +252,19 @@ local plugins = {
     "echasnovski/mini.starter",
     event = "VimEnter",
     config = function()
-      require("mini.starter").setup()
+      local starter = require("mini.starter")
+
+      starter.setup({
+        items = {
+          { name = "Open Old Files", action = "Telescope oldfiles", section = "File Explorer" },
+          { name = "Open File Explorer", action = "Neotree toggle", section = "File Explorer" },
+          { action = starter.sections.recent_files(8, true, true), section = "Recent Files" },
+          { name = "Quit Neovim", action = "quitall", section = "Manage Neovim" },
+          { name = "Update Plugins", action = "Lazy sync", section = "Manage Neovim" },
+        },
+        header = "Welcome Back, Jarmos!",
+        footer = 'Press "Alt=j/k" to navigate up/down.',
+      })
     end,
   },
 
