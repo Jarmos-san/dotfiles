@@ -17,6 +17,7 @@ local disable_filetypes = {
   "lazy",
   "lspinfo",
   "sh",
+  "starter",
   "text",
   "Trouble",
   "tmux",
