@@ -73,6 +73,9 @@ vim.filetype.add({
   },
 })
 
--- Additional features to look into later on:
+-- INFO: Enable an experimental fast module loader. See the PR for more information:
 -- https://github.com/neovim/neovim/pull/22668
+vim.loader.enable()
+
+-- Additional features to look into later on:
 -- https://github.com/rafcamlet/nvim-luapad
