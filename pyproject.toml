@@ -2,6 +2,9 @@
 name = "-dotfiles"
 license = "GPL 3.0"
 packages = [{include = "dotfiles"}]
+version = "v0.0.1"
+description = ""
+authors = ["Somraj Saha"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
