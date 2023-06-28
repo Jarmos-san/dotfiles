@@ -52,10 +52,14 @@ require("lazy").setup("plugins", {
   },
 })
 
--- Load the necessary user-defined Lua modules here for customising Neovim.
-require("options")
-require("autocmds")
-require("keymaps")
+-- Safely load the necessary user-defined Lua modules meant to customise Neovim.
+for _, module in ipairs({ "options", "autocmds", "keymaps" }) do
+  local ok, error = pcall(require, module)
+
+  if not ok then
+    print("Error loading module: " .. error)
+  end
+end
 
 vim.cmd.colorscheme("onedark")
 -- The follow two colourschems are the most popular ones right now with support for semantic highlighting
