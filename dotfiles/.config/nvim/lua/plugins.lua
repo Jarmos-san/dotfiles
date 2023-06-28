@@ -263,7 +263,7 @@ local plugins = {
           { name = "Update Plugins", action = "Lazy sync", section = "Manage Neovim" },
         },
         header = "Welcome Back, Jarmos!",
-        footer = 'Press "Alt=j/k" to navigate up/down.',
+        footer = 'Press "alt + j/k" to navigate up/down.',
       })
     end,
   },
