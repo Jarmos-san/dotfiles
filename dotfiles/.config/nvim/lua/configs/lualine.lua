@@ -11,7 +11,6 @@ M.config = function()
     globalstatus = true,
     disabled_filetypes = {
       statusline = {
-        "alpha",
         "dashboard",
         "filesytem",
         "mason",
@@ -20,6 +19,7 @@ M.config = function()
         "null-ls-info",
         "lazy",
         "lspinfo",
+        "starter",
         "TelescopePrompt",
       },
     },
