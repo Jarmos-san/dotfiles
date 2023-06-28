@@ -208,7 +208,7 @@ local plugins = {
   {
     -- Plugin to highlight certain patterns like TO-DO comments and RGB colour codes
     "echasnovski/mini.hipatterns",
-    event = { "BufNewFile", "BufRead" },
+    event = { "BufNewFile", "BufReadPre" },
     config = function()
       local hipatterns = require("mini.hipatterns")
 
@@ -221,7 +221,7 @@ local plugins = {
           note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
 
           -- Highlight hex color strings (`#rrggbb`) using that color
-          hex_color = hipatterns.gen_highlighter.hex_color(),
+          hex_color = hipatterns.gen_highlighter.hex_color({ priority = 2000 }),
         },
       })
     end,
