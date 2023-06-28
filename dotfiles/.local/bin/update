@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+
+"""
+Easily update the system through a simple script.
+
+Author: Somraj Saha
+License: GPL-3.0 (see https://github.com/Jarmos-san/dotfiles/blob/main/LICENSE for more
+         information)
+"""
+
+"""
+TODO: Implement the following functionalities/behaviour:
+    1. Check the name of the Operating system to invoke its appropriate package manager.
+    2. Check if certain package manager like Homebrew or Flatpak are also installed, if
+       so invoke them.
+    3. Once all the updates are complete, perform a mandatory cleanup action to free up
+       space.
+"""
+
+import platform
+import subprocess
+
+
+def main() -> None:
+    """Entrypoint of the script."""
+    # Get the name of the OS the system is running on
+    os_name = platform.freedesktop_os_release().get("NAME")
+
+    # Run the OS-specific package managers to update the system and their respective packages
+    match os_name:
+        case "Ubuntu":
+            subprocess.run(["sudo", "apt-get", "update"], check=True)
+            subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"], check=True)
+        case "Arch":
+            subprocess.run(
+                [
+                    "sudo",
+                    "pacman",
+                    "--sync",
+                    "--sysupgrade",
+                    "--refresh",
+                    "--noconfirm",
+                ],
+                check=True,
+            )
+        case "Fedora":
+            subprocess.run(["sudo", "dnf", "update"], check=True)
+        case _:
+            raise OSError
+
+    # TODO: Figure a way out to check if either Homebrew/Flatpak/YAY is installed and
+    # invoke them if necessary for updating their packages.
+
+
+if __name__ == "__main__":
+    main()
