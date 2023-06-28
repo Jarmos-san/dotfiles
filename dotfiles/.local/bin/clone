@@ -25,29 +25,40 @@ License: GPL-3.0 (see https://github.com/Jarmos-san/dotfiles/blob/main/LICENSE f
 """
 
 import argparse
+import pathlib
+import subprocess
 
 
 def main() -> None:
     """Invoke the entrypoint of the script."""
-    parser = argparse.ArgumentParser(description="Process some integers.")
+    # Initialise the parser
+    parser = argparse.ArgumentParser(description="Clone a remote GitHub repository!")
+
+    # Add the positional arg "repo" to the "parser" Object
     parser.add_argument(
-        "integers",
-        metavar="N",
-        type=int,
-        nargs="+",
-        help="an integer for the accumulator",
-    )
-    parser.add_argument(
-        "--sum",
-        dest="accumulate",
-        action="store_const",
-        const=sum,
-        default=max,
-        help="sum the integers (default: find the max)",
+        "repo",
+        help='The name of the remote repository, example - "Jarmos-san/dotfiles"',
     )
 
+    # Add the optional flag "--dest" to the "parser" Object
+    parser.add_argument(
+        "--dest",
+        help="The local destination to clone the repository to",
+        required=False,
+        type=pathlib.Path,
+    )
+
+    # Parse all the flags and args to the "clone" script
     args = parser.parse_args()
-    print(args.accumulate(args.integers))
+
+    # Conditional operation to clone repo to a local repository (which can be
+    # optionally passed)
+    if not args.dest:
+        subprocess.run(["git", "clone", f"git@github.com:{args.repo}"], check=True)
+    else:
+        subprocess.run(
+            ["git", "clone", f"git@github.com:{args.repo}", f"{args.dest}"], check=True
+        )
 
 
 if __name__ == "__main__":
