@@ -269,6 +269,7 @@ local plugins = {
   },
 
   {
+    -- Plugin to split a single inside brackets into multiple lines
     "echasnovski/mini.splitjoin",
     event = "BufRead",
     config = function()
@@ -277,6 +278,7 @@ local plugins = {
   },
 
   {
+    -- Plugin to easily a move a line (or a block of lines) vertically or horizontally
     "echasnovski/mini.move",
     event = "BufRead",
     config = function()
