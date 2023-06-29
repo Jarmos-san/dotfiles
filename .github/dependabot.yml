@@ -11,3 +11,14 @@ updates:
       prefix: "🔀"
     labels:
       - "dependencies"
+
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "06:00"
+      timezone: "Asia/Kolkata"
+    commit-message:
+      prefix: "🔀"
+    labels:
+      - "dependencies"
