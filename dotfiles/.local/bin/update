@@ -41,14 +41,22 @@ def update_system(osname: str | None = None) -> None:
             raise OSError(f"Unknown OS: {osname}")
 
 
-def check_homebrew_exists() -> None:
+def is_homebrew_installed() -> bool:
     """Perform a statutory check if Homebrew exists and is executable."""
-    pass
+    try:
+        subprocess.run(["brew", "--version"], stderr=subprocess.STDOUT)
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
 
 
-def check_yay_exists() -> None:
+def check_yay_exists() -> bool:
     """Perform a statutory check if the "yay" package manager exists."""
-    pass
+    try:
+        subprocess.run(["yay", "--version"], stderr=subprocess.STDOUT)
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
 
 
 def main() -> None:
