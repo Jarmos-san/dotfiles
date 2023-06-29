@@ -19,11 +19,11 @@ import textwrap
 
 def parse_arguments() -> argparse.Namespace:
     """Parse the CLI arguments passed to the script."""
-    # Initialise the "parser" Namespace Object to store the argument list
     parser = argparse.ArgumentParser(
         description="Create a template blog post with minimal information to build upon"
     )
 
+    # Positional argument to create a template from the filename passed to the script
     parser.add_argument(
         "filename",
         help='Name of the filename for the blog post, (like "example-blog-post")',
