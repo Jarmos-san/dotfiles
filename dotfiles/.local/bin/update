@@ -67,8 +67,13 @@ def main() -> None:
     update_system(osname=osname)
 
     if is_homebrew_installed():
-        subprocess.run(["brew update"])
-        subprocess.run(["brew upgrade"])
+        subprocess.run(["brew", "update"])
+        subprocess.run(["brew", "upgrade"])
+        subprocess.run(["brew", "autoremove"])
+        subprocess.run(["brew", "cleanup"])
+
+    if is_yay_installed():
+        subprocess.run(["yay", "--sync", "--sysupgrade", "--refresh", "--noconfirm"])
 
 
 if __name__ == "__main__":
