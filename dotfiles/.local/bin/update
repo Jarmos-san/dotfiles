@@ -11,15 +11,6 @@ License: GPL-3.0 (see https://github.com/Jarmos-san/dotfiles/blob/main/LICENSE f
 import platform
 import subprocess
 
-"""
-TODO: Implement the following functionalities/behaviour:
-    1. Check the name of the Operating system to invoke its appropriate package manager.
-    2. Check if certain package manager like Homebrew or Flatpak are also installed, if
-       so invoke them.
-    3. Once all the updates are complete, perform a mandatory cleanup action to free up
-       space.
-"""
-
 
 def get_osname() -> str | None:
     """Fetch the name of the OS the system is running on."""
