@@ -66,8 +66,9 @@ def main() -> None:
     # Perform a system update after identifying the OS the system is running on
     update_system(osname=osname)
 
-    # TODO: Figure a way out to check if either Homebrew/Flatpak/YAY is installed and
-    # invoke them if necessary for updating their packages.
+    if is_homebrew_installed():
+        subprocess.run(["brew update"])
+        subprocess.run(["brew upgrade"])
 
 
 if __name__ == "__main__":
