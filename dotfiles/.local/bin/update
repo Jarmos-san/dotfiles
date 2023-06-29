@@ -8,6 +8,9 @@ License: GPL-3.0 (see https://github.com/Jarmos-san/dotfiles/blob/main/LICENSE f
          information)
 """
 
+import platform
+import subprocess
+
 """
 TODO: Implement the following functionalities/behaviour:
     1. Check the name of the Operating system to invoke its appropriate package manager.
@@ -16,9 +19,6 @@ TODO: Implement the following functionalities/behaviour:
     3. Once all the updates are complete, perform a mandatory cleanup action to free up
        space.
 """
-
-import platform
-import subprocess
 
 
 def main() -> None:
