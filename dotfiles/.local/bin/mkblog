@@ -41,19 +41,52 @@ def parse_arguments() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def create_blogpost_path(filename: str) -> pathlib.Path:
+def create_blogpost_path(filename: pathlib.Path) -> pathlib.Path:
     """Create the blog post's path to write the template to."""
-    pass
+    blogpost = pathlib.Path(
+        f"{pathlib.Path.home()}/Projects/jarmos.dev/_blog/{filename}.md"
+    )
+
+    return blogpost
 
 
-def generate_blogpost_template(slug: str) -> str:
+def generate_blogpost_template(
+    slug: str,
+    cover_image_href: str = "https://picsum.photos/1200/640",
+    cover_image_alt: str = "Lorem ipsum dolor sit amet",
+) -> str:
     """Generate the blog post's template to use when writing one."""
-    pass
+    template = textwrap.dedent(
+        f"""\
+        ---
+        title: {slug.replace('-', " ").title()}
+        summary: |
+            Add a brief description of the blog post in not more than 160-250 words for
+            SEO reasons.
+        description: |
+            Add a brief description of the blog post to showcase on the website itself.
+        slug: {slug}
+        publishedDate: {datetime.datetime.now().strftime('%Y-%m-%d')}
+        image:
+            href: {cover_image_href}
+            alt: {cover_image_alt}
+        ---
+
+        # {slug.replace('-', " ").title()}
+
+        ![{cover_image_alt}]({cover_image_href})
+        """
+    )
+
+    return template
 
 
-def write_blogpost_template() -> None:
+def write_blogpost_template(markdown_file: pathlib.Path, template: str) -> None:
     """Write the contents of the template to a file."""
-    pass
+    with open(markdown_file, "w") as file:
+        file.write(template)
+
+    print(f"Creating {markdown_file}")
 
 
 def main() -> None:
@@ -61,42 +94,19 @@ def main() -> None:
     # Parse the arguments passed to the script during invocation
     args = parse_arguments()
 
-    # Create a filepath Object of the individual blog post
-    blogpost = pathlib.Path(
-        # f"{pathlib.Path.home()}/Projects/jarmos.dev/_blog/{args.filename}.md"
-        f"{pathlib.Path.home()}/.dotfiles/_blog/{args.filename}.md"
-    )
+    # Create a Markdown file (in memory) to write the template contents in to
+    blogpost = create_blogpost_path(filename=args.filename)
 
-    # The Markdown file template's content
-    template = textwrap.dedent(
-        f"""\
-        ---
-        title: Example Blog Post's Title!
-        summary: |
-            Add a brief description of the blog post in not more than 160-250 words for
-            SEO reasons.
-        description: |
-            Add a brief description of the blog post to showcase on the website itself.
-        slug: {blogpost.stem}
-        publishedDate: {datetime.datetime.now().strftime('%Y-%m-%d')}
-        image:
-            href: https://example.com
-            alt: This is the cover image alternate text!
-        ---
-
-        # Example Blog Post's Title
-
-        ![Cover Image Alt Text](https://example.com)
-        """
+    # Generate the template before writing it to the Markdown file
+    template = generate_blogpost_template(
+        slug=blogpost.stem, cover_image_href=args.href, cover_image_alt=args.alt
     )
 
     if blogpost.exists():
         print(f"Not creating blog post template, {blogpost} exists already")
     else:
-        with open(blogpost, "w") as file:
-            file.write(template)
-
-        print(f"Creating {blogpost}")
+        # Write the Markdown to disk (from memory) using the template
+        write_blogpost_template(markdown_file=blogpost, template=template)
 
 
 if __name__ == "__main__":
