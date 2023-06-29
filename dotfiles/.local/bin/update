@@ -50,7 +50,7 @@ def is_homebrew_installed() -> bool:
         return False
 
 
-def check_yay_exists() -> bool:
+def is_yay_installed() -> bool:
     """Perform a statutory check if the "yay" package manager exists."""
     try:
         subprocess.run(["yay", "--version"], stderr=subprocess.STDOUT)
