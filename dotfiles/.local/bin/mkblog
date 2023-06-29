@@ -29,6 +29,15 @@ def parse_arguments() -> argparse.Namespace:
         help='Name of the filename for the blog post, (like "example-blog-post")',
     )
 
+    # Positional argument to handle the cover images of the blog posts
+    cover_image_group = parser.add_argument_group(
+        "cover image", description="Add cover image and its alternate text"
+    )
+    cover_image_group.add_argument("--href", help="The URL of the cover image")
+    cover_image_group.add_argument(
+        "--alt", help="The alternate text of the cover image"
+    )
+
     return parser.parse_args()
 
 
