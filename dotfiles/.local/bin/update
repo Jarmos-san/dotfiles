@@ -21,14 +21,14 @@ TODO: Implement the following functionalities/behaviour:
 """
 
 
-def main() -> None:
-    """Entrypoint of the script."""
-    # Get the name of the OS the system is running on
-    os_name = platform.freedesktop_os_release().get("NAME")
+def get_osname() -> str | None:
+    """Fetch the name of the OS the system is running on."""
+    return platform.freedesktop_os_release().get("NAME")
 
-    # Run the OS-specific package managers to update the system and their respective
-    # packages
-    match os_name:
+
+def update_system(osname: str | None = None) -> None:
+    """Identify the OS and perform a system update."""
+    match osname:
         case "Ubuntu":
             subprocess.run(["sudo", "apt-get", "update"], check=True)
             subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"], check=True)
@@ -47,7 +47,25 @@ def main() -> None:
         case "Fedora":
             subprocess.run(["sudo", "dnf", "update"], check=True)
         case _:
-            raise OSError
+            raise OSError(f"Unknown OS: {osname}")
+
+
+def check_homebrew_exists() -> None:
+    """Perform a statutory check if Homebrew exists and is executable."""
+    pass
+
+
+def check_yay_exists() -> None:
+    """Perform a statutory check if the "yay" package manager exists."""
+    pass
+
+
+def main() -> None:
+    """Entrypoint of the script."""
+    osname = get_osname()
+
+    # Perform a system update after identifying the OS the system is running on
+    update_system(osname=osname)
 
     # TODO: Figure a way out to check if either Homebrew/Flatpak/YAY is installed and
     # invoke them if necessary for updating their packages.
