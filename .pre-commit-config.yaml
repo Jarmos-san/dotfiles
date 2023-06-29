@@ -19,4 +19,10 @@ repos:
       hooks:
           - id: stylua
 
+    - repo: https://github.com/astral-sh/ruff-pre-commit
+      rev: v0.0.275
+      hooks:
+          - id: ruff
+            args: [--fix, --exit-non-zero-on-fix]
+
     # TODO: Add a pre-commit hook for Selene
