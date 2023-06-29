@@ -11,30 +11,83 @@ License: GPL-3.0 (see https://github.com/Jarmos-san/dotfiles/blob/main/LICENSE f
                   information)
 """
 
-"""
-TODO: Design the script to function as follows:
-    1. Check if the website's local repo exists, if not thrown an error and exit.
-    2. If the repo exists then create a template file in the appropriate directory
-       (usually the "_blog" directory).
-    3. With the template file created, write these contents shared below inside a pair
-       "---".
+import argparse
+import datetime
+import pathlib
+import textwrap
 
-TODO: Create a template with these content:
-    1. "title"
-    2. "description"
-    3. "summary" (for SEO reasons)
-    4. "slug" (to create a custom URL for the blog post and one which should also be
-       used to define the filename)
-    5. "publishDate" to show the date of publishing the blog post
-    6. "image" (to add an image for SEO reasons)
-       a. "imageUrl"
-       b. "imageAltTxt"
-"""
+
+def parse_arguments() -> argparse.Namespace:
+    """Parse the CLI arguments passed to the script."""
+    # Initialise the "parser" Namespace Object to store the argument list
+    parser = argparse.ArgumentParser(
+        description="Create a template blog post with minimal information to build upon"
+    )
+
+    parser.add_argument(
+        "filename",
+        help='Name of the filename for the blog post, (like "example-blog-post")',
+    )
+
+    return parser.parse_args()
+
+
+def create_blogpost_path(filename: str) -> pathlib.Path:
+    """Create the blog post's path to write the template to."""
+    pass
+
+
+def generate_blogpost_template(slug: str) -> str:
+    """Generate the blog post's template to use when writing one."""
+    pass
+
+
+def write_blogpost_template() -> None:
+    """Write the contents of the template to a file."""
+    pass
 
 
 def main() -> None:
     """Entrypoint function of the script."""
-    print("hello world!")
+    # Parse the arguments passed to the script during invocation
+    args = parse_arguments()
+
+    # Create a filepath Object of the individual blog post
+    blogpost = pathlib.Path(
+        # f"{pathlib.Path.home()}/Projects/jarmos.dev/_blog/{args.filename}.md"
+        f"{pathlib.Path.home()}/.dotfiles/_blog/{args.filename}.md"
+    )
+
+    # The Markdown file template's content
+    template = textwrap.dedent(
+        f"""\
+        ---
+        title: Example Blog Post's Title!
+        summary: |
+            Add a brief description of the blog post in not more than 160-250 words for
+            SEO reasons.
+        description: |
+            Add a brief description of the blog post to showcase on the website itself.
+        slug: {blogpost.stem}
+        publishedDate: {datetime.datetime.now().strftime('%Y-%m-%d')}
+        image:
+            href: https://example.com
+            alt: This is the cover image alternate text!
+        ---
+
+        # Example Blog Post's Title
+
+        ![Cover Image Alt Text](https://example.com)
+        """
+    )
+
+    if blogpost.exists():
+        print(f"Not creating blog post template, {blogpost} exists already")
+    else:
+        with open(blogpost, "w") as file:
+            file.write(template)
+
+        print(f"Creating {blogpost}")
 
 
 if __name__ == "__main__":
