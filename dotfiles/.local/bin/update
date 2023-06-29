@@ -24,7 +24,7 @@ def update_system(osname: str | None = None) -> None:
             subprocess.run(["sudo", "apt-get", "update"], check=True)
             subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"], check=True)
             subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
-        case "Arch":
+        case "Arch" | "elementary OS":
             subprocess.run(
                 [
                     "sudo",
