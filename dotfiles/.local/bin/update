@@ -62,10 +62,7 @@ def is_yay_installed() -> bool:
 
 def main() -> None:
     """Entrypoint of the script."""
-    osname = get_osname()
-
-    # Perform a system update after identifying the OS the system is running on
-    update_system(osname=osname)
+    update_system(get_osname())
 
     if is_homebrew_installed():
         subprocess.run(["brew", "update"])
