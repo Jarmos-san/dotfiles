@@ -29,9 +29,8 @@ import pathlib
 import subprocess
 
 
-def main() -> None:
-    """Invoke the entrypoint of the script."""
-    # Initialise the parser
+def parse_args() -> argparse.Namespace:
+    """Parse the arguments passed to the script and return a Namespace Object."""
     parser = argparse.ArgumentParser(description="Clone a remote GitHub repository!")
 
     # Add the positional arg "repo" to the "parser" Object
@@ -48,8 +47,13 @@ def main() -> None:
         type=pathlib.Path,
     )
 
+    return parser.parse_args()
+
+
+def main() -> None:
+    """Invoke the entrypoint of the script."""
     # Parse all the flags and args to the "clone" script
-    args = parser.parse_args()
+    args = parse_args()
 
     # Conditional operation to clone repo to a local repository (which can be
     # optionally passed)
