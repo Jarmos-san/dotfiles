@@ -26,6 +26,7 @@ License: GPL-3.0 (see https://github.com/Jarmos-san/dotfiles/blob/main/LICENSE f
 
 import argparse
 import pathlib
+import re
 import subprocess
 
 
@@ -50,19 +51,41 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def validate_repo_format(repo: str) -> None:
+    """Validate the format of the repo argument using regular expressions."""
+    pattern = r"^[A-Za-z0-9-]+/[A-Za-z0-9-]+$"
+
+    if not re.match(pattern, repo):
+        raise ValueError(
+            'The "repo" argument should be in the format "username/repository".'
+        )
+
+
+def invoke_git_clone(
+    repo: argparse.Namespace, destination: argparse.Namespace | None
+) -> None:
+    """Wrapr the "git-clone" command for invocation."""
+    if not destination:
+        subprocess.run(
+            ["git", "clone", f"git@github.com:{repo}", f"{destination}"],
+            check=True,
+        )
+    else:
+        subprocess.run(
+            ["git", "clone", f"git@github.com:{repo}", f"{destination}"], check=True
+        )
+
+
 def main() -> None:
     """Invoke the entrypoint of the script."""
     # Parse all the flags and args to the "clone" script
     args = parse_args()
 
-    # Conditional operation to clone repo to a local repository (which can be
-    # optionally passed)
-    if not args.dest:
-        subprocess.run(["git", "clone", f"git@github.com:{args.repo}"], check=True)
-    else:
-        subprocess.run(
-            ["git", "clone", f"git@github.com:{args.repo}", f"{args.dest}"], check=True
-        )
+    # Validate the value passed to the "repo" positional argument is proper
+    validate_repo_format(args.repo)
+
+    # Invoke the "git-clone" command if the validation passes
+    invoke_git_clone(repo=args.repo, destination=args.dest)
 
 
 if __name__ == "__main__":
