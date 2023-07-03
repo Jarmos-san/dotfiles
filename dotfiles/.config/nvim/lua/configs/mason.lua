@@ -10,7 +10,6 @@ local mason_packages = {
   "eslint_d",
   "json-lsp",
   "lua-language-server",
-  "mypy",
   "prettier",
   "pyright",
   "ruff",
