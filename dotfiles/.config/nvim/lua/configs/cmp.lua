@@ -144,7 +144,25 @@ M.config = function()
       { name = "luasnip" },
       { name = "nvim_lua" },
       { name = "path" },
-      { name = "buffer" },
+      {
+        name = "buffer",
+        option = {
+          keyword_length = 6,
+          -- The following configurations helps in improving the performance to an extent.
+          -- See the following documentations for information in this regards:
+          -- https://github.com/hrsh7th/cmp-buffer#performance-on-large-text-files
+          get_bufnrs = function()
+            local buf = vim.api.nvim_get_current_buf()
+            local byte_size = vim.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
+
+            if byte_size > 1024 * 1024 then
+              return {}
+            end
+
+            return { buf }
+          end,
+        },
+      },
     },
   })
 
