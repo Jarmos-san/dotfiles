@@ -61,6 +61,9 @@ M.config = function()
     diagnostics.ruff.with({ -- Super fast diagnostics tool for Python files
       prefer_local = ".venv/bin", -- Prefer using the virtual environment local binary for better project identification
     }),
+    formatting.ruff.with({ -- Super fast formatting tool for Python files
+      prefer_local = ".venv/bin", -- Prefer using the virtual environment local binary for better project identification
+    }),
     formatting.prettier.with({ -- Formatter for web dev files
       prefer_local = "node_modules/.bin",
       extra_args = { "--prose-wrap", "always" },
