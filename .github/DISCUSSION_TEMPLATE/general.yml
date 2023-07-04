@@ -1,0 +1,8 @@
+title: "[General Discussion] "
+labels: ["discussion"]
+body:
+  - type: markdown
+    attributes:
+      value: Share your ideas or questions or random banter here!
+    validations:
+      required: true
