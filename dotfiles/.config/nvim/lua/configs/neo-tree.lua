@@ -44,7 +44,18 @@ M.options = {
     filtered_items = {
       hide_dotfiles = false,
       hide_gitignored = true,
-      never_show = { ".git", ".null-ls_*" },
+      never_show = {
+        ".git",
+        ".null-ls_*",
+        ".mypy_cache",
+        ".venv",
+        "__pycache__",
+        ".coverage",
+        ".pytest_cache",
+        ".ruff_cache",
+        ".task",
+      },
+      hide_by_name = { "__init__.py" },
     },
   },
   window = {
