@@ -377,6 +377,17 @@ local plugins = {
       })
     end,
   },
+
+  { -- Plugin to generate ".gitignore" files more easily
+    "wintermute-cell/gitignore.nvim",
+    cmd = "Gitignore",
+  },
+
+  {
+    -- Plugin to show the diagnostics messages in a floating window
+    "dgagn/diagflow.nvim",
+    event = { "BufRead", "BufNewFile" },
+  },
 }
 
 return plugins
