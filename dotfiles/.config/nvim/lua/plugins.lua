@@ -3,6 +3,7 @@
 -- https://github.com/folke/lazy.nvim#-structuring-your-plugins
 
 -- TODO: Explore the following plugins & decide to use them or not
+-- "dgagn/diagflow.nvim" to enable pretty floating window diagnostic messages
 -- "JellyApple102/flote.nvim", -- Plugin to take simple & disposable Markdown notes
 -- Add TailwindCSS support for highlighting the colour codes. Take a look at the code below for inspiration:
 -- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/util/mini-hipatterns.lua
@@ -227,14 +228,15 @@ local plugins = {
     end,
   },
 
-  {
-    -- Plugin to animate some events within Neovim
-    "echasnovski/mini.animate",
-    priority = 9000,
-    config = function()
-      require("mini.animate").setup()
-    end,
-  },
+  -- {
+  --   -- FIXME: Causes a momentary flash of background colour distortion.
+  --   -- Issue tracked at - https://github.com/Jarmos-san/dotfiles/issues/16
+  --   -- Plugin to animate some events within Neovim
+  --   "echasnovski/mini.animate",
+  --   config = function()
+  --     require("mini.animate").setup()
+  --   end,
+  -- },
 
   {
     -- Plugin to remove and/or delete buffers easily
@@ -381,12 +383,6 @@ local plugins = {
   { -- Plugin to generate ".gitignore" files more easily
     "wintermute-cell/gitignore.nvim",
     cmd = "Gitignore",
-  },
-
-  {
-    -- Plugin to show the diagnostics messages in a floating window
-    "dgagn/diagflow.nvim",
-    event = { "BufRead", "BufNewFile" },
   },
 }
 
