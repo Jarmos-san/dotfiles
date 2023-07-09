@@ -7,9 +7,7 @@ M.init = function()
   -- Setup the LSP plugin to log only error messages else the log file grows too large eventually!
   vim.lsp.set_log_level("error")
   vim.diagnostic.config({
-    virtual_text = false, -- Disable the inline diagnostic message
     underline = true, -- Show diagnostic errors with a squigly underline
-    signs = false, -- Disable the diagnostic signs in the number column to keep the UI clean
     update_in_insert = true, -- Update the diagnostic message even when in Insert mode
     severity_sort = true, -- Configure Neovim to sort the error messages according to the severity.
   })
