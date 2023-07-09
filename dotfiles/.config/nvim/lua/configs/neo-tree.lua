@@ -59,7 +59,8 @@ M.options = {
     },
   },
   window = {
-    width = "30", -- Hard-code the size of the window width
+    width = "50", -- Hard-code the size of the window width
+    position = "right",
   },
 }
 
