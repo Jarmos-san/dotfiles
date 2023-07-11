@@ -265,7 +265,7 @@ function install_homebrew_packages() {
   # The formulae are mostly CLI tools easily installable through
   # Linuxbrew
   readonly formulae=(
-    "act" "azure-cli" "btop" "cmatrix" "exa" "fd" "gcc" "gh" "glow" "httpie"
+    "azure-cli" "btop" "cmatrix" "exa" "fd" "gcc" "gh" "glow" "httpie"
     "lua@5.1" "mdbook" "neofetch" "neovim" "oci-cli" "poetry" "pre-commit"
     "ripgrep" "rustup-init" "starship" "shellcheck" "stow" "zsh"
   )
