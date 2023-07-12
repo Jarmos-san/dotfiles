@@ -389,6 +389,20 @@ local plugins = {
     "wintermute-cell/gitignore.nvim",
     cmd = "Gitignore",
   },
+
+  {
+    -- Plugin for smooth scrolling inside buffers
+    -- NOTE: This plugin is only temporary until there is a fix for this issue:
+    -- https://github.com/Jarmos-san/dotfiles/issues/16
+    "karb94/neoscroll.nvim",
+    event = { "BufRead", "BufNewFile" },
+    config = function()
+      require("neoscroll").setup({
+        respect_scrolloff = true,
+        cursor_scrolls_alone = false,
+      })
+    end,
+  },
 }
 
 return plugins
