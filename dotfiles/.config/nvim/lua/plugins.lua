@@ -122,8 +122,8 @@ local plugins = {
 
   {
     -- Plugin for better TypeScript LSP support & more
-    "jose-elias-alvarez/typescript.nvim",
-    event = "BufRead",
+    "pmizio/typescript-tools.nvim",
+    event = { "BufRead", "BufNewFile" },
     ft = { "typescript", "typescriptreact" },
   },
 
