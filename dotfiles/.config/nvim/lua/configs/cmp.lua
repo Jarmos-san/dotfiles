@@ -11,13 +11,6 @@ M.config = function()
   -- FIXME: Not sure what it exactly does.
   -- require("cmp_luasnip_choice").setup({ auto_open = true })
 
-  luasnip.setup({
-    region_check_events = "InsertEnter",
-    delete_check_events = "InsertEnter",
-  })
-
-  require("luasnip.loaders.from_vscode").lazy_load()
-
   -- Check if there any preceeding words to either autocomplete or place Tab characters
   local has_words_before = function()
     local _, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -71,9 +64,6 @@ M.config = function()
         return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment")
       end
     end,
-    -- view = {
-    --   entries = { name = 'custom', selection_order = 'near_cursor' }
-    -- }
     preselect = cmp.PreselectMode.Item,
     sorting = {
       comparators = {
@@ -93,7 +83,6 @@ M.config = function()
     },
     window = {
       completion = cmp.config.window.bordered(),
-      -- documentation = cmp.config.window.bordered(),
       documentation = cmp.config.disable,
     },
     formatting = {
@@ -116,15 +105,15 @@ M.config = function()
       ["<C-y>"] = cmp.config.disable,
       ["<C-e>"] = cmp.mapping.abort(),
       ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
-      ["<Tab>"] = cmp.mapping(function()
+      ["<Tab>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_next_item()
-        elseif luasnip.expand_or_jumpable() then
+        elseif luasnip.expand_or_locally_jumpable() then
           luasnip.expand_or_jump()
         elseif has_words_before() then
           cmp.complete()
         else
-          vim.fn.feedkeys("\t", "n")
+          fallback()
         end
       end, { "i", "s" }),
       ["<S-Tab>"] = cmp.mapping(function()
