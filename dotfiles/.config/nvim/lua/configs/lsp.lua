@@ -15,7 +15,7 @@ end
 
 M.config = function()
   local lspconfig = require("lspconfig")
-  local typescript_ls = require("typescript")
+  local typescript_ls = require("typescript-tools")
   local rust_ls = require("rust-tools")
 
   -- Add rounded borders to the LSP flaoting windows
@@ -119,7 +119,8 @@ M.config = function()
 
   -- LSP configurations for TypeScript projects
   typescript_ls.setup({
-    server = { on_attach = on_attach },
+    on_attach = on_attach,
+    capabilities = capabilities,
   })
 
   -- LSP configurations for Rust projects
