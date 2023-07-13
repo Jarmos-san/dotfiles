@@ -344,15 +344,8 @@ local plugins = {
     -- Plugin for VSCode-like snippets powered by Neovim's in-built LSP.
     "L3MON4D3/LuaSnip",
     event = "InsertEnter",
-    dependencies = {
-      "neovim/nvim-lspconfig",
-      "hrsh7th/nvim-cmp",
-      -- "rafamadriz/friendly-snippets",
-    },
     build = "make jsregexp",
-    config = function()
-      require("luasnip.loaders.from_vscode").lazy_load()
-    end,
+    config = require("configs.luasnip").config,
   },
 
   {
