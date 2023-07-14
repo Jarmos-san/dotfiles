@@ -23,7 +23,7 @@ the contents of this repository.
 Running the automation script below to setup everything:
 
 ```console
-curl -fsSL "https://tinyurl.com/setup-dots" | bash -c
+bash -c "$(curl -fsSL 'https://tinyurl.com/setup-dots')"
 ```
 
 <details>
