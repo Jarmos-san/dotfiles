@@ -37,7 +37,7 @@ wk.register({
   -- Keymaps to manage the inbuilt terminal within Neovim itself
   ["<leader>t"] = {
     name = "+Terminal",
-    t = { "<cmd>TermRun zsh<cr>", "Toggle the terminal open/close" },
+    t = { "<cmd>TermOpen<cr>", "Toggle the terminal open/close" },
   },
   -- VSCode-like quick file management UI
   ["<leader>f"] = {
