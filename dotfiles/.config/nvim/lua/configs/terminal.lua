@@ -36,13 +36,8 @@ end
 
 M.config = function()
   require("terminal").setup({
-    layout = {
-      -- Open the terminal in a vertical split
-      open_cmd = "vnew",
-    },
-    -- cmd = { vim.o.shell },
-    -- Close the terminal as well when the shell process is exited
-    -- autoclose = false,
+    -- Open the terminal in a vertical split
+    layout = { open_cmd = "vnew" },
   })
 end
 
