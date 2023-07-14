@@ -57,7 +57,6 @@ wk.register({
   -- Easier & quicker buffer management keymaps
   ["<leader>b"] = {
     name = "+Buffer",
-    -- d = { "<cmd>lua require('bufdelete').bufdelete(o, true)<cr>", "Delete the current buffer" },
     d = { bdelete, "Delete the current buffer" },
     l = { "<cmd>Telescope buffers<cr>", "List all loaded buffers" },
     n = { "<cmd>bnext<cr>", "Load the next hidden buffer" },
