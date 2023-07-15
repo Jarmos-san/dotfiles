@@ -49,6 +49,11 @@ local configs = {
   autotag = { -- Enable adding automatic HTML/JSX closing tags based on Treesitter queries
     enable = true,
   },
+  pairs = { -- Enable bracket pair highlighting
+    enable = true,
+    -- highlight_pair_events = { "CursorMoved" },
+    highlight_pair_events = { "CursorMoved" },
+  },
 }
 
 M.setup = function()
