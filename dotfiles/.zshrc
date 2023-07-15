@@ -55,11 +55,12 @@ unset plugins
 
 # Configure some ZSH keybinds only if using the Kitty terminal
 if [[ $TERM == "kitty-xterm" ]]; then
-  # Move to the end of the line when pressing the "End" key
   bindkey "^[[4~" end-of-line
-
-  # Move to the start of the line when pressing the "Home" key
   bindkey "^[[1~" beginning-of-line
+else
+  bindkey "^[[H" beginning-of-line
+  bindkey "^[[F" end-of-line
+  bindkey "^[[3~" delete-char
 fi
 
 #############################################################################
