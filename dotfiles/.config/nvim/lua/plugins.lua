@@ -7,6 +7,7 @@
 -- "JellyApple102/flote.nvim", -- Plugin to take simple & disposable Markdown notes
 -- Add TailwindCSS support for highlighting the colour codes. Take a look at the code below for inspiration:
 -- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/util/mini-hipatterns.lua
+-- https://github.com/nvim-treesitter/nvim-treesitter-refactor
 
 local plugins = {
   {
@@ -376,6 +377,7 @@ local plugins = {
         with_sync = true,
       })
     end,
+    dependencies = { "theHamsta/nvim-treesitter-pairs" },
   },
 
   { -- Plugin to generate ".gitignore" files more easily
