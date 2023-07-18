@@ -4,8 +4,8 @@ local M = {}
 
 -- List of filetypes where the colour column should be disabled for readability concerns.
 local disable_filetypes = {
-  "alpha",
   "checkhealth",
+  "dosini",
   "gitattributes",
   "gitconfig",
   "gitignore",
