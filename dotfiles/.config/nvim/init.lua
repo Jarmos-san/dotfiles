@@ -67,6 +67,7 @@ vim.cmd.colorscheme("onedark")
 -- vim.cmd.colorscheme("catppuccin")
 
 -- TODO: Figure a way out to move these highlights to a separate file elsewhere(?)
+-- INFO: Provide a slight grayish highlight to the current line number on the right side
 highlight(0, "CursorLineNr", { guibg = nil, guifg = nil })
 highlight(0, "CursorLine", { guibg = nil })
 
