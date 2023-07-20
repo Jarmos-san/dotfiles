@@ -55,6 +55,12 @@ M.config = function()
   }
 
   cmp.setup({
+    view = {
+      entries = {
+        name = "custom",
+        selection_order = "near_cursor",
+      },
+    },
     enabled = function()
       local context = require("cmp.config.context")
 
