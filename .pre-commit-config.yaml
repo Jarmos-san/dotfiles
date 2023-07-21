@@ -12,17 +12,20 @@ repos:
       rev: 3.0.0
       hooks:
           - id: shfmt
+            name: format shell scripts
             args: ["-i 2 -ci -bn"]
 
     - repo: https://github.com/JohnnyMorganz/StyLua
-      rev: v0.17.1
+      rev: v0.18.1
       hooks:
           - id: stylua
+            name: format lua files
 
     - repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.0.275
+      rev: v0.0.278
       hooks:
           - id: ruff
+            name: format/lint python files
             args: [--fix, --exit-non-zero-on-fix]
 
     # TODO: Add a pre-commit hook for Selene
