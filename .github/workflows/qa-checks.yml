@@ -55,7 +55,7 @@ jobs:
         run: |
           gh release download --repo Kampfkarren/selene --pattern "selene-light-*-linux.zip"
           unzip "selene-light-*-linux.zip"
-          cp selene /usr/local/bin/
+          cp selene /usr/local/bin/ && chmod u+x /usr/local/bin/selene
           echo "Downloaded Selene v$(selene --version | grep --only-matching --perl-regexp '\d+\.\d+\.\d+')"
 
       - name: Run Selene to lint Lua code
