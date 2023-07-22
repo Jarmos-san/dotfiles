@@ -68,8 +68,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Download and Setup Selene
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release download --repo astral-sh/ruff --pattern "ruff-x86_64-unknown-linux-gnu.tar.gz"
+          tar --extract --file "ruff-x86_64-unknown-linux-gnu.tar.gz"
+          cp ruff /usr/local/bin/
+          echo "Downloaded Ruff v$(ruff --version | grep --only-matching --perl-regexp '\d+\.\d+\.\d+')"
+
       - name: Run the Ruff Linter for Python Code
-        uses: chartboost/ruff-action@v1
+        run: ruff .
 
   runBlackFormatter:
     name: Format Python Files
