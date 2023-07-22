@@ -1,7 +1,7 @@
 name: QA Checks
 
 on:
-  - workflow_dispatch
+  workflow_dispatch:
 
 jobs:
   runShellCheck:
