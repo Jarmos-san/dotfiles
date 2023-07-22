@@ -1,0 +1,93 @@
+name: QA Checks
+
+on:
+  push:
+
+jobs:
+  runShellCheck:
+    name: Lint Shell Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Download and Setup Shellcheck
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release download --repo koalaman/shellcheck --pattern "*.linux.x86_64.tar.xz"
+          tar --extract --file shellcheck*.tar.xz
+          cp shellcheck*/shellcheck /usr/local/bin/
+          echo "Downloaded Shellcheck v$(shellcheck --version | grep --only-matching --perl-regexp '\d+\.\d+\.\d+')"
+
+      - name: Run Shellcheck
+        run: shellcheck "setup"
+
+  runStyLua:
+    name: Format Lua Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Download and Setup Stylua
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release download --repo JohnnyMorganz/StyLua --pattern "stylua-linux-x86_64.zip"
+          unzip "stylua-linux-x86_64.zip"
+          cp stylua /usr/local/bin/
+          echo "Downloaded Stylua v$(stylua --version | grep --only-matching --perl-regexp '\d+\.\d+\.\d+')"
+
+      - name: Run the Stylua formatter for Lua code
+        run: stylua . --check
+
+  runSeleneLinter:
+    name: Lint Lua Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Download and Setup Selene
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release download --repo Kampfkarren/selene --pattern "selene-light-*-linux.zip"
+          unzip "selene-light-*-linux.zip"
+          cp selene /usr/local/bin/ && chmod u+x /usr/local/bin/selene
+          echo "Downloaded Selene v$(selene --version | grep --only-matching --perl-regexp '\d+\.\d+\.\d+')"
+
+      - name: Run Selene to Lint Lua Code
+        run: selene .
+
+  runRuff:
+    name: Lint Python Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Download and Setup Selene
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release download --repo astral-sh/ruff --pattern "ruff-x86_64-unknown-linux-gnu.tar.gz"
+          tar --extract --file "ruff-x86_64-unknown-linux-gnu.tar.gz"
+          cp ruff /usr/local/bin/
+          echo "Downloaded Ruff v$(ruff --version | grep --only-matching --perl-regexp '\d+\.\d+\.\d+')"
+
+      - name: Run the Ruff Linter for Python Code
+        run: ruff .
+
+  runBlackFormatter:
+    name: Format Python Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Run the Black Formatter on Python Files
+        run: |
+          pip install black
+          black . --check
