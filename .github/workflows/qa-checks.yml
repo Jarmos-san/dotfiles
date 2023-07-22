@@ -53,8 +53,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release download --repo Kampfkarren/selene --pattern "selene-*-linux.zip"
-          unzip "selene-*-linux.zip"
+          gh release download --repo Kampfkarren/selene --pattern "selene-light-*-linux.zip"
+          unzip "selene-light-*-linux.zip"
           cp selene /usr/local/bin/
           echo "Downloaded Selene v$(selene --version | grep --only-matching --perl-regexp '\d+\.\d+\.\d+')"
 
