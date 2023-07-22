@@ -46,7 +46,7 @@ jobs:
     name: Lint Lua Files
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Download and Setup Selene
@@ -58,27 +58,27 @@ jobs:
           cp selene /usr/local/bin/ && chmod u+x /usr/local/bin/selene
           echo "Downloaded Selene v$(selene --version | grep --only-matching --perl-regexp '\d+\.\d+\.\d+')"
 
-      - name: Run Selene to lint Lua code
+      - name: Run Selene to Lint Lua Code
         run: selene .
 
   runRuff:
-    name: Lint Python files
+    name: Lint Python Files
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Run the Ruff linter for Python code
+      - name: Run the Ruff Linter for Python Code
         uses: chartboost/ruff-action@v1
 
   runBlackFormatter:
-    name: Format Python files
+    name: Format Python Files
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Run the Black formatter on Python files
+      - name: Run the Black Formatter on Python Files
         run: |
           pip install black
           black .
