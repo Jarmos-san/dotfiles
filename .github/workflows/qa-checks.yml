@@ -18,7 +18,8 @@ jobs:
           gh release download --repo koalaman/shellcheck --pattern "*.linux.x86_64.tar.xz"
           tar --extract --file shellcheck*.tar.xz
           cp shellcheck*/shellcheck /usr/local/bin/
-          echo "Downloaded Shellcheck v$(shellcheck --version | grep -oP '\d+\.\d+\.\d+')"
+          echo "Downloaded Shellcheck v$(shellcheck --version
+            | grep --only-matching --perl-regexp '\d+\.\d+\.\d+')"
 
       - name: Run Shellcheck
         run: shellcheck "setup"
@@ -37,7 +38,8 @@ jobs:
           gh release download --repo JohnnyMorganz/StyLua --pattern "stylua-linux-x86_64.zip"
           unzip "stylua-linux-x86_64.zip"
           cp stylua /usr/local/bin/
-          echo "Downloaded Stylua v$(stylua --version | grep -oP '\d+\.\d+\.\d+')"
+          echo "Downloaded Stylua v$(stylua --version
+            | grep --only-matching --perl-regexp '\d+\.\d+\.\d+')"
 
       - name: Run the Stylua formatter for Lua code
         run: stylua . --check
@@ -49,12 +51,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Download and Setup Selene
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release download --repo Kampfkarren/selene --pattern "selene-*-linux.zip"
+          unzip "selene-*-linux.zip"
+          cp selene /usr/local/bin/
+          echo "Downloaded Selene v$(selene --version
+            | grep --only-matching --perl-regexp '\d+\.\d+\.\d+')"
+
       - name: Run Selene to lint Lua code
-        uses: NTBBloodbath/selene-action@v1.0.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          args: dotfiles
-          version: 0.16.0
+        run: selene .
 
   runRuff:
     name: Lint Python files
