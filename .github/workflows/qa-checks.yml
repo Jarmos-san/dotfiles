@@ -90,4 +90,4 @@ jobs:
       - name: Run the Black Formatter on Python Files
         run: |
           pip install black
-          black .
+          black . --check
