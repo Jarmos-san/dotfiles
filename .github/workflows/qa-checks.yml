@@ -18,7 +18,7 @@ jobs:
           gh release download --repo koalaman/shellcheck --pattern "*.linux.x86_64.tar.xz"
           tar --extract --file shellcheck*.tar.xz
           cp shellcheck*/shellcheck /usr/local/bin/
-          echo "Downloaded Shellcheck v{$(shellcheck --version)}"
+          echo "Downloaded Shellcheck v$(shellcheck --version | grep -oP '\d+\.\d+\.\d+')"
 
       - name: Run Shellcheck
         run: shellcheck "setup"
@@ -37,10 +37,10 @@ jobs:
           gh release download --repo JohnnyMorganz/StyLua --pattern "stylua-linux-x86_64.zip"
           unzip "stylua-linux-x86_64.zip"
           cp stylua /usr/local/bin/
-          echo "Downloaded Stylua v{$(stylua --version)}"
+          echo "Downloaded Stylua v$(stylua --version | grep -oP '\d+\.\d+\.\d+')"
 
       - name: Run the Stylua formatter for Lua code
-        run: stylua .
+        run: stylua . --check
 
   runSeleneLinter:
     name: Lint Lua Files
