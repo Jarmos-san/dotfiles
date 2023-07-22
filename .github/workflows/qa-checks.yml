@@ -1,7 +1,6 @@
 name: QA Checks
 
 on:
-  - push
   - workflow_dispatch
 
 jobs:
@@ -35,7 +34,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release download --repo JohnnyMorganz/StyLua --pattern "stylua*.tar.xz"
+          gh release download --repo JohnnyMorganz/StyLua --pattern "stylua-linux-x86_64.zip"
           unzip "stylua-linux-x86_64.zip"
           cp stylua /usr/local/bin/
           echo "Downloaded Stylua v{$(stylua --version)}"
