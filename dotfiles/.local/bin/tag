@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+"""
+Simple script to make Git tagging easier.
+
+The script intelligently identifies the project configuration file (like "package.json"
+or "pyproject.toml"), updates the project version and applies a Git Tag as well!
+
+Author: Somraj Saha
+License: MIT License
+"""
+
+# TODO: Script is a Work-in-Progress
+
+from pathlib import Path
+
+CWD = Path(".")
+
+
+def main() -> None:
+    """Entrypoint of the script."""
+    config_files = ("package.json", "pyproject.toml", "Cargo.toml")
+
+    for file in config_files:
+        Path(file).is_file()
+
+    is_git_repo = Path("./.git").is_dir()
+
+    if not is_git_repo:
+        print("Not a local Git repository!")
+
+
+if __name__ == "__main__":
+    main()
