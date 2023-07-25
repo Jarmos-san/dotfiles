@@ -40,7 +40,9 @@ M.options = {
   filesystem = {
     hijack_netrw_behaviour = "open_current", -- Use the plugin instead of the default "netrw" plugin
     bind_to_cwd = false,
-    follow_current_file = true,
+    follow_current_file = {
+      enable = true,
+    },
     filtered_items = {
       hide_dotfiles = false,
       hide_gitignored = true,
