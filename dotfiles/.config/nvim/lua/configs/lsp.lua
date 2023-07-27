@@ -25,6 +25,7 @@ M.config = function()
     local map = vim.keymap.set
     local opts = { noremap = true, silent = true }
 
+    -- TODO: Configure the following keymappings to use the WhichKey plugin instead for better identification
     map("n", "gD", vim.lsp.buf.declaration, opts)
     map("n", "gd", vim.lsp.buf.definition, opts)
     map("n", "K", vim.lsp.buf.hover, opts)
