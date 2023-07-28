@@ -9,20 +9,10 @@ M.config = function()
   local formatting = null_ls.builtins.formatting
   local code_actions = null_ls.builtins.code_actions
 
-  -- Utility wrapper to make configuring the native vim.lsp.buf.format() function easier to use
-  local lsp_formatting = function()
-    vim.lsp.buf.format({
-      filter = function(client)
-        -- apply whatever logic you want (in this example, we'll only use null-ls)
-        return client.name == "null-ls"
-      end,
-      async = false,
-    })
-  end
-
   -- Callback function to invoke after the Null-Ls is up & running
-  local on_attach = function(client, bufnr)
+  local on_attach = function(client, _)
     local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+    local bufnr = vim.api.nvim_get_current_buf()
 
     -- Check if the LSP supports formatting capabilities
     if client.supports_method("textDocument/formatting") then
@@ -31,7 +21,13 @@ M.config = function()
         group = augroup,
         buffer = bufnr,
         callback = function()
-          lsp_formatting()
+          vim.lsp.buf.format({
+            filter = function()
+              -- apply whatever logic you want (in this example, we'll only use null-ls)
+              return client.name == "null-ls"
+            end,
+            async = false,
+          })
         end,
       })
     end
