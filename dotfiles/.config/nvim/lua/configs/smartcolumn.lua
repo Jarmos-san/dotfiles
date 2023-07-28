@@ -15,6 +15,7 @@ local disable_filetypes = {
   "mason",
   "mdx",
   "lazy",
+  "log",
   "lspinfo",
   "sh",
   "starter",
