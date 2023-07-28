@@ -17,6 +17,7 @@ M.config = function()
         return client.name == "null-ls"
       end,
       bufnr = bufnr,
+      async = false,
     })
   end
 
