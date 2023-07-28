@@ -88,7 +88,13 @@ M.config = function()
   }
 
   -- Initialise the plugin with the aforementioned configurations
-  null_ls.setup({ border = "rounded", on_attach = on_attach, sources = sources })
+  null_ls.setup({
+    -- INFO: Only uncomment the following when debugging issues with Null-ls
+    -- debug = true,
+    border = "rounded",
+    on_attach = on_attach,
+    sources = sources,
+  })
 end
 
 return M
