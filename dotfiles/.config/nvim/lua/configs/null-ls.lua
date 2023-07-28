@@ -10,13 +10,12 @@ M.config = function()
   local code_actions = null_ls.builtins.code_actions
 
   -- Utility wrapper to make configuring the native vim.lsp.buf.format() function easier to use
-  local lsp_formatting = function(bufnr)
+  local lsp_formatting = function()
     vim.lsp.buf.format({
       filter = function(client)
         -- apply whatever logic you want (in this example, we'll only use null-ls)
         return client.name == "null-ls"
       end,
-      bufnr = bufnr,
       async = false,
     })
   end
@@ -32,7 +31,7 @@ M.config = function()
         group = augroup,
         buffer = bufnr,
         callback = function()
-          lsp_formatting(bufnr)
+          lsp_formatting()
         end,
       })
     end
