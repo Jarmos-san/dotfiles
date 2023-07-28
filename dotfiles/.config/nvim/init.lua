@@ -88,6 +88,7 @@ highlight(0, "CmpItemKindUnit", { link = "CmpItemKindKeyword" })
 vim.filetype.add({
   extension = {
     mdx = "mdx",
+    log = "log",
   },
 })
 
