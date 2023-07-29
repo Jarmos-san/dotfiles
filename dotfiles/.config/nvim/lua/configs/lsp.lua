@@ -35,17 +35,16 @@ M.config = function()
         T = { vim.lsp.buf.type_definition, "Get the type definition" },
         r = { vim.lsp.buf.rename, "Rename the object under the cursor" },
         R = { vim.lsp.buf.references, "Jump to the reference of the object" },
+        c = { vim.lsp.buf.code_action, "Open available code actions" },
+        d = { vim.lsp.buf.definition, "Jump to object definition" },
+      },
+      ["<leader>w"] = {
+        name = "+Workspace",
+        a = { vim.lsp.buf.add_workspace_folder, "Add workspace folder" },
+        r = { vim.lsp.buf.remove_workspace_folder, "Remove workspace folder" },
+        l = { vim.inspect(vim.lsp.buf.list_workspace_folders), "List workspace folder" },
       },
     })
-
-    -- TODO: Configure the following keymappings to use the WhichKey plugin instead for better identification
-    -- map("n", "gd", vim.lsp.buf.definition, opts)
-    -- map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
-    -- map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
-    -- map("n", "<Leader>wl", function()
-    --   print(vim.inspect(vim.lsp.buf.list_workspace_folder))
-    -- end, opts)
-    -- map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
 
     -- Configurations for showing diagnostics in a hover window instead. See the documentations at:
     -- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#show-line-diagnostics-automatically-in-hover-window

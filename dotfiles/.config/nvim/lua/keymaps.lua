@@ -64,7 +64,7 @@ wk.register({
   -- Keymaps to manage & show LSP stuff
   ["<leader>l"] = {
     name = "+LSP",
-    d = { "<cmd>TroubleToggle<cr>", "Toggle open/close the diagnostics list" },
+    t = { "<cmd>TroubleToggle<cr>", "Toggle open/close the diagnostics list" },
   },
 })
 
