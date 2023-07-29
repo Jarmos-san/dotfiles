@@ -250,6 +250,18 @@ local plugins = {
     event = "VimEnter",
     config = function()
       local starter = require("mini.starter")
+      local header = [[
+##   ##  #######   #####   ##   ##  ####   ##   ##
+###  ##  #######  #######  ##   ##  ####   ### ###
+#### ##   ##  ##  ##   ##  ### ###   ##    #######
+#######   ####    ##   ##   ## ##    ##    #######
+#######   ####    ##   ##   #####    ##    ## # ##
+## ####   ##  ##  ##   ##    ###     ##    ##   ##
+##  ###  #######  #######    ###    ####   ##   ##
+##   ##  #######   #####      #     ####   ##   ##
+
+Welcome Back, Jarmos!
+]]
 
       starter.setup({
         items = {
@@ -260,8 +272,9 @@ local plugins = {
           { name = "Plugin Updates", action = "Lazy sync", section = "Manage Neovim" },
           { name = "LSP Updates", action = "MasonToolsUpdate", section = "Manage Neovim" },
           { name = "Tree-Sitter Parser Updates", action = "TSUpdate", section = "Manage Neovim" },
+          { name = "Fuzzy Search for Files/Folders", action = "Telescope find_files", section = "File Explorer" },
         },
-        header = "Welcome Back, Jarmos!",
+        header = header,
         footer = 'Press "alt + j/k" to navigate up/down.',
       })
     end,
