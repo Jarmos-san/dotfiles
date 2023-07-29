@@ -93,7 +93,7 @@
     whitespace = red reverse
 
 [color "branch"]
-    current = white magenta bold
+    current = black magenta bold
     local = green bold
     remote = blue bold
     upstream = magenta bold
