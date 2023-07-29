@@ -54,16 +54,7 @@ local plugins = {
     "nvim-telescope/telescope.nvim",
     event = "BufRead",
     cmd = "Telescope",
-    opts = {
-      defaults = {
-        file_ignore_patterns = { "%.git", "node_modules", "venv", ".venv", "env", ".env" },
-      },
-      pickers = {
-        find_files = {
-          find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
-        },
-      },
-    },
+    opts = require("configs.telescope").configs,
     config = true,
     dependencies = {
       "kyazdani42/nvim-web-devicons",
