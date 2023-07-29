@@ -1,4 +1,4 @@
--- Module for configuring the "lspconfig" plugin
+-- Module for configuring the "nvim-lspconfig" plugin
 
 local M = {}
 
