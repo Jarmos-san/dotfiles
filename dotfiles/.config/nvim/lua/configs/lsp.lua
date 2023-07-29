@@ -22,24 +22,30 @@ M.config = function()
   require("lspconfig.ui.windows").default_options.border = "rounded"
 
   local on_attach = function(_, bufnr)
-    local map = vim.keymap.set
-    local opts = { noremap = true, silent = true }
+    local wk = require("which-key")
+
+    -- INFO: Configure the "which-key" plugin to keep a track of the LSP keybindings
+    wk.register({
+      ["<leader>l"] = {
+        name = "+LSP",
+        D = { vim.lsp.buf.declaration, "Jump to the object declaration" },
+        K = { vim.lsp.buf.hover, "Open the documentations of the object" },
+        i = { vim.lsp.buf.implementation, "Jump to the implementation" },
+        k = { vim.lsp.buf.signature_help, "Get the help documentations" },
+        T = { vim.lsp.buf.type_definition, "Get the type definition" },
+        r = { vim.lsp.buf.rename, "Rename the object under the cursor" },
+        R = { vim.lsp.buf.references, "Jump to the reference of the object" },
+      },
+    })
 
     -- TODO: Configure the following keymappings to use the WhichKey plugin instead for better identification
-    map("n", "gD", vim.lsp.buf.declaration, opts)
-    map("n", "gd", vim.lsp.buf.definition, opts)
-    map("n", "K", vim.lsp.buf.hover, opts)
-    map("n", "gi", vim.lsp.buf.implementation, opts)
-    map("n", "<C-k>", vim.lsp.buf.signature_help, opts)
-    map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
-    map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
-    map("n", "<Leader>wl", function()
-      print(vim.inspect(vim.lsp.buf.list_workspace_folder))
-    end, opts)
-    map("n", "<leader>D", vim.lsp.buf.type_definition, opts)
-    map("n", "<leader>rn", vim.lsp.buf.rename, opts)
-    map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-    map("n", "gr", vim.lsp.buf.references, opts)
+    -- map("n", "gd", vim.lsp.buf.definition, opts)
+    -- map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
+    -- map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
+    -- map("n", "<Leader>wl", function()
+    --   print(vim.inspect(vim.lsp.buf.list_workspace_folder))
+    -- end, opts)
+    -- map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
 
     -- Configurations for showing diagnostics in a hover window instead. See the documentations at:
     -- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#show-line-diagnostics-automatically-in-hover-window
