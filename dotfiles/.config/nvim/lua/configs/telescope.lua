@@ -4,7 +4,7 @@ local M = {}
 
 M.configs = {
   defaults = {
-    file_ignore_patterns = { "%.git", "node_modules", "venv", ".venv", "env", ".env" },
+    file_ignore_patterns = { "^%.git$", "node_modules", "^%.?venv$", "^%.?env$" },
   },
   pickers = {
     find_files = {
