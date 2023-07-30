@@ -383,7 +383,7 @@ Welcome Back, Jarmos!
         with_sync = true,
       })
     end,
-    dependencies = { "theHamsta/nvim-treesitter-pairs" },
+    dependencies = { "theHamsta/nvim-treesitter-pairs", "nvim-treesitter/nvim-treesitter-textobjects" },
   },
 
   { -- Plugin to generate ".gitignore" files more easily
