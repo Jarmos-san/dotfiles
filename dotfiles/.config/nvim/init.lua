@@ -1,8 +1,6 @@
 -- Path to install "lazy.nvim" at
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
-local highlight = vim.api.nvim_set_hl
-
 -- Small snippet to install "lazy.nvim" from within Neovim.
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
