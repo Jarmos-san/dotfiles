@@ -61,6 +61,9 @@ for _, module in ipairs({ "options", "autocmds", "keymaps" }) do
   end
 end
 
+-- My WIP personalised colour scheme
+-- vim.cmd.colorscheme("shinkai")
+
 vim.cmd.colorscheme("onedark")
 -- The follow two colourschems are the most popular ones right now with support for semantic highlighting
 -- vim.cmd([[ colorscheme tokyonight]])
