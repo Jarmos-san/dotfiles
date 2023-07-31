@@ -69,24 +69,6 @@ vim.cmd.colorscheme("onedark")
 -- vim.cmd([[ colorscheme tokyonight]])
 -- vim.cmd.colorscheme("catppuccin")
 
--- TODO: Figure a way out to move these highlights to a separate file elsewhere(?)
--- INFO: Provide a slight grayish highlight to the current line number on the right side
-highlight(0, "CursorLineNr", { guibg = nil, guifg = nil })
-highlight(0, "CursorLine", { guibg = nil })
-
--- INFO: Provide highlights to the complettion menu items similar to that of VSCode
-highlight(0, "CmpItemAbbrDeprecated", { bg = "NONE", strikethrough = true, fg = "#808080" })
-highlight(0, "CmpItemAbbrMatch", { bg = "NONE", fg = "#569CD6" })
-highlight(0, "CmpItemAbbrMatchFuzzy", { link = "CmpIntemAbbrMatch" })
-highlight(0, "CmpItemKindVariable", { bg = "NONE", fg = "#9CDCFE" })
-highlight(0, "CmpItemKindInterface", { link = "CmpItemKindVariable" })
-highlight(0, "CmpItemKindText", { link = "CmpItemKindVariable" })
-highlight(0, "CmpItemKindFunction", { bg = "NONE", fg = "#C586C0" })
-highlight(0, "CmpItemKindMethod", { link = "CmpItemKindFunction" })
-highlight(0, "CmpItemKindKeyword", { bg = "NONE", fg = "#D4D4D4" })
-highlight(0, "CmpItemKindProperty", { link = "CmpItemKindKeyword" })
-highlight(0, "CmpItemKindUnit", { link = "CmpItemKindKeyword" })
-
 -- Register MDX files for the Treesitter plugin to understand
 vim.filetype.add({
   extension = {
