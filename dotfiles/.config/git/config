@@ -3,9 +3,9 @@
 
 [user]
     name = Somraj Saha
-    email = somraj.1994@gmail.com
+    email = somraj.mle@gmail.com
     # GPG key for Jarmos Desktop (Ubuntu)
-    signingkey = 9A3291DED12A1FD6
+    signingkey = C3A241E8FCFA1EF9
 
 [merge]
     tool = nvim
