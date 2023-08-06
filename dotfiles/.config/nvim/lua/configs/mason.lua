@@ -2,59 +2,55 @@
 
 local M = {}
 
-local mason_packages = {
-  "bash-language-server",
-  "black",
-  "debugpy",
-  "dockerfile-language-server",
-  "eslint_d",
-  "json-lsp",
-  "lua-language-server",
-  "prettier",
-  "pyright",
-  "ruff",
-  -- "taplo", -- TODO: Figure out how to make it identify the "pyproject.toml" file
-  -- "selene", -- FIXME: Broken on Ubuntu 20.04
-  "shellcheck",
-  "shfmt",
-  "stylua",
-  "tailwindcss-language-server",
-  "typescript-language-server",
-  "rust-analyzer",
-  "rustfmt",
-  "vale",
-  "yaml-language-server",
-}
+M.config = function()
+  -- The list of LSP servers to install
+  local mason_packages = {
+    -- Some of the commented out LSP servers aren't available for download!
+    "bashls",
+    -- "black",
+    -- "debugpy",
+    "cssls",
+    "dockerls",
+    "eslint",
+    "html",
+    "jsonls",
+    "lua_ls",
+    -- "prettier",
+    "pyright",
+    "ruff_lsp",
+    "rust_analyzer",
+    -- "taplo", -- TODO: Figure out how to make it identify the "pyproject.toml" file
+    -- "selene", -- FIXME: Broken on Ubuntu 20.04
+    -- "shellcheck",
+    -- "shfmt",
+    -- "stylua",
+    "sqlls",
+    "tailwindcss",
+    "tsserver",
+    "typst_lsp",
+    "vale_ls",
+    "yamlls",
+  }
 
-M.init = function()
-  local autocmd = vim.api.nvim_create_autocmd
-  local augroup = function(name)
-    return vim.api.nvim_create_augroup("augroup" .. name, { clear = true })
-  end
+  -- Configure the Mason UI to look nicer and distinct from its surroundings
+  require("mason").setup({
+    -- Configure the plugin to have rounded borders
+    ui = { border = "rounded" },
 
-  autocmd("User", {
-    pattern = "MasonToolsUpdateComplete",
-    desc = "Invoke a notification when Mason has completed installing/updating the servers",
-    group = augroup("mason_notifications"),
-    callback = function()
-      vim.schedule(function()
-        vim.notify("Mason has completed installing the servers...")
-      end)
-    end,
+    -- Configure the log levels for the plugin
+    log_level = vim.log.levels.WARN,
   })
-end
 
-M.tools = function()
-  require("mason-tool-installer").setup({
+  -- Configure Mason to automatically install certain LSP servers
+  -- NOTE: This plugin can ONLY install LSP servers and nothing else. In other words, DAPs, formatters, linters needs
+  -- to be either installed either manually or I need to write custom code to make Mason do it for me
+  require("mason-lspconfig").setup({
+    -- Configure Mason to install the necessary LSP servers automatically
     ensure_installed = mason_packages,
   })
-end
 
-M.config = {
-  -- Configure the plugin to have rounded borders
-  ui = { border = "rounded" },
-  -- Configure the log levels for the plugin
-  log_level = vim.log.levels.WARN,
-}
+  -- TODO: Write code to make Mason install everything related to LSP automatically and "properly"
+  -- vim.cmd(":MasonInstall stylua")
+end
 
 return M

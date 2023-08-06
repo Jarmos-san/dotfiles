@@ -301,18 +301,9 @@ Welcome Back, Jarmos!
   {
     -- A friendly plugin for managing the LSP servers more easily.
     "williamboman/mason.nvim",
-    cmd = "Mason",
-    opts = require("configs.mason").config,
-    config = true,
-    dependencies = "WhoIsSethDaniel/mason-tool-installer.nvim",
-  },
-
-  {
-    -- Extension for "mason.nvim" which makes it VERY easy to auto-install LSP servers.
-    "WhoIsSethDaniel/mason-tool-installer.nvim",
-    cmd = { "MasonToolsInstall", "MasonToolsUpdate" },
-    init = require("configs.mason").init,
-    config = require("configs.mason").tools,
+    cmd = { "LspInstall", "LspUninstall", "Mason" },
+    config = require("configs.mason").config,
+    dependencies = { "neovim/nvim-lspconfig", "williamboman/mason-lspconfig.nvim" },
   },
 
   {
