@@ -8,70 +8,21 @@ License: GPL-3.0 (see https://github.com/Jarmos-san/dotfiles/blob/main/LICENSE f
          information)
 """
 
+
 import platform
 import subprocess
 
 
-def get_osname() -> str | None:
-    """Fetch the name of the OS the system is running on."""
-    return platform.freedesktop_os_release().get("NAME")
-
-
-def update_system(osname: str | None = None) -> None:
-    """Identify the OS and perform a system update."""
-    match osname:
-        case "Ubuntu":
-            subprocess.run(["sudo", "apt-get", "update"], check=True)
-            subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"], check=True)
-            subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
-        case "Arch" | "elementary OS":
-            subprocess.run(
-                [
-                    "sudo",
-                    "pacman",
-                    "--sync",
-                    "--sysupgrade",
-                    "--refresh",
-                    "--noconfirm",
-                ],
-                check=True,
-            )
-        case "Fedora":
-            subprocess.run(["sudo", "dnf", "update"], check=True)
-        case _:
-            raise OSError(f"Unknown OS: {osname}")
-
-
-def is_homebrew_installed() -> bool:
-    """Perform a statutory check if Homebrew exists and is executable."""
-    try:
-        subprocess.run(["brew", "--version"], stderr=subprocess.STDOUT)
-        return True
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        return False
-
-
-def is_yay_installed() -> bool:
-    """Perform a statutory check if the "yay" package manager exists."""
-    try:
-        subprocess.run(["yay", "--version"], stderr=subprocess.STDOUT)
-        return True
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        return False
-
-
 def main() -> None:
     """Entrypoint of the script."""
-    update_system(get_osname())
+    # Logic to update a Debian/Ubuntu system using APT
+    if platform.system() == "Linux":
+        if platform.freedesktop_os_release().get("NAME") == "Ubuntu":
+            subprocess.run(["sudo", "apt-get", "update"])
+            subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"])
+            subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
 
-    if is_homebrew_installed():
-        subprocess.run(["brew", "update"])
-        subprocess.run(["brew", "upgrade"])
-        subprocess.run(["brew", "autoremove"])
-        subprocess.run(["brew", "cleanup"])
-
-    if is_yay_installed():
-        subprocess.run(["yay", "--sync", "--sysupgrade", "--refresh", "--noconfirm"])
+    # TODO: Write logic to check if Homebrew is installed then run an update
 
 
 if __name__ == "__main__":
