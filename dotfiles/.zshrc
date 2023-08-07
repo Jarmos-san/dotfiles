@@ -20,7 +20,7 @@ eval "$(starship init zsh)"
 
 # A bunch of custom aliases for easier terminal usage.
 alias ll="exa --long --all --classify --icons --git --ignore-glob='.git'"
-alias dcp="docker-compose"
+alias dcp="docker compose"
 alias loc="wc -l"
 alias mkvenv="python3 -m venv .venv"
 alias tree="exa --tree --all --icons --ignore-glob='.git' --git-ignore"
