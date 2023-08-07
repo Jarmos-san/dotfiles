@@ -377,11 +377,6 @@ Welcome Back, Jarmos!
     dependencies = { "theHamsta/nvim-treesitter-pairs", "nvim-treesitter/nvim-treesitter-textobjects" },
   },
 
-  { -- Plugin to generate ".gitignore" files more easily
-    "wintermute-cell/gitignore.nvim",
-    cmd = "Gitignore",
-  },
-
   {
     -- Plugin for smooth scrolling inside buffers
     -- NOTE: This plugin is only temporary until there is a fix for this issue:
