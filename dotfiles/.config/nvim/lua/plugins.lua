@@ -270,7 +270,7 @@ Welcome Back, Jarmos!
           { action = starter.sections.recent_files(8, true, true), section = "Recent Files" },
           { name = "Quit Neovim", action = "quitall", section = "Manage Neovim" },
           { name = "Plugin Updates", action = "Lazy sync", section = "Manage Neovim" },
-          { name = "LSP Updates", action = "MasonToolsUpdate", section = "Manage Neovim" },
+          { name = "LSP Updates", action = "Mason", section = "Manage Neovim" },
           { name = "Tree-Sitter Parser Updates", action = "TSUpdate", section = "Manage Neovim" },
           { name = "Fuzzy Search for Files/Folders", action = "Telescope find_files", section = "File Explorer" },
         },
