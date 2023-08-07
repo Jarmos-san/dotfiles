@@ -12,12 +12,6 @@ compinit
 setopt autocd beep extendedglob nomatch notify
 # End of lines configured by zsh-newuser-install
 
-# FIXME: Doesn't work for now. Take a look at the following Stack Exchange thread for further instructions
-# https://unix.stackexchange.com/a/33898
-if [[ -f "$HOME/.zsh/functions" ]]; then
-  source "$HOME/.zsh/functions"
-fi
-
 # Update the default PATH
 export PATH="$HOME/.local/bin:$PATH"
 
