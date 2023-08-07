@@ -1,6 +1,3 @@
-# EditorConfig is awesome: https://EditorConfig.org
-
-# top-most EditorConfig file
 root = true
 
 [*]
@@ -14,9 +11,12 @@ insert_final_newline = true
 [*.lua]
 indent_size = 2
 
+[*.py]
+indent_size = 4
+
 [*.{json,md,toml,yml}]
 indent_size = 2
 
-[*.{sh,aliases,functions,bash_profile,exports}]
+[*.{sh,bash_profile}]
 indent_size = 2
 insert_final_newline = false
