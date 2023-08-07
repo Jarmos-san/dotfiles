@@ -44,14 +44,20 @@ def run_apt_updates() -> None:
 
 def main() -> None:
     """Entrypoint of the script."""
-    # Logic to update a Debian/Ubuntu system using APT
+    # Run system updates if the detected OS is Linux
     if platform.system() == "Linux":
-        if platform.freedesktop_os_release().get("NAME") == "Ubuntu":
-            subprocess.run(["sudo", "apt-get", "update"])
-            subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"])
-            subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
+        # Get the name of the OS the script is running on
+        os_name = platform.freedesktop_os_release().get("NAME")
 
-    # TODO: Write logic to check if Homebrew is installed then run an update
+        match os_name:
+            case "Ubuntu" | "Debian":
+                run_apt_updates()
+            case _:
+                print("Failed to identify the OS! Aborting...")
+    # Run system updates if the detected OS is MacOS
+    elif platform.system == "MacOS":
+        if is_brew_installed():
+            run_brew_updates()
 
 
 if __name__ == "__main__":
