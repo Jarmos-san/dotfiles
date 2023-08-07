@@ -10,8 +10,11 @@ Author: Somraj Saha
 License: MIT License
 """
 
+# INFO: This is a WIP script, nothing is set in stone yet!
+
 import subprocess
 from argparse import ArgumentParser, Namespace
+from pathlib import Path
 
 
 def is_git_repository() -> bool | None:
@@ -37,17 +40,35 @@ def argument_parser() -> Namespace:
     return parser.parse_args()
 
 
-def main() -> None:
-    """Entrypoint of the script."""
+def run_git_tag() -> None:
+    """Invoke the git-tag function to annotate a commit."""
     args = argument_parser()
 
-    # TODO: Refactor the function to also update the project configuration files like
-    # package.json, Cargo.toml, pyproject.toml and such with the tagged information
+    subprocess.run(
+        ["git", "tag", "--annotate", "--sign", args.name, f"--message={args.message}"]
+    )
+
+
+def main() -> None:
+    """Entrypoint of the script."""
+    # A list of the project configuration files to update with the latest version tag
+    filename = ("package.json", "pyproject.toml", "Cargo.toml")
 
     if is_git_repository():
-        subprocess.run(
-            ["git", "tag", "--annotate", "sign", args.name, f"--message={args.message}"]
-        )
+        run_git_tag()
+
+        for file in filename:
+            filepath = Path.cwd() / file
+            if filepath.exists():
+                match filepath.name:
+                    case "package.json":
+                        print('Update the "package.json" file!')
+                    case "pyproject.toml":
+                        print('Update the "pyproject.toml" file!')
+                    case "Cargo.toml":
+                        print('Update the "Cargo.toml" file!')
+                    case _:
+                        print("Failed to identify project configuration file!")
     else:
         print("Not a Git directory...not tagging anything!")
 
