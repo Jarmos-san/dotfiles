@@ -10,24 +10,10 @@ Author: Somraj Saha
 License: MIT License
 """
 
-# TODO: Script is a Work-in-Progress
-
-from pathlib import Path
-
-CWD = Path(".")
-
 
 def main() -> None:
     """Entrypoint of the script."""
-    config_files = ("package.json", "pyproject.toml", "Cargo.toml")
-
-    for file in config_files:
-        Path(file).is_file()
-
-    is_git_repo = Path("./.git").is_dir()
-
-    if not is_git_repo:
-        print("Not a local Git repository!")
+    pass
 
 
 if __name__ == "__main__":
