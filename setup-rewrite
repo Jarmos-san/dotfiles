@@ -90,8 +90,6 @@ def main() -> None:
         print('Running script in "dry" mode...')
         run_system_updates()
 
-    # TODO: Detect the OS and run some preliminary system updates
-
 
 if __name__ == "__main__":
     main()
