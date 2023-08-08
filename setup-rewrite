@@ -25,7 +25,6 @@ License: MIT (see the LICENSE document for more info on this regards)
 
 import platform
 import subprocess
-import time
 from argparse import ArgumentParser, Namespace
 
 
@@ -58,8 +57,7 @@ def run_apt_updates(dry_run: bool) -> None:
         subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
     else:
         # TODO: Use the logging module instead of using print statements
-        print("Updating APT packages...")
-        time.sleep(30)
+        print(f"Updating APT packages {10*'...'}")
         print("System upgrade complete!")
 
 
