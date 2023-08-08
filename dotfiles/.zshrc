@@ -26,6 +26,7 @@ alias mkvenv="python3 -m venv .venv"
 alias tree="exa --tree --all --icons --ignore-glob='.git' --git-ignore"
 alias dateiso="date +%Y-%m-%dT%H:%M:%S%z"
 alias top="btop --utf-force"
+alias cm="cmatrix -abs -C yellow"
 
 # Various ZSH plugins to make the Shell usage experience better
 plugins=(
