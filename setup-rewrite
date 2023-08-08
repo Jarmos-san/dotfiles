@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+
+"""
+Script to automatically setup a fresh new Linux/MacOS system (or VM).
+
+This script should ONLY be used after installing a fresh new OS on a new machine or
+inside a VM to setup a development environment automatically. The script will install
+necessary tools like Code Editors, package managers and more before setting up their
+configuration files automatically.
+
+USAGE: To use the script, run the following command (its not ready for usage yet);
+
+curl -fsSL https://raw.githubusercontent.com/<username>/<repository>/path/to/script \
+    | python3 - --dry-run
+
+NOTE: The script is designed to be subjective, hence it is RECOMMENDED to NOT invoke it
+without understanding the context of the contents! Please read through the script or
+reach out to the author for clarification on what certain parts of the script does.
+
+DISCLAIMER: The script IS NOT TESTED and there is no guranteed it works properly!
+
+Author: Somraj Saha <somraj.saha@weburz.com>
+License: MIT (see the LICENSE document for more info on this regards)
+"""
+
+import platform
+import subprocess
+from argparse import ArgumentParser, Namespace
+
+
+def argument_parser() -> Namespace:
+    """Parse the list of arguments passed to the script and return them."""
+    parser = ArgumentParser(
+        description="Automation script to setup a dev environment on a new machine!"
+    )
+
+    parser.add_argument(
+        "--dry-run",
+        required=False,
+        help="Enable the script without making serious changes to the system.",
+        action="store_true",
+    )
+
+    return parser.parse_args()
+
+
+def run_apt_updates() -> None:
+    """Run APT to update a Debian/Ubuntu system and perform some cleanup actions."""
+    subprocess.run(["sudo", "apt-get", "update"])
+    subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"])
+    subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
+
+
+def run_system_updates() -> None:
+    """Detect the Operating System name and run some system updates on it."""
+    if platform.system() == "Linux":
+        os_name = platform.freedesktop_os_release().get("NAME")
+
+        match os_name:
+            case "Ubuntu" | "Debian":
+                run_apt_updates()
+            case _:
+                print("Failed to identify the OS...aborting system updates!")
+
+
+def main() -> None:
+    """Entrypoint of the script."""
+    args = argument_parser()
+
+    if args.dry_run:
+        # TODO: Implement the script to run in dry-mode
+        print('Running script in "dry" mode...')
+
+    # TODO: Detect the OS and run some preliminary system updates
+
+
+if __name__ == "__main__":
+    main()
