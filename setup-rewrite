@@ -25,6 +25,7 @@ License: MIT (see the LICENSE document for more info on this regards)
 
 import platform
 import subprocess
+import time
 from argparse import ArgumentParser, Namespace
 
 
@@ -44,21 +45,37 @@ def argument_parser() -> Namespace:
     return parser.parse_args()
 
 
-def run_apt_updates() -> None:
-    """Run APT to update a Debian/Ubuntu system and perform some cleanup actions."""
-    subprocess.run(["sudo", "apt-get", "update"])
-    subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"])
-    subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
+def run_apt_updates(dry_run: bool) -> None:
+    """
+    Run APT to update a Debian/Ubuntu system and perform some cleanup actions.
+
+    dry_run (boolean): Flag to configure the apt-get statements to run either in dry
+                       mode or not.
+    """
+    if not dry_run:
+        subprocess.run(["sudo", "apt-get", "update"])
+        subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"])
+        subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
+    else:
+        # TODO: Use the logging module instead of using print statements
+        print("Updating APT packages...")
+        time.sleep(30)
+        print("System upgrade complete!")
 
 
-def run_system_updates() -> None:
-    """Detect the Operating System name and run some system updates on it."""
+def run_system_updates(dry_run: bool = True) -> None:
+    """
+    Detect the Operating System name and run some system updates on it.
+
+    dry_run (boolean): Defaults to True which configures the function to run system
+                       updates in dry mode explicitly.
+    """
     if platform.system() == "Linux":
         os_name = platform.freedesktop_os_release().get("NAME")
 
         match os_name:
             case "Ubuntu" | "Debian":
-                run_apt_updates()
+                run_apt_updates(dry_run=dry_run)
             case _:
                 print("Failed to identify the OS...aborting system updates!")
 
@@ -67,9 +84,11 @@ def main() -> None:
     """Entrypoint of the script."""
     args = argument_parser()
 
-    if args.dry_run:
-        # TODO: Implement the script to run in dry-mode
+    if not args.dry_run:
+        run_system_updates(dry_run=False)
+    else:
         print('Running script in "dry" mode...')
+        run_system_updates()
 
     # TODO: Detect the OS and run some preliminary system updates
 
