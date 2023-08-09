@@ -82,7 +82,6 @@ def main() -> None:
     # Detect the system name (like Linux or MacOS and so on) and store it in a variable
     system = platform.system()
 
-    # Run system updates if the detected OS is Linux
     if system == "Linux":
         perform_linux_updates()
     elif system == "MacOS":
