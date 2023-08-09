@@ -82,10 +82,13 @@ def main() -> None:
     # Detect the system name (like Linux or MacOS and so on) and store it in a variable
     system = platform.system()
 
-    if system == "Linux":
-        perform_linux_updates()
-    elif system == "MacOS":
-        perform_macos_updates()
+    match system:
+        case "Linux":
+            perform_linux_updates()
+        case "MacOS":
+            perform_macos_updates()
+        case _:
+            print("Failed to identify the OS! Aborting system updates...")
 
     # Check if Neovim is installed and accessible, if so run some updates for it
     if is_tool_installed("nvim"):
