@@ -47,6 +47,36 @@ def run_apt_updates() -> None:
     subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
 
 
+def perform_linux_updates() -> None:
+    """Run some automated system updates for Linux distros."""
+    # Get the name of the OS the script is running on
+    os_name = platform.freedesktop_os_release().get("NAME")
+
+    match os_name:
+        case "Ubuntu" | "Debian":
+            run_apt_updates()
+
+            if is_tool_installed("brew"):
+                run_brew_updates()
+        case _:
+            print("Failed to identify the OS! Aborting system updates...")
+
+
+def perform_macos_updates() -> None:
+    """Run some automated system updates for MacOS."""
+    subprocess.run(["sudo", "softwareupdate", "-i", "-a"])
+
+    # Run Homebrew updates on a MacBook (or rather any Apple computer)
+    if is_tool_installed("brew"):
+        run_brew_updates()
+
+
+def perform_neovim_updates() -> None:
+    """Run some automated system update procedure for Neovim."""
+    # TODO: Automate Neovim updates & push the latest updates to the remote repo
+    subprocess.run(["nvim", "--headless", '"+Lazy! sync"', "+qa"])
+
+
 def main() -> None:
     """Entrypoint of the script."""
     # Detect the system name (like Linux or MacOS and so on) and store it in a variable
@@ -54,26 +84,13 @@ def main() -> None:
 
     # Run system updates if the detected OS is Linux
     if system == "Linux":
-        # Get the name of the OS the script is running on
-        os_name = platform.freedesktop_os_release().get("NAME")
-
-        match os_name:
-            case "Ubuntu" | "Debian":
-                run_apt_updates()
-
-                if is_brew_installed():
-                    run_brew_updates()
-            case _:
-                print("Failed to identify the OS! Aborting system updates...")
-
-    # Run system updates if the detected OS is MacOS
+        perform_linux_updates()
     elif system == "MacOS":
-        # Run recommended and applicable MacOS system updates
-        subprocess.run(["sudo", "softwareupdate", "-i", "-a"])
+        perform_macos_updates()
 
-        # Run Homebrew updates on a MacBook (or rather any Apple computer)
-        if is_brew_installed():
-            run_brew_updates()
+    # Check if Neovim is installed and accessible, if so run some updates for it
+    if is_tool_installed("nvim"):
+        perform_neovim_updates()
 
 
 if __name__ == "__main__":
