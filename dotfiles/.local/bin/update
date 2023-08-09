@@ -52,8 +52,12 @@ def main() -> None:
         match os_name:
             case "Ubuntu" | "Debian":
                 run_apt_updates()
+
+                if is_brew_installed():
+                    run_brew_updates()
             case _:
                 print("Failed to identify the OS! Aborting...")
+
     # Run system updates if the detected OS is MacOS
     elif platform.system == "MacOS":
         if is_brew_installed():
