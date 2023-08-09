@@ -13,11 +13,16 @@ import platform
 import subprocess
 
 
-def is_brew_installed() -> bool:
-    """Check if Homebrew is installed and available on $PATH."""
+def is_tool_installed(tool: str) -> bool:
+    """
+    Check if a specified tool is installed and available on $PATH.
+
+    tool (String): Name of the tool to check for its existence. Examples - "brew" or
+                   "nvim"
+    """
     try:
         subprocess.run(
-            ["brew", "--version"],
+            [tool, "--version"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             check=True,
