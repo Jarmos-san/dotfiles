@@ -73,7 +73,7 @@ def perform_macos_updates() -> None:
 
 def perform_neovim_updates() -> None:
     """Run some automated system update procedure for Neovim."""
-    # TODO: Automate Neovim updates & push the latest updates to the remote repo
+    # FIXME: Doesn't work for whatever reason
     subprocess.run(["nvim", "--headless", '"+Lazy! sync"', "+qa"])
 
 
