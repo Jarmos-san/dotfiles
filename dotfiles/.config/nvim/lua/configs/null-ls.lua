@@ -27,6 +27,7 @@ M.config = function()
               return client.name == "null-ls"
             end,
             async = false,
+            timeout_ms = 2000,
           })
         end,
       })
@@ -67,10 +68,11 @@ M.config = function()
     formatting.ruff.with({ -- Super fast formatting tool for Python files
       prefer_local = ".venv/bin", -- Prefer using the virtual environment local binary for better project identification
     }),
-    formatting.prettier.with({ -- Formatter for web dev files
-      prefer_local = "node_modules/.bin",
-      extra_args = { "--prose-wrap", "always" },
-    }),
+    -- FIXME: Broken and is causing some timeout issues!
+    -- formatting.prettier.with({ -- Formatter for web dev files
+    --   prefer_local = "node_modules/.bin",
+    --   extra_args = { "--prose-wrap", "always" },
+    -- }),
     -- FIXME: Reports false-negatives when working with certain TOML files like "pyproject.toml"
     -- formatting.taplo, -- Formatter for TOML files
     diagnostics.vale.with({ -- Diagnostics tool for spell checking
