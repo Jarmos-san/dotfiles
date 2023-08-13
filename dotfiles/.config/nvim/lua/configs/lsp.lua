@@ -74,6 +74,7 @@ M.config = function()
   -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#jsonls
   capabilities.textDocument.completion.completionItem.snippetSupport = true
 
+  -- INFO: The official recommended configurations will throw a lot of errors and is generally very buggy!
   -- LSP configurations for Lua files
   lspconfig["lua_ls"].setup({
     on_attach = on_attach,
