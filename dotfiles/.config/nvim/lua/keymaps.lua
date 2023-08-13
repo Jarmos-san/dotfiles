@@ -113,3 +113,7 @@ map({ "i", "v", "n", "s" }, "<C-s>", "<cmd>write<cr><esc>", { desc = "Save the c
 -- Better & easier indenting
 map("v", "<", "<gv")
 map("v", ">", ">gv")
+
+-- Disable the redundant (and sometimes annoying "Ex mode")
+-- INFO: See the docs at ":h gQ" for more info on what its supposed to do
+map("n", "gQ", "<NOP>")
