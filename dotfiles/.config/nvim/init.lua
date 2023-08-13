@@ -81,3 +81,6 @@ vim.loader.enable()
 
 -- Additional features to look into later on:
 -- https://github.com/rafcamlet/nvim-luapad
+
+-- INFO: Good book to learn Vim from;
+-- https://learnvim.irian.to/
