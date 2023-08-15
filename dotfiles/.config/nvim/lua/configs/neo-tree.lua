@@ -58,6 +58,7 @@ M.options = {
         ".task",
       },
       hide_by_name = { "__init__.py" },
+      always_show = { ".env" },
     },
   },
   window = {
