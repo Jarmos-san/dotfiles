@@ -73,6 +73,10 @@ vim.filetype.add({
     mdx = "mdx",
     log = "log",
   },
+  pattern = {
+    -- FIXME: Doesn't work for now
+    [".env.*"] = "dotenv",
+  },
 })
 
 -- INFO: Enable an experimental fast module loader. See the PR for more information:
