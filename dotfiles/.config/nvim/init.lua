@@ -75,7 +75,7 @@ vim.filetype.add({
   },
   pattern = {
     -- FIXME: Doesn't work for now
-    [".env.*"] = "dotenv",
+    [".?env.*"] = "dotenv",
   },
 })
 
