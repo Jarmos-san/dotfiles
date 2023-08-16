@@ -150,38 +150,32 @@ local plugins = {
     -- Plugin for better (un)commenting of code
     "echasnovski/mini.comment",
     event = { "BufNewFile", "BufRead" },
-    opts = {
-      -- Ensure blanklines don't have unnecessary comments to avoid clutter
-      ignore_blank_lines = true,
-      hooks = {
-        pre = function()
-          -- Necessary hook for commenting source code based on Treesitter queries.
-          require("ts_context_commentstring.internal").update_commentstring({})
-        end,
-      },
-    },
-    config = function(opts)
-      require("mini.comment").setup(opts)
+    config = function()
+      require("mini.comment").setup({
+        -- FIXME: Doesn't work
+        -- Ensure blanklines don't have unnecessary comments to avoid clutter
+        ignore_blank_lines = true,
+      })
     end,
   },
 
   {
     -- Simple & minimal plugin for pairing brackets, quotes & more!
     "echasnovski/mini.pairs",
-    event = "InsertEnter",
-    opts = {
-      modes = {
-        insert = true, -- "Insert" mode
-        command = true, -- "Command" mode
-        terminal = true, -- "Terminal" mode
-      },
-      mappings = {
-        -- FIXME: Does not work for whatever reasons
-        ["<"] = { action = "open", pair = "<>", neigh_pattern = "[^\\]." },
-      },
-    },
-    config = function(opts)
-      require("mini.pairs").setup(opts)
+    event = { "CmdwinEnter", "InsertEnter" },
+    config = function()
+      require("mini.pairs").setup({
+        modes = {
+          insert = true, -- "Insert" mode
+          -- FIXME: Doesn't work on "Command" nor "Terminal" modes
+          command = true, -- "Command" mode
+          terminal = true, -- "Terminal" mode
+        },
+        mappings = {
+          -- FIXME: Does not work for whatever reasons
+          ["<"] = { action = "open", pair = "<>", neigh_pattern = "[^\\]." },
+        },
+      })
     end,
   },
 
