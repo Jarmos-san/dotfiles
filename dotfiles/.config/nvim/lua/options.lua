@@ -49,3 +49,4 @@ opt.iskeyword:append("-") -- Make Neovim recognise dash-seperated words as a sin
 opt.scrolloff = 6 -- Maintain a buffer of rows between the current row & the either ends of the window
 opt.relativenumber = true -- Display the row number relative to the up/down rows
 opt.signcolumn = "yes" -- Allow the sign column to show else it'll keep shifting later on
+opt.shell = "zsh" -- Explicitly tell Neovim to use ZSH for terminal commands instead of relying on $SHELL
