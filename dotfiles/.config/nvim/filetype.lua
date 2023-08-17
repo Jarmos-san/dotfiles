@@ -12,6 +12,7 @@ vim.filetype.add({
   -- Detect and apply filetypes based on the entire filename
   filename = {
     [".env"] = "dotenv",
+    ["env"] = "dotenv",
     ["tsconfig.json"] = "jsonc",
   },
   -- Detect and apply filetypes based on certain patterns of the filenames
