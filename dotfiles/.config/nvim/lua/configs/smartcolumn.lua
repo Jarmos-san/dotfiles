@@ -6,6 +6,7 @@ local M = {}
 local disable_filetypes = {
   "checkhealth",
   "dosini",
+  "dotenv",
   "gitattributes",
   "gitconfig",
   "gitignore",
