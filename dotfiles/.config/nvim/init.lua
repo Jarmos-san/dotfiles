@@ -67,18 +67,6 @@ vim.cmd.colorscheme("onedark")
 -- vim.cmd([[ colorscheme tokyonight]])
 -- vim.cmd.colorscheme("catppuccin")
 
--- Register MDX files for the Treesitter plugin to understand
-vim.filetype.add({
-  extension = {
-    mdx = "mdx",
-    log = "log",
-  },
-  pattern = {
-    -- FIXME: Doesn't work for now
-    [".?env.*"] = "dotenv",
-  },
-})
-
 -- INFO: Enable an experimental fast module loader. See the PR for more information:
 -- https://github.com/neovim/neovim/pull/22668
 vim.loader.enable()
