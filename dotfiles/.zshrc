@@ -27,6 +27,7 @@ alias tree="exa --tree --all --icons --ignore-glob='.git' --git-ignore"
 alias dateiso="date +%Y-%m-%dT%H:%M:%S%z"
 alias top="btop --utf-force"
 alias cm="cmatrix -abs -C yellow"
+alias rands="openssl rand -base64 32"
 
 # Various ZSH plugins to make the Shell usage experience better
 plugins=(
