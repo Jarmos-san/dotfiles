@@ -17,6 +17,13 @@ local plugins = {
   },
 
   {
+    -- FIXME: Certain files like ".env" files aren't shown with consistent icons
+    -- Plugin for Nerd Fonts supports required by a couple of plugins
+    "nvim-tree/nvim-web-devicons",
+    name = "devicons",
+  },
+
+  {
     -- Functionally better plugin for showing a nice colorcolum
     "m4xshen/smartcolumn.nvim",
     event = "BufRead",
@@ -45,7 +52,7 @@ local plugins = {
     event = "LspAttach",
     cmd = "Trouble",
     config = true,
-    dependencies = "kyazdani42/nvim-web-devicons",
+    dependencies = "devicons",
   },
 
   {
@@ -57,7 +64,7 @@ local plugins = {
     opts = require("configs.telescope").configs,
     config = true,
     dependencies = {
-      "kyazdani42/nvim-web-devicons",
+      "devicons",
       "nvim-lua/plenary.nvim",
       "neovim/nvim-lspconfig",
       "nvim-treesitter/nvim-treesitter",
@@ -84,7 +91,7 @@ local plugins = {
     config = true,
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "kyazdani42/nvim-web-devicons",
+      "devicons",
       "MunifTanjim/nui.nvim",
     },
   },
