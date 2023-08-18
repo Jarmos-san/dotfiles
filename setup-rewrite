@@ -45,6 +45,18 @@ def argument_parser() -> Namespace:
     return parser.parse_args()
 
 
+def system_update_simulate() -> None:
+    """Simulate a system update (when the "dry_run" arguments are passed)."""
+    print("Simulating system updates...")
+
+    # Print a bunch of dots across 10 lines for roughly around 30 secs
+    for _ in range(10):
+        print("...")
+        time.sleep(3)
+
+    print("System upgrade simulation complete...")
+
+
 def run_apt_updates(dry_run: bool) -> None:
     """
     Run APT to update a Debian/Ubuntu system and perform some cleanup actions.
@@ -58,12 +70,8 @@ def run_apt_updates(dry_run: bool) -> None:
         subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
     else:
         # TODO: Use the logging module instead of using print statements
-        print("Simulating system updates...")
+        system_update_simulate()
 
-        # Print a bunch of dots across 10 lines for roughly around 30 secs
-        for _ in range(10):
-            print("...")
-            time.sleep(3)
 
         print("System upgrade simulation complete...")
 
