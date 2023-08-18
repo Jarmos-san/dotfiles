@@ -23,6 +23,8 @@ Author: Somraj Saha <somraj.saha@weburz.com>
 License: MIT (see the LICENSE document for more info on this regards)
 """
 
+# TODO: Make use of the logging module instead of useless print statements
+
 import platform
 import subprocess
 import time
@@ -69,7 +71,6 @@ def run_apt_updates(dry_run: bool) -> None:
         subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"])
         subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
     else:
-        # TODO: Use the logging module instead of using print statements
         system_update_simulate()
 
 
