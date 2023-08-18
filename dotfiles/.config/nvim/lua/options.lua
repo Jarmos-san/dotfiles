@@ -47,6 +47,7 @@ opt.sidescroll = 8 -- Enable horinzontal scrolling when word wrap is disabled
 -- FIXME: The following option might only be useful in certain filetypes like JSX, Markdown and such
 opt.iskeyword:append("-") -- Make Neovim recognise dash-seperated words as a single word
 opt.scrolloff = 6 -- Maintain a buffer of rows between the current row & the either ends of the window
+opt.number = true -- Enable the current line number to be shown
 opt.relativenumber = true -- Display the row number relative to the up/down rows
 opt.signcolumn = "yes" -- Allow the sign column to show else it'll keep shifting later on
 opt.shell = "zsh" -- Explicitly tell Neovim to use ZSH for terminal commands instead of relying on $SHELL
