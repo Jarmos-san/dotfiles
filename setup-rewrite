@@ -30,6 +30,9 @@ import subprocess
 import time
 from argparse import ArgumentParser, Namespace
 
+# Fetch and store the OS name to be used later on in the script
+OS_NAME = platform.freedesktop_os_release().get("NAME")
+
 
 def argument_parser() -> Namespace:
     """Parse the list of arguments passed to the script and return them."""
@@ -94,9 +97,7 @@ def run_system_updates(dry_run: bool = True) -> None:
                        updates in dry mode explicitly.
     """
     if platform.system() == "Linux":
-        os_name = platform.freedesktop_os_release().get("NAME")
-
-        match os_name:
+        match OS_NAME:
             case "Ubuntu" | "Debian":
                 run_apt_updates(dry_run=dry_run)
             case _:
@@ -107,14 +108,43 @@ def run_system_updates(dry_run: bool = True) -> None:
         print("Failed to identify the platform!")
 
 
-def install_system_essentials() -> None:
+def install_system_essentials(dry_run: bool = True) -> None:
     """Install certain essentials necessary for proper functioning of the system."""
-    # TODO: Research and make a list of all the essentials necessary for a system to run
-    # properly.
-
-    # 1. Git(?)
-    # 2. cURL(?)
-    pass
+    if platform.system() == "Linux":
+        match OS_NAME:
+            case "Ubuntu" | "Debian":
+                if not dry_run:
+                    try:
+                        subprocess.run(
+                            [
+                                "sudo",
+                                "apt-get",
+                                "install",
+                                "curl",
+                                "git",
+                                "--yes",
+                                "--no-install-recommends",
+                            ]
+                        )
+                    except subprocess.CalledProcessError as error:
+                        print(error)
+                else:
+                    subprocess.run(
+                        [
+                            "sudo",
+                            "apt-get",
+                            "install",
+                            "curl",
+                            "git",
+                            "--yes",
+                            "--no-install-recommends",
+                            "--dry-run",
+                        ]
+                    )
+            case _:
+                print("Failed to identify OS...aborting!")
+    else:
+        print("Unknown OS...aborting!")
 
 
 def install_homebrew(dry_run: bool = True) -> None:
@@ -150,10 +180,12 @@ def main() -> None:
     if not args.dry_run:
         run_system_updates(dry_run=False)
         install_homebrew(dry_run=False)
+        install_system_essentials(dry_run=False)
     else:
         print('Running script in "dry" mode...')
         run_system_updates()
         install_homebrew()
+        install_system_essentials()
 
 
 if __name__ == "__main__":
