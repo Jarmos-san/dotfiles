@@ -111,6 +111,9 @@ def install_system_essentials() -> None:
     """Install certain essentials necessary for proper functioning of the system."""
     # TODO: Research and make a list of all the essentials necessary for a system to run
     # properly.
+
+    # 1. Git(?)
+    # 2. cURL(?)
     pass
 
 
