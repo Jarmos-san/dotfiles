@@ -117,7 +117,7 @@ def install_system_essentials() -> None:
     pass
 
 
-def install_homebrew(dry_run: bool) -> None:
+def install_homebrew(dry_run: bool = True) -> None:
     """Install HomeBrew on MacOS and Ubuntu/Debian systems."""
     homebrew_installation_url = (
         "https://raw.githubusercontent.com/Homebrew/install/master/install.sh"
@@ -130,7 +130,9 @@ def install_homebrew(dry_run: bool) -> None:
         # Install Homebrew only for MacOS and Ubuntu/Debian systems
         if platform.system() == "MacOS" or platform.system() == "Linux":
             try:
-                subprocess.run(["/bin/bash", "-c", f'$"({curl_command})"'])
+                subprocess.run(
+                    ["NONINTERACTIVE=1 ", "/bin/bash", "-c", f'$"({curl_command})"']
+                )
             except subprocess.CalledProcessError as error:
                 print(f"Failed to install Homebrew: {error}")
         else:
@@ -147,9 +149,11 @@ def main() -> None:
 
     if not args.dry_run:
         run_system_updates(dry_run=False)
+        install_homebrew(dry_run=False)
     else:
         print('Running script in "dry" mode...')
         run_system_updates()
+        install_homebrew()
 
 
 if __name__ == "__main__":
