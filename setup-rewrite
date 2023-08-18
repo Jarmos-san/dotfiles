@@ -73,7 +73,16 @@ def run_apt_updates(dry_run: bool) -> None:
         system_update_simulate()
 
 
-        print("System upgrade simulation complete...")
+def run_macos_updates(dry_run: bool) -> None:
+    """Automate MacOS system updates."""
+    if not dry_run:
+        try:
+            subprocess.run(["sudo", "softwareupdate", "-i", "-a"])
+        except subprocess.CalledProcessError as error:
+            print("MacOS system update failed...")
+            print(error)
+    else:
+        system_update_simulate()
 
 
 def run_system_updates(dry_run: bool = True) -> None:
@@ -91,6 +100,10 @@ def run_system_updates(dry_run: bool = True) -> None:
                 run_apt_updates(dry_run=dry_run)
             case _:
                 print("Failed to identify the OS...aborting system updates!")
+    elif platform.system() == "MacOS":
+        run_macos_updates(dry_run=dry_run)
+    else:
+        print("Failed to identify the platform!")
 
 
 def main() -> None:
