@@ -107,6 +107,13 @@ def run_system_updates(dry_run: bool = True) -> None:
         print("Failed to identify the platform!")
 
 
+def install_system_essentials() -> None:
+    """Install certain essentials necessary for proper functioning of the system."""
+    # TODO: Research and make a list of all the essentials necessary for a system to run
+    # properly.
+    pass
+
+
 def main() -> None:
     """Entrypoint of the script."""
     args = argument_parser()
