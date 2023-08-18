@@ -47,7 +47,7 @@ def argument_parser() -> Namespace:
     return parser.parse_args()
 
 
-def system_update_simulate() -> None:
+def system_update_simulation() -> None:
     """Simulate a system update (when the "dry_run" arguments are passed)."""
     print("Simulating system updates...")
 
@@ -71,7 +71,7 @@ def run_apt_updates(dry_run: bool) -> None:
         subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"])
         subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
     else:
-        system_update_simulate()
+        system_update_simulation()
 
 
 def run_macos_updates(dry_run: bool) -> None:
@@ -83,7 +83,7 @@ def run_macos_updates(dry_run: bool) -> None:
             print("MacOS system update failed...")
             print(error)
     else:
-        system_update_simulate()
+        system_update_simulation()
 
 
 def run_system_updates(dry_run: bool = True) -> None:
