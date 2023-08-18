@@ -176,6 +176,21 @@ def install_homebrew(dry_run: bool = DRY_RUN) -> None:
         print("Simulating Homebrew installation...")
 
 
+def install_fonts(dry_run: bool = DRY_RUN) -> None:
+    """Install certain fonts and make them available for use in the system."""
+    cascadia_code_download_url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/CascadiaCode.zip"
+    cascadia_code_zipname = "cascadia_code.zip"
+
+    print(cascadia_code_download_url)
+    print(cascadia_code_zipname)
+
+    if not dry_run:
+        pass
+    else:
+        # TODO: Refactor the "simulation function" to make this behaviour
+        print("Installing fonts...")
+
+
 def main() -> None:
     """Entrypoint of the script."""
     args = argument_parser()
