@@ -33,6 +33,9 @@ from argparse import ArgumentParser, Namespace
 # Fetch and store the OS name to be used later on in the script
 OS_NAME = platform.freedesktop_os_release().get("NAME")
 
+# Set the global default script runtime behaviour to be a simulation
+DRY_RUN = True
+
 
 def argument_parser() -> Namespace:
     """Parse the list of arguments passed to the script and return them."""
@@ -89,7 +92,7 @@ def run_macos_updates(dry_run: bool) -> None:
         system_update_simulation()
 
 
-def run_system_updates(dry_run: bool = True) -> None:
+def run_system_updates(dry_run: bool = DRY_RUN) -> None:
     """
     Detect the Operating System name and run some system updates on it.
 
@@ -108,7 +111,7 @@ def run_system_updates(dry_run: bool = True) -> None:
         print("Failed to identify the platform!")
 
 
-def install_system_essentials(dry_run: bool = True) -> None:
+def install_system_essentials(dry_run: bool = DRY_RUN) -> None:
     """Install certain essentials necessary for proper functioning of the system."""
     if platform.system() == "Linux":
         match OS_NAME:
@@ -147,7 +150,7 @@ def install_system_essentials(dry_run: bool = True) -> None:
         print("Unknown OS...aborting!")
 
 
-def install_homebrew(dry_run: bool = True) -> None:
+def install_homebrew(dry_run: bool = DRY_RUN) -> None:
     """Install HomeBrew on MacOS and Ubuntu/Debian systems."""
     homebrew_installation_url = (
         "https://raw.githubusercontent.com/Homebrew/install/master/install.sh"
