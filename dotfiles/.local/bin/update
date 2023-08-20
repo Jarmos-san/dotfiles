@@ -77,6 +77,14 @@ def perform_neovim_updates() -> None:
     subprocess.run(["nvim", "--headless", '"+Lazy! sync"', "+qa"])
 
 
+def upgrade_rust() -> None:
+    """Upgrade Rust and its related tools."""
+    try:
+        subprocess.run(["rustup", "upgrade", "stable"])
+    except subprocess.CalledProcessError as error:
+        raise (error)
+
+
 def main() -> None:
     """Entrypoint of the script."""
     # Detect the system name (like Linux or MacOS and so on) and store it in a variable
@@ -93,6 +101,9 @@ def main() -> None:
     # Check if Neovim is installed and accessible, if so run some updates for it
     if is_tool_installed("nvim"):
         perform_neovim_updates()
+
+    if is_tool_installed("rustup"):
+        upgrade_rust()
 
 
 if __name__ == "__main__":
