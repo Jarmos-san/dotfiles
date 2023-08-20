@@ -332,9 +332,32 @@ def install_flatpak(dry_run: bool = DRY_RUN) -> None:
         print("Simulating a dry installation for Flatpak!")
 
 
-def install_flatpak_packages() -> None:
-    """Install Flatpak packages on Linus distros."""
-    pass
+def install_flatpak_packages(dry_run: bool = DRY_RUN) -> None:
+    """Install Flatpak packages on Linux distros."""
+    packages = (
+        "com.microsoft.Edge"
+        "com.spotify.Client"
+        "com.discordapp.Discord"
+        "com.transmissionbt.Transmission"
+        "org.wezfurlong.wezterm"
+        "com.calibre_ebook.calibre"
+        "com.valvesoftware.Steam"
+        "org.flameshot.Flameshot"
+        "com.visualstudio.code"
+        "io.dbeaver.DBeaverCommunity"
+    )
+
+    if not dry_run:
+        if is_flatpak_installed():
+            for package in packages:
+                try:
+                    subprocess.run(
+                        ["flatpak", "install", "--assumeyes", "flathub", package]
+                    )
+                except subprocess.CalledProcessError as error:
+                    print(error)
+    else:
+        print("Simulating a dry installation for Flatpak packages!")
 
 
 def install_zsh_plugins() -> None:
