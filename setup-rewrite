@@ -360,9 +360,35 @@ def install_flatpak_packages(dry_run: bool = DRY_RUN) -> None:
         print("Simulating a dry installation for Flatpak packages!")
 
 
-def install_zsh_plugins() -> None:
+def install_zsh_plugins(dry_run: bool = DRY_RUN) -> None:
     """Install ZSH plugins."""
-    pass
+    # The list of ZSH plugins to install
+    plugins = (
+        "zsh-users/zsh-syntax-highlighting"
+        "zsh-users/zsh-autosuggestions"
+        "zsh-users/zsh-completions"
+        "le0me55i/zsh-extract"
+        "ael-code/zsh-colored-man-pages"
+    )
+
+    # The location on the filesystem to store the plugins
+    zsh_plugin_dir = Path(f"{Path.home()}/.zsh/plugins")
+
+    # Create the plugins directory if it doesn't already exists
+    if not zsh_plugin_dir.exists() and not zsh_plugin_dir.is_dir():
+        os.mkdir(zsh_plugin_dir)
+
+    # Attempt to install the ZSH plugins from GitHub to its respective location
+    if not dry_run:
+        for plugin in plugins:
+            try:
+                subprocess.run(
+                    ["git", "clone", f"git@github.com{plugin}", zsh_plugin_dir]
+                )
+            except subprocess.CalledProcessError as error:
+                print(error)
+    else:
+        print("Simulating ZSH plugins installation...")
 
 
 def setup_dotfiles() -> None:
