@@ -55,6 +55,6 @@ More will be added as & when I come across any.
 ## Terms & Conditions of Usage
 
 Everything in this repository is licensed under the T&Cs of a FOSS license. More
-specifically, the project is licensed under the T&Cs of GPL-3.0, so for more
+specifically, the project is licensed under the T&Cs of the MIT License, so for more
 info on it, refer to the [LICENSE](./LICENSE). So feel free to copy & distribute
 any of the configurations I shared in this repository.
