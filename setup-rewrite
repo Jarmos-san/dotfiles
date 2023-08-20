@@ -296,9 +296,40 @@ def install_brew_packages(dry_run: bool = DRY_RUN) -> None:
         print("Simulating Homebrew package installation...")
 
 
-def install_flatpak() -> None:
+def is_flatpak_installed() -> bool:
+    """Check if Flatpak is installed or not."""
+    try:
+        subprocess.run(["flatpak", "--version"], check=True)
+        return True
+    except subprocess.CalledProcessError as error:
+        raise error
+
+
+def install_flatpak(dry_run: bool = DRY_RUN) -> None:
     """Install Flatpak if its not available on Linux distros."""
-    pass
+    flatpak_repo = "https://flathub.org/repo/flathub.flatpakrepo"
+
+    if not dry_run:
+        # INFO: Attempt to install Flatpak if it is not available ONLY on Linux distros
+        if platform.system() == "Linux" and not is_flatpak_installed():
+            match OS_NAME:
+                case "Ubuntu" | "Debian":
+                    try:
+                        subprocess.run(["apt-get", "install", "flatpak"])
+                    except subprocess.CalledProcessError as error:
+                        print(error)
+                case _:
+                    print("Failed to identify OS...skipping Flatpak installation")
+                    pass
+
+            try:
+                subprocess.run(
+                    ["flatpak", "remote-add", "-if-not-exists", "flathub", flatpak_repo]
+                )
+            except subprocess.CalledProcessError as error:
+                print(error)
+    else:
+        print("Simulating a dry installation for Flatpak!")
 
 
 def install_flatpak_packages() -> None:
