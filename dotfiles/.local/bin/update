@@ -34,17 +34,23 @@ def is_tool_installed(tool: str) -> bool:
 
 def run_brew_updates() -> None:
     """Run Homebrew to update the respective packages and then some cleanup actions."""
-    subprocess.run(["brew", "update"])
-    subprocess.run(["brew", "upgrade"])
-    subprocess.run(["brew", "autoremove"])
-    subprocess.run(["brew", "cleanup"])
+    try:
+        subprocess.run(["brew", "update"])
+        subprocess.run(["brew", "upgrade"])
+        subprocess.run(["brew", "autoremove"])
+        subprocess.run(["brew", "cleanup"])
+    except subprocess.CalledProcessError as error:
+        raise error
 
 
 def run_apt_updates() -> None:
     """Run APT to update a Debian/Ubuntu system and then some cleanup actions."""
-    subprocess.run(["sudo", "apt-get", "update"])
-    subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"])
-    subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
+    try:
+        subprocess.run(["sudo", "apt-get", "update"])
+        subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"])
+        subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
+    except subprocess.CalledProcessError as error:
+        raise error
 
 
 def perform_linux_updates() -> None:
@@ -64,7 +70,10 @@ def perform_linux_updates() -> None:
 
 def perform_macos_updates() -> None:
     """Run some automated system updates for MacOS."""
-    subprocess.run(["sudo", "softwareupdate", "-i", "-a"])
+    try:
+        subprocess.run(["sudo", "softwareupdate", "-i", "-a"])
+    except subprocess.CalledProcessError as error:
+        raise error
 
     # Run Homebrew updates on a MacBook (or rather any Apple computer)
     if is_tool_installed("brew"):
@@ -74,7 +83,10 @@ def perform_macos_updates() -> None:
 def perform_neovim_updates() -> None:
     """Run some automated system update procedure for Neovim."""
     # FIXME: Doesn't work for whatever reason
-    subprocess.run(["nvim", "--headless", '"+Lazy! sync"', "+qa"])
+    try:
+        subprocess.run(["nvim", "--headless", '"+Lazy! sync"', "+qa"])
+    except subprocess.CalledProcessError as error:
+        raise error
 
 
 def upgrade_rust() -> None:
@@ -82,7 +94,7 @@ def upgrade_rust() -> None:
     try:
         subprocess.run(["rustup", "upgrade", "stable"])
     except subprocess.CalledProcessError as error:
-        raise (error)
+        raise error
 
 
 def main() -> None:
