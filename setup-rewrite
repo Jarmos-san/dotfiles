@@ -450,7 +450,7 @@ def main() -> None:
         install_flatpak(dry_run=False)
         install_flatpak_packages(dry_run=False)
         install_zsh_plugins(dry_run=False)
-        setup_dotfiles()
+        setup_dotfiles(dry_run=False)
         install_docker()
         install_rust()
         install_node()
