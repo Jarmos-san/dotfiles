@@ -25,7 +25,6 @@ License: MIT (see the LICENSE document for more info on this regards)
 
 # TODO: Make use of the logging module instead of useless print statements
 
-import os
 import platform
 import subprocess
 import time
@@ -202,7 +201,7 @@ def install_fonts(dry_run: bool = DRY_RUN) -> None:
                 # If the "~/.fonts" directory doesn't exists, create it before
                 # extracting the zipped contents
                 if not fonts_dir.exists() and not fonts_dir.is_dir():
-                    os.mkdir(fonts_dir)
+                    Path.mkdir(fonts_dir)
 
                 # Extract the zipped contents to the "~/.fonts" directory
                 zipfile.extractall(fonts_dir)
@@ -376,7 +375,7 @@ def install_zsh_plugins(dry_run: bool = DRY_RUN) -> None:
 
     # Create the plugins directory if it doesn't already exists
     if not zsh_plugin_dir.exists() and not zsh_plugin_dir.is_dir():
-        os.mkdir(zsh_plugin_dir)
+        Path.mkdir(zsh_plugin_dir)
 
     # Attempt to install the ZSH plugins from GitHub to its respective location
     if not dry_run:
