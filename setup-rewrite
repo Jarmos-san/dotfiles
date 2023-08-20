@@ -438,9 +438,13 @@ def install_rust(dry_run: bool = DRY_RUN) -> None:
         print("Simulating Rust installation...")
 
 
-def install_node() -> None:
+def install_node(dry_run: bool = DRY_RUN) -> None:
     """Install Node.js for the system."""
-    pass
+    if not dry_run:
+        # TODO: Figure out how to install Node.js using Python
+        pass
+    else:
+        print("Simulating Node.js installation...")
 
 
 def main() -> None:
@@ -459,7 +463,7 @@ def main() -> None:
         setup_dotfiles(dry_run=False)
         install_docker()
         install_rust(dry_run=False)
-        install_node()
+        install_node(dry_run=False)
     else:
         print('Running script in "dry" mode...')
         run_system_updates()
