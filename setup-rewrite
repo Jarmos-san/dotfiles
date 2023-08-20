@@ -69,6 +69,20 @@ def system_update_simulation() -> None:
     print("System upgrade simulation complete...")
 
 
+def is_tool_installed(tool: str) -> bool:
+    """Check if a tool is installed and executable."""
+    try:
+        subprocess.run(
+            [tool, "--version"],
+            check=True,
+            stderr=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+        )
+        return True
+    except subprocess.CalledProcessError as error:
+        raise error
+
+
 def run_apt_updates(dry_run: bool) -> None:
     """
     Run APT to update a Debian/Ubuntu system and perform some cleanup actions.
@@ -259,49 +273,36 @@ def install_brew_packages(dry_run: bool = DRY_RUN) -> None:
     )
 
     # INFO: Check if Homebrew is installed and invocable, else raise an error and log it
-    try:
-        subprocess.run(["brew", "--version"], check=True)
-    except subprocess.CalledProcessError as error:
-        raise (error)
+    if is_tool_installed("brew"):
+        if not dry_run:
+            print(taps, casks, formulae)
 
-    if not dry_run:
-        print(taps, casks, formulae)
-
-        # INFO: Install "taps" for Homebrew to fetch the packages (formulae) from
-        for tap in taps:
-            try:
-                subprocess.run(["brew", "install", tap])
-            except subprocess.CalledProcessError as error:
-                print(error)
-
-        # INFO: Install "formulae" (the packages) using Homebrew for both Linux and
-        # MacOS systems
-        for formula in formulae:
-            try:
-                subprocess.run(["brew", "install", formula])
-            except subprocess.CalledProcessError as error:
-                print(error)
-
-        # INFO: Installation of "casks" (GUI tools) are ONLY supported on MacOS!
-        if platform.system() == "MacOS":
-            for cask in casks:
+            # INFO: Install "taps" for Homebrew to fetch the packages (formulae) from
+            for tap in taps:
                 try:
-                    subprocess.run(["brew", "install", cask])
+                    subprocess.run(["brew", "install", tap])
                 except subprocess.CalledProcessError as error:
                     print(error)
 
-    else:
-        # TODO: Refactor and write simulation function instead
-        print("Simulating Homebrew package installation...")
+            # INFO: Install "formulae" (the packages) using Homebrew for both Linux and
+            # MacOS systems
+            for formula in formulae:
+                try:
+                    subprocess.run(["brew", "install", formula])
+                except subprocess.CalledProcessError as error:
+                    print(error)
 
+            # INFO: Installation of "casks" (GUI tools) are ONLY supported on MacOS!
+            if platform.system() == "MacOS":
+                for cask in casks:
+                    try:
+                        subprocess.run(["brew", "install", cask])
+                    except subprocess.CalledProcessError as error:
+                        print(error)
 
-def is_flatpak_installed() -> bool:
-    """Check if Flatpak is installed or not."""
-    try:
-        subprocess.run(["flatpak", "--version"], check=True)
-        return True
-    except subprocess.CalledProcessError as error:
-        raise error
+        else:
+            # TODO: Refactor and write simulation function instead
+            print("Simulating Homebrew package installation...")
 
 
 def install_flatpak(dry_run: bool = DRY_RUN) -> None:
@@ -310,7 +311,7 @@ def install_flatpak(dry_run: bool = DRY_RUN) -> None:
 
     if not dry_run:
         # INFO: Attempt to install Flatpak if it is not available ONLY on Linux distros
-        if platform.system() == "Linux" and not is_flatpak_installed():
+        if platform.system() == "Linux" and not is_tool_installed("flatpak"):
             match OS_NAME:
                 case "Ubuntu" | "Debian":
                     try:
@@ -347,7 +348,7 @@ def install_flatpak_packages(dry_run: bool = DRY_RUN) -> None:
     )
 
     if not dry_run:
-        if is_flatpak_installed():
+        if is_tool_installed("flatpak"):
             for package in packages:
                 try:
                     subprocess.run(
