@@ -228,11 +228,13 @@ def main() -> None:
         run_system_updates(dry_run=False)
         install_homebrew(dry_run=False)
         install_system_essentials(dry_run=False)
+        install_fonts(dry_run=False)
     else:
         print('Running script in "dry" mode...')
         run_system_updates()
         install_homebrew()
         install_system_essentials()
+        install_fonts()
 
 
 if __name__ == "__main__":
