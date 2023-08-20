@@ -220,6 +220,82 @@ def install_fonts(dry_run: bool = DRY_RUN) -> None:
             print("Simulating fonts downloading and installation...")
 
 
+def install_brew_packages(dry_run: bool = DRY_RUN) -> None:
+    """Install Homebrew packages."""
+    taps = (
+        "eth-p/software",
+        "go-task/tap",
+        "homebrew/bundle",
+        "homebrew/core",
+        "xo/xo",
+    )
+
+    casks = ("visual-studio-code", "spotify", "discord", "inkscape", "dbeaverlite")
+
+    formulae = (
+        "azure-cli",
+        "btop",
+        "cmatrix",
+        "cookiecutter",
+        "exa",
+        "fd",
+        "gcc",
+        "gh",
+        "glow",
+        "httpie",
+        "lua@5.1",
+        "mdbook",
+        "neofetch",
+        "neovim",
+        "oci-cli",
+        "poetry",
+        "pre-commit",
+        "ripgrep",
+        "rustup-init",
+        "starship",
+        "shellcheck",
+        "stow",
+        "usql",
+        "zsh",
+    )
+
+    # INFO: Check if Homebrew is installed and invocable, else raise an error and log it
+    try:
+        subprocess.run(["brew", "--version"], check=True)
+    except subprocess.CalledProcessError as error:
+        raise (error)
+
+    if not dry_run:
+        print(taps, casks, formulae)
+
+        # INFO: Install "taps" for Homebrew to fetch the packages (formulae) from
+        for tap in taps:
+            try:
+                subprocess.run(["brew", "install", tap])
+            except subprocess.CalledProcessError as error:
+                print(error)
+
+        # INFO: Install "formulae" (the packages) using Homebrew for both Linux and
+        # MacOS systems
+        for formula in formulae:
+            try:
+                subprocess.run(["brew", "install", formula])
+            except subprocess.CalledProcessError as error:
+                print(error)
+
+        # INFO: Installation of "casks" (GUI tools) are ONLY supported on MacOS!
+        if platform.system() == "MacOS":
+            for cask in casks:
+                try:
+                    subprocess.run(["brew", "install", cask])
+                except subprocess.CalledProcessError as error:
+                    print(error)
+
+    else:
+        # TODO: Refactor and write simulation function instead
+        print("Simulating Homebrew package installation...")
+
+
 def main() -> None:
     """Entrypoint of the script."""
     args = argument_parser()
@@ -229,12 +305,14 @@ def main() -> None:
         install_homebrew(dry_run=False)
         install_system_essentials(dry_run=False)
         install_fonts(dry_run=False)
+        install_brew_packages(dry_run=False)
     else:
         print('Running script in "dry" mode...')
         run_system_updates()
         install_homebrew()
         install_system_essentials()
         install_fonts()
+        install_brew_packages()
 
 
 if __name__ == "__main__":
