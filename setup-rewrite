@@ -296,6 +296,41 @@ def install_brew_packages(dry_run: bool = DRY_RUN) -> None:
         print("Simulating Homebrew package installation...")
 
 
+def install_flatpak() -> None:
+    """Install Flatpak if its not available on Linux distros."""
+    pass
+
+
+def install_flatpak_packages() -> None:
+    """Install Flatpak packages on Linus distros."""
+    pass
+
+
+def install_zsh_plugins() -> None:
+    """Install ZSH plugins."""
+    pass
+
+
+def setup_dotfiles() -> None:
+    """Set up dotfiles for the system."""
+    pass
+
+
+def install_docker() -> None:
+    """Install Docker for the system."""
+    pass
+
+
+def install_rust() -> None:
+    """Install Rust for the system."""
+    pass
+
+
+def install_node() -> None:
+    """Install Node.js for the system."""
+    pass
+
+
 def main() -> None:
     """Entrypoint of the script."""
     args = argument_parser()
@@ -306,6 +341,13 @@ def main() -> None:
         install_system_essentials(dry_run=False)
         install_fonts(dry_run=False)
         install_brew_packages(dry_run=False)
+        install_flatpak()
+        install_flatpak_packages()
+        install_zsh_plugins()
+        setup_dotfiles()
+        install_docker()
+        install_rust()
+        install_node()
     else:
         print('Running script in "dry" mode...')
         run_system_updates()
@@ -313,6 +355,13 @@ def main() -> None:
         install_system_essentials()
         install_fonts()
         install_brew_packages()
+        install_flatpak()
+        install_flatpak_packages()
+        install_zsh_plugins()
+        setup_dotfiles()
+        install_docker()
+        install_rust()
+        install_node()
 
 
 if __name__ == "__main__":
