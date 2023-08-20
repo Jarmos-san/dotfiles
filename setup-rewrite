@@ -25,10 +25,15 @@ License: MIT (see the LICENSE document for more info on this regards)
 
 # TODO: Make use of the logging module instead of useless print statements
 
+import os
 import platform
 import subprocess
 import time
 from argparse import ArgumentParser, Namespace
+from io import BytesIO
+from pathlib import Path
+from urllib.request import urlopen
+from zipfile import ZipFile
 
 # Fetch and store the OS name to be used later on in the script
 OS_NAME = platform.freedesktop_os_release().get("NAME")
@@ -178,17 +183,41 @@ def install_homebrew(dry_run: bool = DRY_RUN) -> None:
 
 def install_fonts(dry_run: bool = DRY_RUN) -> None:
     """Install certain fonts and make them available for use in the system."""
-    cascadia_code_download_url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/CascadiaCode.zip"
-    cascadia_code_zipname = "cascadia_code.zip"
+    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/CascadiaCode.zip"
+    fonts_dir = Path(f"{Path.home()}/.fonts")
 
-    print(cascadia_code_download_url)
-    print(cascadia_code_zipname)
-
-    if not dry_run:
-        pass
+    if not platform.system() == "Linux" or platform.system() == "MacOS":
+        print("Failed to identify OS...skipping fonts setup!")
     else:
-        # TODO: Refactor the "simulation function" to make this behaviour
-        print("Installing fonts...")
+        if not dry_run:
+            with urlopen(url=url) as res:
+                print("Downloading fonts...please wait!")
+
+                # Store the buffered contents from the HTTPS response in a variable
+                contents = BytesIO(res.read())
+
+                # Create a zipped file from the buffered contents
+                zipfile = ZipFile(contents)
+
+                # If the "~/.fonts" directory doesn't exists, create it before
+                # extracting the zipped contents
+                if not fonts_dir.exists() and not fonts_dir.is_dir():
+                    os.mkdir(fonts_dir)
+
+                # Extract the zipped contents to the "~/.fonts" directory
+                zipfile.extractall(fonts_dir)
+
+                # Refresh the font cache for the OS to know where to look for the new
+                # fonts
+                try:
+                    subprocess.run(["fc-cache", "--force"])
+                except subprocess.CalledProcessError as error:
+                    print(error)
+
+                print("Fonts download and setup complete!")
+        else:
+            # TODO: Write the logic to run a simulation of fonts installation
+            print("Simulating fonts downloading and installation...")
 
 
 def main() -> None:
