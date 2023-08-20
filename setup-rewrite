@@ -390,9 +390,36 @@ def install_zsh_plugins(dry_run: bool = DRY_RUN) -> None:
         print("Simulating ZSH plugins installation...")
 
 
-def setup_dotfiles() -> None:
+def setup_dotfiles(dry_run: bool = DRY_RUN) -> None:
     """Set up dotfiles for the system."""
-    pass
+    dotfiles_dir = Path(f"{Path.home()}/.dotfiles")
+
+    if not dry_run:
+        # INFO: Create the "~/.dotfiles" directory if it doesn't already exists
+        if not dotfiles_dir.exists() and not dotfiles_dir.is_dir():
+            Path.mkdir(dotfiles_dir)
+
+        # INFO: Attempt to download the dotfiles from the remote repository on GitHub
+        try:
+            subprocess.run(
+                ["git", "clone", "git@github.com:Jarmos-san/dotfiles", dotfiles_dir]
+            )
+        except subprocess.CalledProcessError as error:
+            print(error)
+
+        # INFO: Check if the contents of the ".dotfiles" repository are already
+        # symlinked, if yes then attempt to remove the links
+        for content in Path.iterdir(dotfiles_dir / "dotfiles"):
+            if content.is_symlink():
+                content.unlink(missing_ok=True)
+
+        # INFO: Create symlinks of the contents from "~/.dotfiles/dotfiles" directory
+        for content in Path.iterdir(dotfiles_dir / "dotfiles"):
+            content.symlink_to(
+                target=f"{Path.home()}/{content}", target_is_directory=True
+            )
+    else:
+        print("Simulating dotfiles setup...")
 
 
 def install_docker() -> None:
