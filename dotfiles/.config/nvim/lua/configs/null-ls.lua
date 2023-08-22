@@ -27,7 +27,8 @@ M.config = function()
               return client.name == "null-ls"
             end,
             async = false,
-            timeout_ms = 2000,
+            -- Allow 5 secs for the Null-ls sources to do its thing
+            timeout_ms = 5000,
           })
         end,
       })
@@ -68,11 +69,10 @@ M.config = function()
     formatting.ruff.with({ -- Super fast formatting tool for Python files
       prefer_local = ".venv/bin", -- Prefer using the virtual environment local binary for better project identification
     }),
-    -- FIXME: Broken and is causing some timeout issues!
-    -- formatting.prettier.with({ -- Formatter for web dev files
-    --   prefer_local = "node_modules/.bin",
-    --   extra_args = { "--prose-wrap", "always" },
-    -- }),
+    formatting.prettier.with({ -- Formatter for web dev files
+      prefer_local = "node_modules/.bin",
+      extra_args = { "--prose-wrap", "always" },
+    }),
     -- FIXME: Reports false-negatives when working with certain TOML files like "pyproject.toml"
     -- formatting.taplo, -- Formatter for TOML files
     diagnostics.vale.with({ -- Diagnostics tool for spell checking
