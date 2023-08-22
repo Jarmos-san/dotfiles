@@ -159,11 +159,16 @@ local plugins = {
     event = { "BufNewFile", "BufRead" },
     config = function()
       require("mini.comment").setup({
-        -- FIXME: Doesn't work
-        -- Ensure blanklines don't have unnecessary comments to avoid clutter
-        ignore_blank_lines = true,
+        options = {
+          ignore_blank_lines = true, -- FIXME: Blank lines are also commented (need a fix someday)
+          custom_commentstring = function()
+            -- INFO: Apply custom commenstring based on the embedded filetype
+            return require("ts_context_commentstring.internal").calculate_commentstring() or vim.bo.commentstring
+          end,
+        },
       })
     end,
+    dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
   },
 
   {
@@ -174,13 +179,8 @@ local plugins = {
       require("mini.pairs").setup({
         modes = {
           insert = true, -- "Insert" mode
-          -- FIXME: Doesn't work on "Command" nor "Terminal" modes
           command = true, -- "Command" mode
           terminal = true, -- "Terminal" mode
-        },
-        mappings = {
-          -- FIXME: Does not work for whatever reasons
-          ["<"] = { action = "open", pair = "<>", neigh_pattern = "[^\\]." },
         },
       })
     end,

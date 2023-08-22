@@ -31,6 +31,10 @@ local configs = {
     "vim",
     "vimdoc",
   },
+  context_commentstring = { -- Enable Treesitter aware commenting for certain files like JSX/TSX
+    enable = true,
+    enable_autocmd = false,
+  },
   highlight = { -- Enable syntax highlighting using the Treesitter parsers
     enable = true,
     additional_vim_regex_highlighting = false,
