@@ -128,6 +128,11 @@ M.config = function()
   typescript_ls.setup({
     on_attach = on_attach,
     capabilities = capabilities,
+    settings = {
+      tsserver_file_preferences = {
+        disableSuggestions = true,
+      },
+    },
   })
 
   -- LSP configurations for Rust projects
