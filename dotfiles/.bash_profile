@@ -5,4 +5,3 @@ if [ -f "$HOME/.bashrc" ]; then
   # shellcheck disable=1091
   source "$HOME/.bashrc"
 fi
-. "$HOME/.cargo/env"
