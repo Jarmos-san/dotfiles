@@ -79,13 +79,6 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 # Enable Starship for custom prompt experience
 eval "$(starship init bash)"
 
-# BEGIN_KITTY_SHELL_INTEGRATION
-# shellcheck source=/dev/null
-if test -n "$KITTY_INSTALLATION_DIR" -a -e "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; then
-  source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
-fi
-# END_KITTY_SHELL_INTEGRATION
-
 # Necessary configurations for GPG to work properly
 GPG_TTY=$(tty)
 export GPG_TTY
@@ -97,12 +90,3 @@ PATH=$PATH:$HOME/.local/bin
 
 # This is required for starship to recognise the location of its config file.
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
-
-# A bunch of custom aliases for easier terminal usage.
-alias ll="exa --long --all --classify --icons --git --ignore-glob='.git'"
-alias dcp="docker-compose"
-alias loc="wc -l"
-alias mkvenv="python -m venv .venv"
-alias update="sudo apt-get update && sudo apt-get upgrade -y && brew update && brew upgrade && brew autoremove"
-alias mx="tmux -u"
-. "$HOME/.cargo/env"
