@@ -70,7 +70,11 @@ def system_update_simulation() -> None:
 
 
 def is_tool_installed(tool: str) -> bool:
-    """Check if a tool is installed and executable."""
+    """
+    Check if a tool is installed and executable.
+
+    tool (String): The name of the tool to check for its availability
+    """
     try:
         subprocess.run(
             [tool, "--version"],
@@ -88,7 +92,7 @@ def run_apt_updates(dry_run: bool) -> None:
     Run APT to update a Debian/Ubuntu system and perform some cleanup actions.
 
     dry_run (boolean): Flag to configure the apt-get statements to run either in dry
-                       mode or not.
+        mode or not.
     """
     if not dry_run:
         subprocess.run(["sudo", "apt-get", "update"])
@@ -99,7 +103,12 @@ def run_apt_updates(dry_run: bool) -> None:
 
 
 def run_macos_updates(dry_run: bool) -> None:
-    """Automate MacOS system updates."""
+    """
+    Automate MacOS system updates.
+
+    dry_run (boolean): Flag to configure the MacOS system update to run either in dry
+        mode or not.
+    """
     if not dry_run:
         try:
             subprocess.run(["sudo", "softwareupdate", "-i", "-a"])
@@ -115,7 +124,7 @@ def run_system_updates(dry_run: bool = DRY_RUN) -> None:
     Detect the Operating System name and run some system updates on it.
 
     dry_run (boolean): Defaults to True which configures the function to run system
-                       updates in dry mode explicitly.
+        updates in dry mode explicitly.
     """
     if platform.system() == "Linux":
         match OS_NAME:
@@ -130,7 +139,12 @@ def run_system_updates(dry_run: bool = DRY_RUN) -> None:
 
 
 def install_system_essentials(dry_run: bool = DRY_RUN) -> None:
-    """Install certain essentials necessary for proper functioning of the system."""
+    """
+    Install certain essentials necessary for proper functioning of the system.
+
+    dry_run (Boolean): Optional flag to either run system updates based on the
+        identified OS.
+    """
     if platform.system() == "Linux":
         match OS_NAME:
             case "Ubuntu" | "Debian":
@@ -169,7 +183,11 @@ def install_system_essentials(dry_run: bool = DRY_RUN) -> None:
 
 
 def install_homebrew(dry_run: bool = DRY_RUN) -> None:
-    """Install HomeBrew on MacOS and Ubuntu/Debian systems."""
+    """
+    Install HomeBrew on MacOS and Ubuntu/Debian systems.
+
+    dry_run (Boolean): Optional flag to simulate Homebrew installtion.
+    """
     homebrew_installation_url = (
         "https://raw.githubusercontent.com/Homebrew/install/master/install.sh"
     )
@@ -195,7 +213,11 @@ def install_homebrew(dry_run: bool = DRY_RUN) -> None:
 
 
 def install_fonts(dry_run: bool = DRY_RUN) -> None:
-    """Install certain fonts and make them available for use in the system."""
+    """
+    Install certain fonts and make them available for use in the system.
+
+    dry_run (Boolean): Optional flag to simulate installation of the system fonts.
+    """
     url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/CascadiaCode.zip"
     fonts_dir = Path(f"{Path.home()}/.fonts")
 
@@ -234,7 +256,11 @@ def install_fonts(dry_run: bool = DRY_RUN) -> None:
 
 
 def install_brew_packages(dry_run: bool = DRY_RUN) -> None:
-    """Install Homebrew packages."""
+    """
+    Install Homebrew packages.
+
+    dry_run (Boolean): Optional flag to simulate Homebrew formulae installation.
+    """
     taps = (
         "eth-p/software",
         "go-task/tap",
@@ -303,7 +329,11 @@ def install_brew_packages(dry_run: bool = DRY_RUN) -> None:
 
 
 def install_flatpak(dry_run: bool = DRY_RUN) -> None:
-    """Install Flatpak if its not available on Linux distros."""
+    """
+    Install Flatpak if its not available on Linux distros.
+
+    dry_run (Boolean): Simulate Flatpak installation for the system.
+    """
     flatpak_repo = "https://flathub.org/repo/flathub.flatpakrepo"
 
     if not dry_run:
@@ -330,7 +360,11 @@ def install_flatpak(dry_run: bool = DRY_RUN) -> None:
 
 
 def install_flatpak_packages(dry_run: bool = DRY_RUN) -> None:
-    """Install Flatpak packages on Linux distros."""
+    """
+    Install Flatpak packages on Linux distros.
+
+    dry_run (Boolean): Simulate installing Flatpak packages on Linux systems.
+    """
     packages = (
         "com.calibre_ebook.calibre"
         "com.discordapp.Discord"
@@ -358,7 +392,11 @@ def install_flatpak_packages(dry_run: bool = DRY_RUN) -> None:
 
 
 def install_zsh_plugins(dry_run: bool = DRY_RUN) -> None:
-    """Install ZSH plugins."""
+    """
+    Install ZSH plugins.
+
+    dry_run (Boolean): Flag to optionally simulate installing ZSH plugins.
+    """
     # The list of ZSH plugins to install
     plugins = (
         "zsh-users/zsh-syntax-highlighting"
@@ -389,7 +427,11 @@ def install_zsh_plugins(dry_run: bool = DRY_RUN) -> None:
 
 
 def setup_dotfiles(dry_run: bool = DRY_RUN) -> None:
-    """Set up dotfiles for the system."""
+    """
+    Set up dotfiles for the system.
+
+    dry_run (Boolean): Flat to optionally simulate the dotfiles setup for the system.
+    """
     dotfiles_dir = Path(f"{Path.home()}/.dotfiles")
 
     if not dry_run:
@@ -426,7 +468,16 @@ def install_docker() -> None:
 
 
 def install_node(dry_run: bool = DRY_RUN) -> None:
-    """Install Node.js for the system."""
+    """
+    Install Node.js for the system.
+
+    dry_run (Boolean): Flat to simulate Node.js installation on the system.
+
+    INFO: It is necessary to Node.js through the recommended approach instead of
+    Homebrew because of issues with TypeScript complaining about the localtion of npm.
+    See the folowing issue thread for more information on this regards:
+    https://github.com/microsoft/TypeScript/issues/23924
+    """
     if not dry_run:
         # TODO: Figure out how to install Node.js using Python
         pass
