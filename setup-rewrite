@@ -425,17 +425,6 @@ def install_docker() -> None:
     pass
 
 
-def install_rust(dry_run: bool = DRY_RUN) -> None:
-    """Install Rust for the system."""
-    if not dry_run:
-        try:
-            subprocess.run(["rustup", "update", "stable"])
-        except subprocess.CalledProcessError as error:
-            print(error)
-    else:
-        print("Simulating Rust installation...")
-
-
 def install_node(dry_run: bool = DRY_RUN) -> None:
     """Install Node.js for the system."""
     if not dry_run:
@@ -460,7 +449,6 @@ def main() -> None:
         install_zsh_plugins(dry_run=False)
         setup_dotfiles(dry_run=False)
         install_docker()
-        install_rust(dry_run=False)
         install_node(dry_run=False)
     else:
         print('Running script in "dry" mode...')
@@ -474,7 +462,6 @@ def main() -> None:
         install_zsh_plugins()
         setup_dotfiles()
         install_docker()
-        install_rust()
         install_node()
 
 
