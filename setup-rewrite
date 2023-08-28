@@ -332,16 +332,16 @@ def install_flatpak(dry_run: bool = DRY_RUN) -> None:
 def install_flatpak_packages(dry_run: bool = DRY_RUN) -> None:
     """Install Flatpak packages on Linux distros."""
     packages = (
-        "com.microsoft.Edge"
-        "com.spotify.Client"
-        "com.discordapp.Discord"
-        "com.transmissionbt.Transmission"
-        "org.wezfurlong.wezterm"
         "com.calibre_ebook.calibre"
-        "com.valvesoftware.Steam"
+        "com.discordapp.Discord"
         "org.flameshot.Flameshot"
+        "com.microsoft.Edge"
+        "com.github.KRTirtho.Spotube"
+        "com.transmissionbt.Transmission"
+        "com.valvesoftware.Steam"
         "com.visualstudio.code"
         "io.dbeaver.DBeaverCommunity"
+        "org.wezfurlong.wezterm"
     )
 
     if not dry_run:
