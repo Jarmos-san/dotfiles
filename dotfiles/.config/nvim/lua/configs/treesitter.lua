@@ -42,11 +42,6 @@ local configs = {
   indent = { -- Disable Treesitter-based indentation since its errorneous
     enable = false,
   },
-  context_commentstring = {
-    -- Enable easier commenting using Treesitter
-    enable = true,
-    enable_autocmd = false,
-  },
   incremental_selection = { -- Incrementally select content powered by Treesitter
     enable = true,
   },
