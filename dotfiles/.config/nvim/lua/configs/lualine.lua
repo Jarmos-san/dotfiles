@@ -30,6 +30,9 @@ M.config = function()
     lualine_x = { "filetype" },
     lualine_y = { "progress" },
     lualine_z = { "location" },
+    lualine_c = { -- INFO: This section shows the entire filepath relative to the project root
+      { "filename", path = 1 },
+    },
   }
 
   require("lualine").setup({ options = options, sections = sections })
