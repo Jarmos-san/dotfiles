@@ -35,11 +35,8 @@ from pathlib import Path
 from urllib.request import urlopen
 from zipfile import ZipFile
 
-# Fetch and store the OS name to be used later on in the script
+# Fetch and store the OS name to be used later on in the script (Linux ONLY)
 OS_NAME = platform.freedesktop_os_release().get("NAME")
-
-# Set the global default script runtime behaviour to be a simulation
-DRY_RUN = True
 
 
 @unique
@@ -55,6 +52,10 @@ class MessageLabel(StrEnum):
     def __str__(self) -> str:
         """Easier representation of the Enum Object's values with print statements."""
         return self.value
+
+
+# Variable for easier access to the Enum members
+label = MessageLabel
 
 
 def argument_parser() -> Namespace:
@@ -77,19 +78,15 @@ def simulate_dry_run() -> None:
     """Simulate dry runs of various functionalities like system updates and more."""
     # TODO: Refactor the entire script to remove each "dry run" capabilities from the
     # functions below and apply those in this single function instead to be DRY
-    print(f'{MessageLabel.INFO} Running the script in simulation (or a "dry run") mode')
+    print(f'{label.INFO} Running the script in simulation (or a "dry run") mode')
+    time.sleep(1)
 
-
-def system_update_simulation() -> None:
-    """Simulate a system update (when the "dry_run" arguments are passed)."""
-    print("Simulating system updates...")
-
-    # Print a bunch of dots across 10 lines for roughly around 30 secs
+    # TODO: Detect OS and simulate update accordingly
+    print(f"{label.INFO} Simulating system updates...")
     for _ in range(10):
         print("...")
-        time.sleep(3)
-
-    print("System upgrade simulation complete...")
+        time.sleep(1)
+    print(f"{label.SUCCESS} System updates complete...")
 
 
 def is_tool_installed(tool: str) -> bool:
@@ -110,107 +107,62 @@ def is_tool_installed(tool: str) -> bool:
         raise error
 
 
-def run_apt_updates(dry_run: bool) -> None:
-    """
-    Run APT to update a Debian/Ubuntu system and perform some cleanup actions.
-
-    dry_run (boolean): Flag to configure the apt-get statements to run either in dry
-        mode or not.
-    """
-    if not dry_run:
+def run_apt_updates() -> None:
+    """Run APT to update a Debian/Ubuntu system and perform some cleanup actions."""
+    try:
         subprocess.run(["sudo", "apt-get", "update"])
         subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"])
         subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
-    else:
-        system_update_simulation()
+    except subprocess.CalledProcessError as error:
+        print(f"{label.ERROR} APT failed to update the packages...\n{error}")
 
 
-def run_macos_updates(dry_run: bool) -> None:
-    """
-    Automate MacOS system updates.
-
-    dry_run (boolean): Flag to configure the MacOS system update to run either in dry
-        mode or not.
-    """
-    if not dry_run:
-        try:
-            subprocess.run(["sudo", "softwareupdate", "-i", "-a"])
-        except subprocess.CalledProcessError as error:
-            print("MacOS system update failed...")
-            print(error)
-    else:
-        system_update_simulation()
+def run_macos_updates() -> None:
+    """Automate MacOS system updates."""
+    try:
+        subprocess.run(["sudo", "softwareupdate", "-i", "-a"])
+    except subprocess.CalledProcessError as error:
+        print(f"{label.ERROR} MacOS system update failed...\n{error}")
 
 
-def run_system_updates(dry_run: bool = DRY_RUN) -> None:
-    """
-    Detect the Operating System name and run some system updates on it.
-
-    dry_run (boolean): Defaults to True which configures the function to run system
-        updates in dry mode explicitly.
-    """
+def run_system_updates() -> None:
+    """Detect the Operating System name and run some system updates on it."""
     if platform.system() == "Linux":
         match OS_NAME:
             case "Ubuntu" | "Debian":
-                run_apt_updates(dry_run=dry_run)
+                run_apt_updates()
             case _:
-                print("Failed to identify the OS...aborting system updates!")
+                print(f"{label.ERROR} Failed to identify the OS...aborting!")
     elif platform.system() == "MacOS":
-        run_macos_updates(dry_run=dry_run)
+        run_macos_updates()
     else:
-        print("Failed to identify the platform!")
+        print(f"{label.ERROR} Failed to identify the platform!")
 
 
-def install_system_essentials(dry_run: bool = DRY_RUN) -> None:
-    """
-    Install certain essentials necessary for proper functioning of the system.
-
-    dry_run (Boolean): Optional flag to either run system updates based on the
-        identified OS.
-    """
-    if platform.system() == "Linux":
-        match OS_NAME:
-            case "Ubuntu" | "Debian":
-                if not dry_run:
-                    try:
-                        subprocess.run(
-                            [
-                                "sudo",
-                                "apt-get",
-                                "install",
-                                "curl",
-                                "git",
-                                "--yes",
-                                "--no-install-recommends",
-                            ]
-                        )
-                    except subprocess.CalledProcessError as error:
-                        print(error)
-                else:
-                    subprocess.run(
-                        [
-                            "sudo",
-                            "apt-get",
-                            "install",
-                            "curl",
-                            "git",
-                            "--yes",
-                            "--no-install-recommends",
-                            "--dry-run",
-                        ]
-                    )
-            case _:
-                print("Failed to identify OS...aborting!")
-    else:
-        print("Unknown OS...aborting!")
+def install_system_essentials() -> None:
+    """Install certain essentials necessary for proper functioning of the system."""
+    match OS_NAME:
+        case "Ubuntu" | "Debian":
+            try:
+                subprocess.run(
+                    [
+                        "sudo",
+                        "apt-get",
+                        "install",
+                        "curl",
+                        "git",
+                        "--yes",
+                        "--no-install-recommends",
+                    ]
+                )
+            except subprocess.CalledProcessError as error:
+                print(f"{label.ERROR} Failed to install essential tools...\n{error}")
+        case _:
+            print(f"{label.ERROR} Failed to identify OS...aborting!")
 
 
-def install_homebrew(dry_run: bool = DRY_RUN) -> None:
-    """
-    Install HomeBrew on MacOS and Ubuntu/Debian systems.
-
-    dry_run (Boolean): Optional flag to simulate Homebrew installtion.
-    """
+def install_homebrew() -> None:
+    """Install HomeBrew on MacOS and Ubuntu/Debian systems."""
     homebrew_installation_url = (
         "https://raw.githubusercontent.com/Homebrew/install/master/install.sh"
     )
@@ -218,72 +170,55 @@ def install_homebrew(dry_run: bool = DRY_RUN) -> None:
         f"curl --fail --silent --show-error --location ${homebrew_installation_url}"
     )
 
-    if not dry_run:
-        # Install Homebrew only for MacOS and Ubuntu/Debian systems
-        if platform.system() == "MacOS" or platform.system() == "Linux":
-            try:
-                subprocess.run(
-                    ["NONINTERACTIVE=1 ", "/bin/bash", "-c", f'$"({curl_command})"']
-                )
-            except subprocess.CalledProcessError as error:
-                print(f"Failed to install Homebrew: {error}")
-        else:
-            pass
+    # Install Homebrew only for MacOS and Ubuntu/Debian systems
+    if platform.system() == "MacOS" or platform.system() == "Linux":
+        try:
+            subprocess.run(
+                ["NONINTERACTIVE=1 ", "/bin/bash", "-c", f'$"({curl_command})"']
+            )
+        except subprocess.CalledProcessError as error:
+            print(f"{label.ERROR} Failed to install Homebrew...\n{error}")
     else:
-        # TODO: Refactor the "system_update_simulation" to consider a Homebrew
-        # installation as well
-        print("Simulating Homebrew installation...")
+        pass
 
 
-def install_fonts(dry_run: bool = DRY_RUN) -> None:
-    """
-    Install certain fonts and make them available for use in the system.
-
-    dry_run (Boolean): Optional flag to simulate installation of the system fonts.
-    """
+def install_fonts() -> None:
+    """Install certain fonts and make them available for use in the system."""
     url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/CascadiaCode.zip"
     fonts_dir = Path(f"{Path.home()}/.fonts")
 
     if not platform.system() == "Linux" or platform.system() == "MacOS":
-        print("Failed to identify OS...skipping fonts setup!")
+        print(f"{label.INFO} Failed to identify OS...skipping fonts setup!")
     else:
-        if not dry_run:
-            with urlopen(url=url) as res:
-                print("Downloading fonts...please wait!")
+        with urlopen(url=url) as res:
+            print(f"{label.INFO} Downloading fonts...please wait!")
 
-                # Store the buffered contents from the HTTPS response in a variable
-                contents = BytesIO(res.read())
+            # Store the buffered contents from the HTTPS response in a variable
+            contents = BytesIO(res.read())
 
-                # Create a zipped file from the buffered contents
-                zipfile = ZipFile(contents)
+            # Create a zipped file from the buffered contents
+            zipfile = ZipFile(contents)
 
-                # If the "~/.fonts" directory doesn't exists, create it before
-                # extracting the zipped contents
-                if not fonts_dir.exists() and not fonts_dir.is_dir():
-                    Path.mkdir(fonts_dir)
+            # If the "~/.fonts" directory doesn't exists, create it before
+            # extracting the zipped contents
+            if not fonts_dir.exists() and not fonts_dir.is_dir():
+                Path.mkdir(fonts_dir)
 
-                # Extract the zipped contents to the "~/.fonts" directory
-                zipfile.extractall(fonts_dir)
+            # Extract the zipped contents to the "~/.fonts" directory
+            zipfile.extractall(fonts_dir)
 
-                # Refresh the font cache for the OS to know where to look for the new
-                # fonts
-                try:
-                    subprocess.run(["fc-cache", "--force"])
-                except subprocess.CalledProcessError as error:
-                    print(error)
+            # Refresh the font cache for the OS to know where to look for the new
+            # fonts
+            try:
+                subprocess.run(["fc-cache", "--force"])
+            except subprocess.CalledProcessError as error:
+                print(f"{label.ERROR} Failed to update the fonts cache...\n{error}")
 
-                print("Fonts download and setup complete!")
-        else:
-            # TODO: Write the logic to run a simulation of fonts installation
-            print("Simulating fonts downloading and installation...")
+            print("Fonts download and setup complete!")
 
 
-def install_brew_packages(dry_run: bool = DRY_RUN) -> None:
-    """
-    Install Homebrew packages.
-
-    dry_run (Boolean): Optional flag to simulate Homebrew formulae installation.
-    """
+def install_brew_packages() -> None:
+    """Install Homebrew packages."""
     taps = (
         "eth-p/software",
         "go-task/tap",
@@ -318,76 +253,63 @@ def install_brew_packages(dry_run: bool = DRY_RUN) -> None:
         "zsh",
     )
 
-    # INFO: Check if Homebrew is installed and invocable, else raise an error and log it
+    # INFO: Check if Homebrew is installed and invocable
     if is_tool_installed("brew"):
-        if not dry_run:
-            print(taps, casks, formulae)
+        # INFO: Install "taps" for Homebrew to fetch the packages (formulae) from
+        for tap in taps:
+            try:
+                subprocess.run(["brew", "install", tap])
+            except subprocess.CalledProcessError as error:
+                print(f"{label.ERROR} Failed to install Homebrew taps...\n{error}")
 
-            # INFO: Install "taps" for Homebrew to fetch the packages (formulae) from
-            for tap in taps:
+        # INFO: Install "formulae" using Homebrew for both Linux and MacOS systems
+        for formula in formulae:
+            try:
+                subprocess.run(["brew", "install", formula])
+            except subprocess.CalledProcessError as error:
+                print(f"{label.ERROR} Failed to install formulae...\n{error}")
+
+        # INFO: Installation of "casks" (GUI tools) are ONLY supported on MacOS!
+        if platform.system() == "MacOS":
+            for cask in casks:
                 try:
-                    subprocess.run(["brew", "install", tap])
+                    subprocess.run(["brew", "install", cask])
                 except subprocess.CalledProcessError as error:
-                    print(error)
-
-            # INFO: Install "formulae" (the packages) using Homebrew for both Linux and
-            # MacOS systems
-            for formula in formulae:
-                try:
-                    subprocess.run(["brew", "install", formula])
-                except subprocess.CalledProcessError as error:
-                    print(error)
-
-            # INFO: Installation of "casks" (GUI tools) are ONLY supported on MacOS!
-            if platform.system() == "MacOS":
-                for cask in casks:
-                    try:
-                        subprocess.run(["brew", "install", cask])
-                    except subprocess.CalledProcessError as error:
-                        print(error)
-
-        else:
-            # TODO: Refactor and write simulation function instead
-            print("Simulating Homebrew package installation...")
+                    print(f"{label.ERROR} Failed to install casks...\n{error}")
+    else:
+        print(
+            f"{label.ERROR} Homebrew not found (or perhaps not installed?)...aborting!"
+        )
 
 
-def install_flatpak(dry_run: bool = DRY_RUN) -> None:
-    """
-    Install Flatpak if its not available on Linux distros.
-
-    dry_run (Boolean): Simulate Flatpak installation for the system.
-    """
+def install_flatpak() -> None:
+    """Install Flatpak if its not available on Linux distros."""
     flatpak_repo = "https://flathub.org/repo/flathub.flatpakrepo"
 
-    if not dry_run:
-        # INFO: Attempt to install Flatpak if it is not available ONLY on Linux distros
-        if platform.system() == "Linux" and not is_tool_installed("flatpak"):
-            match OS_NAME:
-                case "Ubuntu" | "Debian":
-                    try:
-                        subprocess.run(["apt-get", "install", "flatpak"])
-                    except subprocess.CalledProcessError as error:
-                        print(error)
-                case _:
-                    print("Failed to identify OS...skipping Flatpak installation")
-                    pass
+    # INFO: Attempt to install Flatpak ONLY on Linux distros & not WSL, if not available
+    if platform.system() == "Linux" and not is_tool_installed("flatpak"):
+        match OS_NAME:
+            case "Ubuntu" | "Debian":
+                try:
+                    subprocess.run(["apt-get", "install", "flatpak"])
+                except subprocess.CalledProcessError as error:
+                    print(f"{label.ERROR} Failed to install Flatpak...\n{error}")
+            case _:
+                print(f"{label.ERROR} Unknown OS...skipping Flatpak installation")
+                pass
 
-            try:
-                subprocess.run(
-                    ["flatpak", "remote-add", "-if-not-exists", "flathub", flatpak_repo]
-                )
-            except subprocess.CalledProcessError as error:
-                print(error)
-    else:
-        print("Simulating a dry installation for Flatpak!")
+        try:
+            subprocess.run(
+                ["flatpak", "remote-add", "-if-not-exists", "flathub", flatpak_repo]
+            )
+        except subprocess.CalledProcessError as error:
+            print(
+                f"{label.ERROR} Failed to update Flatpak repository locally...\n{error}"
+            )
 
 
-def install_flatpak_packages(dry_run: bool = DRY_RUN) -> None:
-    """
-    Install Flatpak packages on Linux distros.
-
-    dry_run (Boolean): Simulate installing Flatpak packages on Linux systems.
-    """
+def install_flatpak_packages() -> None:
+    """Install Flatpak packages on Linux distros."""
     packages = (
         "com.calibre_ebook.calibre"
         "com.discordapp.Discord"
@@ -401,25 +323,20 @@ def install_flatpak_packages(dry_run: bool = DRY_RUN) -> None:
         "org.wezfurlong.wezterm"
     )
 
-    if not dry_run:
-        if is_tool_installed("flatpak"):
-            for package in packages:
-                try:
-                    subprocess.run(
-                        ["flatpak", "install", "--assumeyes", "flathub", package]
-                    )
-                except subprocess.CalledProcessError as error:
-                    print(error)
-    else:
-        print("Simulating a dry installation for Flatpak packages!")
+    if is_tool_installed("flatpak"):
+        for package in packages:
+            try:
+                subprocess.run(
+                    ["flatpak", "install", "--assumeyes", "flathub", package]
+                )
+            except subprocess.CalledProcessError as error:
+                print(
+                    f"{label.ERROR} Failed to install packages from Flatpak...\n{error}"
+                )
 
 
-def install_zsh_plugins(dry_run: bool = DRY_RUN) -> None:
-    """
-    Install ZSH plugins.
-
-    dry_run (Boolean): Flag to optionally simulate installing ZSH plugins.
-    """
+def install_zsh_plugins() -> None:
+    """Install ZSH plugins."""
     # The list of ZSH plugins to install
     plugins = (
         "zsh-users/zsh-syntax-highlighting"
@@ -437,52 +354,38 @@ def install_zsh_plugins(dry_run: bool = DRY_RUN) -> None:
         Path.mkdir(zsh_plugin_dir)
 
     # Attempt to install the ZSH plugins from GitHub to its respective location
-    if not dry_run:
-        for plugin in plugins:
-            try:
-                subprocess.run(
-                    ["git", "clone", f"git@github.com{plugin}", zsh_plugin_dir]
-                )
-            except subprocess.CalledProcessError as error:
-                print(error)
-    else:
-        print("Simulating ZSH plugins installation...")
+    for plugin in plugins:
+        try:
+            subprocess.run(["git", "clone", f"git@github.com{plugin}", zsh_plugin_dir])
+        except subprocess.CalledProcessError as error:
+            print(f"{label.ERROR} Failed to install ZSH plugins...\n{error}")
 
 
-def setup_dotfiles(dry_run: bool = DRY_RUN) -> None:
-    """
-    Set up dotfiles for the system.
-
-    dry_run (Boolean): Flat to optionally simulate the dotfiles setup for the system.
-    """
+def setup_dotfiles() -> None:
+    """Set up dotfiles for the system."""
     dotfiles_dir = Path(f"{Path.home()}/.dotfiles")
 
-    if not dry_run:
-        # INFO: Create the "~/.dotfiles" directory if it doesn't already exists
-        if not dotfiles_dir.exists() and not dotfiles_dir.is_dir():
-            Path.mkdir(dotfiles_dir)
+    # INFO: Create the "~/.dotfiles" directory if it doesn't already exists
+    if not dotfiles_dir.exists() and not dotfiles_dir.is_dir():
+        Path.mkdir(dotfiles_dir)
 
-        # INFO: Attempt to download the dotfiles from the remote repository on GitHub
-        try:
-            subprocess.run(
-                ["git", "clone", "git@github.com:Jarmos-san/dotfiles", dotfiles_dir]
-            )
-        except subprocess.CalledProcessError as error:
-            print(error)
+    # INFO: Attempt to download the dotfiles from the remote repository on GitHub
+    try:
+        subprocess.run(
+            ["git", "clone", "git@github.com:Jarmos-san/dotfiles", dotfiles_dir]
+        )
+    except subprocess.CalledProcessError as error:
+        print(f"{label.ERROR} Failed to clone remote dotfiles repository...\n{error}")
 
-        # INFO: Check if the contents of the ".dotfiles" repository are already
-        # symlinked, if yes then attempt to remove the links
-        for content in Path.iterdir(dotfiles_dir / "dotfiles"):
-            if content.is_symlink():
-                content.unlink(missing_ok=True)
+    # INFO: Check if the contents of the ".dotfiles" repository are already
+    # symlinked, if yes then attempt to remove the links
+    for content in Path.iterdir(dotfiles_dir / "dotfiles"):
+        if content.is_symlink():
+            content.unlink(missing_ok=True)
 
-        # INFO: Create symlinks of the contents from "~/.dotfiles/dotfiles" directory
-        for content in Path.iterdir(dotfiles_dir / "dotfiles"):
-            content.symlink_to(
-                target=f"{Path.home()}/{content}", target_is_directory=True
-            )
-    else:
-        print("Simulating dotfiles setup...")
+    # INFO: Create symlinks of the contents from "~/.dotfiles/dotfiles" directory
+    for content in Path.iterdir(dotfiles_dir / "dotfiles"):
+        content.symlink_to(target=f"{Path.home()}/{content}", target_is_directory=True)
 
 
 def install_docker() -> None:
@@ -490,22 +393,16 @@ def install_docker() -> None:
     pass
 
 
-def install_node(dry_run: bool = DRY_RUN) -> None:
+def install_node() -> None:
     """
     Install Node.js for the system.
-
-    dry_run (Boolean): Flat to simulate Node.js installation on the system.
 
     INFO: It is necessary to Node.js through the recommended approach instead of
     Homebrew because of issues with TypeScript complaining about the localtion of npm.
     See the folowing issue thread for more information on this regards:
     https://github.com/microsoft/TypeScript/issues/23924
     """
-    if not dry_run:
-        # TODO: Figure out how to install Node.js using Python
-        pass
-    else:
-        print("Simulating Node.js installation...")
+    pass
 
 
 def main() -> None:
