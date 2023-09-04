@@ -135,8 +135,6 @@ def run_system_updates() -> None:
                 print(f"{label.ERROR} Failed to identify the OS...aborting!")
     elif platform.system() == "MacOS":
         run_macos_updates()
-    else:
-        print(f"{label.ERROR} Failed to identify the platform!")
 
 
 def install_system_essentials() -> None:
@@ -171,15 +169,16 @@ def install_homebrew() -> None:
     )
 
     # Install Homebrew only for MacOS and Ubuntu/Debian systems
-    if platform.system() == "MacOS" or platform.system() == "Linux":
+    if not platform.system() == "MacOS" or not platform.system() == "Linux":
+        print(f"{label.INFO} Skipping Homebrew installation on unsupported OS")
+        pass
+    else:
         try:
             subprocess.run(
                 ["NONINTERACTIVE=1 ", "/bin/bash", "-c", f'$"({curl_command})"']
             )
         except subprocess.CalledProcessError as error:
             print(f"{label.ERROR} Failed to install Homebrew...\n{error}")
-    else:
-        pass
 
 
 def install_fonts() -> None:
@@ -189,6 +188,7 @@ def install_fonts() -> None:
 
     if not platform.system() == "Linux" or platform.system() == "MacOS":
         print(f"{label.INFO} Failed to identify OS...skipping fonts setup!")
+        pass
     else:
         with urlopen(url=url) as res:
             print(f"{label.INFO} Downloading fonts...please wait!")
@@ -254,7 +254,9 @@ def install_brew_packages() -> None:
     )
 
     # INFO: Check if Homebrew is installed and invocable
-    if is_tool_installed("brew"):
+    if not is_tool_installed("brew"):
+        print(f"{label.ERROR} Homebrew not found (not installed perhaps?)...aborting!")
+    else:
         # INFO: Install "taps" for Homebrew to fetch the packages (formulae) from
         for tap in taps:
             try:
@@ -276,10 +278,6 @@ def install_brew_packages() -> None:
                     subprocess.run(["brew", "install", cask])
                 except subprocess.CalledProcessError as error:
                     print(f"{label.ERROR} Failed to install casks...\n{error}")
-    else:
-        print(
-            f"{label.ERROR} Homebrew not found (or perhaps not installed?)...aborting!"
-        )
 
 
 def install_flatpak() -> None:
@@ -298,6 +296,7 @@ def install_flatpak() -> None:
                 print(f"{label.ERROR} Unknown OS...skipping Flatpak installation")
                 pass
 
+        # INFO: Attemp to update the remote Flatpak repository locally
         try:
             subprocess.run(
                 ["flatpak", "remote-add", "-if-not-exists", "flathub", flatpak_repo]
@@ -323,7 +322,9 @@ def install_flatpak_packages() -> None:
         "org.wezfurlong.wezterm"
     )
 
-    if is_tool_installed("flatpak"):
+    if not is_tool_installed("flatpak"):
+        print(f"{label.WARNING} Flatpak not found")
+    else:
         for package in packages:
             try:
                 subprocess.run(
