@@ -29,6 +29,7 @@ import platform
 import subprocess
 import time
 from argparse import ArgumentParser, Namespace
+from enum import StrEnum, unique
 from io import BytesIO
 from pathlib import Path
 from urllib.request import urlopen
@@ -39,6 +40,21 @@ OS_NAME = platform.freedesktop_os_release().get("NAME")
 
 # Set the global default script runtime behaviour to be a simulation
 DRY_RUN = True
+
+
+@unique
+class MessageLabel(StrEnum):
+
+    """Message labels with appropriate terminal colours to showcase its importance."""
+
+    ERROR = "\033[0;31m[ERROR]\033[0m"
+    SUCCESS = "\033[0;32m[SUCCESS]\033[0m"
+    WARNING = "\033[0;33m[WARNING]\033[0m"
+    INFO = "\033[0;34m[INFO]\033[0m"
+
+    def __str__(self) -> str:
+        """Easier representation of the Enum Object's values with print statements."""
+        return self.value
 
 
 def argument_parser() -> Namespace:
