@@ -73,6 +73,13 @@ def argument_parser() -> Namespace:
     return parser.parse_args()
 
 
+def simulate_dry_run() -> None:
+    """Simulate dry runs of various functionalities like system updates and more."""
+    # TODO: Refactor the entire script to remove each "dry run" capabilities from the
+    # functions below and apply those in this single function instead to be DRY
+    print(f'{MessageLabel.INFO} Running the script in simulation (or a "dry run") mode')
+
+
 def system_update_simulation() -> None:
     """Simulate a system update (when the "dry_run" arguments are passed)."""
     print("Simulating system updates...")
@@ -506,17 +513,7 @@ def main() -> None:
     args = argument_parser()
 
     if not args.dry_run:
-        run_system_updates(dry_run=False)
-        install_homebrew(dry_run=False)
-        install_system_essentials(dry_run=False)
-        install_fonts(dry_run=False)
-        install_brew_packages(dry_run=False)
-        install_flatpak(dry_run=False)
-        install_flatpak_packages(dry_run=False)
-        install_zsh_plugins(dry_run=False)
-        setup_dotfiles(dry_run=False)
-        install_docker()
-        install_node(dry_run=False)
+        simulate_dry_run()
     else:
         print('Running script in "dry" mode...')
         run_system_updates()
