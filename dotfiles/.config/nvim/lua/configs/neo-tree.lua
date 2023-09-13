@@ -55,6 +55,7 @@ M.options = {
         ".pytest_cache",
         ".ruff_cache",
         ".task",
+        ".tmp",
         ".venv",
         "__pycache__",
       },
