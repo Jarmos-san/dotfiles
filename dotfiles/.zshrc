@@ -20,7 +20,7 @@ eval "$(starship init zsh)"
 
 # A bunch of custom aliases for easier terminal usage.
 alias ll="exa --long --all --classify --icons --git --ignore-glob='.git'"
-alias dcp="docker compose"
+alias compose="docker compose"
 alias loc="wc -l"
 alias mkvenv="python3 -m venv .venv"
 alias tree="exa --tree --all --icons --ignore-glob='.git' --git-ignore"
@@ -28,6 +28,7 @@ alias dateiso="date +%Y-%m-%dT%H:%M:%S%z"
 alias top="btop --utf-force"
 alias cm="cmatrix -abs -C yellow"
 alias rands="openssl rand -base64 32"
+alias docker-clean="docker system prune --force --all --volumes"
 
 # Various ZSH plugins to make the Shell usage experience better
 plugins=(
