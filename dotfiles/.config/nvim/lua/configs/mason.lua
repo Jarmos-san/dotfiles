@@ -13,10 +13,11 @@ M.config = function()
     "dockerls",
     "eslint",
     "html",
+    "jedi_language_server",
     "jsonls",
     "lua_ls",
     -- "prettier",
-    "pyright",
+    -- "pyright",
     "ruff_lsp",
     "rust_analyzer",
     -- "taplo", -- TODO: Figure out how to make it identify the "pyproject.toml" file

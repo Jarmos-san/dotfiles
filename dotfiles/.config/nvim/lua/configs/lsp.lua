@@ -147,7 +147,9 @@ M.config = function()
   lspconfig["dockerls"].setup({ on_attach = on_attach, capabilities = capabilities })
 
   -- LSP configurations for Python files
-  lspconfig["pyright"].setup({ on_attach = on_attach, capabilities = capabilities })
+  -- INFO: Experimenting with an alternative Python LSP
+  -- lspconfig["pyright"].setup({ on_attach = on_attach, capabilities = capabilities })
+  lspconfig["jedi_language_server"].setup({ on_attach = on_attach, capabilities = capabilities })
 
   -- LSP configurations for TailwindCSS classes
   lspconfig["tailwindcss"].setup({ on_attach = on_attach, capabilities = capabilities })
