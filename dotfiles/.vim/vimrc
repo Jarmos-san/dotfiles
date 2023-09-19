@@ -17,3 +17,11 @@ set showcmd
 set scrolloff=6
 
 inoremap jk <esc>
+nnoremap <C-s> :write!<CR>
+nnoremap <C-a> :ggVG<CR>
+nnoremap <S-h> <home>
+nnoremap <S-l> <end>
+
+syntax on
+
+colorscheme slate
