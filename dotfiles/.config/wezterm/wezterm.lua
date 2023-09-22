@@ -24,7 +24,7 @@ return {
   },
 
   -- Set the colorscheme to something which is usable
-  color_scheme = "Catppuccin Mocha",
+  color_scheme = "Tokyo Night Moon",
 
   -- Set a monospaced font for easier time when writing code
   font = wezterm.font("CaskaydiaCove Nerd Font Mono", {
