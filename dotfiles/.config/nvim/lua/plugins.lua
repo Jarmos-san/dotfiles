@@ -144,12 +144,15 @@ local plugins = {
 
   {
     -- The default colorscheme used right now
-    "navarasu/onedark.nvim",
+    "folke/tokyonight.nvim",
     event = "VimEnter",
     opts = {
-      style = "darker",
+      style = "night",
+      light_style = "day",
       transparent = true,
-      lualine = { transparent = true },
+      terminal_colors = true,
+      dim_inactive = true,
+      lualine_bold = true,
     },
   },
 
