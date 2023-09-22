@@ -62,9 +62,9 @@ end
 -- My WIP personalised colour scheme
 -- vim.cmd.colorscheme("shinkai")
 
-vim.cmd.colorscheme("onedark")
+-- vim.cmd.colorscheme("onedark")
 -- The follow two colourschems are the most popular ones right now with support for semantic highlighting
--- vim.cmd([[ colorscheme tokyonight]])
+vim.cmd.colorscheme("tokyonight")
 -- vim.cmd.colorscheme("catppuccin")
 
 -- INFO: Enable an experimental fast module loader. See the PR for more information:
