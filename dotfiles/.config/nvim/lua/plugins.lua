@@ -208,38 +208,6 @@ local plugins = {
   },
 
   {
-    -- Plugin to highlight certain patterns like TO-DO comments and RGB colour codes
-    "echasnovski/mini.hipatterns",
-    event = { "BufNewFile", "BufReadPre" },
-    config = function()
-      local hipatterns = require("mini.hipatterns")
-
-      hipatterns.setup({
-        highlighters = {
-          -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
-          fixme = { pattern = "%f[%w]()FIXME()%f[%W]", group = "MiniHipatternsFixme" },
-          hack = { pattern = "%f[%w]()HACK()%f[%W]", group = "MiniHipatternsHack" },
-          todo = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
-          note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
-
-          -- Highlight hex color strings (`#rrggbb`) using that color
-          hex_color = hipatterns.gen_highlighter.hex_color({ priority = 2000 }),
-        },
-      })
-    end,
-  },
-
-  -- {
-  --   -- FIXME: Causes a momentary flash of background colour distortion.
-  --   -- Issue tracked at - https://github.com/Jarmos-san/dotfiles/issues/16
-  --   -- Plugin to animate some events within Neovim
-  --   "echasnovski/mini.animate",
-  --   config = function()
-  --     require("mini.animate").setup()
-  --   end,
-  -- },
-
-  {
     -- Plugin to remove and/or delete buffers easily
     "echasnovski/mini.bufremove",
     event = { "BufRead", "BufNewFile" },
