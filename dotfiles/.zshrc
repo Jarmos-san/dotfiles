@@ -28,7 +28,10 @@ alias dateiso="date +%Y-%m-%dT%H:%M:%S%z"
 alias top="btop --utf-force"
 alias cm="cmatrix -abs -C yellow"
 alias rands="openssl rand -base64 32"
-alias docker-clean="docker system prune --force --all --volumes"
+# alias docker-clean="docker system prune --force --all --volumes"
+alias dcdown="docker compose down --remove-orphans --volumes"
+alias dcup="docker compose up --detach"
+alias dclogs="docker compose logs"
 
 # Various ZSH plugins to make the Shell usage experience better
 plugins=(
