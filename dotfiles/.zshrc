@@ -32,6 +32,7 @@ alias rands="openssl rand -base64 32"
 alias dcdown="docker compose down --remove-orphans --volumes"
 alias dcup="docker compose up --detach"
 alias dclogs="docker compose logs"
+alias ct="cookiecutter"
 
 # Various ZSH plugins to make the Shell usage experience better
 plugins=(
