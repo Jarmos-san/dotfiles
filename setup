@@ -267,8 +267,8 @@ function install_homebrew_packages() {
   # Linuxbrew
   readonly formulae=(
     "azure-cli" "btop" "cmatrix" "cookiecutter" "exa" "fd" "gcc" "gh"
-    "glow" "httpie" "lua@5.1" "mdbook" "neofetch" "neovim" "oci-cli"
-    "poetry" "pre-commit" "ripgrep" "rustup-init" "starship"
+    "glow" "httpie" "lua@5.1" "mongosh" "mdbook" "neofetch" "neovim"
+    "oci-cli" "poetry" "pre-commit" "ripgrep" "rustup-init" "starship"
     "shellcheck" "stow" "usql" "zsh"
   )
 
