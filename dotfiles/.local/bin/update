@@ -48,7 +48,7 @@ def run_apt_updates() -> None:
     try:
         subprocess.run(["sudo", "apt-get", "update"])
         subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"])
-        subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
+        subprocess.run(["sudo", "apt-get", "autoremove", "--purge", "--assume-yes"])
     except subprocess.CalledProcessError as error:
         raise error
 
