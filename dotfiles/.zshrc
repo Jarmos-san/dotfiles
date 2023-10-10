@@ -34,6 +34,7 @@ alias dcdown="docker compose down --remove-orphans --volumes"
 alias dcup="docker compose up --detach"
 alias dclogs="docker compose logs"
 alias ct="cookiecutter"
+alias pcs="pre-commit sample-config >> .pre-commit-config.yaml && pre-commit autoupdate"
 
 # Various ZSH plugins to make the Shell usage experience better
 plugins=(
