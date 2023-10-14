@@ -18,23 +18,10 @@ export PATH="$HOME/.local/bin:$PATH"
 # Enable Starship
 eval "$(starship init zsh)"
 
-# A bunch of custom aliases for easier terminal usage.
-alias ll="exa --long --all --classify --icons --git --ignore-glob='.git'"
-alias compose="docker compose"
-alias loc="wc -l"
-alias mkvenv="python3 -m venv .venv"
-alias tree="exa --tree --all --icons --ignore-glob='.git' --git-ignore"
-alias dateiso="date +%Y-%m-%dT%H:%M:%S%z"
-alias top="btop --utf-force"
-alias cm="cmatrix -abs -C yellow"
-alias rands="openssl rand -base64 32"
-alias dimc="docker image prune --force"
-alias drmi="docker image rm"
-alias dcdown="docker compose down --remove-orphans --volumes"
-alias dcup="docker compose up --detach"
-alias dclogs="docker compose logs"
-alias ct="cookiecutter"
-alias pcs="pre-commit sample-config >> .pre-commit-config.yaml && pre-commit autoupdate &>/dev/null"
+# Source the aliases if they are available
+if [[ -f $HOME/.zsh/aliases ]]; then
+  source $HOME/.zsh/aliases
+fi
 
 # Various ZSH plugins to make the Shell usage experience better
 plugins=(
