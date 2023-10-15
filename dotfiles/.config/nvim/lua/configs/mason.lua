@@ -12,6 +12,7 @@ M.config = function()
     "cssls",
     "dockerls",
     "eslint",
+    "gopls",
     "html",
     "jedi_language_server",
     "jsonls",
