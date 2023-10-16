@@ -42,23 +42,23 @@ wk.register({
   -- VSCode-like quick file management UI
   ["<leader>f"] = {
     name = "+File",
-    f = { "<cmd>Telescope find_files<cr>", "Find files" },
-    o = { "<cmd>Telescope oldfiles<cr>", "Open recent files" },
-    n = { "<cmd>enew<cr>", "Open a new file" },
-    h = { "<cmd>Telescope help_tags<cr>", "Open the help tags menu" },
-    e = { "<cmd>Neotree toggle<cr>", "Toggle the file explorer open/close" },
+    f = { "<CMD>Telescope find_files<CR>", "Find files" },
+    o = { "<CMD>Telescope oldfiles<CR>", "Open recent files" },
+    n = { "<CMD>enew<CR>", "Open a new file" },
+    h = { "<CMD>Telescope help_tags<CR>", "Open the help tags menu" },
+    e = { "<CMD>Neotree toggle<CR>", "Toggle the file explorer open/close" },
   },
   -- Easier & quicker buffer management keymaps
   ["<leader>b"] = {
     name = "+Buffer",
     d = { bdelete, "Delete the current buffer" },
-    l = { "<cmd>Telescope buffers<cr>", "List all loaded buffers" },
-    n = { "<cmd>bnext<cr>", "Load the next hidden buffer" },
+    l = { "<CMD>Telescope buffers<CR>", "List all loaded buffers" },
+    n = { "<CMD>bnext<CR>", "Load the next hidden buffer" },
   },
   -- Keymaps to manage & show LSP stuff
   ["<leader>l"] = {
     name = "+LSP",
-    t = { "<cmd>TroubleToggle<cr>", "Toggle open/close the diagnostics list" },
+    t = { "<CMD>TroubleToggle<CR>", "Toggle open/close the diagnostics list" },
   },
 })
 
@@ -84,25 +84,25 @@ map("n", "<leader>k", "<C-w>k", { desc = "Go to upper window" })
 map("n", "<leader>l", "<C-w>l", { desc = "Go to right window" })
 
 -- Resize windows using <Ctrl + Arrow keys>
-map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window height" })
-map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease window height" })
-map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
-map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Increase window width" })
+map("n", "<C-Up>", "<CMD>resize +2<CR>", { desc = "Increase window height" })
+map("n", "<C-Down>", "<CMD>resize -2<CR>", { desc = "Decrease window height" })
+map("n", "<C-Right>", "<CMD>vertical resize +2<CR>", { desc = "Increase window width" })
+map("n", "<C-Left>", "<CMD>vertical resize -2<CR>", { desc = "Increase window width" })
 
 -- Clear the search highlight by pressing <ESC>
-map({ "i", "n" }, "<esc>", "<cmd>nohlsearch<cr><esc>", { desc = "Escape & clear highlighted search" })
+map({ "i", "n" }, "<esc>", "<CMD>nohlsearch<CR><esc>", { desc = "Escape & clear highlighted search" })
 
 -- Clear search, diff update & redraw, see credit below:
 -- https://github.com/LazyVim/LazyVim/blob/befa6c67a4387b0db4f8421d463f5d03f91dc829/lua/lazyvim/config/keymaps.lua#L58
 map(
   "n",
   "<leader>ur",
-  "<cmd>nohlsearch<bar>diffupdate<bar>normal! <C-L><cr>",
+  "<CMD>nohlsearch<bar>diffupdate<bar>normal! <C-L><CR>",
   { desc = "Redraw, clear the search highlight & update diff" }
 )
 
 -- Save the file like any other "normal" IDEs
-map({ "i", "v", "n", "s" }, "<C-s>", "<cmd>write<cr><esc>", { desc = "Save the contents of the buffer" })
+map({ "i", "v", "n", "s" }, "<C-s>", "<CMD>write<CR><esc>", { desc = "Save the contents of the buffer" })
 
 -- Better & easier indenting
 map("v", "<", "<gv")
