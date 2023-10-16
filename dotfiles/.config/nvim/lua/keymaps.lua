@@ -33,17 +33,11 @@ local bdelete = function()
   open_starter_if_empty_buffer()
 end
 
--- Wrapper function to safely pass to Which-Key to open a terminal session
-local open_terminal = function()
-  -- INFO: The empty string is a hack to immediately open a Shell session without a user prompt
-  require("terminal").run("")
-end
-
 wk.register({
   -- Keymaps to manage the inbuilt terminal within Neovim itself
   ["<leader>t"] = {
     name = "+Terminal",
-    t = { open_terminal, "Toggle the terminal open/close" },
+    t = { "<CMD>vsplit term://zsh<CR>", "Open the terminal prompt" },
   },
   -- VSCode-like quick file management UI
   ["<leader>f"] = {

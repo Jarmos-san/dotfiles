@@ -31,14 +31,6 @@ local plugins = {
   },
 
   {
-    -- A better functioning & minimal terminal for usage within Neovim itself
-    "rebelot/terminal.nvim",
-    cmd = { "TermOpen", "TermRun" },
-    init = require("configs.terminal").init,
-    config = require("configs.terminal").config,
-  },
-
-  {
     -- A UI plugin for registering and managing keymaps under a single place
     "folke/which-key.nvim",
     event = "VeryLazy",
