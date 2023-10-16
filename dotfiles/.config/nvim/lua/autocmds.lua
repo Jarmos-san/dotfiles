@@ -18,6 +18,12 @@ autocmd("FileType", {
   command = "startinsert | 1",
 })
 
+autocmd("TermOpen", {
+  desc = "Get into Insert mode when the terminal is opened",
+  group = augroup("terminal_insert"),
+  command = "set nonumber | set norelativenumber | startinsert | 1",
+})
+
 autocmd("FocusLost", {
   desc = "Save/write all unsaved buffers when focus is lost",
   group = augroup("save_buffers"),
