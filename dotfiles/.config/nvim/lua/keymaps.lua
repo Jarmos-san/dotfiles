@@ -1,18 +1,7 @@
 -- Module of keymaps & bindings which makes using Neovim a pleasure
 
 local wk = require("which-key")
-
--- Utlity function to make keybind mappings easier & DRY
-local map = function(mode, lhs, rhs, opts)
-  local keys = require("lazy.core.handler").handlers.keys
-  ---@cast keys LazyKeysHandler
-  -- do not create the keymap if a lazy keys handler exists
-  if not keys.active[keys.parse({ lhs, mode = mode }).id] then
-    opts = opts or {}
-    opts.silent = opts.silent ~= false
-    vim.keymap.set(mode, lhs, rhs, opts)
-  end
-end
+local map = require("utils").map
 
 -- Open the starter dashboard if the buffer list is empty
 local open_starter_if_empty_buffer = function()
