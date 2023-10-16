@@ -1,9 +1,7 @@
 -- Module for configuring some global autocommand which will always be loaded at startup
 
-local autocmd = vim.api.nvim_create_autocmd
-local augroup = function(name)
-  return vim.api.nvim_create_augroup("augroup" .. name, { clear = true })
-end
+local autocmd = require("utils").autocmd
+local augroup = require("utils").augroup
 
 autocmd("TextYankPost", {
   desc = "Highlight the yanked text for a specified time.",
