@@ -41,7 +41,6 @@
   "schemastore.nvim": { "branch": "main", "commit": "eee059d1eda843cb7c15192a559c7c87a694410a" },
   "smartcolumn.nvim": { "branch": "main", "commit": "c6abf3917fcec487c7475e208ae37f5788af5b04" },
   "telescope.nvim": { "branch": "master", "commit": "74ce793a60759e3db0d265174f137fb627430355" },
-  "terminal.nvim": { "branch": "master", "commit": "764b7c137512bcfba2e45cf3e25c08a9f4d3b733" },
   "tokyonight.nvim": { "branch": "main", "commit": "1e5492bb99d461a5a0d020a119fc76d75945af84" },
   "trouble.nvim": { "branch": "main", "commit": "02219b557d4726a789be58c5d6bd6e139c46a9fe" },
   "typescript-tools.nvim": { "branch": "master", "commit": "47c0461f652b90bc088bcaf6481d488d3b86291e" },
