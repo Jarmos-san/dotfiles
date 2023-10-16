@@ -21,7 +21,12 @@ autocmd("FileType", {
 autocmd("TermOpen", {
   desc = "Get into Insert mode when the terminal is opened",
   group = augroup("terminal_insert"),
-  command = "set nonumber | set norelativenumber | startinsert | 1",
+  callback = function()
+    vim.opt.number = false
+    vim.opt.relativenumber = false
+    vim.cmd("startinsert | 1")
+    -- TODO: Figure out a keybind to get out Insert mode within the terminal
+  end,
 })
 
 autocmd("FocusLost", {
