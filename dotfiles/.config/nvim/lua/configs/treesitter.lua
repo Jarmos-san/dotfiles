@@ -13,6 +13,7 @@ local configs = {
     "gitattributes",
     "gitcommit",
     "gitignore",
+    "go",
     "javascript",
     "json",
     "lua",
