@@ -36,9 +36,6 @@ M.config = function()
   end
 
   local sources = {
-    formatting.stylua.with({ -- Formatter for Lua files
-      extra_args = { "--indent-type", "Spaces", "--indent-width", "2" },
-    }),
     -- INFO: This is probably broken on old OSes. See the following thread for guidance if a similar error was raised:
     -- https://askubuntu.com/questions/421642/libc-so-6-version-glibc-2-14-not-found
     diagnostics.selene.with({ -- Linter for Lua files
@@ -54,9 +51,6 @@ M.config = function()
     }),
     code_actions.shellcheck, -- Code Actions for Bash/Shell files
     diagnostics.shellcheck, -- Diagnostics for Bash/Shell files
-    formatting.black.with({ -- Formatter for Python files
-      prefer_local = ".venv/bin",
-    }),
     diagnostics.eslint_d.with({ -- Diagnostics for ESLint files
       condition = function(utils)
         -- Load this tool only if its configuration file exists in the current working directory
@@ -66,9 +60,9 @@ M.config = function()
     diagnostics.ruff.with({ -- Super fast diagnostics tool for Python files
       prefer_local = ".venv/bin", -- Prefer using the virtual environment local binary for better project identification
     }),
-    formatting.ruff.with({ -- Super fast formatting tool for Python files
-      prefer_local = ".venv/bin", -- Prefer using the virtual environment local binary for better project identification
-    }),
+    -- formatting.ruff.with({ -- Super fast formatting tool for Python files
+    --   prefer_local = ".venv/bin", -- Prefer using the virtual environment local binary for better project identification
+    -- }),
     formatting.prettier.with({ -- Formatter for web dev files
       prefer_local = "node_modules/.bin",
       extra_args = { "--prose-wrap", "always" },
