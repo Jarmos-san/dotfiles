@@ -3,6 +3,7 @@
 local autocmd = require("utils").autocmd
 local augroup = require("utils").augroup
 local format = require("utils").format
+local map = require("utils").map
 
 autocmd("BufWritePost", {
   desc = "Format the buffer contents after save",
@@ -15,3 +16,5 @@ autocmd("BufWritePost", {
     format(gofmt_command)
   end,
 })
+
+map("n", "<F5>", "<CMD>terminal go run %<CR>")
