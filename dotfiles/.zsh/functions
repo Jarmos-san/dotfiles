@@ -1,0 +1,11 @@
+#!/usr/bin/env zsh
+
+# This script contains a bunch of utility functions to make life on the terminal easier
+
+mkc() {
+    if [[ -n "$1" ]]; then
+        mkdir --parents "$1" && cd "$1"
+    else
+        echo "usage: mkc <name>"
+    fi
+}
