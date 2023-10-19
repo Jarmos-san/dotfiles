@@ -18,9 +18,12 @@ export PATH="$HOME/.local/bin:$PATH"
 # Enable Starship
 eval "$(starship init zsh)"
 
-# Source the aliases if they are available
-if [[ -f $HOME/.zsh/aliases ]]; then
-  source $HOME/.zsh/aliases
+# Check if ~/.zsh directory exists
+if [[ -d "$HOME/.zsh" ]]; then
+  # Source all files within the ~/.zsh directory
+  for file in "$HOME/.zsh"/*; do
+    source "$file"
+  done
 fi
 
 # Various ZSH plugins to make the Shell usage experience better
