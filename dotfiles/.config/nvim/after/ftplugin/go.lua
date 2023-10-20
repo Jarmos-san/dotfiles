@@ -14,6 +14,10 @@ autocmd("BufWritePost", {
 
     -- INFO: Invoke the formatting command with special logic
     format(gofmt_command)
+
+    if not vim.g.shell_error == 0 then
+      vim.cmd("undo")
+    end
   end,
 })
 
