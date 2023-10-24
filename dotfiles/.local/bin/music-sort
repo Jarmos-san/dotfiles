@@ -1,0 +1,5 @@
+#!/usr/bin/env python3
+
+"""Script to sort local music collection."""
+
+print("Hello World!")
