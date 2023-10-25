@@ -55,3 +55,8 @@ else
   bindkey "^[[F" end-of-line
   bindkey "^[[3~" delete-char
 fi
+
+# INFO: See the thread here - "https://vi.stackexchange.com/a/7654" for more information
+if [[ -n $VIRTUAL_ENV && -e "${VIRTUAL_ENV}/bin/activate" ]]; then
+  source "${VIRTUAL_ENV}/bin/activate"
+fi
