@@ -66,5 +66,6 @@ scratch
 .venv
 .mypy_cache
 .ruff_cache
+**/adb
 
 # End of https://www.toptal.com/developers/gitignore/api/powershell,visualstudiocode,vim,git
