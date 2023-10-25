@@ -24,13 +24,12 @@ autocmd("BufWritePost", {
   group = augroup("format_python_files"),
   callback = function()
     -- INFO: Command to invoke black from within Neovim
-    local black_command = "silent %!black - --quiet"
+    local black_command = "silent !black % --stdin-filename % --quiet"
 
-    -- TODO: Create logic to identify the venv and only then invoke the following command
-
-    -- INFO: Invoke the formatting command with special logic
+    -- INFO: Run the formatting command on the buffer contents
     format(black_command)
 
+    -- INFO: If "black" exited with an error, undo the changes to the previous state
     if not vim.g.shell_error == 0 then
       vim.cmd("undo")
     end
