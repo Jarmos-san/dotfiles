@@ -26,7 +26,6 @@ def dir_exist(dirs: tuple[Path, Path]) -> bool:
     for dir in dirs:
         if dir.exists():
             return True
-            break
 
     return False
 
