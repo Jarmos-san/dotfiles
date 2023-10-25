@@ -1,10 +1,8 @@
 [tool.poetry]
-name = "-dotfiles"
-license = "GPL 3.0"
-packages = [{include = "dotfiles"}]
+name = ""
 version = "v0.0.1"
 description = ""
-authors = ["Somraj Saha"]
+authors = [""]
 
 [tool.poetry.dependencies]
 python = "^3.11"
