@@ -1,5 +1,52 @@
 #!/usr/bin/env python3
 
-"""Script to sort local music collection."""
+"""
+Script to sort local music collection.
 
-print("Hello World!")
+Author: Somraj Saha
+License: MIT License (see https://github.com/Jarmos-san/dotfiles/blob/main/LICENSE for
+         more information)
+
+INFO: This is a WIP script, it is not ready for usage yet!
+"""
+
+from pathlib import Path
+
+# INFO: Labels for logging when printing to STDOUT
+ERROR = "\033[1;31mINFO\033[0m"
+SUCCESS = "\033[1;32mINFO\033[0m"
+WARN = "\033[1;33mINFO\033[0m"
+INFO = "\033[1;34mINFO\033[0m"
+
+
+def dir_exist(dirs: tuple[Path, Path]) -> bool:
+    """Check whether a download location exists or not."""
+    # INFO: Check if any of the aforementioned downloads folder exists, if not then
+    # short-circuit the logic and return the function
+    for dir in dirs:
+        if dir.exists():
+            return True
+            break
+
+    return False
+
+
+def main() -> None:
+    """Entrypoint of the script."""
+    # Location of the home directory where the downloads directory is supposed to be in
+    home_dir = Path.home()
+
+    # Possible sets of download locations
+    download_dirs = (home_dir / "Downloads", home_dir / "downloads")
+
+    if not dir_exist(download_dirs):
+        print(f"[{ERROR}] No download directory found...aborting!")
+    else:
+        print(f"[{SUCCESS}] Download directory found...sorting music right now!")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as err:
+        print(f"[{ERROR}] Sorting music collection failed!\n{err}")
