@@ -4,16 +4,16 @@ opt.clipboard = "unnamedplus" -- Sync the system clipboard with Neovim
 opt.laststatus = 3 -- Enable the global status line
 opt.completeopt = "menu,menuone,noselect" -- Make the autocompletion window more accessible
 opt.conceallevel = 3 -- Hide the * markups for bold & italics
-opt.expandtab = true -- Use spaces instead of tabs
+-- opt.expandtab = true -- Use spaces instead of tabs
 -- TODO: Figure out what purpose does it serve
 -- opt.formatoptions = "jcroqlnt" -- Some formatting configuration, needs more research
 opt.ignorecase = true -- Ignore casing when searching for a word
 opt.inccommand = "nosplit" -- Preview incremental substitute
 opt.list = true -- Show invisible whitespace characters
-opt.shiftround = true -- Roundup indentations
+-- opt.shiftround = true -- Roundup indentations
 -- TODO: Figure a way out to configure these options specific to the filetype instead
-opt.shiftwidth = 2 -- The default size of an indentation (this will be configure per filetype later on)
-opt.tabstop = 2 -- Number of Spaces, a single tab counts for
+-- opt.shiftwidth = 2 -- The default size of an indentation (this will be configure per filetype later on)
+-- opt.tabstop = 2 -- Number of Spaces, a single tab counts for
 opt.smartcase = true -- Don't ignore casing with capitals
 opt.spelllang = { "en" } -- The language to use when spelling checking
 opt.splitbelow = true -- Put new windows below current

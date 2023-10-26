@@ -9,7 +9,6 @@ local augroup = require("utils").augroup
 local map = require("utils").map
 local format = require("utils").format
 
--- FIXME: These are causing weird issues
 -- opt.expandtab = true
 -- opt.autoindent = true
 -- opt.smarttab = true

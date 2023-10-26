@@ -41,7 +41,8 @@ local configs = {
     additional_vim_regex_highlighting = false,
   },
   indent = { -- Disable Treesitter-based indentation since its errorneous
-    enable = false,
+    enable = true,
+    disable = { "python" },
   },
   incremental_selection = { -- Incrementally select content powered by Treesitter
     enable = true,
