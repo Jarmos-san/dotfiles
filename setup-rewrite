@@ -29,7 +29,6 @@ import platform
 import subprocess
 import time
 from argparse import ArgumentParser, Namespace
-from enum import StrEnum, unique
 from io import BytesIO
 from pathlib import Path
 from urllib.request import urlopen
@@ -39,23 +38,11 @@ from zipfile import ZipFile
 OS_NAME = platform.freedesktop_os_release().get("NAME")
 
 
-@unique
-class TerminalLabel(StrEnum):
-
-    """Message labels with appropriate terminal colours to showcase its importance."""
-
-    ERROR = "\033[0;31m[ERROR]\033[0m"
-    SUCCESS = "\033[0;32m[SUCCESS]\033[0m"
-    WARNING = "\033[0;33m[WARNING]\033[0m"
-    INFO = "\033[0;34m[INFO]\033[0m"
-
-    def __str__(self) -> str:
-        """Easier representation of the Enum Object's values with print statements."""
-        return self.value
-
-
-# Variable for easier access to the Enum members
-cterm = TerminalLabel
+# Message labels with appropriate terminal colours to showcase its importance
+ERROR = "\033[0;31m[ERROR]\033[0m"
+SUCCESS = "\033[0;32m[SUCCESS]\033[0m"
+WARNING = "\033[0;33m[WARNING]\033[0m"
+INFO = "\033[0;34m[INFO]\033[0m"
 
 
 def argument_parser() -> Namespace:
@@ -78,15 +65,15 @@ def simulate_dry_run() -> None:
     """Simulate dry runs of various functionalities like system updates and more."""
     # TODO: Refactor the entire script to remove each "dry run" capabilities from the
     # functions below and apply those in this single function instead to be DRY
-    print(f'{cterm.INFO} Running the script in simulation (or a "dry run") mode')
+    print(f'{INFO} Running the script in simulation (or a "dry run") mode')
     time.sleep(1)
 
     # TODO: Detect OS and simulate update accordingly
-    print(f"{cterm.INFO} Simulating system updates...")
+    print(f"{INFO} Simulating system updates...")
     for _ in range(10):
         print("...")
         time.sleep(1)
-    print(f"{cterm.SUCCESS} System updates complete...")
+    print(f"{SUCCESS} System updates complete...")
 
 
 def is_tool_installed(tool: str) -> bool:
@@ -114,7 +101,7 @@ def run_apt_updates() -> None:
         subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"])
         subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
     except subprocess.CalledProcessError as error:
-        print(f"{cterm.ERROR} APT failed to update the packages...\n{error}")
+        print(f"{ERROR} APT failed to update the packages...\n{error}")
 
 
 def run_macos_updates() -> None:
@@ -122,7 +109,7 @@ def run_macos_updates() -> None:
     try:
         subprocess.run(["sudo", "softwareupdate", "-i", "-a"])
     except subprocess.CalledProcessError as error:
-        print(f"{cterm.ERROR} MacOS system update failed...\n{error}")
+        print(f"{ERROR} MacOS system update failed...\n{error}")
 
 
 def run_system_updates() -> None:
@@ -132,7 +119,7 @@ def run_system_updates() -> None:
             case "Ubuntu" | "Debian":
                 run_apt_updates()
             case _:
-                print(f"{cterm.ERROR} Failed to identify the OS...aborting!")
+                print(f"{ERROR} Failed to identify the OS...aborting!")
     elif platform.system() == "MacOS":
         run_macos_updates()
 
@@ -154,9 +141,9 @@ def install_system_essentials() -> None:
                     ]
                 )
             except subprocess.CalledProcessError as error:
-                print(f"{cterm.ERROR} Failed to install essential tools...\n{error}")
+                print(f"{ERROR} Failed to install essential tools...\n{error}")
         case _:
-            print(f"{cterm.ERROR} Failed to identify OS...aborting!")
+            print(f"{ERROR} Failed to identify OS...aborting!")
 
 
 def install_homebrew() -> None:
@@ -170,7 +157,7 @@ def install_homebrew() -> None:
 
     # Install Homebrew only for MacOS and Ubuntu/Debian systems
     if not platform.system() == "MacOS" or not platform.system() == "Linux":
-        print(f"{cterm.INFO} Skipping Homebrew installation on unsupported OS")
+        print(f"{INFO} Skipping Homebrew installation on unsupported OS")
         pass
     else:
         try:
@@ -178,7 +165,7 @@ def install_homebrew() -> None:
                 ["NONINTERACTIVE=1 ", "/bin/bash", "-c", f'$"({curl_command})"']
             )
         except subprocess.CalledProcessError as error:
-            print(f"{cterm.ERROR} Failed to install Homebrew...\n{error}")
+            print(f"{ERROR} Failed to install Homebrew...\n{error}")
 
 
 def install_fonts() -> None:
@@ -187,11 +174,11 @@ def install_fonts() -> None:
     fonts_dir = Path(f"{Path.home()}/.fonts")
 
     if not platform.system() == "Linux" or platform.system() == "MacOS":
-        print(f"{cterm.INFO} Failed to identify OS...skipping fonts setup!")
+        print(f"{INFO} Failed to identify OS...skipping fonts setup!")
         pass
     else:
         with urlopen(url=url) as res:
-            print(f"{cterm.INFO} Downloading fonts...please wait!")
+            print(f"{INFO} Downloading fonts...please wait!")
 
             # Store the buffered contents from the HTTPS response in a variable
             contents = BytesIO(res.read())
@@ -212,7 +199,7 @@ def install_fonts() -> None:
             try:
                 subprocess.run(["fc-cache", "--force"])
             except subprocess.CalledProcessError as error:
-                print(f"{cterm.ERROR} Failed to update the fonts cache...\n{error}")
+                print(f"{ERROR} Failed to update the fonts cache...\n{error}")
 
             print("Fonts download and setup complete!")
 
@@ -255,21 +242,21 @@ def install_brew_packages() -> None:
 
     # INFO: Check if Homebrew is installed and invocable
     if not is_tool_installed("brew"):
-        print(f"{cterm.ERROR} Homebrew not found (not installed perhaps?)...aborting!")
+        print(f"{ERROR} Homebrew not found (not installed perhaps?)...aborting!")
     else:
         # INFO: Install "taps" for Homebrew to fetch the packages (formulae) from
         for tap in taps:
             try:
                 subprocess.run(["brew", "install", tap])
             except subprocess.CalledProcessError as error:
-                print(f"{cterm.ERROR} Failed to install Homebrew taps...\n{error}")
+                print(f"{ERROR} Failed to install Homebrew taps...\n{error}")
 
         # INFO: Install "formulae" using Homebrew for both Linux and MacOS systems
         for formula in formulae:
             try:
                 subprocess.run(["brew", "install", formula])
             except subprocess.CalledProcessError as error:
-                print(f"{cterm.ERROR} Failed to install formulae...\n{error}")
+                print(f"{ERROR} Failed to install formulae...\n{error}")
 
         # INFO: Installation of "casks" (GUI tools) are ONLY supported on MacOS!
         if platform.system() == "MacOS":
@@ -277,7 +264,7 @@ def install_brew_packages() -> None:
                 try:
                     subprocess.run(["brew", "install", cask])
                 except subprocess.CalledProcessError as error:
-                    print(f"{cterm.ERROR} Failed to install casks...\n{error}")
+                    print(f"{ERROR} Failed to install casks...\n{error}")
 
 
 def install_flatpak() -> None:
@@ -291,9 +278,9 @@ def install_flatpak() -> None:
                 try:
                     subprocess.run(["apt-get", "install", "flatpak"])
                 except subprocess.CalledProcessError as error:
-                    print(f"{cterm.ERROR} Failed to install Flatpak...\n{error}")
+                    print(f"{ERROR} Failed to install Flatpak...\n{error}")
             case _:
-                print(f"{cterm.ERROR} Unknown OS...skipping Flatpak installation")
+                print(f"{ERROR} Unknown OS...skipping Flatpak installation")
                 pass
 
         # INFO: Attemp to update the remote Flatpak repository locally
@@ -302,9 +289,7 @@ def install_flatpak() -> None:
                 ["flatpak", "remote-add", "-if-not-exists", "flathub", flatpak_repo]
             )
         except subprocess.CalledProcessError as error:
-            print(
-                f"{cterm.ERROR} Failed to update Flatpak repository locally...\n{error}"
-            )
+            print(f"{ERROR} Failed to update Flatpak repository locally...\n{error}")
 
 
 def install_flatpak_packages() -> None:
@@ -323,7 +308,7 @@ def install_flatpak_packages() -> None:
     )
 
     if not is_tool_installed("flatpak"):
-        print(f"{cterm.WARNING} Flatpak not found")
+        print(f"{WARNING} Flatpak not found")
     else:
         for package in packages:
             try:
@@ -331,9 +316,7 @@ def install_flatpak_packages() -> None:
                     ["flatpak", "install", "--assumeyes", "flathub", package]
                 )
             except subprocess.CalledProcessError as error:
-                print(
-                    f"{cterm.ERROR} Failed to install packages from Flatpak...\n{error}"
-                )
+                print(f"{ERROR} Failed to install packages from Flatpak...\n{error}")
 
 
 def install_zsh_plugins() -> None:
@@ -359,7 +342,7 @@ def install_zsh_plugins() -> None:
         try:
             subprocess.run(["git", "clone", f"git@github.com{plugin}", zsh_plugin_dir])
         except subprocess.CalledProcessError as error:
-            print(f"{cterm.ERROR} Failed to install ZSH plugins...\n{error}")
+            print(f"{ERROR} Failed to install ZSH plugins...\n{error}")
 
 
 def setup_dotfiles() -> None:
@@ -376,7 +359,7 @@ def setup_dotfiles() -> None:
             ["git", "clone", "git@github.com:Jarmos-san/dotfiles", dotfiles_dir]
         )
     except subprocess.CalledProcessError as error:
-        print(f"{cterm.ERROR} Failed to clone remote dotfiles repository...\n{error}")
+        print(f"{ERROR} Failed to clone remote dotfiles repository...\n{error}")
 
     # INFO: Check if the contents of the ".dotfiles" repository are already
     # symlinked, if yes then attempt to remove the links
@@ -415,7 +398,7 @@ def main() -> None:
         simulate_dry_run()
 
     print(
-        f"{cterm.WARNING} Running the script can cause system corruption or worse!",
+        f"{WARNING} Running the script can cause system corruption or worse!",
         end=" ",
     )
 
@@ -429,7 +412,7 @@ def main() -> None:
         # prompted not to.
         case "n" | "no" | "":
             print(
-                f"{cterm.INFO} Aborting automation script...",
+                f"{INFO} Aborting automation script...",
                 end=" ",
             )
 
@@ -438,9 +421,9 @@ def main() -> None:
             if dry_run_response in ("y", "yes", ""):
                 simulate_dry_run()
         case "y" | "yes":
-            print(f"{cterm.INFO} Running automatic system setup right now...")
+            print(f"{INFO} Running automatic system setup right now...")
         case _:
-            print(f"{cterm.ERROR} Unknown response...aborting!")
+            print(f"{ERROR} Unknown response...aborting!")
 
     # INFO: Procedurally run one automation task after the other, the order probably
     # matters in certain sections of the logic.
