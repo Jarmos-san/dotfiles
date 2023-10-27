@@ -37,7 +37,6 @@ from zipfile import ZipFile
 # Fetch and store the OS name to be used later on in the script (Linux ONLY)
 OS_NAME = platform.freedesktop_os_release().get("NAME")
 
-
 # Message labels with appropriate terminal colours to showcase its importance
 ERROR = "\033[0;31m[ERROR]\033[0m"
 SUCCESS = "\033[0;32m[SUCCESS]\033[0m"
