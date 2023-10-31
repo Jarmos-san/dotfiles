@@ -23,8 +23,6 @@ Author: Somraj Saha <somraj.saha@jarmos.dev>
 License: MIT (see the LICENSE document for more info on this regards)
 """
 
-# TODO: Make use of the logging module instead of useless print statements
-
 import platform
 import subprocess
 import time
@@ -62,12 +60,9 @@ def argument_parser() -> Namespace:
 
 def simulate_dry_run() -> None:
     """Simulate dry runs of various functionalities like system updates and more."""
-    # TODO: Refactor the entire script to remove each "dry run" capabilities from the
-    # functions below and apply those in this single function instead to be DRY
     print(f'{INFO} Running the script in simulation (or a "dry run") mode')
     time.sleep(1)
 
-    # TODO: Detect OS and simulate update accordingly
     print(f"{INFO} Simulating system updates...")
     for _ in range(10):
         print("...")
