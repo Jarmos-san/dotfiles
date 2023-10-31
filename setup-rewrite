@@ -130,6 +130,8 @@ def install_system_essentials() -> None:
                         "install",
                         "curl",
                         "git",
+                        "gnupg",
+                        "ca-certificates",
                         "--yes",
                         "--no-install-recommends",
                     ]
@@ -379,6 +381,9 @@ def install_node() -> None:
     Homebrew because of issues with TypeScript complaining about the localtion of npm.
     See the folowing issue thread for more information on this regards:
     https://github.com/microsoft/TypeScript/issues/23924
+
+    INFO: For installation instructions on Debian/Ubuntu systems, refer to:
+    https://deb.nodesource.com/
     """
     pass
 
