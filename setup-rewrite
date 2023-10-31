@@ -173,11 +173,11 @@ def install_fonts() -> None:
         print(f"{INFO} Failed to identify OS...skipping fonts setup!")
         pass
     else:
-        with urlopen(url=url) as res:
+        with urlopen(url=url) as response:
             print(f"{INFO} Downloading fonts...please wait!")
 
             # Store the buffered contents from the HTTPS response in a variable
-            contents = BytesIO(res.read())
+            contents = BytesIO(response.read())
 
             # Create a zipped file from the buffered contents
             zipfile = ZipFile(contents)
