@@ -119,17 +119,21 @@ def setup_gpg_keys() -> None:
     if not keyrings_dir.exists() and not keyrings_dir.is_dir():
         keyrings_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
 
-    for file, url in gpg_keys.items():
+    for ascii_key, url in gpg_keys.items():
         request = urllib.request.Request(url, headers={"User-Agent": "curl/8.4.0"})
 
         try:
-            with urllib.request.urlopen(request) as response, open(file, "wb") as file:
-                file.write(response.read())
+            with urllib.request.urlopen(
+                request
+            ) as response, open(  # type: ignore[assignment]
+                ascii_key, "wb"
+            ) as ascii_key:
+                ascii_key.write(response.read())  # type: ignore[attr-defined]
         except urllib.error.URLError as error:
             print(f"{ERROR} Failed to download the GPG keys: {error}")
 
-    for file, gpg_file in gpg_bin_files.items():
-        ascii_file = pathlib.Path.cwd() / file
+    for ascii_key, gpg_file in gpg_bin_files.items():
+        ascii_file = pathlib.Path.cwd() / ascii_key
         gpg_dearmor_cmd = [
             "gpg",
             "--yes",
