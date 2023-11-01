@@ -34,7 +34,7 @@ import urllib.request
 import zipfile
 
 # Fetch and store the OS name to be used later on in the script (Linux ONLY)
-OS_NAME = platform.freedesktop_os_release().get("NAME")
+OSNAME = platform.freedesktop_os_release().get("NAME")
 
 # Message labels with appropriate terminal colours to showcase its importance
 ERROR = "\033[0;31m[ERROR]\033[0m"
@@ -110,7 +110,7 @@ def run_macos_updates() -> None:
 def run_system_updates() -> None:
     """Detect the Operating System name and run some system updates on it."""
     if platform.system() == "Linux":
-        match OS_NAME:
+        match OSNAME:
             case "Ubuntu" | "Debian":
                 run_apt_updates()
             case _:
@@ -121,7 +121,7 @@ def run_system_updates() -> None:
 
 def install_system_essentials() -> None:
     """Install certain essentials necessary for proper functioning of the system."""
-    match OS_NAME:
+    match OSNAME:
         case "Ubuntu" | "Debian":
             try:
                 subprocess.run(
@@ -270,7 +270,7 @@ def install_flatpak() -> None:
 
     # INFO: Attempt to install Flatpak ONLY on Linux distros & not WSL, if not available
     if platform.system() == "Linux" and not is_tool_installed("flatpak"):
-        match OS_NAME:
+        match OSNAME:
             case "Ubuntu" | "Debian":
                 try:
                     subprocess.run(["apt-get", "install", "flatpak"])
@@ -391,7 +391,17 @@ def install_node() -> None:
     # INFO: GPG keys and commands to generate them
     gpg_key_url = "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key"
     gpg_asc_file = pathlib.Path.cwd() / "nodesource.asc"
-    gpg_bin_file = pathlib.Path("/etc/apt/keyrings/nodesource.gpg")
+    keyrings_dir = pathlib.Path("/etc/apt/keyrings")
+
+    # INFO: Check whether the "keyrings" directory exists based on conditional logic
+    if OSNAME == "Ubuntu" or OSNAME == "Debian":
+        if not keyrings_dir.exists() and not keyrings_dir.is_dir():
+            keyrings_dir.mkdir(parents=True, exist_ok=True)
+
+    # INFO: Path to the binary GPG key
+    gpg_bin_file = keyrings_dir / "nodesource.gpg"
+
+    # INFO: The GPG command to generate the binary key
     gpg_dearmor_cmd = [
         "gpg",
         "--yes",
@@ -416,11 +426,11 @@ def install_node() -> None:
         ) as file:
             file.write(response.read())
     except urllib.error.URLError as error:
-        print(f"Failed to download GPG key: {error}")
+        print(f"{ERROR} Failed to download GPG key: {error}")
 
     # INFO: Attempt to generate the binary GPG key using the ASCII key
     if not gpg_asc_file.exists() and gpg_asc_file.is_file():
-        print(f"Failed to dearmor the {gpg_asc_file} ASCII file!")
+        print(f"{ERROR} Failed to dearmor the {gpg_asc_file} ASCII file!")
     else:
         try:
             subprocess.run(gpg_dearmor_cmd)
@@ -431,21 +441,22 @@ def install_node() -> None:
 
     # INFO: Print some helpful messages to STDOUT based on the logic above
     if not gpg_bin_file.exists() and not gpg_bin_file.is_file():
-        print("Failed to generate the GPG key!")
+        print(f"{ERROR} Failed to generate the GPG key!")
     else:
-        print(f"Created GPG key: {gpg_bin_file}")
+        print(f"{INFO} Created GPG key: {gpg_bin_file}")
 
     # INFO: Update the APT list in preparation to install Node.js
     if not apt_list.exists() and not apt_list.is_file():
         with open(apt_list, "w") as file:
             file.write(apt_repo)
-            print(f"Updated APT list for the Node.js repository: {apt_list}")
+            print(f"{INFO} Updated APT list for the Node.js repository: {apt_list}")
 
     # INFO: Invoke the "apt-get" command to install Node.js
     try:
         subprocess.run(
             ["apt-get", "install", "--assume-yes", "nodejs", "--no-install-recommends"]
         )
+        print(f"{SUCCESS} Node.js installation complete!")
     except subprocess.CalledProcessError as error:
         raise error
 
