@@ -103,6 +103,73 @@ def run_apt_updates() -> None:
         print(f"{ERROR} APT failed to update the packages...\n{error}")
 
 
+def setup_gpg_keys() -> None:
+    """Set up GPG keys for the "apt-get" command on Debian/Ubuntu systems."""
+    keyrings_dir = pathlib.Path("/etc/apt/keyrings")
+    gpg_keys = {
+        "docker.asc": "https://download.docker.com/linux/ubuntu/gpg",
+        "nodesource.asc": "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key",
+    }
+    gpg_bin_files = {
+        "docker.asc": keyrings_dir / "docker.gpg",
+        "nodesource.asc": keyrings_dir / "nodesource.gpg",
+    }
+
+    # INFO: Check whether the "keyrings" directory exists based on conditional logic
+    if not keyrings_dir.exists() and not keyrings_dir.is_dir():
+        keyrings_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
+
+    for file, url in gpg_keys.items():
+        request = urllib.request.Request(url, headers={"User-Agent": "curl/8.4.0"})
+
+        try:
+            with urllib.request.urlopen(request) as response, open(file, "wb") as file:
+                file.write(response.read())
+        except urllib.error.URLError as error:
+            print(f"{ERROR} Failed to download the GPG keys: {error}")
+
+    for file, gpg_file in gpg_bin_files.items():
+        ascii_file = pathlib.Path.cwd() / file
+        gpg_dearmor_cmd = [
+            "gpg",
+            "--yes",
+            "--output",
+            str(gpg_file),
+            "--dearmor",
+            str(ascii_file),
+        ]
+
+        if not ascii_file.exists() and not ascii_file.is_file():
+            print(f"{ERROR} Failed to dearmor the {gpg_file} ASCII file!")
+        else:
+            try:
+                subprocess.run(gpg_dearmor_cmd)
+            except subprocess.CalledProcessError as error:
+                raise error
+            finally:
+                ascii_file.unlink()
+
+
+def update_apt_list() -> None:
+    """Update the APT list to fetch packages from for Debian/Ubuntu systems."""
+    nodesource = "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] \
+            https://deb.nodesource.com/node_20.x nodistro main"
+    docker = f"deb [arch='{platform.machine()}' \
+            signed-by=/etc/apt/keyrings/docker.gpg] \
+            https://download.docker.com/linux/debian \
+            '{platform.freedesktop_os_release().get('VERSION_CODENAME')}' stable"
+
+    sources = {
+        docker: pathlib.Path("/etc/apt/sources.list.d/docker.list"),
+        nodesource: pathlib.Path("/etc/apt/sources.list.d/nodesource.list"),
+    }
+
+    for source, source_file in sources.items():
+        with open(source_file, "w") as file:
+            file.writelines(source)
+            print(f"{INFO} Updated {source_file}")
+
+
 def run_macos_updates() -> None:
     """Automate MacOS system updates."""
     try:
@@ -375,94 +442,27 @@ def setup_dotfiles() -> None:
         )
 
 
-def install_docker() -> None:
-    """Install Docker for the system."""
-    pass
-
-
-def install_node() -> None:
-    """
-    Install Node.js for the system.
-
-    INFO: It is necessary to Node.js through the recommended approach instead of
-    Homebrew because of issues with TypeScript complaining about the localtion of npm.
-    See the folowing issue thread for more information on this regards:
-    https://github.com/microsoft/TypeScript/issues/23924
-
-    INFO: For installation instructions on Debian/Ubuntu systems, refer to:
-    https://deb.nodesource.com/
-    """
-    # INFO: GPG keys and commands to generate them
-    gpg_key_url = "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key"
-    gpg_asc_file = pathlib.Path.cwd() / "nodesource.asc"
-    keyrings_dir = pathlib.Path("/etc/apt/keyrings")
-
-    # INFO: Check whether the "keyrings" directory exists based on conditional logic
-    if OSNAME == "Ubuntu" or OSNAME == "Debian":
-        if not keyrings_dir.exists() and not keyrings_dir.is_dir():
-            keyrings_dir.mkdir(parents=True, exist_ok=True)
-
-    # INFO: Path to the binary GPG key
-    gpg_bin_file = keyrings_dir / "nodesource.gpg"
-
-    # INFO: The GPG command to generate the binary key
-    gpg_dearmor_cmd = [
-        "gpg",
-        "--yes",
-        "--output",
-        str(gpg_bin_file),
-        "--dearmor",
-        str(gpg_asc_file),
-    ]
-
-    # INFO: The repository URLs and the APT list to download/update Node.js
-    apt_list = pathlib.Path("/etc/apt/sources.list.d/nodesource.list")
-    repo_url = "https://deb.nodesource.com/node_20.x"
-    apt_repo = f"deb [signed-by={gpg_bin_file}] {repo_url} nodistro main"
-
-    # INFO: URL request Object which closely mimics a cURL command
-    request = urllib.request.Request(gpg_key_url, headers={"User-Agent": "curl/8.4.0"})
-
-    # INFO: Attempt to download the GPG key in ASCII format
-    try:
-        with urllib.request.urlopen(request) as response, open(
-            gpg_asc_file, "wb"
-        ) as file:
-            file.write(response.read())
-    except urllib.error.URLError as error:
-        print(f"{ERROR} Failed to download GPG key: {error}")
-
-    # INFO: Attempt to generate the binary GPG key using the ASCII key
-    if not gpg_asc_file.exists() and gpg_asc_file.is_file():
-        print(f"{ERROR} Failed to dearmor the {gpg_asc_file} ASCII file!")
-    else:
-        try:
-            subprocess.run(gpg_dearmor_cmd)
-        except subprocess.CalledProcessError as error:
-            raise error
-        finally:
-            gpg_asc_file.unlink()
-
-    # INFO: Print some helpful messages to STDOUT based on the logic above
-    if not gpg_bin_file.exists() and not gpg_bin_file.is_file():
-        print(f"{ERROR} Failed to generate the GPG key!")
-    else:
-        print(f"{INFO} Created GPG key: {gpg_bin_file}")
-
-    # INFO: Update the APT list in preparation to install Node.js
-    if not apt_list.exists() and not apt_list.is_file():
-        with open(apt_list, "w") as file:
-            file.write(apt_repo)
-            print(f"{INFO} Updated APT list for the Node.js repository: {apt_list}")
-
+def install_apt_packages() -> None:
+    """Install some packages using the "apt-get" command for Ubuntu/Debian systems."""
     # INFO: Invoke the "apt-get" command to install Node.js
     try:
         subprocess.run(
-            ["apt-get", "install", "--assume-yes", "nodejs", "--no-install-recommends"]
+            [
+                "apt-get",
+                "install",
+                "--assume-yes",
+                "nodejs",
+                "docker-ce",
+                "docker-ce-cli",
+                "containerd.io",
+                "docker-buildx-plugin",
+                "docker-compose-plugin",
+                "--no-install-recommends",
+            ]
         )
-        print(f"{SUCCESS} Node.js installation complete!")
+        print(f"{SUCCESS} APT packages installation complete!")
     except subprocess.CalledProcessError as error:
-        raise error
+        print(f"{ERROR} APT package installation failed\n{error}")
 
 
 def main() -> None:
@@ -512,8 +512,6 @@ def main() -> None:
     install_flatpak_packages()
     install_zsh_plugins()
     setup_dotfiles()
-    install_docker()
-    install_node()
 
 
 if __name__ == "__main__":
