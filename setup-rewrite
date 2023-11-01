@@ -28,6 +28,7 @@ import io
 import pathlib
 import platform
 import subprocess
+import sys
 import time
 import urllib.error
 import urllib.request
@@ -69,6 +70,9 @@ def simulate_dry_run() -> None:
         print("...")
         time.sleep(1)
     print(f"{SUCCESS} System updates complete...")
+
+    # INFO: Exit script execution upon success
+    sys.exit()
 
 
 def is_tool_installed(tool: str) -> bool:
