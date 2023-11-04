@@ -1,709 +1,525 @@
-#!/usr/bin/env bash
-#
-# Script to install Neovimulus on a user's local machine automatically.
-#
-# Author: Somraj Saha
-# License: MIT License
-# (see https://github.com/Jarmos-san/neovimulus/blob/main/LICENSE for info).
-
-# INFO: Necessary command for all Bash script to execute safely.
-# For a detailed explanation, check the following resource:
-# https://explainshell.com/explain?cmd=set+-euo+pipefail
-set -euo pipefail
-
-# Some colour codes to make the formatted output prettier.
-readonly RED="\033[0;31m"
-readonly GREEN="\033[0;32m"
-readonly YELLOW="\033[0;33m"
-readonly BLUE="\033[0;34m"
-readonly NOCOLOR="\033[0m"
-
-###############################################################################
-# Wrapper function to more easily output an error message to STDERR.
-#
-# Arguments:
-#   The message to echo to STDERR.
-#
-# Outputs:
-#   An ANSI colour code formatted message to print to STDERR based on
-#   the message which is passed to the function as a parameter.
-###############################################################################
-function error() {
-  echo -e "${RED}[ERROR]${NOCOLOR} $1"
-}
-
-###############################################################################
-# Wrapper function to easily print a warning to STDOUT.
-#
-# Arguments:
-#   The message to echo to STDOUT.
-#
-# Outputs:
-#   An ANSI colour code formatted message to print to STDOUT based on
-#   the message which is passed to the function as a parameter.
-###############################################################################
-function warn() {
-  echo -e "${YELLOW}[WARN]${NOCOLOR} $1"
-}
-
-###############################################################################
-# Wrapper function to easily print a success to STDOUT.
-#
-# Arguments:
-#   The message to echo to STDOUT.
-#
-# Outputs:
-#   An ANSI colour code formatted message to print to STDOUT based on
-#   the message which is passed to the function as a parameter.
-###############################################################################
-function success() {
-  echo -e "${GREEN}[SUCCESS]${NOCOLOR} $1"
-}
-
-###############################################################################
-# Wrapper function to easily print a success to STDOUT.
-#
-# Arguments:
-#   The message to echo to STDOUT.
-#
-# Outputs:
-#   An ANSI colour code formatted message to print to STDOUT based on
-#   the message which is passed to the function as a parameter.
-###############################################################################
-function info() {
-  echo -e "${BLUE}[INFO]${NOCOLOR} $1"
-}
-
-###############################################################################
-# Remove all unnecessary artifacts created by the script upon
-# successful execution.
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-###############################################################################
-function cleanup() {
-  rm --recursive --force yay
-}
-
-#####################################################################
-# Detect the OS the system is running and return the name of the OS
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function detect_os() {
-  case "$(uname --all)" in
-    *Microsoft*) readonly os="WSL" ;;
-    *Linux*) if [[ -f "/etc/os-release" ]]; then
-      # shellcheck source=/dev/null
-      source "/etc/os-release"
-      readonly os="$NAME"
-    else
-      readonly os="Linux"
-    fi ;;
-    *Darwin*) readonly os="MacOS" ;;
-    *) readonly os="" ;;
-  esac
-}
-
-#####################################################################
-# Detect the OS and perform a preliminary system update using the
-# OS's native package manager
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function update_system() {
-  # Fetch the name of the OS for further logic and conditions
-  detect_os
-
-  case "$os" in
-    "WSL" | "Ubuntu") apt-get update --yes && apt-get upgrade ;;
-    "MacOS") softwareupdate --install --all ;;
-    "Fedora") dnf update && dnf upgrade ;;
-    "Arch Linux") pacman --sync --upgrades --refresh ;;
-    *) error "Unsupported or unknown OS. Unable to update system!" ;;
-  esac
-}
-
-#####################################################################
-# Detect the name of the OS and install some essentials programs
-# using the OS's native package manager
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function install_essentials() {
-  # Fetch the name of the OS for further logic and conditions
-  detect_os
-
-  # Logic to install the necessary essential programs
-  case "$os" in
-    "WSL" | "Ubuntu") apt-get install --yes git curl ca-certificates gnupg ;;
-    "Fedora") dnf install git ;;
-    "Arch Linux") pacman --sync --refresh --noconfirm base-devel git ;;
-    *) error "Unsupported or unknown OS. Unable to update system!" ;;
-  esac
-}
-
-#####################################################################
-# Detect the OS name and install the "yay" package manager only if
-# the system is running on an Arch Linux based OS
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function install_yay() {
-  # Clone the "yay" git repository and run its installer
-  git clone "https://aur.archlinux.org/yay.git"
-  cd yay && makepkg -si --noconfirm && cd -
-}
-
-#####################################################################
-# Install Homebrew using the installation script in a Bash subshell
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function install_homebrew() {
-  # Homebrew installation script
-  homebrew_url="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
-
-  # Fetch the installation script and invoke it in a subshell
-  bash -c "$(curl --fail --silent --show-error --location $homebrew_url)"
-}
-
-#####################################################################
-# Install Flatpak using the OS's native package manager
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function install_flatpak() {
-  readonly flatpak_repo="https://flathub.org/repo/flathub.flatpakrepo"
-
-  # Install flatpak using APT (which is the native package manager
-  # for Debian/Ubuntu based OSes)
-  apt-get install flatpak
-
-  # Configure the repository to fetch the programs from using Flatpak
-  flatpak remote-add --if-not-exists flathub "$flatpak_repo"
-}
-
-#####################################################################
-# Download and setup the fonts for further installation
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function install_fonts() {
-  readonly cascadia_code_download_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/CascadiaCode.zip"
-  readonly cascadia_code_zip_filename="cascadia_code.zip"
-
-  # Download the zipped files
-  curl --fail --silent --show-error --location --output \
-    $cascadia_code_zip_filename $cascadia_code_download_url
-
-  if [[ -d $cascadia_code_zip_filename ]]; then
-    # Extract the contents of the downloaded zip file
-    unzip $cascadia_code_zip_filename -d cascadia
-
-    # Move the extracted font assets to its appropriate location
-    mv cascadia/*.ttf "$HOME/.fonts"
-  fi
-
-  # Ensure the system is aware of the loaded fonts
-  fc-cache --force --verbose
-}
-
-#####################################################################
-# Install Homebrew packages based on the type of the OS used which is
-# either Ubuntu or MacOS.
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function install_homebrew_packages() {
-  # Taps are "repositories" to download the packages from
-  readonly taps=(
-    "eth-p/software" "go-task/tap" "homebrew/bundle" "homebrew/core"
-    "xo/xo"
-  )
-
-  # Casks are GUI tools (some proprietary) which can't be installed on
-  # Linuxbrew
-  readonly casks=(
-    "visual-studio-code" "spotify" "discord" "inkscape" "dbeaverlite"
-  )
-
-  # The formulae are mostly CLI tools easily installable through
-  # Linuxbrew
-  readonly formulae=(
-    "azure-cli" "btop" "cmatrix" "cookiecutter" "exa" "fd" "gcc" "gh"
-    "glow" "httpie" "lua@5.1" "mongosh" "mdbook" "neofetch" "neovim"
-    "oci-cli" "poetry" "pre-commit" "ripgrep" "rustup-init" "starship"
-    "shellcheck" "stow" "usql" "zsh"
-  )
-
-  # Setup the Homebrew taps
-  for tap in "${taps[@]}"; do
-    brew install "$tap"
-  done
-
-  # Detect the OS name for further conditional logic
-  detect_os
-
-  # Install only the formulae if the detected OS is Ubuntu/Debian
-  if [[ "$os" == "Ubuntu" && ! "$os" == "MacOS" ]]; then
-    for formula in "${formulae[@]}"; do
-      brew install "$formula"
-    done
-  fi
-
-  # Install both the formulae and the casks for MacOS
-  if [[ "$os" == "MacOS" ]]; then
-    # Loop through the "formulae" array to install the CLI tools
-    for formula in "${formulae[@]}"; do
-      brew install "$formula"
-    done
-
-    # Loop through the "casks" array to install the GUI tools
-    for cask in "${casks[@]}"; do
-      brew install "$cask"
-    done
-  fi
-}
-
-#####################################################################
-# Install packages for Arch Linux based distributions from the Arch
-# User Repository (AUR)
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function install_aur_packages() {
-  # FIXME: List of some missing packages - "pre-commit"
-
-  readonly aur_packages=(
-    "act" "azure-cli" "btop-git" "cmatrix-git" "exa-git" "fd-git"
-    "gcc11" "github-cli-git" "glow-git" "mdbook-git" "neofetch-gitn"
-    "neovim-git" "oci-cli" "python-poetry-git" "ripgrep-git"
-    "rustup-git" "starship-git" "shellcheck-bin" "stow-git" "zsh"
-    "zsh-completions"
-  )
-
-  readonly pacman_packages=("httpie")
-
-  # Check if "yay" is installed then install the programs mentioned
-  # above
-  if [[ -x $(command -v yay --version &>/dev/null) ]]; then
-    for package in "${aur_packages[@]}"; do
-      yay --sync --refresh --upgrade "$package"
-    done
-  else
-    error "Failed to install packages from AUR!"
-  fi
-
-  # Install the pacman packages if any are required
-  if [[ ! ${#pacman_packages[@]} -eq 0 ]]; then
-    for package in "${pacman_packages[@]}"; do
-      yay --sync --refresh --upgrade "$package"
-    done
-  else
-    error "Failed to install Pacman packages!"
-  fi
-}
-
-#####################################################################
-# Detect if the Flatpak package manager exists then install some
-# necessary packages from Flathub
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function install_flatpak_packages() {
-  readonly flatpak_packages=(
-    "com.microsoft.Edge"
-    "com.spotify.Client"
-    "com.discordapp.Discord"
-    "com.transmissionbt.Transmission"
-    "org.wezfurlong.wezterm"
-    "com.calibre_ebook.calibre"
-    "com.valvesoftware.Steam"
-    "org.flameshot.Flameshot"
-    "com.visualstudio.code"
-    "io.dbeaver.DBeaverCommunity"
-  )
-
-  if [[ -x $(command -v flatpak --version &>/dev/null) ]]; then
-    for package in "${flatpak_packages[@]}"; do
-      flatpak install --assumeyes flathub "$package"
-    done
-  else
-    error "Failed to install packages from Flathub!"
-  fi
-}
-
-#####################################################################
-# Install some RPM packages
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function install_rpm_packages() {
-  readonly rpm_packages=()
-
-  if [[ "$os" == "Fedora" ]]; then
-    for package in "${rpm_packages[@]}"; do
-      dnf install --assumeyes "$package"
-    done
-  else
-    error "Failed to install some RPM packages!"
-  fi
-}
-
-#####################################################################
-# Install some ZSH plugins
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function install_zsh_plugins() {
-  readonly zsh_plugins=(
-    "zsh-users/zsh-syntax-highlighting"
-    "zsh-users/zsh-autosuggestions"
-    "zsh-users/zsh-completions"
-    "le0me55i/zsh-extract"
-    "ael-code/zsh-colored-man-pages"
-  )
-
-  # Location to store the ZSH plugins
-  readonly zsh_plugins_dir="${ZDOTDIR:-$HOME}/.zsh/plugins"
-
-  # Check for the existence of the local ZSH directory, if not then create it
-  if [[ ! -d $zsh_plugins_dir ]]; then
-    mkdir --parents "$zsh_plugins_dir"
-  fi
-
-  # Download the listed ZSH plugins to a local directory for usage
-  for plugin in "${zsh_plugins[@]}"; do
-    git clone "git@github.com:${plugin}" "$zsh_plugins_dir"
-  done
-}
-
-#####################################################################
-# Install certain GitHub CLI plugins
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function install_gh_plugins() {
-  # Need to install the completions seperately because the upstream
-  # repo does not provide it
-  readonly gh_completions="{$ZDOTDIR:-$HOME}.zsh/plugins/zsh-completions/src/_gh"
-
-  readonly gh_plugins=(
-    "seachicken/gh-poi"
-    "yusukebe/gh-markdown-preview"
-    "chelnak/gh-changelog"
-    "redraw/gh-install"
-    "vilmibm/gh-screensaver"
-    "k1LoW/gh-grep"
-    "HaywardMorihara/gh-tidy"
-  )
-
-  if [[ ! -f "$gh_completions" ]]; then
-    gh completion --shell zsh >"$gh_completions"
-  else
-    echo "GitHub CLI completions failed to generate...skipping"
-  fi
-
-  # Setup some GitHub CLI extensions (or "plugins")
-  for plugin in "${gh_plugins[@]}"; do
-    gh extension install "$plugin"
-  done
-}
-
-#####################################################################
-# Download the dotfiles to the local repository and setup the
-# dotfiles
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function setup_dotfiles() {
-  # Local path to the dotfiles
-  readonly dotfiles_dir="$HOME/.dotfiles"
-
-  # Clone the remote dotfiles repository to the local repository
-  git clone git@github.com:Jarmos-san/dotfiles "$dotfiles_dir"
-
-  # Check if the contents of the dotfiles repository are symlinks
-  for file in "$dotfiles_dir"/*; do
-    if [[ ! -L "$file" ]]; then
-      unlink "$file"
-    fi
-  done
-
-  # Create the symlinks from the dotfiles repository
-  cd "$dotfiles_dir" && stow dotfiles && cd -
-}
-
-#####################################################################
-# Entrypoint of the script to invoke with all the arbitrary
-# parameters the script can be invoked with.
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function setup_ssh() {
-  # Detect the OS name for usage later down the line
-  detect_os
-
-  if ! command -v gh &>/dev/null; then
-    error "GitHub CLI not found...failed to setup SSH authentication"
-  else
-    # Generate the SSH keys for the local machine
-    ssh-keygen -t "ed25519" -C "somraj.mle@gmail.com" \
-      -f "$HOME/.ssh/id_ed25519" -N ""
-
-    # Authenticate the local GitHub CLI session using a secret token
-    gh auth login --with-token <<<"$(printf 'Y/n')"
-
-    # Add the local SSH public keys to the GitHub servers for remote
-    # authentication.
-    gh ssh-key add "$HOME/.ssh/id_ed25519.pub" \
-      --title "$os Development Machine"
-  fi
-}
-
-#####################################################################
-# Setup Docker CE for the local system only for Linux OSes
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function setup_docker() {
-  detect_os
-
-  if [[ ! "$os" == "MacOS" && ! "$os" == "WSL" ]]; then
-    readonly docker_download_url="https://download.docker.com/linux/$os"
-
-    # Check what version of Ubuntu is used
-    ubuntu_release="$(lsb_release --codename --short)"
-
-    # Add the Docker GPG key to the APT key lists
-    curl --fail --silent --show-error --location "$docker_download_url/gpg" \
-      | apt-key add -
-
-    # Add the Docker APT repository for downloading the Docker binary
-    add-apt-repository "deb [arch=amd64] $docker_download_url $ubuntu_release stable"
-
-    # Download Docker and related tools from the APT repository
-    apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin \
-      docker-compose-plugin
-
-    # Ensure the "docker" command can be invoked without using "sudo" each time
-    groupadd docker && usermod --append --groups docker "$USER" && newgrp docker
-  fi
-}
-
-#####################################################################
-# Download Rust and its toolchain
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function setup_rust() {
-  if ! command -v rustup &>/dev/null; then
-    error "Failed to download Rust, the \"rustup\" not found!"
-  else
-    rustup update stable
-  fi
-}
-
-#####################################################################
-# Download and setup Node.js for frontend development.
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function setup_node() {
-  readonly node_download_url="https://deb.nodesource.com/setup_lts.x"
-
-  # Download Node.js
-  curl --silent --show-error --location $node_download_url | bash -c
-}
-
-#####################################################################
-# Entrypoint of the script to invoke with all the arbitrary
-# parameters the script can be invoked with.
-#
-# Arguments:
-#   None
-#
-# Outputs:
-#   None
-#####################################################################
-function main() {
-  # Fetch the OS name for certain conditional logic down the line
-  detect_os
-
-  info "Updating system..."
-  # update_system
-
-  info "Installing some essential programs..."
-  # install_essentials
-
-  # TODO: Consider cloning the remote dotfiles repository and then
-  # executing the rest of the commands inside that local directory
-
-  # Install "yay" package manager to install programs from AUR for
-  # Arch Linux based OSes
-  if [[ "$os" == "Arch Linux" ]]; then
-    info "Installing \"yay\"..."
-    # install_yay
-  fi
-
-  # Install "Homebrew" package manager for Ubuntu and MacOS
-  if [[ "$os" == "Ubuntu" || "$os" == "MacOS" ]]; then
-    info "Installing \"Homebrew\"..."
-    # install_homebrew
-  fi
-
-  # Install Flatpak for Debian/Ubuntu based OSes since Fedora comes
-  # preinstalled with Flatpak!
-  if [[ "$os" == "Ubuntu" && ! $(command -v flatpak --version &>/dev/null) ]]; then
-    info "Installing \"Flatpak\"..."
-    # install_flatpak
-  fi
-
-  if [[ ! "$os" == "WSL" ]]; then
-    info "Installing fonts (Cascadia Code)..."
-    # install_fonts
-  fi
-
-  # On Ubuntu/Debian install both Homebrew and Flatpak packages
-  if [[ "$os" == "Ubuntu" &&
-    -x $(command -v brew --version &>/dev/null) &&
-    -x $(command -v flatpak --version &>/dev/null) ]]; then
-    info "Installing Homebrew packages..."
-    # install_homebrew_packages
-    # install_flatpak_packages
-  fi
-
-  if [[ "$os" == "Arch Linux" && -x $(command -v yay --version &>/dev/null) ]]; then
-    info "Installing AUR packages..."
-    # install_aur_packages
-  fi
-
-  if [[ "$os" == "Fedora" ]]; then
-    info "Installing RPM and Flatpak packages..."
-    # install_rpm_packages
-    # install_flatpak_packages
-  fi
-
-  info "Installing the ZSH plugins..."
-  # install_zsh_plugins
-
-  if [[ -x $(command -v gh --version &>/dev/null) ]]; then
-    info "Installing GitHub CLI plugins..."
-    # install_gh_plugins
-  fi
-
-  info "Setting up dotfiles and creating the necessary symlinks..."
-  # setup_dotfiles
-
-  info "Setting up SSH for authentication to remote servers..."
-  # setup_ssh
-
-  info "Downloading and setting up Node.js..."
-  # setup_nodejs
-
-  info "Downloading and setting up Rust..."
-  # setup_rust
-
-  info "Downloading and setting up Docker..."
-  # TODO: Refactor the "setup_docker" function to consider other Linux OSes as well
-  # setup_docker
-
-  info "Please perform these manual tasks to complete the setup:"
-  echo -e "\n-> Download the backup GPG keys & set them up..."
-  echo -e "\n-> Ensure GUI tools like VSCode are using the right font..."
-
-  success "Automated system setup complete...you can restart the system now!"
-}
-
-# Prompt for sudo password and store its exit code for further usage
-sudo -v
-sudo_exit_code=$?
-
-# Check if sudo credentials are cached then invoke the script to run
-if [ "$sudo_exit_code" -eq 0 ]; then
-  info "Setting up automated system setup now..."
-  main
-  success "Automated system setup is complete..."
-else
-  warn "Sudo privileges are required to run this script!"
-fi
-
-# Cleanup any generated artifacts and the system in general after the
-# scripts completes execution
-trap cleanup EXIT
+#!/usr/bin/env python3
+
+"""
+Script to automatically setup a fresh new Linux/MacOS system (or VM).
+
+This script should ONLY be used after installing a fresh new OS on a new machine or
+inside a VM to setup a development environment automatically. The script will install
+necessary tools like Code Editors, package managers and more before setting up their
+configuration files automatically.
+
+USAGE: To use the script, run the following command (its not ready for usage yet);
+
+curl -fsSL https://raw.githubusercontent.com/<username>/<repository>/path/to/script \
+    | python3 - --dry-run
+
+NOTE: The script is designed to be subjective, hence it is RECOMMENDED to NOT invoke it
+without understanding the context of the contents! Please read through the script or
+reach out to the author for clarification on what certain parts of the script does.
+
+DISCLAIMER: The script IS NOT TESTED and there is no guranteed it works properly!
+
+Author: Somraj Saha <somraj.saha@jarmos.dev>
+License: MIT (see the LICENSE document for more info on this regards)
+"""
+
+import argparse
+import io
+import pathlib
+import platform
+import subprocess
+import sys
+import time
+import urllib.error
+import urllib.request
+import zipfile
+
+# Fetch and store the OS name to be used later on in the script (Linux ONLY)
+OSNAME = platform.freedesktop_os_release().get("NAME")
+
+# Message labels with appropriate terminal colours to showcase its importance
+ERROR = "\033[0;31m[ERROR]\033[0m"
+SUCCESS = "\033[0;32m[SUCCESS]\033[0m"
+WARNING = "\033[0;33m[WARNING]\033[0m"
+INFO = "\033[0;34m[INFO]\033[0m"
+
+
+def argument_parser() -> argparse.Namespace:
+    """Parse the list of arguments passed to the script and return them."""
+    parser = argparse.ArgumentParser(
+        description="Automation script to setup a dev environment on a new machine!"
+    )
+
+    parser.add_argument(
+        "--dry-run",
+        required=False,
+        help="Enable the script without making serious changes to the system.",
+        action="store_true",
+    )
+
+    return parser.parse_args()
+
+
+def simulate_dry_run() -> None:
+    """Simulate dry runs of various functionalities like system updates and more."""
+    print(f'{INFO} Running the script in simulation (or a "dry run") mode')
+    time.sleep(1)
+
+    print(f"{INFO} Simulating system updates...")
+    for _ in range(10):
+        print("...")
+        time.sleep(1)
+    print(f"{SUCCESS} System updates complete...")
+
+    # INFO: Exit script execution upon success
+    sys.exit()
+
+
+def is_tool_installed(tool: str) -> bool:
+    """
+    Check if a tool is installed and executable.
+
+    tool (String): The name of the tool to check for its availability
+    """
+    try:
+        subprocess.run(
+            [tool, "--version"],
+            check=True,
+            stderr=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+        )
+        return True
+    except subprocess.CalledProcessError as error:
+        raise error
+
+
+def run_apt_updates() -> None:
+    """Run APT to update a Debian/Ubuntu system and perform some cleanup actions."""
+    try:
+        subprocess.run(["sudo", "apt-get", "update"])
+        subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"])
+        subprocess.run(["sudo", "apt-get", "autoremove", "--purge"])
+    except subprocess.CalledProcessError as error:
+        print(f"{ERROR} APT failed to update the packages...\n{error}")
+
+
+def setup_gpg_keys() -> None:
+    """Set up GPG keys for the "apt-get" command on Debian/Ubuntu systems."""
+    keyrings_dir = pathlib.Path("/etc/apt/keyrings")
+    gpg_keys = {
+        "docker.asc": "https://download.docker.com/linux/ubuntu/gpg",
+        "nodesource.asc": "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key",
+    }
+    gpg_bin_files = {
+        "docker.asc": keyrings_dir / "docker.gpg",
+        "nodesource.asc": keyrings_dir / "nodesource.gpg",
+    }
+
+    # INFO: Check whether the "keyrings" directory exists based on conditional logic
+    if not keyrings_dir.exists() and not keyrings_dir.is_dir():
+        keyrings_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
+
+    for ascii_key, url in gpg_keys.items():
+        request = urllib.request.Request(url, headers={"User-Agent": "curl/8.4.0"})
+
+        try:
+            with urllib.request.urlopen(
+                request
+            ) as response, open(  # type: ignore[assignment]
+                ascii_key, "wb"
+            ) as ascii_key:
+                ascii_key.write(response.read())  # type: ignore[attr-defined]
+        except urllib.error.URLError as error:
+            print(f"{ERROR} Failed to download the GPG keys: {error}")
+
+    for ascii_key, gpg_file in gpg_bin_files.items():
+        ascii_file = pathlib.Path.cwd() / ascii_key
+        gpg_dearmor_cmd = [
+            "gpg",
+            "--yes",
+            "--output",
+            str(gpg_file),
+            "--dearmor",
+            str(ascii_file),
+        ]
+
+        if not ascii_file.exists() and not ascii_file.is_file():
+            print(f"{ERROR} Failed to dearmor the {gpg_file} ASCII file!")
+        else:
+            try:
+                subprocess.run(gpg_dearmor_cmd)
+            except subprocess.CalledProcessError as error:
+                raise error
+            finally:
+                ascii_file.unlink()
+
+
+def update_apt_list() -> None:
+    """Update the APT list to fetch packages from for Debian/Ubuntu systems."""
+    nodesource = "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] \
+            https://deb.nodesource.com/node_20.x nodistro main"
+    docker = f"deb [arch='{platform.machine()}' \
+            signed-by=/etc/apt/keyrings/docker.gpg] \
+            https://download.docker.com/linux/debian \
+            '{platform.freedesktop_os_release().get('VERSION_CODENAME')}' stable"
+
+    sources = {
+        docker: pathlib.Path("/etc/apt/sources.list.d/docker.list"),
+        nodesource: pathlib.Path("/etc/apt/sources.list.d/nodesource.list"),
+    }
+
+    for source, source_file in sources.items():
+        with open(source_file, "w") as file:
+            file.writelines(source)
+            print(f"{INFO} Updated {source_file}")
+
+
+def run_macos_updates() -> None:
+    """Automate MacOS system updates."""
+    try:
+        subprocess.run(["sudo", "softwareupdate", "-i", "-a"])
+    except subprocess.CalledProcessError as error:
+        print(f"{ERROR} MacOS system update failed...\n{error}")
+
+
+def run_system_updates() -> None:
+    """Detect the Operating System name and run some system updates on it."""
+    if platform.system() == "Linux":
+        match OSNAME:
+            case "Ubuntu" | "Debian":
+                run_apt_updates()
+            case _:
+                print(f"{ERROR} Failed to identify the OS...aborting!")
+    elif platform.system() == "MacOS":
+        run_macos_updates()
+
+
+def install_system_essentials() -> None:
+    """Install certain essentials necessary for proper functioning of the system."""
+    match OSNAME:
+        case "Ubuntu" | "Debian":
+            try:
+                subprocess.run(
+                    [
+                        "sudo",
+                        "apt-get",
+                        "install",
+                        "curl",
+                        "git",
+                        "gnupg",
+                        "ca-certificates",
+                        "--yes",
+                        "--no-install-recommends",
+                    ]
+                )
+            except subprocess.CalledProcessError as error:
+                print(f"{ERROR} Failed to install essential tools...\n{error}")
+        case _:
+            print(f"{ERROR} Failed to identify OS...aborting!")
+
+
+def install_homebrew() -> None:
+    """Install HomeBrew on MacOS and Ubuntu/Debian systems."""
+    homebrew_installation_url = (
+        "https://raw.githubusercontent.com/Homebrew/install/master/install.sh"
+    )
+    curl_command = (
+        f"curl --fail --silent --show-error --location ${homebrew_installation_url}"
+    )
+
+    # Install Homebrew only for MacOS and Ubuntu/Debian systems
+    if not platform.system() == "MacOS" or not platform.system() == "Linux":
+        print(f"{INFO} Skipping Homebrew installation on unsupported OS")
+        pass
+    else:
+        try:
+            subprocess.run(
+                ["NONINTERACTIVE=1 ", "/bin/bash", "-c", f'$"({curl_command})"']
+            )
+        except subprocess.CalledProcessError as error:
+            print(f"{ERROR} Failed to install Homebrew...\n{error}")
+
+
+def install_fonts() -> None:
+    """Install certain fonts and make them available for use in the system."""
+    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/CascadiaCode.zip"
+    fonts_dir = pathlib.Path(f"{pathlib.Path.home()}/.fonts")
+
+    if not platform.system() == "Linux" or platform.system() == "MacOS":
+        print(f"{INFO} Failed to identify OS...skipping fonts setup!")
+        pass
+    else:
+        with urllib.request.urlopen(url) as response:
+            print(f"{INFO} Downloading fonts...please wait!")
+
+            # Store the buffered contents from the HTTPS response in a variable
+            contents = io.BytesIO(response.read())
+
+            # Create a zipped file from the buffered contents
+            zippedfile = zipfile.ZipFile(contents)
+
+            # If the "~/.fonts" directory doesn't exists, create it before
+            # extracting the zipped contents
+            if not fonts_dir.exists() and not fonts_dir.is_dir():
+                pathlib.Path.mkdir(fonts_dir)
+
+            # Extract the zipped contents to the "~/.fonts" directory
+            zippedfile.extractall(fonts_dir)
+
+            # Refresh the font cache for the OS to know where to look for the new
+            # fonts
+            try:
+                subprocess.run(["fc-cache", "--force"])
+            except subprocess.CalledProcessError as error:
+                print(f"{ERROR} Failed to update the fonts cache...\n{error}")
+
+            print("Fonts download and setup complete!")
+
+
+def install_brew_packages() -> None:
+    """Install Homebrew packages."""
+    taps = (
+        "eth-p/software",
+        "go-task/tap",
+        "homebrew/bundle",
+        "homebrew/core",
+        "xo/xo",
+    )
+
+    casks = ("visual-studio-code", "spotify", "discord", "inkscape", "dbeaverlite")
+
+    formulae = (
+        "azure-cli",
+        "btop",
+        "cmatrix",
+        "cookiecutter",
+        "exa",
+        "gcc",
+        "gh",
+        "httpie",
+        "lua@5.1",
+        "mdbook",
+        "neofetch",
+        "neovim",
+        "oci-cli",
+        "poetry",
+        "pre-commit",
+        "ripgrep",
+        "rust",
+        "starship",
+        "shellcheck",
+        "usql",
+        "zsh",
+    )
+
+    # INFO: Check if Homebrew is installed and invocable
+    if not is_tool_installed("brew"):
+        print(f"{ERROR} Homebrew not found (not installed perhaps?)...aborting!")
+    else:
+        # INFO: Install "taps" for Homebrew to fetch the packages (formulae) from
+        for tap in taps:
+            try:
+                subprocess.run(["brew", "install", tap])
+            except subprocess.CalledProcessError as error:
+                print(f"{ERROR} Failed to install Homebrew taps...\n{error}")
+
+        # INFO: Install "formulae" using Homebrew for both Linux and MacOS systems
+        for formula in formulae:
+            try:
+                subprocess.run(["brew", "install", formula])
+            except subprocess.CalledProcessError as error:
+                print(f"{ERROR} Failed to install formulae...\n{error}")
+
+        # INFO: Installation of "casks" (GUI tools) are ONLY supported on MacOS!
+        if platform.system() == "MacOS":
+            for cask in casks:
+                try:
+                    subprocess.run(["brew", "install", cask])
+                except subprocess.CalledProcessError as error:
+                    print(f"{ERROR} Failed to install casks...\n{error}")
+
+
+def install_flatpak() -> None:
+    """Install Flatpak if its not available on Linux distros."""
+    flatpak_repo = "https://flathub.org/repo/flathub.flatpakrepo"
+
+    # INFO: Attempt to install Flatpak ONLY on Linux distros & not WSL, if not available
+    if platform.system() == "Linux" and not is_tool_installed("flatpak"):
+        match OSNAME:
+            case "Ubuntu" | "Debian":
+                try:
+                    subprocess.run(["apt-get", "install", "flatpak"])
+                except subprocess.CalledProcessError as error:
+                    print(f"{ERROR} Failed to install Flatpak...\n{error}")
+            case _:
+                print(f"{ERROR} Unknown OS...skipping Flatpak installation")
+                pass
+
+        # INFO: Attemp to update the remote Flatpak repository locally
+        try:
+            subprocess.run(
+                ["flatpak", "remote-add", "-if-not-exists", "flathub", flatpak_repo]
+            )
+        except subprocess.CalledProcessError as error:
+            print(f"{ERROR} Failed to update Flatpak repository locally...\n{error}")
+
+
+def install_flatpak_packages() -> None:
+    """Install Flatpak packages on Linux distros."""
+    packages = (
+        "com.calibre_ebook.calibre"
+        "com.discordapp.Discord"
+        "org.flameshot.Flameshot"
+        "com.microsoft.Edge"
+        "com.github.KRTirtho.Spotube"
+        "com.transmissionbt.Transmission"
+        "com.valvesoftware.Steam"
+        "com.visualstudio.code"
+        "io.dbeaver.DBeaverCommunity"
+        "org.wezfurlong.wezterm"
+    )
+
+    if not is_tool_installed("flatpak"):
+        print(f"{WARNING} Flatpak not found")
+    else:
+        for package in packages:
+            try:
+                subprocess.run(
+                    ["flatpak", "install", "--assumeyes", "flathub", package]
+                )
+            except subprocess.CalledProcessError as error:
+                print(f"{ERROR} Failed to install packages from Flatpak...\n{error}")
+
+
+def install_zsh_plugins() -> None:
+    """Install ZSH plugins."""
+    # The list of ZSH plugins to install
+    plugins = (
+        "zsh-users/zsh-syntax-highlighting"
+        "zsh-users/zsh-autosuggestions"
+        "zsh-users/zsh-completions"
+        "le0me55i/zsh-extract"
+        "ael-code/zsh-colored-man-pages"
+    )
+
+    # The location on the filesystem to store the plugins
+    zsh_plugin_dir = pathlib.Path(f"{pathlib.Path.home()}/.zsh/plugins")
+
+    # Create the plugins directory if it doesn't already exists
+    if not zsh_plugin_dir.exists() and not zsh_plugin_dir.is_dir():
+        pathlib.Path.mkdir(zsh_plugin_dir)
+
+    # Attempt to install the ZSH plugins from GitHub to its respective location
+    for plugin in plugins:
+        try:
+            subprocess.run(["git", "clone", f"git@github.com{plugin}", zsh_plugin_dir])
+        except subprocess.CalledProcessError as error:
+            print(f"{ERROR} Failed to install ZSH plugins...\n{error}")
+
+
+def setup_dotfiles() -> None:
+    """Set up dotfiles for the system."""
+    dotfiles_dir = pathlib.Path(f"{pathlib.Path.home()}/.dotfiles")
+
+    # INFO: Create the "~/.dotfiles" directory if it doesn't already exists
+    if not dotfiles_dir.exists() and not dotfiles_dir.is_dir():
+        pathlib.Path.mkdir(dotfiles_dir)
+
+    # INFO: Attempt to download the dotfiles from the remote repository on GitHub
+    try:
+        subprocess.run(
+            ["git", "clone", "git@github.com:Jarmos-san/dotfiles", dotfiles_dir]
+        )
+    except subprocess.CalledProcessError as error:
+        print(f"{ERROR} Failed to clone remote dotfiles repository...\n{error}")
+
+    # INFO: Check if the contents of the ".dotfiles" repository are already
+    # symlinked, if yes then attempt to remove the links
+    for content in pathlib.Path.iterdir(dotfiles_dir / "dotfiles"):
+        if content.is_symlink():
+            content.unlink(missing_ok=True)
+
+    # INFO: Create symlinks of the contents from "~/.dotfiles/dotfiles" directory
+    for content in pathlib.Path.iterdir(dotfiles_dir / "dotfiles"):
+        content.symlink_to(
+            target=f"{pathlib.Path.home()}/{content}", target_is_directory=True
+        )
+
+
+def install_apt_packages() -> None:
+    """Install some packages using the "apt-get" command for Ubuntu/Debian systems."""
+    # INFO: Invoke the "apt-get" command to install Node.js
+    try:
+        subprocess.run(
+            [
+                "apt-get",
+                "install",
+                "--assume-yes",
+                "nodejs",
+                "docker-ce",
+                "docker-ce-cli",
+                "containerd.io",
+                "docker-buildx-plugin",
+                "docker-compose-plugin",
+                "--no-install-recommends",
+            ]
+        )
+        print(f"{SUCCESS} APT packages installation complete!")
+    except subprocess.CalledProcessError as error:
+        print(f"{ERROR} APT package installation failed\n{error}")
+
+
+def main() -> None:
+    """Entrypoint of the script."""
+    args = argument_parser()
+
+    # INFO: Run simulation if the "--dry-run" flag is passed to the script
+    if args.dry_run:
+        simulate_dry_run()
+
+    print(
+        f"{WARNING} Running the script can cause system corruption or worse!",
+        end=" ",
+    )
+
+    # INFO: Prompt users for a response based on the warning above
+    user_warning = input("Proceed? [y/N]:  ").lower()
+
+    # INFO: Handle the logic based on the user response
+    match user_warning:
+        # INFO: If user chose to abort the automation script then prompt to perform
+        # dry-run instead. By default, it'll run the simulation unless explicitly
+        # prompted not to.
+        case "n" | "no" | "":
+            print(
+                f"{INFO} Aborting automation script...",
+                end=" ",
+            )
+
+            dry_run_response = input("dry run instead? [Y/n]").lower()
+
+            if dry_run_response in ("y", "yes", ""):
+                simulate_dry_run()
+        case "y" | "yes":
+            print(f"{INFO} Running automatic system setup right now...")
+        case _:
+            print(f"{ERROR} Unknown response...aborting!")
+
+    # INFO: Procedurally run one automation task after the other, the order probably
+    # matters in certain sections of the logic.
+    run_system_updates()
+    install_homebrew()
+    install_system_essentials()
+    install_fonts()
+    install_brew_packages()
+    install_flatpak()
+    install_flatpak_packages()
+    install_zsh_plugins()
+    setup_dotfiles()
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print(f"{INFO} Automated system setup aborted safely...")
