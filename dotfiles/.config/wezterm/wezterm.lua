@@ -1,10 +1,10 @@
 local wezterm = require("wezterm")
 local mux = wezterm.mux
 
--- Ensure the terminal is opened in maximised mode right after startup
+-- Ensure the terminal is opened is in fullscreen mode right after startup
 wezterm.on("gui-startup", function(cmd)
   local _, _, window = mux.spawn_window(cmd or {})
-  window:gui_window():maximize()
+  window:gui_window():toggle_fullscreen()
 end)
 
 -- This Lua module returns a table of configuration values which Wezterm reads to
