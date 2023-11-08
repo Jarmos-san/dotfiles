@@ -53,4 +53,7 @@ return {
 
   -- Disable checking for updates every day (which is annoying af!)
   check_for_updates = false,
+
+  -- Disable the annoying audio bell
+  audible_bell = "Disabled",
 }
