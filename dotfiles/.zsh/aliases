@@ -12,6 +12,7 @@ alias drmi="docker image rm"
 alias dcdown="docker compose down --remove-orphans --volumes"
 alias dcup="docker compose up --detach"
 alias dclogs="docker compose logs"
+alias dims="docker images"
 
 # Easy and utilitarian aliases for quick terminal usage
 alias reload="source $HOME/.zshrc"
