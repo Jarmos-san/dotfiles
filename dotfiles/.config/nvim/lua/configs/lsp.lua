@@ -156,6 +156,9 @@ M.config = function()
   -- lspconfig["taplo"].setup({ on_attach = on_attach, capabilities = capabilities })
 
   lspconfig["gopls"].setup({ on_attach = on_attach, capabilities = capabilities })
+
+  -- LSP configurations for working with Astro files
+  lspconfig["astro"].setup({ on_attach = on_attach, capabilities = capabilities })
 end
 
 return M
