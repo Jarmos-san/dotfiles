@@ -5,6 +5,7 @@ local M = {}
 local configs = {
   -- Ensure the parsers for these languages are compulsarily installed
   ensure_installed = {
+    "astro",
     "bash",
     "comment",
     "diff",
