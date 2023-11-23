@@ -6,6 +6,7 @@ M.config = function()
   -- The list of LSP servers to install
   local mason_packages = {
     -- Some of the commented out LSP servers aren't available for download!
+    "astro",
     "bashls",
     -- "black",
     -- "debugpy",
