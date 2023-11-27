@@ -51,12 +51,12 @@ M.config = function()
     }),
     code_actions.shellcheck, -- Code Actions for Bash/Shell files
     diagnostics.shellcheck, -- Diagnostics for Bash/Shell files
-    diagnostics.eslint_d.with({ -- Diagnostics for ESLint files
-      condition = function(utils)
-        -- Load this tool only if its configuration file exists in the current working directory
-        return utils.root_has_file({ ".eslintrc", ".eslintrc.js", ".eslintrc.json", "package.json" })
-      end,
-    }),
+    -- diagnostics.eslint_d.with({ -- Diagnostics for ESLint files
+    --   condition = function(utils)
+    --     -- Load this tool only if its configuration file exists in the current working directory
+    --     return utils.root_has_file({ ".eslintrc", ".eslintrc.js", ".eslintrc.json", "package.json" })
+    --   end,
+    -- }),
     diagnostics.ruff.with({ -- Super fast diagnostics tool for Python files
       prefer_local = ".venv/bin", -- Prefer using the virtual environment local binary for better project identification
     }),
