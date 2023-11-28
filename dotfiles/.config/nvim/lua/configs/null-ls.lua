@@ -38,11 +38,11 @@ M.config = function()
   local sources = {
     -- INFO: This is probably broken on old OSes. See the following thread for guidance if a similar error was raised:
     -- https://askubuntu.com/questions/421642/libc-so-6-version-glibc-2-14-not-found
-    diagnostics.selene.with({ -- Linter for Lua files
-      condition = function(utils) -- Only enable the linter if its configuration files exists
-        return utils.root_has_file({ "selene.toml", "vim.toml" })
-      end,
-    }),
+    -- diagnostics.selene.with({ -- Linter for Lua files
+    --   condition = function(utils) -- Only enable the linter if its configuration files exists
+    --     return utils.root_has_file({ "selene.toml", "vim.toml" })
+    --   end,
+    -- }),
     formatting.shfmt.with({ -- Formatter for Bash/Shell files
       -- INFO: Configure "shfmt" to adhere to Google style guide.
       -- See the examples as shared in the official repository below:
