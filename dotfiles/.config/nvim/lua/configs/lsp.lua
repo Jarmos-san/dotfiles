@@ -159,6 +159,9 @@ M.config = function()
 
   -- LSP configurations for working with Astro files
   lspconfig["astro"].setup({ on_attach = on_attach, capabilities = capabilities })
+
+  -- CSS, SCSS and LESS LSP server configs
+  lspconfig["cssls"].setup({ on_attach = on_attach, capabilities = capabilities })
 end
 
 return M
