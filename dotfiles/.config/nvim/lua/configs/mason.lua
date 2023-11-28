@@ -26,6 +26,7 @@ M.config = function()
     -- "shellcheck",
     -- "shfmt",
     -- "stylua",
+    "stylelint_lsp",
     "sqlls",
     "tailwindcss",
     "tsserver",
