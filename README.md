@@ -48,6 +48,8 @@ inspiration.
 - [codeinthehouse's gist](https://gist.githubusercontent.com/codeinthehole/26b37efa67041e1307db/raw/67c06401c3cdb7f7f96aa9054e95cbe0e473b7f0/osx_bootstrap.sh)
 - Dries Vints's [driesvints/dotfiles](https://github.com/driesvints/dotfiles)
 - Tom Payne's [twpayne/dotfiles](https://github.com/twpayne/dotfiles)
+- Maria José Solano's
+  [MariaSolOs/dotfiles](https://github.com/MariaSolOs/dotfiles)
 
 More will be added as & when I come across any.
 
