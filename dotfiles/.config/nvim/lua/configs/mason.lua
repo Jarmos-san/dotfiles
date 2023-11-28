@@ -10,7 +10,7 @@ M.config = function()
     "bashls",
     -- "black",
     -- "debugpy",
-    "cssls",
+    "css-lsp",
     "dockerls",
     "eslint",
     "gopls",
