@@ -8,6 +8,7 @@ local configs = {
     "astro",
     "bash",
     "comment",
+    "css",
     "diff",
     "dockerfile",
     "git_rebase",
