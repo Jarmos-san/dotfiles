@@ -10,3 +10,11 @@ autocmd("BufWritePre", {
     require("conform").format({ bufnr = args.buf })
   end,
 })
+
+autocmd("BufWritePost", {
+  desc = "Lint Lua files using Stylua",
+  group = augroup("lint_lua_files"),
+  callback = function()
+    require("lint").try_lint()
+  end,
+})
