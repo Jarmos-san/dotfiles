@@ -33,4 +33,7 @@ M.format = function(command)
   vim.api.nvim_win_set_cursor(0, cursor)
 end
 
+-- Setup highlight groups for Neovim easily
+M.highlight = vim.api.nvim_set_hl
+
 return M
