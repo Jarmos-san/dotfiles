@@ -47,49 +47,41 @@ fi
 
 # Execute the script in context to the current directory where the script is run
 cd "$(dirname "$0")"
-#
-# Message labels with appropriate terminal colours to showcase its importance
-ERROR="\033[0;31m[ERROR]\033[0m"
-SUCCESS="\033[0;32m[SUCCESS]\033[0m"
-WARNING="\033[0;33m[WARNING]\033[0m"
-INFO="\033[0;34m[INFO]\033[0m"
 
 ###############################################################################
 # Print a nicely formatted informative message to STDOUT
 ###############################################################################
 info() {
-  echo -e "$INFO $1"
+  echo -e "\033[0;34m[INFO]\033[0m $1"
 }
 
 ###############################################################################
 # Print a nicely formatted warning message to STDOUT
 ###############################################################################
-warning() {
-  echo -e "$WARNING $1"
+warn() {
+  echo -e "\033[0;33m[WARN]\033[0m $1"
 }
 
 ###############################################################################
 # Print a nicely formatted success message to STDOUT
 ###############################################################################
 success() {
-  echo -e "$SUCCESS $1"
+  echo -e "\033[0;32m[SUCCESS]\033[0m $1"
 }
 
 ###############################################################################
 # Print a nicely formatted error message to STDOUT
 ###############################################################################
 error() {
-  echo -e "$ERROR $1"
+  echo -e "\033[0;31m[ERROR]\033[0m $1"
 }
 
 ###############################################################################
 # Cleanup any dangling variables or artifacts post script execution
 ###############################################################################
 cleanup() {
-  unset ERROR
-  unset SUCCESS
-  unset WARNING
-  unset INFO
+  # TODO: Write a "cleanup" function here
+  info "Performing cleanup actions post system setup..."
 }
 
 ###############################################################################
@@ -97,7 +89,7 @@ cleanup() {
 # logic
 ###############################################################################
 main() {
-  error "Hello World!"
+  success "Hello World!"
 
   # Run the cleanup function after all the logic above has run without any
   # errors!
