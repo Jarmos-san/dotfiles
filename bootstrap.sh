@@ -85,6 +85,16 @@ cleanup() {
 }
 
 ###############################################################################
+# Update the system before starting the automated setup
+###############################################################################
+update_system() {
+  info "Updating the system before starting the automated setup..."
+
+  # TODO: Uncomment the following line post completion
+  # apt-get upgrade && apt-get upgrade --yes
+}
+
+###############################################################################
 # Install some necessary prerequisite tools before the setup script runs
 ###############################################################################
 install_prerequisites() {
@@ -124,6 +134,9 @@ install_prerequisites() {
 # logic
 ###############################################################################
 main() {
+  # Perform a preliminary system update before starting the automated setup
+  update_system
+
   # Install prerequisite tools before the automated setup
   install_prerequisites
 
