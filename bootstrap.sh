@@ -104,7 +104,7 @@ install_prerequisites() {
   # List of prerequisite tools which aren't installed and will be eventually!
   declare -a missing_tools
 
-  prerequisite_tools=("git" "curl" "gcc" "chigga")
+  prerequisite_tools=("git" "curl" "gcc")
 
   # Check for missing prerequisite tools and store them for future reference
   for tool in "${prerequisite_tools[@]}"; do
