@@ -85,11 +85,47 @@ cleanup() {
 }
 
 ###############################################################################
+# Install some necessary prerequisite tools before the setup script runs
+###############################################################################
+install_prerequisites() {
+  # List of prerequisite tools to check for existence
+  declare -a prerequisite_tools
+
+  # List of prerequisite tools which aren't installed and will be eventually!
+  declare -a missing_tools
+
+  prerequisite_tools=("git" "curl" "gcc" "chigga")
+
+  # Check for missing prerequisite tools and store them for future reference
+  for tool in "${prerequisite_tools[@]}"; do
+    if ! command -v "${tool}" &>/dev/null; then
+      missing_tools+=("$tool")
+    else
+      missing_tools=()
+    fi
+  done
+
+  if [[ ${#missing_tools[@]} -ne 0 ]]; then
+    warn "These tools were not found & hence will be installed!"
+
+    for tool in "${missing_tools[@]}"; do
+      echo "    $tool"
+    done
+
+    # TODO: Uncomment this line post-completion
+    # apt-get install --yes --no-install-recommends "${missing_tools[@]}"
+
+    info "Prerequisite tools installed...proceeding with automated setup"
+  fi
+}
+
+###############################################################################
 # The entrypoint of the script which will run the script as per the prescribed
 # logic
 ###############################################################################
 main() {
-  success "Hello World!"
+  # Install prerequisite tools before the automated setup
+  install_prerequisites
 
   # Run the cleanup function after all the logic above has run without any
   # errors!
