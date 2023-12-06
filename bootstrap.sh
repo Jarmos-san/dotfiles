@@ -11,7 +11,7 @@
 # USAGE: To use the script, run the following command (its not ready for usage yet);
 #
 # curl -fsSL https://raw.githubusercontent.com/<username>/<repository>/path/to/script \
-#   | bash -c
+#   | bash -s
 #
 # NOTE: The script is designed to be subjective, hence it is RECOMMENDED to NOT
 # invoke it without understanding the context of the contents! Please read
