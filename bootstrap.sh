@@ -77,14 +77,6 @@ error() {
 }
 
 ###############################################################################
-# Cleanup any dangling variables or artifacts post script execution
-###############################################################################
-cleanup() {
-  # TODO: Write a "cleanup" function here
-  info "Performing cleanup actions post system setup..."
-}
-
-###############################################################################
 # Update the system before starting the automated setup
 ###############################################################################
 update_system() {
@@ -134,15 +126,28 @@ install_prerequisites() {
 # logic
 ###############################################################################
 main() {
+  warn "The script will perform an automated setup of the system and can cause\
+  potential harm to the system!"
+
+  read -rp "Do you still want to proceed? (yes/no) " yn
+
+  case $yn in
+    yes) info "This system will now be automatically setup..." ;;
+    no)
+      info "Aborting automated system updated..."
+      exit 0
+      ;;
+    *)
+      error "Invalid response"
+      exit 1
+      ;;
+  esac
+
   # Perform a preliminary system update before starting the automated setup
   update_system
 
   # Install prerequisite tools before the automated setup
   install_prerequisites
-
-  # Run the cleanup function after all the logic above has run without any
-  # errors!
-  cleanup
 }
 
 # Defer running the script till the last moment for safety reasons
