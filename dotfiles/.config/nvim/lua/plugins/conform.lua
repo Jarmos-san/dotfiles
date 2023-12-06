@@ -6,6 +6,7 @@ return {
   opts = {
     formatters_by_ft = {
       lua = { "stylua" },
+      sh = { "shfmt" },
     },
   },
   config = function(_, opts)
