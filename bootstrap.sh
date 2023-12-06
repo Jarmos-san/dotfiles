@@ -122,10 +122,9 @@ install_prerequisites() {
 }
 
 ###############################################################################
-# The entrypoint of the script which will run the script as per the prescribed
-# logic
+# Warn user and prompt for confirmation before executing the script
 ###############################################################################
-main() {
+warn_user() {
   warn "The script will perform an automated setup of the system and can cause\
   potential harm to the system!"
 
@@ -142,6 +141,15 @@ main() {
       exit 1
       ;;
   esac
+}
+
+###############################################################################
+# The entrypoint of the script which will run the script as per the prescribed
+# logic
+###############################################################################
+main() {
+  # Warn and prompt the user for confirmation to prevent accidental execution
+  warn_user
 
   # Perform a preliminary system update before starting the automated setup
   update_system
