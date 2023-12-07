@@ -165,6 +165,39 @@ create_necessary_dirs() {
 }
 
 ###############################################################################
+# Setup SSH for authenticating to GitHub using Git
+###############################################################################
+setup_github_ssh() {
+  # Check for the "~/.ssh" directory's existence to createh the SSH keys safely
+  if [[ ! -d "$HOME/.ssh" ]]; then
+    error "The $HOME/.ssh directory does not exist...please create it!"
+    exit 1
+  fi
+
+  info "Generating the SSH secret/public key pair now..."
+
+  ssh-keygen -q -b 4096 -t ed25519 -N "" -f "$HOME/.ssh/github_ed25519"
+
+  pubkey=$(cat "$HOME/.ssh/github_ed25519.pub")
+
+  curl --silent --location \
+    --request POST \
+    --header "Accept: application/vnd.github+json" \
+    --header "Authorization: Bearer $GHTOKEN" \
+    --header "X-GitHub-Api-Version: 2022-11-28" \
+    https://api.github.com/user/keys \
+    --data-binary "{\"title\":\"$SSH_KEY_NAME\",\"key\":\"$pubkey\"}"
+
+  info "SSH public key pushed to remote service..."
+
+  eval "$(ssh-agent -s)"
+  ssh-add "$HOME/.ssh/github_ed25519.pub"
+
+  info "Testing SSH connection to GitHub..."
+  ssh -T git@github.com
+}
+
+###############################################################################
 # The entrypoint of the script which will run the script as per the prescribed
 # logic
 ###############################################################################
