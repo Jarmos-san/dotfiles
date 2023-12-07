@@ -117,8 +117,7 @@ info "Automatic setup is starting...please feel free to grab a cup of coffee!"
 update_system() {
   info "Updating the system before starting the automated setup..."
 
-  # TODO: Uncomment the following line post completion
-  # apt-get upgrade && apt-get upgrade --yes
+  apt-get upgrade && apt-get upgrade --yes
 }
 
 ###############################################################################
@@ -149,8 +148,7 @@ install_prerequisites() {
       echo "    $tool"
     done
 
-    # TODO: Uncomment this line post-completion
-    # apt-get install --yes --no-install-recommends "${missing_tools[@]}"
+    apt-get install --yes --no-install-recommends "${missing_tools[@]}"
 
     info "Prerequisite tools installed...proceeding with automated setup"
   fi
@@ -212,14 +210,21 @@ setup_github_ssh() {
 # logic
 ###############################################################################
 main() {
-  # Warn and prompt the user for confirmation to prevent accidental execution
-  warn_user
+  # TODO: Uncomment the function blog when its ready for usage
 
   # Perform a preliminary system update before starting the automated setup
-  update_system
+  # update_system
+
+  # Ensure certain folders are present and/or created for a smooth operation
+  # create_necessary_dirs
+
+  # Setup SSH for Git/GitHub for cloning/managing the dotfiles itself
+  # setup_github_ssh
+
+  echo "Setting up system automatically!"
 
   # Install prerequisite tools before the automated setup
-  install_prerequisites
+  # install_prerequisites
 }
 
 # Defer running the script till the last moment for safety reasons
