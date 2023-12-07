@@ -76,6 +76,9 @@ error() {
   echo -e "\033[0;31m[ERROR]\033[0m $1"
 }
 
+GHTOKEN=$(read -rp "Enter your GitHub Access Token: ")
+SSH_KEY_NAME=$(read -rp "SSH key name: ")
+
 ###############################################################################
 # Update the system before starting the automated setup
 ###############################################################################
