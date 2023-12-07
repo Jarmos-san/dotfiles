@@ -144,6 +144,24 @@ warn_user() {
 }
 
 ###############################################################################
+# Setup necessary directories relative to the home directory on the system
+###############################################################################
+create_necessary_dirs() {
+  declare -a dirs
+
+  dirs=(".config" ".gnupg" ".ssh" "projects" "work")
+
+  info "Setting up necessary directories for proper system functioning"
+
+  for dir in "${dirs[@]}"; do
+    if [[ ! -d "$HOME/$dir" ]]; then
+      info "$HOME/$dir not found...created"
+      mkdir --parents "$HOME/$dir"
+    fi
+  done
+}
+
+###############################################################################
 # The entrypoint of the script which will run the script as per the prescribed
 # logic
 ###############################################################################
