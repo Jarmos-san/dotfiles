@@ -76,8 +76,40 @@ error() {
   echo -e "\033[0;31m[ERROR]\033[0m $1"
 }
 
-GHTOKEN=$(read -rp "Enter your GitHub Access Token: ")
-SSH_KEY_NAME=$(read -rp "SSH key name: ")
+###############################################################################
+# Warn user and prompt for confirmation before executing the script
+###############################################################################
+warn_user() {
+  warn "The script will perform an automated setup of the system and can cause\
+  potential harm to the system!"
+
+  read -rp "Do you still want to proceed? (yes/no) " yn
+
+  case $yn in
+    yes) info "This system will now be automatically setup..." ;;
+    no)
+      info "Aborting automated system updated..."
+      exit 0
+      ;;
+    *)
+      error "Invalid response"
+      exit 1
+      ;;
+  esac
+}
+
+# Warn and prompt the user for confirmation to prevent accidental execution
+warn_user
+
+info "Please manually enter the prompts below before the automation starts"
+
+GHTOKEN=$(read -rp "GitHub Access Token: ")
+SSH_KEY_NAME=$(read -rp "SSH key name for GitHub: ")
+# GPG_SIGN_NAME=$(read -rp "GPG signature name: ")
+# GPG_SIGN_EMAIL=$(read -rp "GPG signature email address: ")
+# GPG_SIGN_KEY=$(read -rp "GPG signature key: ")
+
+info "Automatic setup is starting...please feel free to grab a cup of coffee!"
 
 ###############################################################################
 # Update the system before starting the automated setup
@@ -122,28 +154,6 @@ install_prerequisites() {
 
     info "Prerequisite tools installed...proceeding with automated setup"
   fi
-}
-
-###############################################################################
-# Warn user and prompt for confirmation before executing the script
-###############################################################################
-warn_user() {
-  warn "The script will perform an automated setup of the system and can cause\
-  potential harm to the system!"
-
-  read -rp "Do you still want to proceed? (yes/no) " yn
-
-  case $yn in
-    yes) info "This system will now be automatically setup..." ;;
-    no)
-      info "Aborting automated system updated..."
-      exit 0
-      ;;
-    *)
-      error "Invalid response"
-      exit 1
-      ;;
-  esac
 }
 
 ###############################################################################
