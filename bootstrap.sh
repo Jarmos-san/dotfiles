@@ -124,9 +124,26 @@ add_unstable_sources() {
 # Update the system before starting the automated setup
 ###############################################################################
 update_system() {
+  # Fetch the name of the OS/distribution
+  os_name=$(grep -Po "(?<=^ID=).+" /etc/os-release | sed 's/"//g')
+
   info "Updating the system before starting the automated setup..."
 
-  apt-get upgrade && apt-get upgrade --yes
+  case "$os_name" in
+    debian)
+      add_unstable_sources
+      apt-get update
+      apt-get upgrade --yes
+      ;;
+    ubuntu)
+      apt-get update
+      apt-get upgrade --yes
+      ;;
+    *)
+      error "Failed to identify the OS"
+      exit 1
+      ;;
+  esac
 }
 
 ###############################################################################
