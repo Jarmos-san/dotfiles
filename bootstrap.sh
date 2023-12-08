@@ -227,5 +227,11 @@ main() {
   # install_prerequisites
 }
 
-# Defer running the script till the last moment for safety reasons
-main "$@"
+# Check whether script has sudo privleges, if so then execute else exit the flow
+if [[ ! $EUID -gt 0 ]]; then
+  error "Ensure the script executes with \"sudo\" privileges"
+  exit 1
+else
+  # Defer running the script till the last moment for safety reasons
+  main "$@"
+fi
