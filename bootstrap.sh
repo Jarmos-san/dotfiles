@@ -111,6 +111,15 @@ SSH_KEY_NAME=$(read -rp "SSH key name for GitHub: ")
 
 info "Automatic setup is starting...please feel free to grab a cup of coffee!"
 
+################################################################################
+# On Debian systems, update the sources to point to the "unstable" repository
+################################################################################
+add_unstable_sources() {
+  unstable_repo_url="deb https://deb.debian.org/debian unstable main"
+  sources_list="/etc/apt/sources.list"
+  echo "$unstable_repo_url" | tee "$sources_list" &>/dev/null
+}
+
 ###############################################################################
 # Update the system before starting the automated setup
 ###############################################################################
