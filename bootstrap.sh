@@ -232,6 +232,27 @@ setup_github_ssh() {
 }
 
 ###############################################################################
+# Setup and install fonts
+###############################################################################
+setup_fonts() {
+  # URL for Cascadia Code assets to download from
+  font_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/CascadiaCode.zip"
+
+  # Only download and setup the Cascadia Code fonts for systems other than WSL2
+  if [[ ! -e "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
+    info "Downloading fonts from the remote source..."
+
+    curl --silent --fail --show-error --remote-name "$font_url"
+
+    unzip CascadiaCode.zip &2> /dev/null
+
+    rm CascadiaCode.zip
+
+    mv ./CascadiaCode/CaskaydiaCoveNerdFontMono-Bold.ttf "$HOME/.fonts"
+  fi
+}
+
+###############################################################################
 # The entrypoint of the script which will run the script as per the prescribed
 # logic
 ###############################################################################
@@ -248,6 +269,8 @@ main() {
   # setup_github_ssh
 
   echo "Setting up system automatically!"
+
+  setup_fonts
 
   # Install prerequisite tools before the automated setup
   # install_prerequisites
