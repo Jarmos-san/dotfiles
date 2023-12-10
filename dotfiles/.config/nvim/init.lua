@@ -1,18 +1,6 @@
 -- Path to install "lazy.nvim" at
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
--- Small snippet to install "lazy.nvim" from within Neovim.
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable",
-    lazypath,
-  })
-end
-
 -- Update the Neovim runtimepath for "lazy.nvim" to source the plugins.
 vim.opt.rtp:prepend(lazypath)
 
