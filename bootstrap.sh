@@ -253,6 +253,33 @@ setup_fonts() {
 }
 
 ###############################################################################
+# Setup and install the "lazy.nvim" package manager for Neovim on the system
+###############################################################################
+install_lazy_nvim() {
+  lazy_nvim_repo="git@github.com:folke/lazy.nvim"
+  lazy_path="$HOME/.local/share/nvim/lazy/lazy.nvim"
+
+  info "Preparing to setup up the LazyNvim package manager for Neovim..."
+
+  # If the LazyNvim installation directory doesn't exist, create it
+  if [[ ! -d "$lazy_path" ]]; then
+    mkdir --parents "$lazy_path"
+  fi
+
+  # Exit script execution safely if Git isn't installed and/or accessible
+  if ! command -v gits &> /dev/null; then
+    error "Failed to installed LazyNvim...please ensure Git is installed!"
+    exit 1
+  fi
+
+  # Clone the LazyNvim source repository to the local machine for usage
+  git clone --filter=blob:none $lazy_nvim_repo --branch=stable $lazy_path \
+    &> /dev/null
+
+  success "LazyNvim installation complete!"
+}
+
+###############################################################################
 # The entrypoint of the script which will run the script as per the prescribed
 # logic
 ###############################################################################
@@ -270,10 +297,13 @@ main() {
 
   echo "Setting up system automatically!"
 
-  setup_fonts
+  # setup_fonts
 
   # Install prerequisite tools before the automated setup
   # install_prerequisites
+
+  # Install and setup the "lazy.nvim" package manager for Neovim
+  # install_lazy_nvim
 }
 
 # Check whether script has sudo privleges, if so then execute else exit the flow
