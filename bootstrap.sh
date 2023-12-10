@@ -210,9 +210,9 @@ setup_github_ssh() {
 
   info "Generating the SSH secret/public key pair now..."
 
-  ssh-keygen -q -b 4096 -t ed25519 -N "" -f "$HOME/.ssh/github_ed25519"
+  ssh-keygen -q -b 4096 -t ed25519 -N "" -f "$HOME/.ssh/id_ed25519"
 
-  pubkey=$(cat "$HOME/.ssh/github_ed25519.pub")
+  pubkey=$(cat "$HOME/.ssh/id_ed25519.pub")
 
   curl --silent --location \
     --request POST \
@@ -225,7 +225,7 @@ setup_github_ssh() {
   info "SSH public key pushed to remote service..."
 
   eval "$(ssh-agent -s)"
-  ssh-add "$HOME/.ssh/github_ed25519.pub"
+  ssh-add "$HOME/.ssh/id_ed25519.pub"
 
   info "Testing SSH connection to GitHub..."
   ssh -T git@github.com
