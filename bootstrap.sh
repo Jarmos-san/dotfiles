@@ -149,7 +149,7 @@ update_system() {
 ###############################################################################
 # Install some necessary prerequisite tools before the setup script runs
 ###############################################################################
-install_prerequisites() {
+install_prerequisite_tools() {
   # List of prerequisite tools to check for existence
   declare -a prerequisite_tools
 
@@ -244,7 +244,8 @@ setup_fonts() {
 
     curl --silent --fail --show-error --remote-name "$font_url"
 
-    unzip CascadiaCode.zip &2> /dev/null
+    unzip CascadiaCode.zip &
+    2>/dev/null
 
     rm CascadiaCode.zip
 
@@ -267,14 +268,14 @@ install_lazy_nvim() {
   fi
 
   # Exit script execution safely if Git isn't installed and/or accessible
-  if ! command -v gits &> /dev/null; then
+  if ! command -v gits &>/dev/null; then
     error "Failed to installed LazyNvim...please ensure Git is installed!"
     exit 1
   fi
 
   # Clone the LazyNvim source repository to the local machine for usage
   git clone --filter=blob:none $lazy_nvim_repo --branch=stable $lazy_path \
-    &> /dev/null
+    &>/dev/null
 
   success "LazyNvim installation complete!"
 }
@@ -300,7 +301,7 @@ main() {
   # setup_fonts
 
   # Install prerequisite tools before the automated setup
-  # install_prerequisites
+  # install_prerequisite_tools
 
   # Install and setup the "lazy.nvim" package manager for Neovim
   # install_lazy_nvim
