@@ -68,4 +68,6 @@ scratch
 .ruff_cache
 **/adb
 
+**/.config/git/credentials
+
 # End of https://www.toptal.com/developers/gitignore/api/powershell,visualstudiocode,vim,git
