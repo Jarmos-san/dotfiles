@@ -49,7 +49,9 @@
     remoteBranch = red bold
 
 [commit]
-    gpgSign = true
+    ; gpgSign = true
+    ; TODO: Uncomment the following line after reconfigurng Git
+    gpgSign = false
 
 [status]
     showStash = true
