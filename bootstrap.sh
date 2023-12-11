@@ -331,6 +331,37 @@ install_zsh_plugins() {
 }
 
 ###############################################################################
+# Setup the dotfiles and related configuration files
+# TODO: Ensure this block of logic work as expected
+###############################################################################
+setup_dotfiles() {
+  info "Preparing to download and setup the dotfiles..."
+
+  # Create the directory if it doesn't already exists
+  if [[ ! -d "$HOME"/.dotfiles ]]; then
+    mkdir --parents "$HOME"/.dotfiles
+  fi
+
+  # Check if git is installed & executable else exit safely
+  if ! command -v git &>/dev/null; then
+    error "Git not found...please ensure its installed and executable!"
+    exit 1
+  fi
+
+  git clone git@github.com:Jarmos-san/dotfiles "$HOME"/.dotfiles
+
+  # Create symlinks of the dotfiles
+  for file in "$HOME"/.dotfiles/dotfiles/*; do
+    if [[ -f "$file" || -d "$file" ]]; then
+      ln --symbolic "$file" "$HOME"
+      info "Created symlink for $file"
+    fi
+  done
+
+  success "Dotfiles setup complete!"
+}
+
+###############################################################################
 # The entrypoint of the script which will run the script as per the prescribed
 # logic
 ###############################################################################
@@ -357,6 +388,8 @@ main() {
   # install_lazy_nvim
 
   # install_zsh_plugins
+
+  # setup_dotfiles
 }
 
 # Check whether script has sudo privleges, if so then execute else exit the flow
