@@ -280,6 +280,49 @@ install_lazy_nvim() {
 }
 
 ###############################################################################
+# Install some ZSH plugns
+###############################################################################
+install_zsh_plugins() {
+  declare -a plugins
+
+  # The list of plugins to install
+  plugins=(
+    "zsh-users/zsh-syntax-highlighting"
+    "zsh-users/zsh-autosuggestions"
+    "zsh-users/zsh-completions"
+    "le0me55i/zsh-extract"
+    "ael-code/zsh-colored-man-pages"
+  )
+
+  # The directory to install the plugins to
+  plugins_directory="$HOME/.zsh/plugins"
+
+  info "Preparing to install ZSH plugins..."
+
+  # If the plugins directory doesn't exist create one
+  if [[ ! -d "$plugins_directory" ]]; then
+    mkdir --parents "$plugins_directory"
+  fi
+
+  # Ensure Git is installed & executable, else exit the script execution safely
+  if [[ ! $(command -v git &>/dev/null) ]]; then
+    error "Git not found...please ensure its installed and executable!"
+    exit 1
+  fi
+
+  info "Downloading ZSH plugins to $plugins_directory"
+
+  # Download the remote plugin repositories to the local plugins directory
+  for plugin in "${plugins[@]}"; do
+    git clone "git@github.com:$plugin" "$plugins_directory"
+  done
+
+  success "ZSH plugins installed!"
+
+  info "The plugins will be usable after a system restart..."
+}
+
+###############################################################################
 # The entrypoint of the script which will run the script as per the prescribed
 # logic
 ###############################################################################
@@ -304,6 +347,8 @@ main() {
 
   # Install and setup the "lazy.nvim" package manager for Neovim
   # install_lazy_nvim
+
+  # install_zsh_plugins
 }
 
 # Check whether script has sudo privleges, if so then execute else exit the flow
