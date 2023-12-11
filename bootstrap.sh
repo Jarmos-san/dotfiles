@@ -108,6 +108,7 @@ SSH_KEY_NAME=$(read -rp "SSH key name for GitHub: ")
 # GPG_SIGN_NAME=$(read -rp "GPG signature name: ")
 # GPG_SIGN_EMAIL=$(read -rp "GPG signature email address: ")
 # GPG_SIGN_KEY=$(read -rp "GPG signature key: ")
+OS_NAME=$(grep -Po "(?<=^ID=).+" /etc/os-release | sed 's/"//g')
 
 info "Automatic setup is starting...please feel free to grab a cup of coffee!"
 
@@ -124,12 +125,9 @@ add_unstable_sources() {
 # Update the system before starting the automated setup
 ###############################################################################
 update_system() {
-  # Fetch the name of the OS/distribution
-  os_name=$(grep -Po "(?<=^ID=).+" /etc/os-release | sed 's/"//g')
-
   info "Updating the system before starting the automated setup..."
 
-  case "$os_name" in
+  case "$OS_NAME" in
     debian)
       add_unstable_sources
       apt-get update
@@ -156,7 +154,17 @@ install_prerequisite_tools() {
   # List of prerequisite tools which aren't installed and will be eventually!
   declare -a missing_tools
 
-  prerequisite_tools=("git" "curl" "gcc")
+  case "$OS_NAME" in
+    debian | ubuntu)
+      prerequisite_tools=(
+        "git" "curl" "build-essential" "gnupg" "ca-certificates"
+      )
+      ;;
+    *)
+      error "Failed to identify the OS!"
+      exit 1
+      ;;
+  esac
 
   # Check for missing prerequisite tools and store them for future reference
   for tool in "${prerequisite_tools[@]}"; do
