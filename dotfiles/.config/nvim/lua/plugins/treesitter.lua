@@ -29,6 +29,7 @@ return {
         "regex",
         "rst",
         "scss",
+        "terraform",
         "tsx",
         "toml",
         "typescript",
