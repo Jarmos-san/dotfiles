@@ -244,8 +244,7 @@ setup_fonts() {
 
     curl --silent --fail --show-error --remote-name "$font_url"
 
-    unzip CascadiaCode.zip &
-    2>/dev/null
+    unzip CascadiaCode.zip &>/dev/null
 
     rm CascadiaCode.zip
 
@@ -274,7 +273,7 @@ install_lazy_nvim() {
   fi
 
   # Clone the LazyNvim source repository to the local machine for usage
-  git clone --filter=blob:none $lazy_nvim_repo --branch=stable $lazy_path \
+  git clone --filter=blob:none $lazy_nvim_repo --branch=stable "$lazy_path" \
     &>/dev/null
 
   success "LazyNvim installation complete!"
