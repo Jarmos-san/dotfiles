@@ -1,114 +1,69 @@
-#!/usr/bin/env python3
+#!/usr/bin/env bash
 
-"""
-Easily update the system through a simple script.
+###############################################################################
+# Simple script to make running updates aacrsso different easy peasy!
+#
+# Author: Somraj Saha <somraj.saha@jarmos.dev>
+# License: MIT (see the LICENSE document for more info on this regards)
+###############################################################################
 
-Author: Somraj Saha
-License: GPL-3.0 (see https://github.com/Jarmos-san/dotfiles/blob/main/LICENSE for more
-         information)
-"""
+# Enable some options for Bash to stop executing the script if there's an error
+set -o errexit
+set -o nounset
+set -o pipefail
 
+# Enable debugging capabilities to the script
+if [[ "${TRACE-0}" == "1" ]]; then
+  set -o xtrace
+fi
 
-import platform
-import subprocess
+# Execute the script in context to the current directory where the script is run
+cd "$(dirname "$0")"
 
+###############################################################################
+# Run APT updates on Debian/Ubuntu systems
+###############################################################################
+run_apt_updates() {
+  os_name=$(grep -Po "(?<=^ID=).+" /etc/os-release | sed 's/"//g')
 
-def is_tool_installed(tool: str) -> bool:
-    """
-    Check if a specified tool is installed and available on $PATH.
+  case "$os_name" in
+    debian)
+      sudo apt-get update
+      sudo apt-get upgrade --yes
+      sudo apt-get autoremove --purge --yes
+      ;;
+    ubuntu)
+      sudo apt-get update
+      sudo apt-get upgrade --yes
+      sudo apt-get autoremove --purge --yes
+      ;;
+    *)
+      echo "Failed to identify the OS"
+      exit 1
+      ;;
+  esac
+}
 
-    tool (String): Name of the tool to check for its existence. Examples - "brew" or
-                   "nvim"
-    """
-    try:
-        subprocess.run(
-            [tool, "--version"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=True,
-        )
-        return True
-    except subprocess.CalledProcessError:
-        return False
+###############################################################################
+# Run Homebrew updates (if its installed and available)
+###############################################################################
+run_brew_updates() {
+  if [[ $(command -v brew) ]]; then
+    brew update
+    brew upgrade
+    brew autoremove
+    brew cleanup
+  fi
+}
 
+###############################################################################
+# Entrypoint of the script
+###############################################################################
+main() {
+  # Run each functions below sequentially for safety reasons
+  run_apt_updates
+  run_brew_updates
+}
 
-def run_brew_updates() -> None:
-    """Run Homebrew to update the respective packages and then some cleanup actions."""
-    try:
-        subprocess.run(["brew", "update"])
-        subprocess.run(["brew", "upgrade"])
-        subprocess.run(["brew", "autoremove"])
-        subprocess.run(["brew", "cleanup"])
-    except subprocess.CalledProcessError as error:
-        raise error
-
-
-def run_apt_updates() -> None:
-    """Run APT to update a Debian/Ubuntu system and then some cleanup actions."""
-    try:
-        subprocess.run(["sudo", "apt-get", "update"])
-        subprocess.run(["sudo", "apt-get", "upgrade", "--assume-yes"])
-        subprocess.run(["sudo", "apt-get", "autoremove", "--purge", "--assume-yes"])
-    except subprocess.CalledProcessError as error:
-        raise error
-
-
-def perform_linux_updates() -> None:
-    """Run some automated system updates for Linux distros."""
-    # Get the name of the OS the script is running on
-    os_name = platform.freedesktop_os_release().get("NAME")
-
-    match os_name:
-        case "Ubuntu" | "Debian":
-            run_apt_updates()
-
-            if is_tool_installed("brew"):
-                run_brew_updates()
-        case _:
-            print("Failed to identify the OS! Aborting system updates...")
-
-
-def perform_macos_updates() -> None:
-    """Run some automated system updates for MacOS."""
-    try:
-        subprocess.run(["sudo", "softwareupdate", "-i", "-a"])
-    except subprocess.CalledProcessError as error:
-        raise error
-
-    # Run Homebrew updates on a MacBook (or rather any Apple computer)
-    if is_tool_installed("brew"):
-        run_brew_updates()
-
-
-def perform_neovim_updates() -> None:
-    """Run some automated system update procedure for Neovim."""
-    # FIXME: Doesn't work for whatever reason
-    try:
-        subprocess.run(["nvim", "--headless", '"+Lazy! sync"', "+qa"])
-    except subprocess.CalledProcessError as error:
-        raise error
-
-
-def main() -> None:
-    """Entrypoint of the script."""
-    # Detect the system name (like Linux or MacOS and so on) and store it in a variable
-    system = platform.system()
-
-    match system:
-        case "Linux":
-            perform_linux_updates()
-        case "MacOS":
-            perform_macos_updates()
-        case _:
-            print("Failed to identify the OS! Aborting system updates...")
-
-    # Check if Neovim is installed and accessible, if so run some updates for it
-    if is_tool_installed("nvim"):
-        perform_neovim_updates()
-
-
-if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print("\n[\033[1;31mINFO\033[0m] System updated aborted safely...")
+# Defer the entrypoint of the script towards the end of the execution flow
+main "$@"
