@@ -45,6 +45,7 @@ return {
         "stylelint",
         "sqlls",
         "tailwindcss-language-server",
+        "terraform-ls",
         "typescript-language-server",
         "typst-lsp",
         "vale-ls",
