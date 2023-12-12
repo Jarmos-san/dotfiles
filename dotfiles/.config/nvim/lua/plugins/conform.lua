@@ -5,6 +5,16 @@ return {
   event = { "LspAttach", "BufReadPost", "BufNewFile" },
   opts = {
     formatters_by_ft = {
+      prettier = {
+        "astro",
+        "typescript",
+        "markdown",
+        "typescriptreact",
+        "javascript",
+        "css",
+        "html",
+        "javascriptreact",
+      },
       lua = { "stylua" },
       sh = { "shfmt" },
       terraform_fmt = { "terraform", "terraform-vars" },
