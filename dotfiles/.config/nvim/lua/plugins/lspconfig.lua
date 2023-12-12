@@ -145,6 +145,9 @@ return {
 
     -- CSS, SCSS and LESS LSP server configs
     lspconfig["cssls"].setup({ on_attach = on_attach, capabilities = capabilities })
+
+    -- Terraform and HCL related LSP configurations
+    lspconfig["terraformls"].setup({ on_attach = on_attach, capabilities = capabilities })
   end,
   dependencies = {
     -- This plugin needs to be loaded as well otherwise Neovim can't find the LSP binary on $PATH.
