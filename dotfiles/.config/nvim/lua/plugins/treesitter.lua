@@ -111,7 +111,9 @@ return {
       -- Configure MDX files to load the Markdown Treesitter parser
       vim.treesitter.language.register("markdown", "mdx")
     end,
-    build = "TSUpdateSync",
+    build = function()
+      vim.cmd("TSUpdateSync")
+    end,
     dependencies = { "theHamsta/nvim-treesitter-pairs", "nvim-treesitter/nvim-treesitter-textobjects" },
   },
 
