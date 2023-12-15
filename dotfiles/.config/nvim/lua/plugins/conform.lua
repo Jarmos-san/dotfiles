@@ -14,6 +14,7 @@ return {
         "css",
         "html",
         "javascriptreact",
+        "yaml",
       },
       lua = { "stylua" },
       sh = { "shfmt" },
