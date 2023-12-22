@@ -59,7 +59,7 @@
 
 [tag]
     forceSignAnnotated = true
-    gpgSign = true
+    gpgSign = false
 
 [url "git@github.com:"]
     insteadof = "gh:"
