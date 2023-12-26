@@ -9,7 +9,6 @@ opt.conceallevel = 3 -- Hide the * markups for bold & italics
 -- opt.formatoptions = "jcroqlnt" -- Some formatting configuration, needs more research
 opt.ignorecase = true -- Ignore casing when searching for a word
 opt.inccommand = "nosplit" -- Preview incremental substitute
-opt.list = true -- Show invisible whitespace characters
 -- opt.shiftround = true -- Roundup indentations
 -- TODO: Figure a way out to configure these options specific to the filetype instead
 -- opt.shiftwidth = 2 -- The default size of an indentation (this will be configure per filetype later on)
