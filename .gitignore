@@ -69,5 +69,6 @@ scratch
 **/adb
 
 **/.config/git/credentials
+**/cobra-cli
 
 # End of https://www.toptal.com/developers/gitignore/api/powershell,visualstudiocode,vim,git
