@@ -21,6 +21,7 @@ return {
       "lspinfo",
       "sh",
       "starter",
+      "terraform",
       "text",
       "Trouble",
       "tmux",
