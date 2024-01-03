@@ -148,6 +148,9 @@ return {
 
     -- Terraform and HCL related LSP configurations
     lspconfig["terraformls"].setup({ on_attach = on_attach, capabilities = capabilities })
+
+    -- TypeScript and other related LSP configurations
+    lspconfig["tsserver"].setup({ on_attach = on_attach, capabilities = capabilities })
   end,
   dependencies = {
     -- This plugin needs to be loaded as well otherwise Neovim can't find the LSP binary on $PATH.
