@@ -24,3 +24,10 @@ alias loc="wc -l"
 alias mkvenv="python3 -m venv .venv"
 alias tree="exa --tree --all --icons --ignore-glob='.git' --git-ignore"
 alias dateiso="date +%Y-%m-%dT%H:%M:%S%z"
+
+# Spin dev/experimental databases
+alias pgdb="docker run --name postgresql --rm -p 5432:5432 \
+    -e POSTGRESQL_USERNAME=postgres \
+    -e POSTGRESQL_PASSWORD=admin \
+    -e POSTGRESQL_DATABASE=postgres \
+    bitnami/postgresql:16"
