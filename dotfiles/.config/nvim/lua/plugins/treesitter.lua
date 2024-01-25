@@ -25,6 +25,7 @@ return {
         "make",
         "markdown",
         "markdown_inline",
+        "mermaid",
         "python",
         "regex",
         "rst",
