@@ -7,6 +7,7 @@ return {
     require("lint").linters_by_ft = {
       lua = { "selene" },
       sh = { "shellcheck" },
+      python = { "ruff", "mypy" },
     }
   end,
 }
