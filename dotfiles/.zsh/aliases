@@ -34,3 +34,5 @@ alias pgdb="docker run --name postgresql --rm -p 5432:5432 \
 alias rsdb="docker run --name redis --rm -p 6379:6379 \
     -e ALLOW_EMPTY_PASSWORD=yes \
     bitnami/redis:7.2"
+
+alias py="python3"
