@@ -43,3 +43,11 @@ autocmd("BufWritePost", {
     end
   end,
 })
+
+autocmd({ "BufWritePost" }, {
+  desc = "Lint buffer contents after writing them",
+  group = augroup("lint_python_files"),
+  callback = function()
+    require("lint").try_lint()
+  end,
+})
