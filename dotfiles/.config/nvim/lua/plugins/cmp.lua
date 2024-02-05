@@ -139,12 +139,12 @@ return {
         { name = "luasnip" },
         { name = "nvim_lua" },
         { name = "path" },
-        {
-          name = "buffer",
-          option = {
-            keyword_length = 6,
-          },
-        },
+        -- {
+        --   name = "buffer",
+        --   option = {
+        --     keyword_length = 6,
+        --   },
+        -- },
       },
     })
 
@@ -152,7 +152,7 @@ return {
     cmp.setup.filetype({ "markdown" }, { sources = { name = "buffer" } })
   end,
   dependencies = {
-    "hrsh7th/cmp-buffer",
+    -- "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-nvim-lsp-signature-help",
     "hrsh7th/cmp-path",
