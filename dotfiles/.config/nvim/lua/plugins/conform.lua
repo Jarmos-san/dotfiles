@@ -5,17 +5,7 @@ return {
   event = { "LspAttach", "BufReadPost", "BufNewFile" },
   opts = {
     formatters_by_ft = {
-      prettier = {
-        "astro",
-        "typescript",
-        "markdown",
-        "typescriptreact",
-        "javascript",
-        "css",
-        "html",
-        "javascriptreact",
-        "yaml",
-      },
+      markdown = { "prettier" },
       lua = { "stylua" },
       sh = { "shfmt" },
       terraform_fmt = { "terraform", "terraform-vars" },
@@ -27,7 +17,15 @@ return {
     },
   },
   config = function(_, opts)
-    require("conform").setup(opts)
+    local conform = require("conform")
+
+    -- Setup "conform.nvim" to work
+    conform.setup(opts)
+
+    -- Customise the default "prettier" command to format Markdown files as well
+    conform.formatters.prettier = {
+      prepend_args = { "--prose-wrap", "always" },
+    }
   end,
   dependencies = { "neovim/nvim-lspconfig" },
 }
