@@ -36,12 +36,12 @@ plugins=(
 )
 
 # Load the Catppuccin colour scheme for ZSH
-source "${ZDOTDIR:-$HOME}/.local/share/zsh/plugins/zsh-syntax-highlighting/catppuccin_mocha-zsh-syntax-highlighting.zsh"
+# source "${ZDOTDIR:-$HOME}/.local/share/zsh/plugins/zsh-syntax-highlighting/catppuccin_mocha-zsh-syntax-highlighting.zsh"
 
 # Loop through the list of plugins mentioned above & source them for usage
-for plugin in "${plugins[@]}"; do
-  source "${ZDOTDIR:-$HOME}/.local/share/zsh/plugins/${plugin}"
-done
+# for plugin in "${plugins[@]}"; do
+#   source "${ZDOTDIR:-$HOME}/.local/share/zsh/plugins/${plugin}"
+# done
 
 # Ensure the "plugins" array to removed from memory for safety reasons
 unset plugins
