@@ -90,3 +90,7 @@ PATH=$PATH:$HOME/.local/bin
 
 # This is required for starship to recognise the location of its config file.
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+
+# See the following comment on GitHub for further explanation:
+# https://github.com/microsoft/WSL/issues/477#issuecomment-441164103
+[[ $- == *i* ]] && $(command -v zsh) && exit || echo "ZSH is not installed"
