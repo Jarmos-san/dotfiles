@@ -1,9 +1,9 @@
 #!/usr/bin/env zsh
 
 # The following lines were added by compinstall
-zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
-zstyle ':completion:*' matcher-list '' '' 'm:{[:lower:]}={[:upper:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'
-zstyle :compinstall filename '$HOME/.zshrc'
+zstyle ":completion:*" completer _expand _complete _ignored _correct _approximate
+zstyle ":completion:*" matcher-list "" "" "m:{[:lower:]}={[:upper:]}" "m:{[:lower:][:upper:]}={[:upper:][:lower:]}"
+zstyle :compinstall filename "$HOME/.zshrc"
 
 autoload -Uz compinit
 compinit
@@ -28,20 +28,16 @@ fi
 
 # Various ZSH plugins to make the Shell usage experience better
 plugins=(
-  'zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh'
-  'zsh-autosuggestions/zsh-autosuggestions.plugin.zsh'
-  'zsh-colored-man-pages/colored-man-pages.plugin.zsh'
-  'zsh-extract/extract.plugin.zsh'
-  'zsh-completions/zsh-completions.plugin.zsh'
+  "zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh"
+  "zsh-autosuggestions/zsh-autosuggestions.plugin.zsh"
+  "zsh-colored-man-pages/colored-man-pages.plugin.zsh"
+  "zsh-completions/zsh-completions.plugin.zsh"
 )
 
-# Load the Catppuccin colour scheme for ZSH
-# source "${ZDOTDIR:-$HOME}/.local/share/zsh/plugins/zsh-syntax-highlighting/catppuccin_mocha-zsh-syntax-highlighting.zsh"
-
 # Loop through the list of plugins mentioned above & source them for usage
-# for plugin in "${plugins[@]}"; do
-#   source "${ZDOTDIR:-$HOME}/.local/share/zsh/plugins/${plugin}"
-# done
+for plugin in "${plugins[@]}"; do
+  source "$HOME/.zsh/plugins/${plugin}"
+done
 
 # Ensure the "plugins" array to removed from memory for safety reasons
 unset plugins
