@@ -8,7 +8,6 @@ return {
       markdown = { "prettier" },
       lua = { "stylua" },
       sh = { "shfmt" },
-      terraform_fmt = { "terraform", "terraform-vars" },
       python = { "ruff_format" },
     },
     format_on_save = {
@@ -25,6 +24,11 @@ return {
     -- Customise the default "prettier" command to format Markdown files as well
     conform.formatters.prettier = {
       prepend_args = { "--prose-wrap", "always" },
+    }
+
+    -- Add proper indents to the formatted Shell files
+    conform.formatters.shfmt = {
+      prepend_args = { "-i", "2" },
     }
   end,
   dependencies = { "neovim/nvim-lspconfig" },
