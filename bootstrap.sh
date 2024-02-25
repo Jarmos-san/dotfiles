@@ -293,39 +293,43 @@ install_lazy_nvim() {
 install_zsh_plugins() {
   declare -a plugins
 
-  # The list of plugins to install
+  # Location where the ZSH plugins will be downloaded to
+  plugins_parent_directory="$HOME/.zsh/plugins"
+
+  # List of all the ZSH plugins
   plugins=(
-    "zsh-users/zsh-syntax-highlighting"
-    "zsh-users/zsh-autosuggestions"
-    "zsh-users/zsh-completions"
-    "le0me55i/zsh-extract"
-    "ael-code/zsh-colored-man-pages"
+    "git@github.com:/zsh-users/zsh-autosuggestions.git"
+    "git@github.com:/zsh-users/zsh-syntax-highlighting.git"
+    "git@github.com:/zsh-users/zsh-completions.git"
+    "git@github.com:/ael-code/zsh-colored-man-pages.git"
   )
 
-  # The directory to install the plugins to
-  plugins_directory="$HOME/.zsh/plugins"
+  info "Preparing to install the ZSH plugins..."
 
-  info "Preparing to install ZSH plugins..."
-
-  # If the plugins directory doesn't exist create one
-  if [[ ! -d "$plugins_directory" ]]; then
-    mkdir --parents "$plugins_directory"
+  # Create the parent ZSH plugins directory if it doesn't already exist
+  if [[ ! -d $plugins_parent_directory ]]; then
+    mkdir --parents "$plugins_parent_directory"
   fi
 
   # Ensure Git is installed & executable, else exit the script execution safely
-  if [[ ! $(command -v git &>/dev/null) ]]; then
+  if [[ $(command -v git &>/dev/null) ]]; then
     error "Git not found...please ensure its installed and executable!"
     exit 1
   fi
 
-  info "Downloading ZSH plugins to $plugins_directory"
+  # Loop through the list of plugins to install
+  for plugin_url in "${plugins[@]}"; do
+    plugin_name=$(basename "$plugin_url" .git)
 
-  # Download the remote plugin repositories to the local plugins directory
-  for plugin in "${plugins[@]}"; do
-    git clone "git@github.com:$plugin" "$plugins_directory"
+    target_dir="$plugins_parent_directory/$plugin_name"
+
+    # If the plugins wasn't already installed, download it locally
+    if [[ ! -d "$target_dir" ]]; then
+      git clone "$plugin_url" "$target_dir"
+    fi
   done
 
-  success "ZSH plugins installed!"
+  success "ZSH plugins installation complete!"
 
   info "The plugins will be usable after a system restart..."
 }
