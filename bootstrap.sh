@@ -336,15 +336,9 @@ install_zsh_plugins() {
 
 ###############################################################################
 # Setup the dotfiles and related configuration files
-# TODO: Ensure this block of logic work as expected
 ###############################################################################
 setup_dotfiles() {
   info "Preparing to download and setup the dotfiles..."
-
-  # Create the directory if it doesn't already exists
-  if [[ ! -d "$HOME"/.dotfiles ]]; then
-    mkdir --parents "$HOME"/.dotfiles
-  fi
 
   # Check if git is installed & executable else exit safely
   if ! command -v git &>/dev/null; then
