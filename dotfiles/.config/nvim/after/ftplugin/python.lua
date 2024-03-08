@@ -2,25 +2,18 @@
 -- Refer to the resource shared below for further inspiration
 -- https://github.com/aikow/dotfiles/blob/main/config/nvim/after/ftplugin/python.lua
 
--- local opt = vim.opt
-
 local autocmd = require("utils").autocmd
 local augroup = require("utils").augroup
 local map = require("utils").map
 local format = require("utils").format
-
--- opt.expandtab = true
--- opt.autoindent = true
--- opt.smarttab = true
--- opt.shiftwidth = 4
--- opt.tabstop = 4
--- opt.softtabstop = 4
+local bufname = vim.fn.bufname()
 
 -- INFO: Local keymap (specific to Python files) to execute the current Python script
 if os.getenv("VIRTUAL_ENV") ~= nil then
-  map("n", "<F5>", "<CMD>terminal python %<CR>")
+  map("n", "<F2>", "<CMD>terminal pytest " .. bufname .. " -vv<CR>")
+  map("n", "<F5>", "<CMD>terminal python " .. bufname .. "<CR>")
 else
-  map("n", "<F5>", "<CMD>terminal python3 %<CR>")
+  map("n", "<F5>", "<CMD>terminal python3 " .. bufname .. "<CR>")
 end
 
 autocmd("BufWritePost", {
@@ -28,7 +21,7 @@ autocmd("BufWritePost", {
   group = augroup("format_python_files"),
   callback = function()
     -- INFO: Command to invoke black from within Neovim
-    local black_command = "silent !black % --stdin-filename % --quiet"
+    local black_command = "silent !black " .. bufname .. " --stdin-filename" .. bufname .. " --quiet"
 
     -- INFO: Run the formatting command on the buffer contents if the venv is activated
     if os.getenv("VIRTUAL_ENV") == nil then
