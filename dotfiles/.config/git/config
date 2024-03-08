@@ -113,3 +113,4 @@
     ra = remote add origin
     tar = archive --format=tar
     zip = archive --format=zip
+    logs = log --pretty=oneline
