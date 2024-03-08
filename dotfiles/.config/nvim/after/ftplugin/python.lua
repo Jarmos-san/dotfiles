@@ -6,14 +6,13 @@ local autocmd = require("utils").autocmd
 local augroup = require("utils").augroup
 local map = require("utils").map
 local format = require("utils").format
-local bufname = vim.fn.bufname()
 
 -- INFO: Local keymap (specific to Python files) to execute the current Python script
 if os.getenv("VIRTUAL_ENV") ~= nil then
-  map("n", "<F2>", "<CMD>terminal pytest " .. bufname .. " -vv<CR>")
-  map("n", "<F5>", "<CMD>terminal python " .. bufname .. "<CR>")
+  map("n", "<F2>", "<CMD>terminal pytest % -vv<CR>")
+  map("n", "<F5>", "<CMD>terminal python %<CR>")
 else
-  map("n", "<F5>", "<CMD>terminal python3 " .. bufname .. "<CR>")
+  map("n", "<F5>", "<CMD>terminal python3 %<CR>")
 end
 
 autocmd("BufWritePost", {
