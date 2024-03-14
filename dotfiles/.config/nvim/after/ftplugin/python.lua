@@ -9,7 +9,7 @@ local format = require("utils").format
 
 -- INFO: Local keymap (specific to Python files) to execute the current Python script
 if os.getenv("VIRTUAL_ENV") ~= nil then
-  map("n", "<F2>", "<CMD>terminal pytest % -vv<CR>")
+  map("n", "<F2>", "<CMD>terminal pytest %<CR>")
   map("n", "<F5>", "<CMD>terminal python %<CR>")
 else
   map("n", "<F5>", "<CMD>terminal python3 %<CR>")
