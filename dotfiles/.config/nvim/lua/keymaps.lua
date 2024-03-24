@@ -100,3 +100,6 @@ map("v", ">", ">gv")
 -- Disable the redundant (and sometimes annoying "Ex mode")
 -- INFO: See the docs at ":h gQ" for more info on what its supposed to do
 map("n", "gQ", "<NOP>")
+
+-- Exit terminal mode in builtin terminal with an easier to use shortcut
+map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
