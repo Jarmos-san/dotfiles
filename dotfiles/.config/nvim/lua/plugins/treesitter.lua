@@ -19,6 +19,8 @@ return {
         "gitcommit",
         "gitignore",
         "go",
+        "gomod",
+        "gosum",
         "javascript",
         "json",
         "lua",
