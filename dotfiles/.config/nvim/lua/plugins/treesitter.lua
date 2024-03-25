@@ -39,6 +39,7 @@ return {
         "yaml",
         "vim",
         "vimdoc",
+        "vue",
       },
       highlight = { -- Enable syntax highlighting using the Treesitter parsers
         enable = true,
