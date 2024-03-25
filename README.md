@@ -50,6 +50,7 @@ inspiration.
 - Tom Payne's [twpayne/dotfiles](https://github.com/twpayne/dotfiles)
 - Maria José Solano's
   [MariaSolOs/dotfiles](https://github.com/MariaSolOs/dotfiles)
+- TJ Devrie's [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
 
 More will be added as & when I come across any.
 
