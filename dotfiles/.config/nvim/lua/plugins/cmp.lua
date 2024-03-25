@@ -11,21 +11,6 @@ return {
     -- FIXME: Not sure what it exactly does.
     -- require("cmp_luasnip_choice").setup({ auto_open = true })
 
-    -- Check if there any preceeding words to either autocomplete or place Tab characters
-    local has_words_before = function()
-      local _, col = unpack(vim.api.nvim_win_get_cursor(0))
-
-      -- Return false if the cursor is at the start of the line without any preceeding characters
-      if col == 0 then
-        return false
-      end
-
-      local line_content = vim.api.nvim_get_current_line()
-      local char_before_cursor = line_content:sub(col, col)
-
-      return char_before_cursor:match("%s") == nil
-    end
-
     local lspkind_icons = {
       Text = "",
       Method = "",
