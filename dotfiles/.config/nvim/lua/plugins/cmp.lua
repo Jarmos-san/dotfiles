@@ -135,12 +135,12 @@ return {
         end, { "i", "s" }),
       }),
       sources = {
-        { name = "luasnip_choice" },
-        { name = "nvim_lsp_signature_help" },
         { name = "nvim_lsp" },
         { name = "luasnip" },
-        { name = "nvim_lua" },
         { name = "path" },
+        { name = "luasnip_choice" },
+        { name = "nvim_lsp_signature_help" },
+        { name = "nvim_lua" },
         -- {
         --   name = "buffer",
         --   option = {
