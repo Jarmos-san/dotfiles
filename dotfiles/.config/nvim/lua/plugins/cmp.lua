@@ -104,34 +104,36 @@ return {
           return vim_item
         end,
       },
-      mapping = {
-        ["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
-        ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
-        ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
-        ["<C-y>"] = cmp.config.disable,
-        ["<C-e>"] = cmp.mapping.abort(),
-        ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
-        ["<Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            cmp.select_next_item()
-          elseif luasnip.expand_or_locally_jumpable() then
+      mapping = cmp.mapping.preset.insert({
+        -- Select the [n]ext item
+        ["<C-n>"] = cmp.mapping.select_next_item(),
+
+        -- Select the [p]revious item
+        ["<C-p>"] = cmp.mapping.select_prev_item(),
+
+        -- Scroll the documentation window [b]ack / [f]orward
+        ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+        ["<C-f>"] = cmp.mapping.scroll_docs(4),
+
+        -- Pressing Ctrl + y will accept the option
+        ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+
+        -- Manually trigger a completion from nvim-cmp.
+        ["<C-Space>"] = cmp.mapping.complete({}),
+
+        -- <c-l> will move you to the right of each of the expansion locations.
+        -- <c-h> is similar, except moving you backwards.
+        ["<C-l>"] = cmp.mapping(function()
+          if luasnip.expand_or_locally_jumpable() then
             luasnip.expand_or_jump()
-          elseif has_words_before() then
-            cmp.complete()
-          else
-            fallback()
           end
         end, { "i", "s" }),
-        ["<S-Tab>"] = cmp.mapping(function()
-          if cmp.visible() then
-            cmp.select_prev_item()
-          elseif luasnip.expand_or_jumpable(-1) then
+        ["<C-h>"] = cmp.mapping(function()
+          if luasnip.locally_jumpable(-1) then
             luasnip.jump(-1)
-          else
-            vim.fn.feedkeys("\t", "n")
           end
         end, { "i", "s" }),
-      },
+      }),
       sources = {
         { name = "luasnip_choice" },
         { name = "nvim_lsp_signature_help" },
