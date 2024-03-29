@@ -36,3 +36,8 @@ alias rsdb="docker run --name redis --rm -p 6379:6379 \
     bitnami/redis:7.2"
 
 alias py="python3"
+
+# Terraform related aliases
+alias tfinit="terraform init"
+alias tfval="terraform validate"
+alias tfplan="terraform plan"
