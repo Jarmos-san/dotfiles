@@ -28,7 +28,13 @@ return {
 
     -- Add proper indents to the formatted Shell files
     conform.formatters.shfmt = {
-      prepend_args = { "-i", "2", "-ci", "-bn" },
+      prepend_args = {
+        "--indent=2",
+        "--binary-next-line",
+        "--case-indent",
+        "--space-redirects",
+        "--keep-padding",
+      },
     }
   end,
   dependencies = { "neovim/nvim-lspconfig" },
