@@ -14,7 +14,7 @@ indent_size = 2
 [*.py]
 indent_size = 4
 
-[*.{json,md,toml,yml}]
+[*.{json,md,toml,yml,yaml}]
 indent_size = 2
 
 [*.{sh,bash_profile}]
