@@ -1,38 +1,43 @@
 repos:
-    - repo: https://github.com/pre-commit/pre-commit-hooks
-      rev: v4.4.0
-      hooks:
-          - id: trailing-whitespace
-          - id: end-of-file-fixer
-            exclude: ^dotfiles/.config/nvim/lazy-lock.json
-          - id: check-yaml
-          - id: check-added-large-files
-          - id: detect-private-key
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+        exclude: ^dotfiles/.config/nvim/lazy-lock.json
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: detect-private-key
 
-    - repo: https://github.com/jumanjihouse/pre-commit-hooks
-      rev: 3.0.0
-      hooks:
-          - id: shfmt
-            name: format shell scripts
-            args: ["-i 2 -ci -bn"]
+  - repo: https://github.com/jumanjihouse/pre-commit-hooks
+    rev: 3.0.0
+    hooks:
+      - id: shfmt
+        name: format shell scripts
+        args:
+          - "--indent=2"
+          - "--case-indent"
+          - "--binary-next-line"
+          - "--space-redirects"
+          - "--keep-padding"
 
-    - repo: https://github.com/JohnnyMorganz/StyLua
-      rev: v0.18.1
-      hooks:
-          - id: stylua
-            name: format lua files
+  - repo: https://github.com/JohnnyMorganz/StyLua
+    rev: v0.18.1
+    hooks:
+      - id: stylua
+        name: format lua files
 
-    - repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.0.278
-      hooks:
-          - id: ruff
-            name: format/lint python files
-            args: [--fix, --exit-non-zero-on-fix]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.0.278
+    hooks:
+      - id: ruff
+        name: format/lint python files
+        args: [--fix, --exit-non-zero-on-fix]
 
-    - repo: https://github.com/pre-commit/mirrors-mypy
-      rev: v1.4.1
-      hooks:
-          - id: mypy
-            name: type check python files
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.4.1
+    hooks:
+      - id: mypy
+        name: type check python files
 
-    # TODO: Add a pre-commit hook for Selene
+  # TODO: Add a pre-commit hook for Selene
