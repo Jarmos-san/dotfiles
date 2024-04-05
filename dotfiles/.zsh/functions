@@ -10,3 +10,13 @@ mkc() {
         echo "usage: mkc <name>"
     fi
 }
+
+# Stop and remove a running Docker Container
+dcs() {
+    if [[ -n "$1" ]]; then
+        docker container stop $1
+        docker container remove $1 --volumes
+    else
+        echo "usage: dcs <docker-container-name>"
+    fi
+}
