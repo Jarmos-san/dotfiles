@@ -9,6 +9,7 @@ return {
       lua = { "stylua" },
       sh = { "shfmt" },
       python = { "ruff_format" },
+      typescript = { "prettier" },
       vue = { "prettier" },
     },
     format_on_save = {
