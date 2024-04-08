@@ -101,7 +101,7 @@ return {
         ["<C-f>"] = cmp.mapping.scroll_docs(4),
 
         -- Pressing Ctrl + y will accept the option
-        ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+        ["<CR>"] = cmp.mapping.confirm({ select = true }),
 
         -- Manually trigger a completion from nvim-cmp.
         ["<C-Space>"] = cmp.mapping.complete({}),
