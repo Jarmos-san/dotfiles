@@ -151,6 +151,9 @@ return {
 
     -- TypeScript and other related LSP configurations
     lspconfig["tsserver"].setup({ on_attach = on_attach, capabilities = capabilities })
+
+    -- Vue 3 related LSP configurations
+    lspconfig["volar"].setup({ on_attach = on_attach, capabilities = capabilities })
   end,
   dependencies = {
     -- This plugin needs to be loaded as well otherwise Neovim can't find the LSP binary on $PATH.

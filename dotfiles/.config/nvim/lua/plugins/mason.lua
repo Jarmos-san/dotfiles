@@ -50,6 +50,7 @@ return {
         "typescript-language-server",
         "typst-lsp",
         "vale-ls",
+        "vue-language-server",
         "yaml-language-server",
       },
     },
