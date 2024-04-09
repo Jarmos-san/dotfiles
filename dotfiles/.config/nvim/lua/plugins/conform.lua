@@ -11,6 +11,7 @@ return {
       python = { "ruff_format" },
       typescript = { "prettier" },
       vue = { "prettier" },
+      yaml = { "prettier" },
     },
     format_on_save = {
       timeout_ms = 2500,
