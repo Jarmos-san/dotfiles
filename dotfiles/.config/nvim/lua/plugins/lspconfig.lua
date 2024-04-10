@@ -149,11 +149,27 @@ return {
     -- Terraform and HCL related LSP configurations
     lspconfig["terraformls"].setup({ on_attach = on_attach, capabilities = capabilities })
 
+    -- INFO: The TyepScript LSP is disable temporarily until I can figure out its usefulness
+    -- Also, check out the issues with Volar (the LSP server for Vue.js) which might interfere
+    -- with TypeScript projects.
     -- TypeScript and other related LSP configurations
-    lspconfig["tsserver"].setup({ on_attach = on_attach, capabilities = capabilities })
+    -- lspconfig["tsserver"].setup({ on_attach = on_attach, capabilities = capabilities })
 
+    -- INFO: See the following resources to learn more about configuring the LSP to work with
+    -- Vue 3 projects (and its embedded language environments):
+    -- https://github.com/vuejs/language-tools/issues/3925
+    -- https://github.com/vuejs/language-tools?tab=readme-ov-file#none-hybrid-modesimilar-to-takeover-mode-configuration-requires-vuelanguage-server-version-207
     -- Vue 3 related LSP configurations
-    lspconfig["volar"].setup({ on_attach = on_attach, capabilities = capabilities })
+    lspconfig["volar"].setup({
+      filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+      init_options = {
+        vue = {
+          hybridMode = false,
+        },
+      },
+      on_attach = on_attach,
+      capabilities = capabilities,
+    })
   end,
   dependencies = {
     -- This plugin needs to be loaded as well otherwise Neovim can't find the LSP binary on $PATH.
