@@ -125,3 +125,10 @@ autocmd("BufNewFile", {
   pattern = "**/LICENSE",
   command = "0r ~/.config/nvim/skeletons/license.txt",
 })
+
+autocmd("BufNewFile", {
+  desc = "Create a Vue SFC",
+  group = augroup("vue_sfc_template"),
+  pattern = "*.vue",
+  command = "0r ~/.config/nvim/skeletons/sfc.vue",
+})
