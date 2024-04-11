@@ -41,3 +41,6 @@ alias py="python3"
 alias tfinit="terraform init"
 alias tfval="terraform validate"
 alias tfplan="terraform plan"
+
+# NPM aliases
+alias npm="pnpm"
