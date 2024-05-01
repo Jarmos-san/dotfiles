@@ -2,7 +2,7 @@ return {
   "folke/tokyonight.nvim",
   event = "VimEnter",
   opts = {
-    style = "night",
+    style = "day",
     light_style = "day",
     transparent = true,
     terminal_colors = true,
