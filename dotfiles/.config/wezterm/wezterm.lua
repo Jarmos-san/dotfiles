@@ -23,8 +23,10 @@ return {
     },
   },
 
+  -- INFO: Enable "light mode" on the desktop
   -- Set the colorscheme to something which is usable
-  color_scheme = "Tokyo Night Moon",
+  -- color_scheme = "Tokyo Night Day",
+  color_scheme = "3024 Day",
 
   -- Set a monospaced font for easier time when writing code
   font = wezterm.font("CaskaydiaCove Nerd Font Mono", {
@@ -42,8 +44,9 @@ return {
   -- Hide the tab bar if there's only one tab open
   hide_tab_bar_if_only_one_tab = true,
 
+  -- INFO: Disable background transparency in light mode
   -- Make the window background transparent
-  window_background_opacity = 0.94,
+  -- window_background_opacity = 0.94,
 
   -- Make the cursor to blink on the terminal
   default_cursor_style = "BlinkingBlock",
