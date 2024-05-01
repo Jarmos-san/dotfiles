@@ -1,7 +1,9 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
 # Global/prompt-wide configurations
 command_timeout = 20000                 # Increase the default timeout duration for long-running applications
 
-palette = "catppuccin_macchiato"
+# palette = "catppuccin_macchiato"
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                             # The name of the module we are configuring is "character"
