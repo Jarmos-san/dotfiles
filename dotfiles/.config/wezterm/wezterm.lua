@@ -26,7 +26,7 @@ return {
   -- INFO: Enable "light mode" on the desktop
   -- Set the colorscheme to something which is usable
   -- color_scheme = "Tokyo Night Day",
-  color_scheme = "3024 Day",
+  color_scheme = "Alabaster",
 
   -- Set a monospaced font for easier time when writing code
   font = wezterm.font("CaskaydiaCove Nerd Font Mono", {
