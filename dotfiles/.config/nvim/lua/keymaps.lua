@@ -1,6 +1,7 @@
 -- Module of keymaps & bindings which makes using Neovim a pleasure
 
 local wk = require("which-key")
+local telescope = require("telescope.builtin")
 local map = require("utils").map
 
 -- Open the starter dashboard if the buffer list is empty
@@ -31,10 +32,11 @@ wk.register({
   -- VSCode-like quick file management UI
   ["<leader>f"] = {
     name = "+File",
-    f = { "<CMD>Telescope find_files<CR>", "Find files" },
-    o = { "<CMD>Telescope oldfiles<CR>", "Open recent files" },
+    f = { telescope.find_files, "Find files" },
+    o = { telescope.oldfiles, "Open recent files" },
     n = { "<CMD>enew<CR>", "Open a new file" },
-    h = { "<CMD>Telescope help_tags<CR>", "Open the help tags menu" },
+    h = { telescope.help_tags, "Open the help tags menu" },
+    g = { telescope.live_grep, "Perform a grep on file contents" },
   },
   -- Easier & quicker buffer management keymaps
   ["<leader>b"] = {
