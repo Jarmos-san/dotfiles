@@ -61,27 +61,12 @@ return {
     "echasnovski/mini.starter",
     event = "VimEnter",
     opts = function()
-      local header = [[
-##   ##  #######   #####   ##   ##  ####   ##   ##
-###  ##  #######  #######  ##   ##  ####   ### ###
-#### ##   ##  ##  ##   ##  ### ###   ##    #######
-#######   ####    ##   ##   ## ##    ##    #######
-#######   ####    ##   ##   #####    ##    ## # ##
-## ####   ##  ##  ##   ##    ###     ##    ##   ##
-##  ###  #######  #######    ###    ####   ##   ##
-##   ##  #######   #####      #     ####   ##   ##
-
-Welcome Back, Jarmos!
-]]
+      local header = "Hello World!"
       return {
         items = {
           { name = "Open Old Files", action = "Telescope oldfiles", section = "File Explorer" },
           { name = "Open File Explorer", action = "Neotree toggle", section = "File Explorer" },
           { action = require("mini.starter").sections.recent_files(8, true, true), section = "Recent Files" },
-          { name = "Quit Neovim", action = "quitall", section = "Manage Neovim" },
-          { name = "Plugin Updates", action = "Lazy sync", section = "Manage Neovim" },
-          { name = "LSP Updates", action = "Mason", section = "Manage Neovim" },
-          { name = "Tree-Sitter Parser Updates", action = "TSUpdate", section = "Manage Neovim" },
           { name = "Fuzzy Search for Files/Folders", action = "Telescope find_files", section = "File Explorer" },
         },
         header = header,
