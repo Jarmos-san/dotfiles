@@ -12,7 +12,6 @@ local open_starter_if_empty_buffer = function()
     return
   end
 
-  vim.cmd("Neotree close")
   require("mini.starter").open()
   vim.cmd(buf_id .. "bwipeout")
 end
