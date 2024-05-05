@@ -372,6 +372,26 @@ install_homebrew() {
 }
 
 ###############################################################################
+# Install Homebrew packages on either Linux or MacOS systems
+###############################################################################
+install_homebrew_packages() {
+  linux_brewfile=$HOME/.dotfiles/dotfiles/linux.Brewfile
+  macos_brewfile=$HOME/.dotfiles/dotfiles/macos.Brewfile
+
+  if [[ ! $(command -v brew &> /dev/null) ]]; then
+    error "Homebrew not found...aborting package installation!"
+    exit 1
+  fi
+
+  if [[ -e $linux_brewfile ]] && [[ -f $linux_brewfile ]]; then
+    brew bundle --files "$linux_brewfile"
+  fi
+
+  if [[ -e $macos_brewfile ]] && [[ -f $macos_brewfile ]]; then
+    brew bundle --files "$macos_brewfile"
+  fi
+}
+###############################################################################
 # The entrypoint of the script which will run the script as per the prescribed
 # logic
 ###############################################################################
@@ -402,6 +422,8 @@ main() {
   # setup_dotfiles
 
   # install_homebrew
+
+  # install_homebrew_packages
 }
 
 # Check whether script has sudo privleges, if so then execute else exit the flow
