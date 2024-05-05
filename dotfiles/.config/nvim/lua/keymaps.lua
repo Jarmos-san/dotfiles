@@ -2,6 +2,7 @@
 
 local wk = require("which-key")
 local telescope = require("telescope.builtin")
+local utils = require("utils")
 local map = require("utils").map
 
 -- Open the starter dashboard if the buffer list is empty
@@ -22,6 +23,15 @@ local bdelete = function()
   open_starter_if_empty_buffer()
 end
 
+-- Use the ":Telescope git_files" command if the current directory is version controlled with Git
+local find_files = function()
+  if utils.is_git_repo() or utils.has_git_dir() then
+    telescope.git_files()
+  else
+    telescope.find_files()
+  end
+end
+
 wk.register({
   -- Keymaps to manage the inbuilt terminal within Neovim itself
   ["<leader>t"] = {
@@ -31,7 +41,7 @@ wk.register({
   -- VSCode-like quick file management UI
   ["<leader>f"] = {
     name = "+File",
-    f = { telescope.find_files, "Find files" },
+    f = { find_files, "Find files" },
     o = { telescope.oldfiles, "Open recent files" },
     n = { "<CMD>enew<CR>", "Open a new file" },
     h = { telescope.help_tags, "Open the help tags menu" },
