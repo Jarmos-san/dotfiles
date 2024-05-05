@@ -118,7 +118,7 @@ info "Automatic setup is starting...please feel free to grab a cup of coffee!"
 add_unstable_sources() {
   unstable_repo_url="deb https://deb.debian.org/debian unstable main"
   sources_list="/etc/apt/sources.list"
-  echo "$unstable_repo_url" | tee "$sources_list" &>/dev/null
+  echo "$unstable_repo_url" | tee "$sources_list" &> /dev/null
 }
 
 ###############################################################################
@@ -168,7 +168,7 @@ install_prerequisite_tools() {
 
   # Check for missing prerequisite tools and store them for future reference
   for tool in "${prerequisite_tools[@]}"; do
-    if ! command -v "${tool}" &>/dev/null; then
+    if ! command -v "${tool}" &> /dev/null; then
       missing_tools+=("$tool")
     else
       missing_tools=()
@@ -252,7 +252,7 @@ setup_fonts() {
 
     curl --silent --fail --show-error --remote-name "$font_url"
 
-    unzip CascadiaCode.zip &>/dev/null
+    unzip CascadiaCode.zip &> /dev/null
 
     rm CascadiaCode.zip
 
@@ -275,14 +275,14 @@ install_lazy_nvim() {
   fi
 
   # Exit script execution safely if Git isn't installed and/or accessible
-  if ! command -v gits &>/dev/null; then
+  if ! command -v gits &> /dev/null; then
     error "Failed to installed LazyNvim...please ensure Git is installed!"
     exit 1
   fi
 
   # Clone the LazyNvim source repository to the local machine for usage
   git clone --filter=blob:none $lazy_nvim_repo --branch=stable "$lazy_path" \
-    &>/dev/null
+    &> /dev/null
 
   success "LazyNvim installation complete!"
 }
@@ -312,7 +312,7 @@ install_zsh_plugins() {
   fi
 
   # Ensure Git is installed & executable, else exit the script execution safely
-  if [[ $(command -v git &>/dev/null) ]]; then
+  if [[ $(command -v git &> /dev/null) ]]; then
     error "Git not found...please ensure its installed and executable!"
     exit 1
   fi
@@ -341,7 +341,7 @@ setup_dotfiles() {
   info "Preparing to download and setup the dotfiles..."
 
   # Check if git is installed & executable else exit safely
-  if ! command -v git &>/dev/null; then
+  if ! command -v git &> /dev/null; then
     error "Git not found...please ensure its installed and executable!"
     exit 1
   fi
@@ -357,6 +357,18 @@ setup_dotfiles() {
   done
 
   success "Dotfiles setup complete!"
+}
+
+###############################################################################
+# Install Homebrew only on Linux and MacOS systems
+###############################################################################
+install_homebrew() {
+  installation_script=https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+
+  if [[ $(uname -s) == "Darwin" ]] || [[ $(uname) == "Linux" ]]; then
+    NONINTERACTIVE=1 /bin/bash -c \
+      "$(curl --fail --silent --show-error --location ${installation_script})"
+  fi
 }
 
 ###############################################################################
@@ -388,6 +400,8 @@ main() {
   # install_zsh_plugins
 
   # setup_dotfiles
+
+  # install_homebrew
 }
 
 # Check whether script has sudo privleges, if so then execute else exit the flow
