@@ -36,4 +36,30 @@ end
 -- Setup highlight groups for Neovim easily
 M.highlight = vim.api.nvim_set_hl
 
+-- Check if the current directory is version-controlled using Git
+M.is_git_repo = function()
+  local handle = io.popen("git rev-parse --is-inside-work-tree 2>/dev/null")
+  local output = handle:read("*a")
+  handle:close()
+
+  if output:match("true") then
+    return true
+  else
+    return false
+  end
+end
+
+-- Check if the ".git" directory exists in the current directory
+M.has_git_dir = function()
+  local handle = io.popen("ls -a 2>/dev/null")
+  local output = handle:read("*a")
+  handle:close()
+
+  if output:match("%.git") then
+    return true
+  else
+    return false
+  end
+end
+
 return M
