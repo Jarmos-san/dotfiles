@@ -107,4 +107,4 @@ vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
 -- FIXME: Figure a way out to disable the statusline in the "starter" buffer
 -- Set the statusline
-vim.o.statusline = "%!v:lua.require('statusline').render()"
+-- vim.o.statusline = "%!v:lua.require('statusline').render()"
