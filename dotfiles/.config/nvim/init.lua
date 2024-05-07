@@ -64,3 +64,6 @@ vim.loader.enable()
 
 -- INFO: Good book to learn Vim from;
 -- https://learnvim.irian.to/
+
+-- FIXME: Figure a way out to handle semantic highlights better with the following article as a source of reference:
+-- https://gist.github.com/swarn/fb37d9eefe1bc616c2a7e476c0bc0316
