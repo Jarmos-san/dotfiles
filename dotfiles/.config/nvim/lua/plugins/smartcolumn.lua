@@ -19,6 +19,7 @@ return {
       "lazy",
       "log",
       "lspinfo",
+      "scss",
       "sh",
       "starter",
       "terraform",
