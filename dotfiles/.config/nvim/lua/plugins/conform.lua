@@ -8,6 +8,7 @@ return {
       javascript = { "prettier" },
       markdown = { "prettier" },
       lua = { "stylua" },
+      scss = { "prettier" },
       sh = { "shfmt" },
       python = { "ruff_format" },
       typescript = { "prettier" },
