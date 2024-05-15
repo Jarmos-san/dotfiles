@@ -51,8 +51,9 @@ wk.register({
   ["<leader>b"] = {
     name = "+Buffer",
     d = { bdelete, "Delete the current buffer" },
-    l = { "<CMD>Telescope buffers<CR>", "List all loaded buffers" },
+    l = { telescope.buffers, "List all loaded buffers" },
     n = { "<CMD>bnext<CR>", "Load the next hidden buffer" },
+    m = { telescope.marks, "List all markers in current buffer" },
   },
   -- Keymaps to manage & show LSP stuff
   ["<leader>l"] = {
