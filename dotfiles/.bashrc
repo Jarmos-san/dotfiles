@@ -20,17 +20,17 @@ shopt -s checkwinsize
 shopt -s nocaseglob
 
 # Autocorrect typos in path names when using "cd"
-shopt -s cdspell 2>/dev/null
+shopt -s cdspell 2> /dev/null
 
 # Correct speiing errors during tab-completion
-shopt -s dirspell 2>/dev/null
+shopt -s dirspell 2> /dev/null
 
 # Following settings enables Bash to enter a dir, say "~/.config/kitty"
 # by simply typing "**/kitty"
-shopt -s autocd 2>/dev/null
+shopt -s autocd 2> /dev/null
 
 # Recursive globbing e.g. "echo **/*.etc"
-shopt -s globstar 2>/dev/null
+shopt -s globstar 2> /dev/null
 
 # Save multi-line commands as one command
 shopt -s cmdhist
@@ -59,7 +59,7 @@ bind '"\e[C": forward-char'
 bind '"\e[D": backward-char'
 
 # Enable Bash Completion for CLI tools installed with Homebrew
-if type brew &>/dev/null; then
+if type brew &> /dev/null; then
   HOMEBREW_PREFIX="$(brew --prefix)"
   if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
     # shellcheck source=/dev/null
@@ -93,4 +93,4 @@ export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 
 # See the following comment on GitHub for further explanation:
 # https://github.com/microsoft/WSL/issues/477#issuecomment-441164103
-[[ $- == *i* ]] && $(command -v zsh) && exit || echo "ZSH is not installed"
+[[ $- == *i* ]] && command -v zsh && exit || echo "ZSH is not installed"
