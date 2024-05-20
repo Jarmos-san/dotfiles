@@ -424,6 +424,8 @@ main() {
   # install_homebrew
 
   # install_homebrew_packages
+
+  # TODO: Add a function to install and setup Nix
 }
 
 # Check whether script has sudo privleges, if so then execute else exit the flow
