@@ -6,6 +6,7 @@ return {
   opts = {
     disabled_filetypes = {
       "checkhealth",
+      "conf",
       "dosini",
       "dotenv",
       "gitattributes",
