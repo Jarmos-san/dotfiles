@@ -6,7 +6,7 @@ return {
   cmd = "Telescope",
   opts = {
     defaults = {
-      file_ignore_patterns = { "^%.git$", "node_modules", "^%.?venv$", "^%.?env$" },
+      file_ignore_patterns = { "^%.git$", "node_modules", "^%.?venv$", "^%.?env$", "%.terraform" },
     },
     pickers = {
       find_files = {
