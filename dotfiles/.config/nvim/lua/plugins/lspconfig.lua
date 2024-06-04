@@ -147,7 +147,11 @@ return {
     lspconfig["cssls"].setup({ on_attach = on_attach, capabilities = capabilities })
 
     -- Terraform and HCL related LSP configurations
-    lspconfig["terraformls"].setup({ on_attach = on_attach, capabilities = capabilities })
+    lspconfig["terraformls"].setup({
+      filetypes = { "terraform", "hcl" },
+      on_attach = on_attach,
+      capabilities = capabilities,
+    })
 
     -- INFO: The TyepScript LSP is disable temporarily until I can figure out its usefulness
     -- Also, check out the issues with Volar (the LSP server for Vue.js) which might interfere
