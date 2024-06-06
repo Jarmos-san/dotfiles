@@ -148,7 +148,7 @@ return {
 
     -- Terraform and HCL related LSP configurations
     lspconfig["terraformls"].setup({
-      filetypes = { "terraform", "hcl" },
+      filetypes = { "terraform", "hcl", "tf" },
       on_attach = on_attach,
       capabilities = capabilities,
     })
