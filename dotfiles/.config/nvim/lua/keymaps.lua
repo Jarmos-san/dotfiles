@@ -114,3 +114,9 @@ map("n", "gQ", "<NOP>")
 
 -- Exit terminal mode in builtin terminal with an easier to use shortcut
 map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+
+-- Easier navigation in Insert mode without the arrow keys!
+map("i", "<M-h>", "<Left>", { desc = "Move left in Insert mode" })
+map("i", "<M-j>", "<Down>", { desc = "Move down in Insert mode" })
+map("i", "<M-k>", "<Up>", { desc = "Move up in Insert mode" })
+map("i", "<M-l>", "<Right>", { desc = "Move right in Insert mode" })
