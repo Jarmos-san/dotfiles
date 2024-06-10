@@ -73,4 +73,7 @@ scratch
 
 **/.zsh/plugins
 
+**/.local/bin
+!**/.local/bin/update
+
 # End of https://www.toptal.com/developers/gitignore/api/powershell,visualstudiocode,vim,git
