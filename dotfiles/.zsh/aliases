@@ -44,4 +44,4 @@ alias tfplan="terraform plan"
 
 # NPM aliases
 alias npm="pnpm"
-alias npx="pnpm exec"
+alias npx="pnpm dlx"
