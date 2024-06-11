@@ -105,6 +105,7 @@
     st = status -sb
     ci = commit -m
     ca = commit -am
+    cb = checkout -b
     pl = pull --rebase
     pu = push
     cl = clone
