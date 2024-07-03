@@ -22,7 +22,7 @@ return {
       "lspinfo",
       "scss",
       "sh",
-      "starter",
+      "ministarter",
       "terraform",
       "text",
       "Trouble",

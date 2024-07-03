@@ -21,7 +21,7 @@ return {
         "null-ls-info",
         "lazy",
         "lspinfo",
-        "starter",
+        "ministarter",
         "TelescopePrompt",
       },
     },
