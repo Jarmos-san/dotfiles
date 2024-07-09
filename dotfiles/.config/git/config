@@ -16,7 +16,12 @@
     ; INFO: More information about the following suggestions can be found at:
     ; https://smittie.de/posts/git-mergetool
     ; cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c '$wincmd J'
-    cmd = "nvim -d -c \"wincmd l\" -c \"normal ]c\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\""
+    ; cmd = "nvim -d -c \"wincmd l\" -c \"normal ]c\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\""
+
+    ; NOTE: This is still experimental!!!
+    ; cmd = "nvim -d '$LOCAL' '$MERGED' '$REMOTE' -c 'wincmd l' -c 'wincmd J'"
+    ; Use the following repository to run some experiments
+    ; https://github.com/redguardtoo/test-git-mergetool
 
 [push]
     default = current
