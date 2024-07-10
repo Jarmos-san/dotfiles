@@ -55,7 +55,7 @@ jobs:
         run: pipx install ruff
 
       - name: Run the Ruff Linter for Python Code
-        run: ruff .
+        run: ruff check "$PWD"
 
   runBlackFormatter:
     name: Format Python Files
