@@ -23,6 +23,7 @@ return {
       "scss",
       "sh",
       "ministarter",
+      "mermaid",
       "terraform",
       "text",
       "Trouble",
