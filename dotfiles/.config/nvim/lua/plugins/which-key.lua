@@ -1,6 +1,7 @@
 return {
   "folke/which-key.nvim",
   event = "VeryLazy",
+  tag = "v2.1.0",
   init = function()
     -- Enable Neovim to wait a couple of milliseconds after a key is pressed to trigger the plugin
     vim.o.timeout = true
