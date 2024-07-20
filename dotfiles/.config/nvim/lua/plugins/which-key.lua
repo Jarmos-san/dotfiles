@@ -1,7 +1,6 @@
 return {
   "folke/which-key.nvim",
   event = "VeryLazy",
-  tag = "v2.1.0",
   init = function()
     -- Enable Neovim to wait a couple of milliseconds after a key is pressed to trigger the plugin
     vim.o.timeout = true
@@ -11,16 +10,10 @@ return {
   end,
   config = function()
     require("which-key").setup({
-      plugins = {
-        -- Disable the "spelling" plugin since it can be annoying at times
-        spelling = { enabled = false },
+      presets = "modern",
+      win = {
+        border = "single",
       },
-
-      -- Configure the floating window to have a window for clearly distinguishing between which is what
-      window = { border = "single" },
-
-      -- Disable showing keymaps w/o any descriptions to avoid unnecessary clutter
-      ignore_missing = true,
     })
   end,
 }
