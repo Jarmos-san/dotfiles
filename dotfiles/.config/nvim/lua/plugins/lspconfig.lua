@@ -23,26 +23,22 @@ return {
     local on_attach = function(_, bufnr)
       local wk = require("which-key")
 
-      -- INFO: Configure the "which-key" plugin to keep a track of the LSP keybindings
-      wk.register({
-        ["<leader>l"] = {
-          name = "+LSP",
-          D = { vim.lsp.buf.declaration, "Jump to the object declaration" },
-          K = { vim.lsp.buf.hover, "Open the documentations of the object" },
-          i = { vim.lsp.buf.implementation, "Jump to the implementation" },
-          k = { vim.lsp.buf.signature_help, "Get the help documentations" },
-          T = { vim.lsp.buf.type_definition, "Get the type definition" },
-          r = { vim.lsp.buf.rename, "Rename the object under the cursor" },
-          R = { vim.lsp.buf.references, "Jump to the reference of the object" },
-          c = { vim.lsp.buf.code_action, "Open available code actions" },
-          d = { vim.lsp.buf.definition, "Jump to object definition" },
-        },
-        ["<leader>w"] = {
-          name = "+Workspace",
-          a = { vim.lsp.buf.add_workspace_folder, "Add workspace folder" },
-          r = { vim.lsp.buf.remove_workspace_folder, "Remove workspace folder" },
-          l = { vim.inspect(vim.lsp.buf.list_workspace_folders), "List workspace folder" },
-        },
+      wk.add({
+        { "<leader>l", group = "LSP" },
+        { "<leader>lD", vim.lsp.buf.declaration, desc = "Jump to the object declaration" },
+        { "<leader>lK", vim.lsp.buf.hover, desc = "Open the documentations of the object" },
+        { "<leader>li", vim.lsp.buf.implementation, desc = "Jump to the implementation" },
+        { "<leader>lk", vim.lsp.buf.signature_help, desc = "Get the help documentations" },
+        { "<leader>lT", vim.lsp.buf.type_definition, desc = "Get the type documentations" },
+        { "<leader>lr", vim.lsp.buf.rename, desc = "Rename the object under the cursor" },
+        { "<leader>lR", vim.lsp.buf.references, desc = "Jump to the reference of the object" },
+        { "<leader>lc", vim.lsp.buf.code_action, desc = "Open available code actions" },
+        { "<leader>ld", vim.lsp.buf.definition, desc = "Jump to the object definition" },
+
+        { "<leader>w", group = "Workspace" },
+        { "<leader>wa", vim.lsp.buf.add_workspace_folder, desc = "Add workspace folder" },
+        { "<leader>wr", vim.lsp.buf.remove_workspace_folder, desc = "Remove workspace folder" },
+        { "<leader>wl", vim.lsp.buf.list_workspace_folders, desc = "List workspace folders" },
       })
 
       -- Configurations for showing diagnostics in a hover window instead. See the documentations at:
