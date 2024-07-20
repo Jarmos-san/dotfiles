@@ -32,34 +32,26 @@ local find_files = function()
   end
 end
 
-wk.register({
-  -- Keymaps to manage the inbuilt terminal within Neovim itself
-  ["<leader>t"] = {
-    name = "+Terminal",
-    t = { "<CMD>vsplit term://zsh<CR>", "Open the terminal prompt" },
-  },
-  -- VSCode-like quick file management UI
-  ["<leader>f"] = {
-    name = "+File",
-    f = { find_files, "Find files" },
-    o = { telescope.oldfiles, "Open recent files" },
-    n = { "<CMD>enew<CR>", "Open a new file" },
-    h = { telescope.help_tags, "Open the help tags menu" },
-    g = { telescope.live_grep, "Perform a grep on file contents" },
-  },
-  -- Easier & quicker buffer management keymaps
-  ["<leader>b"] = {
-    name = "+Buffer",
-    d = { bdelete, "Delete the current buffer" },
-    l = { telescope.buffers, "List all loaded buffers" },
-    n = { "<CMD>bnext<CR>", "Load the next hidden buffer" },
-    m = { telescope.marks, "List all markers in current buffer" },
-  },
-  -- Keymaps to manage & show LSP stuff
-  ["<leader>l"] = {
-    name = "+LSP",
-    t = { "<CMD>TroubleToggle<CR>", "Toggle open/close the diagnostics list" },
-  },
+wk.add({
+  -- Mappings for handling buffer related operations
+  { "<leader>b", group = "Buffer" },
+  { "<leader>bd", bdelete, desc = "Delete the current buffer" },
+  { "<leader>bl", telescope.buffers, desc = "List all loaded buffers" },
+  { "<leader>bn", "<cmd>bnext<cr>", desc = "Load the next buffer" },
+  { "<leader>bm", telescope.marks, desc = "List all markers in current buffer" },
+  { "<leader>bh", "<cmd>nohlsearch<cr>", desc = "Clear the search highlights from the buffer" },
+
+  -- Mappings to handle file operations
+  { "<leader>f", group = "Files" },
+  { "<leader>ff", find_files, desc = "Find files" },
+  { "<leader>fn", "<cmd>enew<cr>", desc = "Open a new file" },
+  { "<leader>fo", telescope.oldfiles, desc = "Open recently opened files" },
+  { "<leader>fh", telescope.help_tags, desc = "Open the help tags menu" },
+  { "<leader>fg", telescope.live_grep, desc = "Perform a live grep on file contents" },
+
+  -- Mappings to handle the builtin terminal capabilities
+  { "<leader>t", group = "Terminal" },
+  { "<leader>tt", "<cmd>vsplit term://zsh<cr>", desc = "Open the terminal prompt" },
 })
 
 -- Change to Normal mode by pressing "jk" in quick succession
