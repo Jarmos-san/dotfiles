@@ -34,20 +34,20 @@ end
 
 wk.add({
   -- Mappings for handling buffer related operations
-  { "<leader>b", group = "Buffer" },
-  { "<leader>bd", bdelete, desc = "Delete the current buffer" },
-  { "<leader>bl", telescope.buffers, desc = "List all loaded buffers" },
-  { "<leader>bn", "<cmd>bnext<cr>", desc = "Load the next buffer" },
-  { "<leader>bm", telescope.marks, desc = "List all markers in current buffer" },
-  { "<leader>bh", "<cmd>nohlsearch<cr>", desc = "Clear the search highlights from the buffer" },
+  { "<leader>b", group = "Buffer", icon = "󱥊" },
+  { "<leader>bd", bdelete, desc = "Delete the current buffer", icon = "󱥊" },
+  { "<leader>bl", telescope.buffers, desc = "List all loaded buffers", icon = "󱥊" },
+  { "<leader>bn", "<cmd>bnext<cr>", desc = "Load the next buffer", icon = "󱥊" },
+  { "<leader>bm", telescope.marks, desc = "List all markers in current buffer", icon = "󱥊" },
+  { "<leader>bh", "<cmd>nohlsearch<cr>", desc = "Clear the search highlights from the buffer", icon = "󱥊" },
 
   -- Mappings to handle file operations
-  { "<leader>f", group = "Files" },
-  { "<leader>ff", find_files, desc = "Find files" },
-  { "<leader>fn", "<cmd>enew<cr>", desc = "Open a new file" },
-  { "<leader>fo", telescope.oldfiles, desc = "Open recently opened files" },
-  { "<leader>fh", telescope.help_tags, desc = "Open the help tags menu" },
-  { "<leader>fg", telescope.live_grep, desc = "Perform a live grep on file contents" },
+  { "<leader>f", group = "Files", icon = "󱥊" },
+  { "<leader>ff", find_files, desc = "Find files", icon = "󱥊" },
+  { "<leader>fn", "<cmd>enew<cr>", desc = "Open a new file", icon = "󱥊" },
+  { "<leader>fo", telescope.oldfiles, desc = "Open recently opened files", icon = "󱥊" },
+  { "<leader>fh", telescope.help_tags, desc = "Open the help tags menu", icon = "󱥊" },
+  { "<leader>fg", telescope.live_grep, desc = "Perform a live grep on file contents", icon = "󱥊" },
 
   -- Mappings to handle the builtin terminal capabilities
   { "<leader>t", group = "Terminal" },

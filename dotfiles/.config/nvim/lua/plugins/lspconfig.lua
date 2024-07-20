@@ -24,21 +24,21 @@ return {
       local wk = require("which-key")
 
       wk.add({
-        { "<leader>l", group = "LSP" },
-        { "<leader>lD", vim.lsp.buf.declaration, desc = "Jump to the object declaration" },
-        { "<leader>lK", vim.lsp.buf.hover, desc = "Open the documentations of the object" },
-        { "<leader>li", vim.lsp.buf.implementation, desc = "Jump to the implementation" },
-        { "<leader>lk", vim.lsp.buf.signature_help, desc = "Get the help documentations" },
-        { "<leader>lT", vim.lsp.buf.type_definition, desc = "Get the type documentations" },
-        { "<leader>lr", vim.lsp.buf.rename, desc = "Rename the object under the cursor" },
-        { "<leader>lR", vim.lsp.buf.references, desc = "Jump to the reference of the object" },
-        { "<leader>lc", vim.lsp.buf.code_action, desc = "Open available code actions" },
-        { "<leader>ld", vim.lsp.buf.definition, desc = "Jump to the object definition" },
+        { "<leader>l", group = "LSP", icon = "󱥊" },
+        { "<leader>lD", vim.lsp.buf.declaration, desc = "Jump to the object declaration", icon = "󱥊" },
+        { "<leader>lK", vim.lsp.buf.hover, desc = "Open the documentations of the object", icon = "󱥊" },
+        { "<leader>li", vim.lsp.buf.implementation, desc = "Jump to the implementation", icon = "󱥊" },
+        { "<leader>lk", vim.lsp.buf.signature_help, desc = "Get the help documentations", icon = "󱥊" },
+        { "<leader>lT", vim.lsp.buf.type_definition, desc = "Get the type documentations", icon = "󱥊" },
+        { "<leader>lr", vim.lsp.buf.rename, desc = "Rename the object under the cursor", icon = "󱥊" },
+        { "<leader>lR", vim.lsp.buf.references, desc = "Jump to the reference of the object", icon = "󱥊" },
+        { "<leader>lc", vim.lsp.buf.code_action, desc = "Open available code actions", icon = "󱥊" },
+        { "<leader>ld", vim.lsp.buf.definition, desc = "Jump to the object definition", icon = "󱥊" },
 
-        { "<leader>w", group = "Workspace" },
-        { "<leader>wa", vim.lsp.buf.add_workspace_folder, desc = "Add workspace folder" },
-        { "<leader>wr", vim.lsp.buf.remove_workspace_folder, desc = "Remove workspace folder" },
-        { "<leader>wl", vim.lsp.buf.list_workspace_folders, desc = "List workspace folders" },
+        { "<leader>w", group = "Workspace", icon = "󱥊" },
+        { "<leader>wa", vim.lsp.buf.add_workspace_folder, desc = "Add workspace folder", icon = "󱥊" },
+        { "<leader>wr", vim.lsp.buf.remove_workspace_folder, desc = "Remove workspace folder", icon = "󱥊" },
+        { "<leader>wl", vim.lsp.buf.list_workspace_folders, desc = "List workspace folders", icon = "󱥊" },
       })
 
       -- Configurations for showing diagnostics in a hover window instead. See the documentations at:
