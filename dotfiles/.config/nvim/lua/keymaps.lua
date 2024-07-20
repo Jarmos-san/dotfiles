@@ -81,18 +81,6 @@ map("n", "<C-Down>", "<CMD>resize -2<CR>", { desc = "Decrease window height" })
 map("n", "<C-Right>", "<CMD>vertical resize +2<CR>", { desc = "Increase window width" })
 map("n", "<C-Left>", "<CMD>vertical resize -2<CR>", { desc = "Increase window width" })
 
--- Clear the search highlight by pressing <ESC>
-map({ "i", "n" }, "<esc>", "<CMD>nohlsearch<CR><esc>", { desc = "Escape & clear highlighted search" })
-
--- Clear search, diff update & redraw, see credit below:
--- https://github.com/LazyVim/LazyVim/blob/befa6c67a4387b0db4f8421d463f5d03f91dc829/lua/lazyvim/config/keymaps.lua#L58
-map(
-  "n",
-  "<leader>ur",
-  "<CMD>nohlsearch<bar>diffupdate<bar>normal! <C-L><CR>",
-  { desc = "Redraw, clear the search highlight & update diff" }
-)
-
 -- Save the file like any other "normal" IDEs
 map({ "i", "v", "n", "s" }, "<C-s>", "<CMD>write<CR><esc>", { desc = "Save the contents of the buffer" })
 
