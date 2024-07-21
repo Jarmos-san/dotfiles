@@ -25,7 +25,7 @@
   "neoscroll.nvim": { "branch": "master", "commit": "a7f5953dbfbe7069568f2d0ed23a9709a56725ab" },
   "nvim-cmp": { "branch": "main", "commit": "d818fd0624205b34e14888358037fb6f5dc51234" },
   "nvim-lint": { "branch": "master", "commit": "efc6fc83f0772283e064c53a8f9fb5645bde0bc0" },
-  "nvim-lspconfig": { "branch": "master", "commit": "e26da408cf955afa8e9ddbadd510e84ea8976cd7" },
+  "nvim-lspconfig": { "branch": "master", "commit": "1ea7c6126a1aa0121098e4f16c04d5dde1a4ba22" },
   "nvim-notify": { "branch": "master", "commit": "d333b6f167900f6d9d42a59005d82919830626bf" },
   "nvim-treesitter": { "branch": "master", "commit": "667b9dbbfa2d0071c5677c429ddcf89fb931b53f" },
   "nvim-treesitter-pairs": { "branch": "master", "commit": "f8c195d4d8464cba6971bf8de2d6a5c8c109b37a" },
@@ -38,5 +38,5 @@
   "telescope.nvim": { "branch": "master", "commit": "79552ef8488cb492e0f9d2bf3b4e808f57515e35" },
   "tokyonight.nvim": { "branch": "main", "commit": "1471dab694ad88351185758bb4275624d8b798ec" },
   "trouble.nvim": { "branch": "main", "commit": "1f71d71232173c1670ad4b9164d7f060586e2236" },
-  "which-key.nvim": { "branch": "main", "commit": "78cc92c6cb7da88df60227bc334a598a7e772e51" }
+  "which-key.nvim": { "branch": "main", "commit": "c4689ab39c1f51cac447893b05bb0266a7af1ed7" }
 }
