@@ -17,6 +17,7 @@ return {
       "markdown",
       "mason",
       "mdx",
+      "netrw",
       "lazy",
       "log",
       "lspinfo",
