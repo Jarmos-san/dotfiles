@@ -59,4 +59,7 @@ return {
 
   -- Disable the annoying audio bell
   audible_bell = "Disabled",
+
+  -- Disable warning about missing glyphs
+  warn_about_missing_glyphs = false,
 }
