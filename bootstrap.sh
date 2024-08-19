@@ -103,8 +103,11 @@ warn_user
 
 info "Please manually enter the prompts below before the automation starts"
 
-GHTOKEN=$(read -rp "GitHub Access Token: ")
-SSH_KEY_NAME=$(read -rp "SSH key name for GitHub: ")
+read -rp "GitHub Access Token: " github_pat
+read -rp "SSH key name for GitHub: " github_ssh_key_name
+
+GHTOKEN="$github_pat"
+SSH_KEY_NAME="$github_ssh_key_name"
 # GPG_SIGN_NAME=$(read -rp "GPG signature name: ")
 # GPG_SIGN_EMAIL=$(read -rp "GPG signature email address: ")
 # GPG_SIGN_KEY=$(read -rp "GPG signature key: ")
@@ -130,12 +133,12 @@ update_system() {
   case "$OS_NAME" in
     debian)
       add_unstable_sources
-      apt-get update
-      apt-get upgrade --yes
+      sudo apt-get update
+      sudo apt-get upgrade --yes
       ;;
     ubuntu)
-      apt-get update
-      apt-get upgrade --yes
+      sudo apt-get update
+      sudo apt-get upgrade --yes
       ;;
     *)
       error "Failed to identify the OS"
@@ -208,6 +211,9 @@ create_necessary_dirs() {
 
 ###############################################################################
 # Setup SSH for authenticating to GitHub using Git
+#
+# FIXME: Identify better ways to automate SSH setup for GitHub because it fails
+# and breaks right now
 ###############################################################################
 setup_github_ssh() {
   # Check for the "~/.ssh" directory's existence to createh the SSH keys safely
@@ -232,7 +238,12 @@ setup_github_ssh() {
 
   info "SSH public key pushed to remote service..."
 
-  eval "$(ssh-agent -s)"
+  chmod 600 "$HOME/.ssh/*"
+  chmod 700 "$HOME/.ssh"
+  chmod 644 "$HOME/.ssh/*.pub"
+
+  eval "$(ssh-agent -s)" &>2 /dev/null
+
   ssh-add "$HOME/.ssh/id_ed25519.pub"
 
   info "Testing SSH connection to GitHub..."
@@ -264,7 +275,7 @@ setup_fonts() {
 # Setup and install the "lazy.nvim" package manager for Neovim on the system
 ###############################################################################
 install_lazy_nvim() {
-  lazy_nvim_repo="git@github.com:folke/lazy.nvim"
+  lazy_nvim_repo="https://github.com/folke/lazy.nvim"
   lazy_path="$HOME/.local/share/nvim/lazy/lazy.nvim"
 
   info "Preparing to setup up the LazyNvim package manager for Neovim..."
@@ -298,10 +309,10 @@ install_zsh_plugins() {
 
   # List of all the ZSH plugins
   plugins=(
-    "git@github.com:/zsh-users/zsh-autosuggestions.git"
-    "git@github.com:/zsh-users/zsh-syntax-highlighting.git"
-    "git@github.com:/zsh-users/zsh-completions.git"
-    "git@github.com:/ael-code/zsh-colored-man-pages.git"
+    "https://github.com/zsh-users/zsh-autosuggestions.git"
+    "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+    "https://github.com/zsh-users/zsh-completions.git"
+    "https://github.com/ael-code/zsh-colored-man-pages.git"
   )
 
   info "Preparing to install the ZSH plugins..."
@@ -346,7 +357,7 @@ setup_dotfiles() {
     exit 1
   fi
 
-  git clone git@github.com:Jarmos-san/dotfiles "$HOME"/.dotfiles
+  git clone https://github.com/Jarmos-san/dotfiles "$HOME"/.dotfiles
 
   # Create symlinks of the dotfiles
   for file in "$HOME"/.dotfiles/dotfiles/*; do
@@ -402,8 +413,9 @@ main() {
   # Ensure certain folders are present and/or created for a smooth operation
   create_necessary_dirs
 
+  # FIXME: Identify ways to automate SSH setup
   # Setup SSH for Git/GitHub for cloning/managing the dotfiles itself
-  setup_github_ssh
+  # setup_github_ssh
 
   echo "Setting up system automatically!"
 
@@ -422,15 +434,7 @@ main() {
   install_homebrew
 
   install_homebrew_packages
-
-  # TODO: Add a function to install and setup Nix
 }
 
-# Check whether script has sudo privleges, if so then execute else exit the flow
-if [[ ! $EUID -gt 0 ]]; then
-  error "Ensure the script executes with \"sudo\" privileges"
-  exit 1
-else
-  # Defer running the script till the last moment for safety reasons
-  main "$@"
-fi
+# Defer running the script till the last moment for safety reasons
+main "$@"
