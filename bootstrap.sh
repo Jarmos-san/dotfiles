@@ -396,34 +396,32 @@ install_homebrew_packages() {
 # logic
 ###############################################################################
 main() {
-  # TODO: Uncomment the function blog when its ready for usage
-
   # Perform a preliminary system update before starting the automated setup
-  # update_system
+  update_system
 
   # Ensure certain folders are present and/or created for a smooth operation
-  # create_necessary_dirs
+  create_necessary_dirs
 
   # Setup SSH for Git/GitHub for cloning/managing the dotfiles itself
-  # setup_github_ssh
+  setup_github_ssh
 
   echo "Setting up system automatically!"
 
-  # setup_fonts
+  setup_fonts
 
   # Install prerequisite tools before the automated setup
-  # install_prerequisite_tools
+  install_prerequisite_tools
 
   # Install and setup the "lazy.nvim" package manager for Neovim
-  # install_lazy_nvim
+  install_lazy_nvim
 
-  # install_zsh_plugins
+  install_zsh_plugins
 
-  # setup_dotfiles
+  setup_dotfiles
 
-  # install_homebrew
+  install_homebrew
 
-  # install_homebrew_packages
+  install_homebrew_packages
 
   # TODO: Add a function to install and setup Nix
 }
