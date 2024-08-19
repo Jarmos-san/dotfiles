@@ -286,7 +286,7 @@ install_lazy_nvim() {
   fi
 
   # Exit script execution safely if Git isn't installed and/or accessible
-  if ! command -v gits &> /dev/null; then
+  if ! command -v git &> /dev/null; then
     error "Failed to installed LazyNvim...please ensure Git is installed!"
     exit 1
   fi
