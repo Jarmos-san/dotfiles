@@ -394,14 +394,23 @@ install_homebrew_packages() {
     exit 1
   fi
 
-  if [[ -e $linux_brewfile ]] && [[ -f $linux_brewfile ]]; then
-    brew bundle --files "$linux_brewfile"
+  if [[ $(uname -s) == "Linux" ]] && [[ -e $linux_brewfile ]] && [[ -f $linux_brewfile ]]; then
+    brew bundle --file "$linux_brewfile"
   fi
 
-  if [[ -e $macos_brewfile ]] && [[ -f $macos_brewfile ]]; then
-    brew bundle --files "$macos_brewfile"
+  if [[ $(uname -s) == "Darwin" ]] && [[ -e $macos_brewfile ]] && [[ -f $macos_brewfile ]]; then
+    brew bundle --file "$macos_brewfile"
   fi
 }
+
+###############################################################################
+# Setup ZSH as the default shell
+###############################################################################
+setup_zsh() {
+  command -v zsh | sudo tee -a /etc/shells
+  sudo chsh -s "$(command -v zsh)" "${USER}"
+}
+
 ###############################################################################
 # The entrypoint of the script which will run the script as per the prescribed
 # logic
@@ -419,6 +428,7 @@ main() {
 
   echo "Setting up system automatically!"
 
+  # Install the fonts for systems with a Linux DE (excluding WSL2 environments)
   setup_fonts
 
   # Install prerequisite tools before the automated setup
@@ -427,13 +437,22 @@ main() {
   # Install and setup the "lazy.nvim" package manager for Neovim
   install_lazy_nvim
 
+  # Install all necessary ZSH plugins
   install_zsh_plugins
 
+  # Setup the dotfiles (like setting up the symlinks and so on)
   setup_dotfiles
 
+  # Install the Homebrew package manager
   install_homebrew
 
+  # Install necessary tools using the Homebrew package manager
   install_homebrew_packages
+
+  # Make ZSH the default interactive shell environment
+  setup_zsh
+
+  info "System setup complete! Please restart the system before usage."
 }
 
 # Defer running the script till the last moment for safety reasons
