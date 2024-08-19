@@ -185,7 +185,7 @@ install_prerequisite_tools() {
       echo "    $tool"
     done
 
-    apt-get install --yes --no-install-recommends "${missing_tools[@]}"
+    sudo apt-get install --yes --no-install-recommends "${missing_tools[@]}"
 
     info "Prerequisite tools installed...proceeding with automated setup"
   fi
