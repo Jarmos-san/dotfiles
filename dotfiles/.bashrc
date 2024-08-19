@@ -94,5 +94,3 @@ export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 # See the following comment on GitHub for further explanation:
 # https://github.com/microsoft/WSL/issues/477#issuecomment-441164103
 [[ $- == *i* ]] && command -v zsh && exit || echo "ZSH is not installed"
-
-complete -C /home/linuxbrew/.linuxbrew/Cellar/terragrunt/0.58.14/bin/terragrunt terragrunt

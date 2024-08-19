@@ -59,6 +59,3 @@ fi
 
 # TODO: Customise the prompt without using 'Starship'
 # https://www.makeuseof.com/customize-zsh-prompt-macos-terminal
-
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /home/linuxbrew/.linuxbrew/Cellar/terragrunt/0.58.14/bin/terragrunt terragrunt
