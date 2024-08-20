@@ -244,7 +244,7 @@ setup_github_ssh() {
   chmod 700 "$HOME/.ssh"
   chmod 644 "$HOME/.ssh/*.pub"
 
-  eval "$(ssh-agent -s)" &>2 /dev/null
+  eval "$(ssh-agent -s)" &> /dev/null
 
   ssh-add "$HOME/.ssh/id_ed25519.pub"
 
