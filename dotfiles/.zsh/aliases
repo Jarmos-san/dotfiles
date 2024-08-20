@@ -17,7 +17,7 @@ alias dims="docker images"
 # Easy and utilitarian aliases for quick terminal usage
 alias reload="source $HOME/.zshrc"
 alias top="btop --utf-force"
-alias cm="cmatrix -abs -C yellow"
+alias cm="cmatrix -abs"
 alias rands="openssl rand -base64 32"
 alias ll="eza --long --all --classify --icons --git --ignore-glob='.git'"
 alias loc="wc -l"
