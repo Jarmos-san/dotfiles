@@ -105,6 +105,8 @@ info "Please manually enter the prompts below before the automation starts"
 
 read -rp "GitHub Access Token: " github_pat
 read -rp "SSH key name for GitHub: " github_ssh_key_name
+read -rp "Enter email address for Git: " git_email
+read -rp "Enter username for Git: " git_name
 
 GHTOKEN="$github_pat"
 SSH_KEY_NAME="$github_ssh_key_name"
@@ -412,6 +414,26 @@ setup_zsh() {
 }
 
 ###############################################################################
+# Setup Git credentials (and potentially other things like SSH access and more!)
+###############################################################################
+setup_git() {
+  git_config_dir="$HOME/.config/git"
+
+  if [[ ! -d $git_config_dir ]]; then
+    mkdir --parents "$git_config_dir"
+  else
+    echo "Failed to create the ${git_config_dir} directory!"
+    exit 1
+  fi
+
+  cat << EOF > "${git_config_dir}"/credentials
+[user]
+  email = $git_email
+  name = $git_name
+EOF
+}
+
+###############################################################################
 # The entrypoint of the script which will run the script as per the prescribed
 # logic
 ###############################################################################
@@ -451,6 +473,9 @@ main() {
 
   # Make ZSH the default interactive shell environment
   setup_zsh
+
+  # Setup Git to work well with GitHub
+  setup_git
 
   info "System setup complete! Please restart the system before usage."
 }
