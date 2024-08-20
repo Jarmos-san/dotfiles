@@ -59,10 +59,19 @@ run_brew_updates() {
 ###############################################################################
 # Entrypoint of the script
 ###############################################################################
+update_zsh_plugins() {
+    # TODO: Implement function to safely perform a git-pull of the repositories
+    echo ""
+}
+
+###############################################################################
+# Entrypoint of the script
+###############################################################################
 main() {
   # Run each functions below sequentially for safety reasons
   run_apt_updates
   run_brew_updates
+  update_zsh_plugins
 }
 
 # Defer the entrypoint of the script towards the end of the execution flow
