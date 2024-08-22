@@ -132,3 +132,11 @@ autocmd("BufNewFile", {
   pattern = "*.vue",
   command = "0r ~/.config/nvim/skeletons/sfc.vue",
 })
+
+autocmd("TermClose", {
+  desc = "Delete the terminal buffer when the process exits",
+  group = augroup("terminal_close"),
+  callback = function()
+    vim.cmd("bdelete")
+  end,
+})
