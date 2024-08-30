@@ -12,6 +12,7 @@ return {
       "gitattributes",
       "gitconfig",
       "gitignore",
+      "gosum",
       "help",
       "json",
       "markdown",
