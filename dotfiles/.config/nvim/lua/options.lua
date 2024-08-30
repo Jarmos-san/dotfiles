@@ -108,3 +108,19 @@ vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 -- FIXME: Figure a way out to disable the statusline in the "starter" buffer
 -- Set the statusline
 -- vim.o.statusline = "%!v:lua.require('statusline').render()"
+
+-- These conditional lines of code are necessary when using Neovim from within WSL2. See ":h clipboard-wsl" for info
+if vim.fn.has("wsl") == 1 then
+  vim.g.clipboard = {
+    name = "WslClipboard",
+    copy = {
+      ["+"] = "clip.exe",
+      ["*"] = "clip.exe",
+    },
+    paste = {
+      ["+"] = [[powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))]],
+      ["*"] = [[powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))]],
+    },
+    cache_enabled = 0,
+  }
+end
