@@ -40,6 +40,7 @@ wk.add({
   { "<leader>bn", "<cmd>bnext<cr>", desc = "Load the next buffer", icon = "󱥊" },
   { "<leader>bm", telescope.marks, desc = "List all markers in current buffer", icon = "󱥊" },
   { "<leader>bh", "<cmd>nohlsearch<cr>", desc = "Clear the search highlights from the buffer", icon = "󱥊" },
+  { "<leader>br", telescope.registers, desc = "Show the contents of the registers", icon = "󱥊" },
 
   -- Mappings to handle file operations
   { "<leader>f", group = "Files", icon = "󱥊" },
