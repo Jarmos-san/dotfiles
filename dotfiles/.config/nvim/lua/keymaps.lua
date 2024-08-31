@@ -101,3 +101,6 @@ map("i", "<M-h>", "<Left>", { desc = "Move left in Insert mode" })
 map("i", "<M-j>", "<Down>", { desc = "Move down in Insert mode" })
 map("i", "<M-k>", "<Up>", { desc = "Move up in Insert mode" })
 map("i", "<M-l>", "<Right>", { desc = "Move right in Insert mode" })
+
+-- Configure Neovim to delete text without copying them to the unnamed register
+map("n", "d", '"_d', { desc = "Delete a line of texting without storing it in a register" })
