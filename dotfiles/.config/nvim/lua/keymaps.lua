@@ -52,7 +52,7 @@ wk.add({
 
   -- Mappings to handle the builtin terminal capabilities
   { "<leader>t", group = "Terminal" },
-  { "<leader>tt", "<cmd>vsplit term://zsh<cr>", desc = "Open the terminal prompt" },
+  { "<leader>tt", "<cmd>split term://zsh<cr>", desc = "Open the terminal prompt" },
 })
 
 -- Change to Normal mode by pressing "jk" in quick succession
