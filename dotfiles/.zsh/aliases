@@ -48,3 +48,8 @@ alias npx="pnpm dlx"
 
 # Google's webp CLI alias
 alias webp="cwebp"
+
+# A bunch of Tmux aliases for easier multiplex usage
+alias tls="tmux list-server"
+alias tnew="tmux new-session"
+alias dots="tmux new-session -s dotfiles -n dotfiles -c ~/.dotfiles"
