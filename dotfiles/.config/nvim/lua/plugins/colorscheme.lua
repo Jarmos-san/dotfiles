@@ -9,4 +9,10 @@ return {
     dim_inactive = true,
     lualine_bold = true,
   },
+  {
+    "ellisonleao/gruvbox.nvim",
+    event = "VimEnter",
+    config = true,
+    opts = {},
+  },
 }
