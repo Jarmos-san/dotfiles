@@ -107,7 +107,7 @@
     recurse = true
 
 [alias]
-    st = status -sb
+    st = status --short --branch --untracked-files=all
     ci = commit -m
     ca = commit -am
     cb = checkout -b
