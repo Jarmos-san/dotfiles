@@ -21,6 +21,7 @@ return {
         "go",
         "gomod",
         "gosum",
+        "html",
         "javascript",
         "json",
         "lua",
