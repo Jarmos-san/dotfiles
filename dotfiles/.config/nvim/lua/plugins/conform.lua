@@ -5,6 +5,7 @@ return {
   event = { "LspAttach", "BufReadPost", "BufNewFile" },
   opts = {
     formatters_by_ft = {
+      html = { "prettier" },
       javascript = { "prettier" },
       markdown = { "prettier" },
       lua = { "stylua" },
