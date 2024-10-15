@@ -50,6 +50,7 @@ alias npx="pnpm dlx"
 alias webp="cwebp"
 
 # A bunch of Tmux aliases for easier multiplex usage
-alias tls="tmux list-server"
+alias tls="tmux list-session"
 alias tnew="tmux new-session"
 alias dots="tmux new-session -s dotfiles -n dotfiles -c ~/.dotfiles"
+alias tks="tmux kill-server"
