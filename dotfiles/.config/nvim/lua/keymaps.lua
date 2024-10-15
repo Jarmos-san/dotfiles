@@ -95,7 +95,7 @@ map("n", "<leader>bp", "<CMD>bprevious<CR>", { desc = "Change to the previous bu
 map("n", "<leader>m", telescope.marks, { desc = "List all Vim marks registered on the current buffer" })
 
 -- List all the registers available on the buffer
-map("n", "<leader>r", telescope.registers, { desc = "Show the contents of the registers", icon = "󱥊" })
+map("n", "<leader>r", telescope.registers, { desc = "Show the contents of the registers" })
 
 -- Open Telescope to fuzzy search through the help docs
 map("n", "<leader>h", telescope.help_tags, { desc = "Open the help tags menu" })
