@@ -1,6 +1,5 @@
 -- Module of keymaps & bindings which makes using Neovim a pleasure
 
-local wk = require("which-key")
 local telescope = require("telescope.builtin")
 local utils = require("utils")
 local map = require("utils").map
@@ -24,42 +23,14 @@ local bdelete = function()
 end
 
 -- Use the ":Telescope git_files" command if the current directory is version controlled with Git
-local find_files = function()
+local git_files = function()
   if utils.is_git_repo() or utils.has_git_dir() then
     telescope.git_files()
-  else
-    telescope.find_files()
   end
 end
 
-wk.add({
-  -- Mappings for handling buffer related operations
-  { "<leader>b", group = "Buffer", icon = "󱥊" },
-  { "<leader>bd", bdelete, desc = "Delete the current buffer", icon = "󱥊" },
-  { "<leader>bl", telescope.buffers, desc = "List all loaded buffers", icon = "󱥊" },
-  { "<leader>bn", "<cmd>bnext<cr>", desc = "Load the next buffer", icon = "󱥊" },
-  { "<leader>bm", telescope.marks, desc = "List all markers in current buffer", icon = "󱥊" },
-  { "<leader>bh", "<cmd>nohlsearch<cr>", desc = "Clear the search highlights from the buffer", icon = "󱥊" },
-  { "<leader>br", telescope.registers, desc = "Show the contents of the registers", icon = "󱥊" },
-
-  -- Mappings to handle file operations
-  { "<leader>f", group = "Files", icon = "󱥊" },
-  { "<leader>ff", find_files, desc = "Find files", icon = "󱥊" },
-  { "<leader>fn", "<cmd>enew<cr>", desc = "Open a new file", icon = "󱥊" },
-  { "<leader>fo", telescope.oldfiles, desc = "Open recently opened files", icon = "󱥊" },
-  { "<leader>fh", telescope.help_tags, desc = "Open the help tags menu", icon = "󱥊" },
-  { "<leader>fg", telescope.live_grep, desc = "Perform a live grep on file contents", icon = "󱥊" },
-
-  -- Mappings to handle the builtin terminal capabilities
-  { "<leader>t", group = "Terminal" },
-  { "<leader>tt", "<cmd>split term://zsh<cr>", desc = "Open the terminal prompt" },
-})
-
 -- Change to Normal mode by pressing "jk" in quick succession
 map("i", "jk", "<esc>", { desc = "Change to Normal mode" })
-
--- Select all contents of the buffer by pressing "Ctrl + a" like every other IDE
-map("n", "<C-a>", "ggVG", { desc = "Select all contents in the buffer" })
 
 -- Easier navigation to the beginning or the start of the line
 map("n", "H", "<Home>", { desc = "Move to the beginning of the line" })
@@ -82,9 +53,6 @@ map("n", "<C-Down>", "<CMD>resize -2<CR>", { desc = "Decrease window height" })
 map("n", "<C-Right>", "<CMD>vertical resize +2<CR>", { desc = "Increase window width" })
 map("n", "<C-Left>", "<CMD>vertical resize -2<CR>", { desc = "Increase window width" })
 
--- Save the file like any other "normal" IDEs
-map({ "i", "v", "n", "s" }, "<C-s>", "<CMD>write<CR><esc>", { desc = "Save the contents of the buffer" })
-
 -- Better & easier indenting
 map("v", "<", "<gv")
 map("v", ">", ">gv")
@@ -104,3 +72,36 @@ map("i", "<M-l>", "<Right>", { desc = "Move right in Insert mode" })
 
 -- Configure Neovim to delete text without copying them to the unnamed register
 map("n", "d", '"_d', { desc = "Delete a line of texting without storing it in a register" })
+
+-- Disable search highlight after a pattern has been searched for
+map("n", "<Esc><Esc>", "<CMD>set nohlsearch<CR>", { desc = "Remove the pattern highlight after a search function" })
+
+-- List all available files (and directories) using Telescope
+map("n", "<leader>ff", telescope.find_files, { desc = "List all available files/directories" })
+map("n", "<leader>gf", git_files, { desc = "List all files and folders tracked inside the Git repository" })
+map("n", "<leader>of", telescope.oldfiles, { desc = "Open recently opened files" })
+
+-- Delete the buffer contents from the Neovim session
+map("n", "<leader>bd", bdelete, { desc = "Delete the buffer contents from the Neovim session" })
+
+-- List all currently loaded buffers
+map("n", "<leader>b", telescope.buffers, { desc = "List all currently in-memory loaded buffers" })
+
+-- Navigate easier around buffers while using the "leader" key
+map("n", "<leader>bn", "<CMD>bnext<CR>", { desc = "Change to the next buffer" })
+map("n", "<leader>bp", "<CMD>bprevious<CR>", { desc = "Change to the previous buffer" })
+
+-- Visually list in Telescope all the currently registered marks on the current buffer
+map("n", "<leader>m", telescope.marks, { desc = "List all Vim marks registered on the current buffer" })
+
+-- List all the registers available on the buffer
+map("n", "<leader>r", telescope.registers, { desc = "Show the contents of the registers", icon = "󱥊" })
+
+-- Open Telescope to fuzzy search through the help docs
+map("n", "<leader>h", telescope.help_tags, { desc = "Open the help tags menu" })
+
+-- Grep through the contents of the current directory for a particular string pattern
+map("n", "<leader>lg", telescope.live_grep, { desc = "Perform a grep on the file contents of the current directory" })
+
+-- Open a Terminal inside Neovim itself
+map("n", "<leader>t", "<CMD>split term://zsh<CR>", { desc = "Open the terminal prompt" })
