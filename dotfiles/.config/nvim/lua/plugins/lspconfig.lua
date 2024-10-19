@@ -16,30 +16,25 @@ return {
   end,
   config = function()
     local lspconfig = require("lspconfig")
+    local map = require("utils").map
+    local telescope = require("telescope.builtin")
 
     -- Add rounded borders to the LSP flaoting windows
     require("lspconfig.ui.windows").default_options.border = "rounded"
 
     local on_attach = function(_, bufnr)
-      local wk = require("which-key")
-
-      wk.add({
-        { "<leader>l", group = "LSP", icon = "󱥊" },
-        { "<leader>lD", vim.lsp.buf.declaration, desc = "Jump to the object declaration", icon = "󱥊" },
-        { "<leader>lK", vim.lsp.buf.hover, desc = "Open the documentations of the object", icon = "󱥊" },
-        { "<leader>li", vim.lsp.buf.implementation, desc = "Jump to the implementation", icon = "󱥊" },
-        { "<leader>lk", vim.lsp.buf.signature_help, desc = "Get the help documentations", icon = "󱥊" },
-        { "<leader>lT", vim.lsp.buf.type_definition, desc = "Get the type documentations", icon = "󱥊" },
-        { "<leader>lr", vim.lsp.buf.rename, desc = "Rename the object under the cursor", icon = "󱥊" },
-        { "<leader>lR", vim.lsp.buf.references, desc = "Jump to the reference of the object", icon = "󱥊" },
-        { "<leader>lc", vim.lsp.buf.code_action, desc = "Open available code actions", icon = "󱥊" },
-        { "<leader>ld", vim.lsp.buf.definition, desc = "Jump to the object definition", icon = "󱥊" },
-
-        { "<leader>w", group = "Workspace", icon = "󱥊" },
-        { "<leader>wa", vim.lsp.buf.add_workspace_folder, desc = "Add workspace folder", icon = "󱥊" },
-        { "<leader>wr", vim.lsp.buf.remove_workspace_folder, desc = "Remove workspace folder", icon = "󱥊" },
-        { "<leader>wl", vim.lsp.buf.list_workspace_folders, desc = "List workspace folders", icon = "󱥊" },
-      })
+      map("n", "gd", telescope.lsp_definitions, { desc = "Jump to the object definition" })
+      map("n", "gD", vim.lsp.buf.declaration, { desc = "Jump to the object declaration" })
+      map("n", "gT", telescope.lsp_type_definitions, { desc = "Get the type documentations" })
+      map("n", "gi", vim.lsp.buf.implementation, { desc = "Jump to the implementation" })
+      map("n", "K", vim.lsp.buf.hover, { desc = "Open the documentations of the object" })
+      map("n", "<C-S>", vim.lsp.buf.signature_help, { desc = "Get the help documentations" })
+      map("n", "gr", vim.lsp.buf.rename, { desc = "Rename the object under the cursor" })
+      map("n", "gR", telescope.lsp_references, { desc = "Jump to the reference of the object" })
+      map("n", "gra", vim.lsp.buf.code_action, { desc = "Open available code actions" })
+      map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, { desc = "Add workspace folder" })
+      map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, { desc = "Remove workspace folder" })
+      map("n", "<leader>wl", vim.lsp.buf.list_workspace_folders, { desc = "List workspace folders" })
 
       -- Configurations for showing diagnostics in a hover window instead. See the documentations at:
       -- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#show-line-diagnostics-automatically-in-hover-window
