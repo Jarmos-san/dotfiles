@@ -36,11 +36,6 @@ map("i", "jk", "<esc>", { desc = "Change to Normal mode" })
 map("n", "H", "<Home>", { desc = "Move to the beginning of the line" })
 map("n", "L", "<End>", { desc = "Move to the end of the line" })
 
--- "Better up/down navigation" (??) not sure what its supposed to do, see the credit below:
--- https://github.com/LazyVim/LazyVim/blob/befa6c67a4387b0db4f8421d463f5d03f91dc829/lua/lazyvim/config/keymaps.lua#L16
-map("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
-map("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-
 -- Navigate around windows more easily with the "hjkl" keys
 map("n", "<leader>h", "<C-w>h", { desc = "Go to left window" })
 map("n", "<leader>j", "<C-w>j", { desc = "Go to lower window" })
@@ -105,3 +100,6 @@ map("n", "<leader>lg", telescope.live_grep, { desc = "Perform a grep on the file
 
 -- Open a Terminal inside Neovim itself
 map("n", "<leader>t", "<CMD>split term://zsh<CR>", { desc = "Open the terminal prompt" })
+
+-- Open a list of keymaps which can be fuzzy-searched using the Telescope UI
+map("n", "<leader>k", telescope.keymaps, { desc = "Open a list of available keymaps" })
