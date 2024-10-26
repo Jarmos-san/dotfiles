@@ -36,12 +36,6 @@ map("i", "jk", "<esc>", { desc = "Change to Normal mode" })
 map("n", "H", "<Home>", { desc = "Move to the beginning of the line" })
 map("n", "L", "<End>", { desc = "Move to the end of the line" })
 
--- Navigate around windows more easily with the "hjkl" keys
-map("n", "<leader>h", "<C-w>h", { desc = "Go to left window" })
-map("n", "<leader>j", "<C-w>j", { desc = "Go to lower window" })
-map("n", "<leader>k", "<C-w>k", { desc = "Go to upper window" })
-map("n", "<leader>l", "<C-w>l", { desc = "Go to right window" })
-
 -- Resize windows using <Ctrl + Arrow keys>
 map("n", "<C-Up>", "<CMD>resize +2<CR>", { desc = "Increase window height" })
 map("n", "<C-Down>", "<CMD>resize -2<CR>", { desc = "Decrease window height" })
