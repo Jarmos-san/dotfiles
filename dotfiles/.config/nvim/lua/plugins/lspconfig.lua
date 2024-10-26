@@ -106,10 +106,11 @@ return {
       capabilities = capabilities,
       settings = {
         yaml = {
-          schemas = {
-            ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-            ["https://taskfile.dev/schema.json"] = "Taskfile.yml",
+          schemaStore = {
+            enable = false,
+            url = "",
           },
+          schemas = require("schemastore").yaml.schemas(),
         },
       },
     })
