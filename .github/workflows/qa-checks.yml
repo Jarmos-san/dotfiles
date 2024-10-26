@@ -15,10 +15,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release download --repo JohnnyMorganz/StyLua --pattern "stylua-linux-x86_64.zip"
+          gh release download --repo JohnnyMorganz/StyLua \
+            --pattern "stylua-linux-x86_64.zip"
           unzip "stylua-linux-x86_64.zip"
           cp stylua /usr/local/bin/
-          echo "Downloaded Stylua v$(stylua --version | grep --only-matching --perl-regexp '\d+\.\d+\.\d+')"
+          echo "Downloaded Stylua v$(stylua --version
+            | grep --only-matching --perl-regexp '\d+\.\d+\.\d+')"
 
       - name: Run the Stylua formatter for Lua code
         run: stylua . --check
@@ -37,7 +39,8 @@ jobs:
           gh release download --repo Kampfkarren/selene --pattern "selene-*-linux.zip"
           unzip "selene-light-*-linux.zip"
           cp selene /usr/local/bin/ && chmod u+x /usr/local/bin/selene
-          echo "Downloaded Selene v$(selene --version | grep --only-matching --perl-regexp '\d+\.\d+\.\d+')"
+          echo "Downloaded Selene v$(selene --version
+            | grep --only-matching --perl-regexp '\d+\.\d+\.\d+')"
 
       - name: Run Selene to Lint Lua Code
         run: selene .
