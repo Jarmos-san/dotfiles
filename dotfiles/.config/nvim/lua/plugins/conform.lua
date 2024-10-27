@@ -7,6 +7,7 @@ return {
     formatters_by_ft = {
       html = { "prettier" },
       javascript = { "prettier" },
+      go = { "gofmt" },
       markdown = { "prettier" },
       lua = { "stylua" },
       scss = { "prettier" },
