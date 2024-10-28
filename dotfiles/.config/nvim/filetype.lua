@@ -15,6 +15,7 @@ vim.filetype.add({
     [".env"] = "dotenv",
     ["env"] = "dotenv",
     ["tsconfig.json"] = "jsonc",
+    ["Caddyfile"] = "Caddyfile",
   },
   -- Detect and apply filetypes based on certain patterns of the filenames
   pattern = {
