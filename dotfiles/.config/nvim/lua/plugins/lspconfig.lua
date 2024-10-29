@@ -13,6 +13,11 @@ return {
       update_in_insert = true, -- Update the diagnostic message even when in Insert mode
       severity_sort = true, -- Configure Neovim to sort the error messages according to the severity.
     })
+    -- Configure the floating window containing information about the object under the cursor
+    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+      border = "double", -- Enable a distinguishable border for the window
+      max_width = math.floor(vim.o.columns * 0.5), -- Cap the width of window at 50% of the terminal size
+    })
   end,
   config = function()
     local lspconfig = require("lspconfig")
