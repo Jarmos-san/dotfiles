@@ -62,4 +62,58 @@ M.has_git_dir = function()
   end
 end
 
+M.terminal = {
+  ---@type fun(): void
+  float = function()
+    local buf = vim.api.nvim_create_buf(false, true) -- false: not listed, true: scratch buffer
+
+    -- 2. Calculate new dimensions for the floating terminal
+    local width = math.floor(vim.o.columns * 0.8) -- 80% of editor width
+    local height = math.floor(vim.o.lines * 0.5) -- 50% of editor height
+    local row = (vim.o.lines - height) / 2 -- Center vertically
+    local col = (vim.o.columns - width) / 2 -- Center horizontally
+
+    -- 3. Open the floating window with set dimensions
+    vim.api.nvim_open_win(buf, true, {
+      relative = "editor",
+      width = width,
+      height = height,
+      row = row,
+      col = col,
+      style = "minimal",
+      border = "rounded",
+    })
+
+    -- 4. Open an interactive shell in the buffer using `termopen`
+    vim.fn.termopen(vim.o.shell)
+  end,
+
+  ---@type fun(): void
+  vertical = function()
+    -- Create a new buffer (false: not listed, true: scratch buffer)
+    local buf = vim.api.nvim_create_buf(false, true)
+
+    -- Get the current window's dimensions
+    local width = math.floor(vim.o.columns * 0.5) -- Set the width for the new split (50% of the current width)
+    local height = vim.api.nvim_win_get_height(0) -- Use the current window's height
+
+    -- Calculate the position for the new window
+    local row = 0 -- Start from the top of the window
+    local col = vim.api.nvim_win_get_width(0) -- Place it at the right side of the current window
+
+    -- Open the vertical split window
+    vim.api.nvim_open_win(buf, true, {
+      relative = "editor", -- Relative to the editor
+      width = width, -- Width of the new window
+      height = height, -- Height of the new window
+      row = row, -- Row position (0 for top)
+      col = col, -- Column position (right of the current window)
+      -- style = "minimal",
+    })
+
+    -- Open an interactive shell in the buffer using `termopen`
+    vim.fn.termopen(vim.o.shell)
+  end,
+}
+
 return M

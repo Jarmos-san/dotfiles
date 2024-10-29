@@ -93,8 +93,8 @@ map("n", "<leader>h", telescope.help_tags, { desc = "Open the help tags menu" })
 map("n", "<leader>lg", telescope.live_grep, { desc = "Perform a grep on the file contents of the current directory" })
 
 -- Open a Terminal inside Neovim itself
-map("n", "<leader>t", "<CMD>split term://$SHELL<CR>", { desc = "Open the terminal prompt in a horizontal split" })
-map("n", "<leader>tv", "<CMD>vsplit term://$SHELL<CR>", { desc = "Open the terminal prompt in vertical split" })
+map("n", "<leader>t", utils.terminal.float, { desc = "Open the terminal prompt in a horizontal split" })
+map("n", "<leader>tv", utils.terminal.vertical, { desc = "Open the terminal prompt in vertical split" })
 
 -- Open a list of keymaps which can be fuzzy-searched using the Telescope UI
 map("n", "<leader>k", telescope.keymaps, { desc = "Open a list of available keymaps" })
