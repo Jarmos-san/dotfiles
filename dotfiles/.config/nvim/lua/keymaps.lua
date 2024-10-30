@@ -50,9 +50,6 @@ map("v", ">", ">gv")
 -- INFO: See the docs at ":h gQ" for more info on what its supposed to do
 map("n", "gQ", "<NOP>")
 
--- Exit terminal mode in builtin terminal with an easier to use shortcut
-map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
-
 -- Easier navigation in Insert mode without the arrow keys!
 map("i", "<M-h>", "<Left>", { desc = "Move left in Insert mode" })
 map("i", "<M-j>", "<Down>", { desc = "Move down in Insert mode" })
@@ -95,6 +92,9 @@ map("n", "<leader>lg", telescope.live_grep, { desc = "Perform a grep on the file
 -- Open a Terminal inside Neovim itself
 map("n", "<leader>t", utils.terminal.float, { desc = "Open the terminal prompt in a horizontal split" })
 map("n", "<leader>tv", utils.terminal.vertical, { desc = "Open the terminal prompt in vertical split" })
+
+-- Exit terminal mode in builtin terminal with an easier to use shortcut
+map("t", "jk", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 -- Open a list of keymaps which can be fuzzy-searched using the Telescope UI
 map("n", "<leader>k", telescope.keymaps, { desc = "Open a list of available keymaps" })
