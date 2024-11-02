@@ -62,57 +62,65 @@ M.has_git_dir = function()
   end
 end
 
-M.terminal = {
-  ---@type fun(): void
-  float = function()
-    local buf = vim.api.nvim_create_buf(false, true) -- false: not listed, true: scratch buffer
+--- @class TermOptions
+--- @field style "minimal" | nil The style of the window. See ":h nvim_open_win()"
+--- @field border string | nil The border type of the window. See ":h nvim_open_win()"
 
-    -- 2. Calculate new dimensions for the floating terminal
-    local width = math.floor(vim.o.columns * 0.8) -- 80% of editor width
-    local height = math.floor(vim.o.lines * 0.5) -- 50% of editor height
-    local row = (vim.o.lines - height) / 2 -- Center vertically
-    local col = (vim.o.columns - width) / 2 -- Center horizontally
+--- Create a terminal buffer
+--- @param width number The width of the terminal
+--- @param height number The height of the terminal
+--- @param row number The number of rows for the terminal
+--- @param col number The number of columns for the terminal
+--- @param opts TermOptions | nil The optional parameters to configure the look of the terminal
+local create_term = function(width, height, row, col, opts)
+  ---@type integer
+  local buf = vim.api.nvim_create_buf(false, true)
 
-    -- 3. Open the floating window with set dimensions
+  if not opts then
     vim.api.nvim_open_win(buf, true, {
       relative = "editor",
       width = width,
       height = height,
       row = row,
       col = col,
-      style = "minimal",
-      border = "rounded",
+      style = opts.style, ---@type string | nil
+      border = opts.border, ---@type string | nil
     })
+  else
+    vim.api.nvim_open_win(buf, true, {
+      relative = "editor",
+      width = width,
+      height = height,
+      row = row,
+      col = col,
+    })
+  end
 
-    -- 4. Open an interactive shell in the buffer using `termopen`
-    vim.fn.termopen(vim.o.shell)
+  -- Start the terminal shell using the value of "$SHELL"
+  vim.fn.termopen(vim.o.shell)
+end
+
+M.terminal = {
+  ---@type fun(): void
+  float = function()
+    local width = math.floor(vim.o.columns * 0.8) -- 80% of editor width
+    local height = math.floor(vim.o.lines * 0.5) -- 50% of editor height
+    local row = (vim.o.lines - height) / 2 -- Center vertically
+    local col = (vim.o.columns - width) / 2 -- Center horizontally
+
+    -- Create the terminal inside the floating window
+    create_term(width, height, row, col, { style = "minimal", border = "rounded" })
   end,
 
   ---@type fun(): void
   vertical = function()
-    -- Create a new buffer (false: not listed, true: scratch buffer)
-    local buf = vim.api.nvim_create_buf(false, true)
-
-    -- Get the current window's dimensions
     local width = math.floor(vim.o.columns * 0.5) -- Set the width for the new split (50% of the current width)
     local height = vim.api.nvim_win_get_height(0) -- Use the current window's height
-
-    -- Calculate the position for the new window
     local row = 0 -- Start from the top of the window
     local col = vim.api.nvim_win_get_width(0) -- Place it at the right side of the current window
 
-    -- Open the vertical split window
-    vim.api.nvim_open_win(buf, true, {
-      relative = "editor", -- Relative to the editor
-      width = width, -- Width of the new window
-      height = height, -- Height of the new window
-      row = row, -- Row position (0 for top)
-      col = col, -- Column position (right of the current window)
-      -- style = "minimal",
-    })
-
-    -- Open an interactive shell in the buffer using `termopen`
-    vim.fn.termopen(vim.o.shell)
+    -- Create the terminal inside the vertical split
+    create_term(width, height, row, col, {})
   end,
 }
 
