@@ -30,7 +30,7 @@ local create_term = function(width, height, row, col, opts)
   vim.fn.termopen(vim.o.shell)
 end
 
-M.terminal = {
+M.setup = {
   float = function()
     local width = math.floor(vim.o.columns * 0.8) -- 80% of editor width
     local height = math.floor(vim.o.lines * 0.5) -- 50% of editor height

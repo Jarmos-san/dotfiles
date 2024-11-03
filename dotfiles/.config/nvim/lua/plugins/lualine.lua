@@ -39,4 +39,5 @@ return {
 
     require("lualine").setup({ options = opts, sections = sections })
   end,
+  disable = true,
 }
