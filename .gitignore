@@ -75,6 +75,7 @@ scratch
 
 **/.local/bin
 !**/.local/bin/update
+!**/.local/bin/git-clean
 
 **/tmux/plugins/**/*
 # End of https://www.toptal.com/developers/gitignore/api/powershell,visualstudiocode,vim,git
