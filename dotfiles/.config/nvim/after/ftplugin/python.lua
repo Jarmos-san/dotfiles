@@ -43,3 +43,7 @@ autocmd({ "BufWritePost" }, {
     require("lint").try_lint()
   end,
 })
+
+-- Wrap words at the EOL "cleanly" (i.e) ensure the words are wrapped and not just characters
+vim.opt.wrap = true
+vim.opt.linebreak = true
