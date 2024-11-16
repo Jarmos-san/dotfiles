@@ -42,13 +42,19 @@ M.setup = {
   end,
 
   vertical = function()
-    local width = math.floor(vim.o.columns * 0.5) -- Set the width for the new split (50% of the current width)
-    local height = vim.api.nvim_win_get_height(0) -- Use the current window's height
-    local row = 0 -- Start from the top of the window
-    local col = vim.api.nvim_win_get_width(0) -- Place it at the right side of the current window
+    -- local width = math.floor(vim.o.columns * 0.5) -- Set the width for the new split (50% of the current width)
+    -- local height = vim.api.nvim_win_get_height(0) -- Use the current window's height
+    -- local row = 0 -- Start from the top of the window
+    -- local col = vim.api.nvim_win_get_width(0) -- Place it at the right side of the current window
 
     -- Create the terminal inside the vertical split
-    create_term(width, height, row, col, {})
+    -- create_term(width, height, row, col, {})
+    -- TODO: Refactor the function
+    local buf = vim.api.nvim_create_buf(false, true)
+
+    -- Create a buffer to open the terminal in
+    vim.api.nvim_open_win(buf, true, { split = "right", win = 0 })
+    vim.fn.termopen(vim.o.shell)
   end,
 }
 
