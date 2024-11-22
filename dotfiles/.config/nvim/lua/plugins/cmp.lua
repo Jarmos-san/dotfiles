@@ -120,12 +120,12 @@ return {
         end, { "i", "s" }),
       }),
       sources = {
-        { name = "nvim_lsp" },
-        { name = "luasnip" },
-        { name = "path" },
-        { name = "luasnip_choice" },
-        { name = "nvim_lsp_signature_help" },
-        { name = "nvim_lua" },
+        { name = "luasnip", priority = 1000 },
+        { name = "luasnip_choice", priority = 1000 },
+        { name = "nvim_lsp", priority = 500 },
+        { name = "nvim_lua", priority = 500 },
+        { name = "nvim_lsp_signature_help", priority = 500 },
+        { name = "path", priority = 250 },
         -- {
         --   name = "buffer",
         --   option = {
