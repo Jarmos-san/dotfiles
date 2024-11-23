@@ -19,4 +19,26 @@ return {
       }
     )
   ),
+
+  snippet(
+    { trig = "req", desc = "Create a require statement" },
+    fmt(
+      [[
+  local {1} = require('{2}')
+  ]],
+      { insert_node(1, ""), insert_node(2, "module_name") }
+    )
+  ),
+
+  snippet(
+    { trig = "if", desc = "Create an if statement" },
+    fmt(
+      [[
+  if {1} then
+    {2}
+  end
+  ]],
+      { insert_node(1, "condition"), insert_node(2, "body") }
+    )
+  ),
 }
