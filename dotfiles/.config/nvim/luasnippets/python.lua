@@ -124,4 +124,26 @@ return {
       }
     )
   ),
+
+  -- Snippets for creating Pyright directives
+  snippet(
+    { trig = "pyright", desc = "Create a Pyright directive" },
+    fmt(
+      [[
+      # pyright: ignore[{1}]
+  ]],
+      { insert_node(1, "directive") }
+    )
+  ),
+
+  -- Snippets for creating "noqa" directives (possibly used by tools like Ruff)
+  snippet(
+    { trig = "noqa", desc = "Create a directive for tools like Ruff" },
+    fmt(
+      [[
+    # noqa: {1}
+  ]],
+      { insert_node(1, "directive") }
+    )
+  ),
 }
