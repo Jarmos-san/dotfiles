@@ -25,3 +25,7 @@ autocmd({ "BufWritePost" }, {
 -- Wrap words at the EOL "cleanly" (i.e) ensure the words are wrapped and not just characters
 vim.opt.wrap = true
 vim.opt.linebreak = true
+
+-- Configure the indent-based folds for Python buffers
+vim.opt.foldmethod = "indent"
+vim.opt.foldlevel = 1
