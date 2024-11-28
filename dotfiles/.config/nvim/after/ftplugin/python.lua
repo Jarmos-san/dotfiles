@@ -28,4 +28,4 @@ vim.opt.linebreak = true
 
 -- Configure the indent-based folds for Python buffers
 vim.opt.foldmethod = "indent"
-vim.opt.foldlevel = 1
+vim.opt.foldlevel = 0
