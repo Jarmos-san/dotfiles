@@ -9,7 +9,7 @@ return {
     fmt(
       [[
   <script lang='ts' setup>
-    {1}
+  {1}
   </script>
   ]],
       { insert_node(1, "") }
