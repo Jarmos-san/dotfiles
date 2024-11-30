@@ -9,6 +9,15 @@ return {
     { trig = "func", desc = "Create a function definition" },
     fmt(
       [[
+  /**
+   * {1} - {6}
+   *
+   * Parameters:
+   * {8}
+   *
+   * Returns:
+   * {7}
+   */
   func {1}({2} {3}) ({4}) {{
       return {5}
   }}
@@ -19,6 +28,9 @@ return {
         insert_node(3, "ArgumentType"),
         insert_node(4, "ReturnType"),
         insert_node(5, ""),
+        insert_node(6, "Describe the function briefly."),
+        insert_node(7, "Describe the return type briefly."),
+        insert_node(8, "Describe the function arguments."),
       }
     )
   ),
