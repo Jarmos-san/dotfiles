@@ -238,4 +238,28 @@ return {
     { trig = "errdoc", desc = "Creating a snippet for generating documentations for errors" },
     fmt([[ // {1}: {2} - {3}]], { insert_node(1, "ErrorName"), insert_node(2, "Type"), insert_node(3, "Description") })
   ),
+
+  -- Snippet for generating the documentations for a function
+  snippet(
+    { trig = "funcdoc", desc = "Create a snippet for generating documentations for functions" },
+    fmt(
+      [[
+        /**
+          * {1}: {2}
+          *
+          * Parameters:
+          *   {3}
+          *
+          * Returns:
+          *   {4}
+        */
+  ]],
+      {
+        insert_node(1, "FunctionName"),
+        insert_node(2, "Description"),
+        insert_node(3, "Parameters"),
+        insert_node(4, "Returns"),
+      }
+    )
+  ),
 }
