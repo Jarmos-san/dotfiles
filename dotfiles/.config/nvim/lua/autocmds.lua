@@ -140,3 +140,10 @@ autocmd("TermClose", {
     vim.cmd("bdelete")
   end,
 })
+
+autocmd("BufWritePre", {
+  desc = "Trim training whitespace after writing the contents of a buffer",
+  group = augroup("trim_trailing_whitespace"),
+  pattern = "*",
+  command = "%s/\\s\\+$//e",
+})
