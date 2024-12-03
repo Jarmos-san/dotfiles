@@ -146,4 +146,48 @@ return {
       { insert_node(1, "directive") }
     )
   ),
+
+  -- Snippet to generate a testcase function
+  snippet(
+    { trig = "testfunc", desc = "Create a testcase function" },
+    fmt(
+      [[
+  def test_{1}() -> None:
+      """{2}"""
+      {3}
+      assert False
+  ]],
+      { insert_node(1, ""), insert_node(2, "A brief test case function description."), insert_node(3, "") }
+    )
+  ),
+
+  -- Snippet to generate a testcase class
+  snippet(
+    { trig = "testclass", desc = "Create a test class" },
+    fmt(
+      [[
+  class Test{1}():
+      """{2}"""
+
+      def {3}(self) -> {4}:
+          """{5}"""
+          return {4}
+
+      def test_{6}(self) -> None:
+          """{7}"""
+          {8}
+          assert False
+  ]],
+      {
+        insert_node(1, ""),
+        insert_node(2, "Describe the test class"),
+        insert_node(3, "fixture"),
+        insert_node(4, "ReturnType"),
+        insert_node(5, "Describe the fixture"),
+        insert_node(6, ""),
+        insert_node(7, "Describe the test function"),
+        insert_node(8, ""),
+      }
+    )
+  ),
 }
