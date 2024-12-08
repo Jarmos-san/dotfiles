@@ -7,7 +7,7 @@ return {
     formatters_by_ft = {
       html = { "prettier" },
       javascript = { "prettier" },
-      go = { "gofmt" },
+      go = { "goimports-reviser", "golines", "gofmt" },
       markdown = { "prettier" },
       lua = { "stylua" },
       scss = { "prettier" },
@@ -50,6 +50,15 @@ return {
         "--case-indent",
         "--space-redirects",
         "--keep-padding",
+      },
+    }
+
+    -- Format long lines in Go source code
+    conform.formatters.golines = {
+      prepend_args = {
+        "--max-len=88",
+        "--reformat-tags",
+        "--shorten-comments",
       },
     }
   end,

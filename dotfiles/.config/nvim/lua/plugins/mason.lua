@@ -29,6 +29,8 @@ return {
         "debugpy",
         "dockerfile-language-server",
         "eslint-lsp",
+        "goimports",
+        "golines",
         "gopls",
         "hadolint",
         "html-lsp",
