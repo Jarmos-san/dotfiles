@@ -41,6 +41,7 @@ return {
       markdown = "80",
       typescriptreact = "81",
       rust = "100",
+      go = "88",
     },
   },
 }
