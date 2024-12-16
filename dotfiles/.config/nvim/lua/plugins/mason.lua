@@ -23,6 +23,8 @@ return {
     opts = {
       ensure_installed = {
         "astro-language-server",
+        "ansible-language-server",
+        "ansible-lint",
         "bash-language-server",
         "black",
         "css-lsp",
