@@ -54,6 +54,7 @@ alias tls="tmux list-session"
 alias tnew="tmux new-session"
 alias dots="tmux new-session -s dotfiles -n dotfiles -c ~/.dotfiles"
 alias tks="tmux kill-server"
+alias homelab="tmux new-session -s homelab -n homelab -c ~/projects/homelab"
 
 # Some complex Git aliases
 alias git-sync="git switch main && git fetch --prune && git branch -vv | awk '/: gone/ {print $1}' | xargs -r git branch --delete"
