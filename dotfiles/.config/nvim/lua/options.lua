@@ -124,3 +124,6 @@ if vim.fn.has("wsl") == 1 then
     cache_enabled = 0,
   }
 end
+
+-- Disable the "~" lines on the left side column shown only the end of buffer is reached
+vim.opt.fillchars = "eob: "
