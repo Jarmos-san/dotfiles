@@ -56,6 +56,7 @@ return {
         "vale-ls",
         "vue-language-server",
         "yaml-language-server",
+        "yamllint",
       },
     },
     config = function(_, opts)

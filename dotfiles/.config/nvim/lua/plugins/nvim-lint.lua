@@ -8,7 +8,8 @@ return {
       lua = { "selene" },
       sh = { "shellcheck" },
       python = { "ruff", "mypy" },
-      ["yaml.ansible"] = { "ansible-lint" },
+      ["yaml.ansible"] = { "ansible-lint", "yamllint" },
+      yaml = { "yamllint" },
     }
   end,
 }
