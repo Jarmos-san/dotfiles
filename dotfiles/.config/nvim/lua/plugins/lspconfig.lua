@@ -64,6 +64,7 @@ return {
     end
 
     local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+    -- local capabilities = require("blink.cmp").get_lsp_capabilities()
 
     -- INFO: Necessary configuration for the JSON LSP server. See the following URL for more information:
     -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#jsonls
