@@ -23,7 +23,7 @@ cd "$(dirname "$0")"
 ###############################################################################
 # Run APT updates on Debian/Ubuntu systems
 ###############################################################################
-run_apt_updates() {
+run_linux_updates() {
   os_name=$(grep -Po "(?<=^ID=).+" /etc/os-release | sed 's/"//g')
 
   case "$os_name" in
@@ -36,6 +36,9 @@ run_apt_updates() {
       sudo apt-get update
       sudo apt-get upgrade --yes
       sudo apt-get autoremove --purge --yes
+      ;;
+    fedora)
+      sudo dnf update --assumeyes
       ;;
     *)
       echo "Failed to identify the OS"
@@ -69,7 +72,7 @@ update_zsh_plugins() {
 ###############################################################################
 main() {
   # Run each functions below sequentially for safety reasons
-  run_apt_updates
+  run_linux_updates
   run_brew_updates
   update_zsh_plugins
 }
