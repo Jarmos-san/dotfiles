@@ -42,6 +42,7 @@ return {
       typescriptreact = "81",
       rust = "100",
       go = "88",
+      hcl = "120",
     },
   },
 }
