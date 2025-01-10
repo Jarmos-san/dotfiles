@@ -8,6 +8,7 @@ return {
       html = { "prettier" },
       javascript = { "prettier" },
       go = { "goimports-reviser", "golines", "gofmt" },
+      hcl = { "hclfmt" },
       markdown = { "prettier" },
       lua = { "stylua" },
       scss = { "prettier" },
