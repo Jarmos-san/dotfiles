@@ -47,9 +47,9 @@ for _, module in ipairs({ "options", "autocmds", "keymaps" }) do
 end
 
 -- My WIP personalised colour scheme
-vim.cmd.colorscheme("tansai")
+-- vim.cmd.colorscheme("tansai")
 
--- vim.cmd.colorscheme("evergarden")
+vim.cmd.colorscheme("evergarden")
 
 -- INFO: Enable an experimental fast module loader. See the PR for more information:
 -- https://github.com/neovim/neovim/pull/22668

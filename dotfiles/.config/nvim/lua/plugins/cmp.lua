@@ -1,203 +1,60 @@
 -- Module for configuring the completion capabilities of Neovim
 
 return {
-  {
-    enabled = true,
-    -- Better autocompletion support for Neovim.
-    "hrsh7th/nvim-cmp",
-    event = "InsertEnter",
-    config = function()
-      local cmp = require("cmp")
-      local luasnip = require("luasnip")
-
-      -- FIXME: Not sure what it exactly does.
-      -- require("cmp_luasnip_choice").setup({ auto_open = true })
-
-      local lspkind_icons = {
-        Text = "",
-        Method = "",
-        Function = "",
-        Constructor = "",
-        Field = "",
-        Variable = "",
-        Class = "ﴯ",
-        Interface = "",
-        Module = "",
-        Property = "ﰠ",
-        Unit = "",
-        Value = "",
-        Enum = "",
-        Keyword = "",
-        Snippet = "",
-        Color = "",
-        File = "",
-        Reference = "",
-        Folder = "",
-        EnumMember = "",
-        Constant = "",
-        Struct = "",
-        Event = "",
-        Operator = "",
-        TypeParameter = "",
-      }
-
-      cmp.setup({
-        view = {
-          entries = {
-            name = "custom",
-            selection_order = "near_cursor",
-          },
-        },
-        enabled = function()
-          local context = require("cmp.config.context")
-
-          if vim.api.nvim_get_mode().mode == "c" then
-            return true
-          else
-            return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment")
-          end
-        end,
-        preselect = cmp.PreselectMode.Item,
-        sorting = {
-          comparators = {
-            cmp.config.compare.offset,
-            cmp.config.compare.exact,
-            cmp.config.compare.score,
-            cmp.config.compare.kind,
-            cmp.config.compare.sort_text,
-            cmp.config.compare.length,
-            cmp.config.compare.order,
-          },
-        },
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
-        },
+  "saghen/blink.cmp",
+  version = "*",
+  ---@module 'blink.cmp'
+  ---@type blink.cmp.Config
+  opts = {
+    keymap = {
+      preset = "enter",
+    },
+    appearance = {
+      use_nvim_cmp_as_default = false,
+      nerd_font_variant = "mono",
+    },
+    snippets = { preset = "luasnip" },
+    sources = {
+      default = { "lsp", "path", "snippets", "buffer" },
+    },
+    completion = {
+      accept = {
+        auto_brackets = { enabled = true },
+      },
+      documentation = {
+        auto_show = true,
+        auto_show_delay_ms = 250,
+        treesitter_highlighting = true,
         window = {
-          completion = cmp.config.window.bordered(),
-          documentation = cmp.config.disable,
+          border = "rounded",
+          winblend = 20,
         },
-        formatting = {
-          fields = { "kind", "abbr", "menu" },
-          format = function(entry, vim_item)
-            vim_item.kind = string.format("%s %s", lspkind_icons[vim_item.kind], vim_item.kind)
-            vim_item.menu = ({
-              buffer = "[Buffer]",
-              nvim_lsp = "[LSP]",
-              luasnip = "[Snippet]",
-              nvim_lua = "[Neovim]",
-            })[entry.source.name]
-            return vim_item
-          end,
+      },
+      list = {
+        selection = {
+          preselect = true,
+          auto_insert = true,
         },
-        mapping = cmp.mapping.preset.insert({
-          -- Select the [n]ext item
-          ["<C-n>"] = cmp.mapping.select_next_item(),
-
-          -- Select the [p]revious item
-          ["<C-p>"] = cmp.mapping.select_prev_item(),
-
-          -- Scroll the documentation window [b]ack / [f]orward
-          ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-          ["<C-f>"] = cmp.mapping.scroll_docs(4),
-
-          -- Pressing Ctrl + y will accept the option
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
-
-          -- Manually trigger a completion from nvim-cmp.
-          ["<C-Space>"] = cmp.mapping.complete({}),
-
-          -- <c-l> will move you to the right of each of the expansion locations.
-          -- <c-h> is similar, except moving you backwards.
-          ["<C-l>"] = cmp.mapping(function()
-            if luasnip.expand_or_locally_jumpable() then
-              luasnip.expand_or_jump()
-            end
-          end, { "i", "s" }),
-          ["<C-h>"] = cmp.mapping(function()
-            if luasnip.locally_jumpable(-1) then
-              luasnip.jump(-1)
-            end
-          end, { "i", "s" }),
-        }),
-        sources = {
-          { name = "luasnip", priority = 1000 },
-          { name = "luasnip_choice", priority = 1000 },
-          { name = "nvim_lsp", priority = 500 },
-          { name = "nvim_lua", priority = 500 },
-          { name = "nvim_lsp_signature_help", priority = 500 },
-          { name = "path", priority = 250 },
-          -- {
-          --   name = "buffer",
-          --   option = {
-          --     keyword_length = 6,
-          --   },
-          -- },
+      },
+      ghost_text = {
+        enabled = true,
+      },
+      menu = {
+        border = "rounded",
+        winblend = 20,
+        draw = {
+          treesitter = { "lsp" },
+          columns = {
+            { "kind_icon" },
+            { "label" },
+            { "source_name" },
+          },
         },
-      })
-
-      -- Disable certain capabilities when working on Markdown files.
-      cmp.setup.filetype({ "markdown" }, { sources = { name = "buffer" } })
-    end,
-    dependencies = {
-      -- "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-nvim-lsp-signature-help",
-      "hrsh7th/cmp-path",
-      "hrsh7th/cmp-nvim-lua",
-      "hrsh7th/cmp-cmdline",
-      "hrsh7th/cmp-nvim-lsp-document-symbol",
-      "saadparwaiz1/cmp_luasnip",
+        auto_show = function(ctx)
+          return ctx.mode ~= "cmdline"
+        end,
+      },
     },
   },
-  {
-    "saghen/blink.cmp",
-    enabled = false,
-    version = "*",
-    opts = {
-      keymap = {
-        preset = "enter",
-      },
-      appearance = {
-        use_nvim_cmp_as_default = false,
-        nerd_font_variant = "mono",
-      },
-      snippets = {
-        expand = function(snippet)
-          require("luasnip").lsp_expand(snippet)
-        end,
-        active = function(filter)
-          if filter and filter.direction then
-            return require("luasnip").jumpable(filter.direction)
-          end
-          return require("luasnip").in_snippet()
-        end,
-        jump = function(direction)
-          require("luasnip").jump(direction)
-        end,
-      },
-      sources = {
-        default = { "lsp", "path", "luasnip", "buffer" },
-      },
-      completion = {
-        accept = {
-          auto_brackets = { enabled = true },
-        },
-        documentation = {
-          auto_show = true,
-          auto_show_delay_ms = 250,
-          treesitter_highlighting = true,
-          window = { border = "rounded" },
-        },
-        list = {
-          selection = function(ctx)
-            return ctx.mode == "cmdline" and "auto_insert" or "preselect"
-          end,
-        },
-      },
-    },
-    opts_extend = { "sources.default" },
-    dependencies = "L3MON4D3/LuaSnip",
-  },
+  dependencies = "L3MON4D3/LuaSnip",
 }
