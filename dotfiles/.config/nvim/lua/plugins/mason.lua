@@ -35,6 +35,7 @@ return {
         "golines",
         "gopls",
         "hadolint",
+        "hclfmt",
         "html-lsp",
         "json-lsp",
         "lua-language-server",
