@@ -21,7 +21,6 @@ alias cm="cmatrix -abs"
 alias rands="openssl rand -base64 32"
 alias ll="eza --long --all --classify --icons --git --ignore-glob='.git'"
 alias loc="wc -l"
-alias mkvenv="python3 -m venv .venv"
 alias tree="eza --tree --all --icons --ignore-glob='.git' --git-ignore"
 alias dateiso="date +%Y-%m-%dT%H:%M:%S%z"
 
@@ -34,8 +33,6 @@ alias pgdb="docker run --detach --name postgresql --rm -p 5432:5432 \
 alias rsdb="docker run --name redis --rm -p 6379:6379 \
     -e ALLOW_EMPTY_PASSWORD=yes \
     bitnami/redis:7.2"
-
-alias py="python3"
 
 # Terraform related aliases
 alias tfinit="terraform init"
@@ -58,3 +55,9 @@ alias homelab="tmux new-session -s homelab -n homelab -c ~/projects/homelab"
 
 # Some complex Git aliases
 alias git-sync="git switch main && git fetch --prune && git branch -vv | awk '/: gone/ {print $1}' | xargs -r git branch --delete"
+
+# Some aliases for working with Python
+alias mkvenv="python3 -m venv .venv"
+alias penv="eval $(poetry env activate)"
+alias py="python3"
+alias python="python3"
