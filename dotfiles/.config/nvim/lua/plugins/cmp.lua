@@ -32,8 +32,12 @@ return {
       },
       list = {
         selection = {
-          preselect = true,
-          auto_insert = true,
+          preselect = function(ctx)
+            return ctx.mode ~= "cmdline"
+          end,
+          auto_insert = function(ctx)
+            return ctx.mode ~= "cmdline"
+          end,
         },
       },
       ghost_text = {
@@ -50,9 +54,6 @@ return {
             { "source_name" },
           },
         },
-        auto_show = function(ctx)
-          return ctx.mode ~= "cmdline"
-        end,
       },
     },
   },
