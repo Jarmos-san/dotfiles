@@ -45,7 +45,7 @@ return {
       },
       menu = {
         border = "rounded",
-        winblend = 10,
+        winblend = 0,
         draw = {
           treesitter = { "lsp" },
           columns = {
