@@ -15,7 +15,9 @@ autocmd("BufWritePost", {
 map("n", "<F5>", "<CMD>terminal go run %<CR>")
 
 -- Configure the indent-based folds for Go buffers
-vim.opt.foldmethod = "indent"
-vim.opt.foldlevel = 0 -- Start with folds closed
-vim.opt.foldcolumn = "2" -- Show fold indicators on the left margin
-vim.opt.foldnestmax = 3 -- Maximum depth of folds
+if vim.api.nvim_buf_line_count(0) >= 100 then
+  vim.opt.foldmethod = "indent"
+  vim.opt.foldlevel = 0 -- Start with folds closed
+  vim.opt.foldcolumn = "2" -- Show fold indicators on the left margin
+  vim.opt.foldnestmax = 3 -- Maximum depth of folds
+end
