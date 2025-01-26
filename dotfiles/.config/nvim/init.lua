@@ -35,6 +35,9 @@ require("lazy").setup("plugins", {
       },
     },
   },
+  rocks = {
+    enabled = false,
+  },
 })
 
 -- Safely load the necessary user-defined Lua modules meant to customise Neovim.
