@@ -27,5 +27,9 @@ vim.opt.wrap = true
 vim.opt.linebreak = true
 
 -- Configure the indent-based folds for Python buffers
-vim.opt.foldmethod = "indent"
-vim.opt.foldlevel = 0
+if vim.api.nvim_buf_line_count(0) >= 100 then
+  vim.opt.foldmethod = "expr"
+  vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+  vim.opt.foldlevel = 0
+  vim.opt.foldcolumn = "auto"
+end
