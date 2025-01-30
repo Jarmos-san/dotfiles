@@ -127,3 +127,9 @@ end
 
 -- Disable the "~" lines on the left side column shown only the end of buffer is reached
 vim.opt.fillchars = "eob: "
+
+if vim.api.nvim_buf_line_count(0) >= 100 then
+  vim.opt.foldmethod = "expr"
+  vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+  vim.opt.foldlevel = 0
+end
