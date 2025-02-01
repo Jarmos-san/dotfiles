@@ -127,3 +127,6 @@ end
 
 -- Disable the "~" lines on the left side column shown only the end of buffer is reached
 vim.opt.fillchars = "eob: "
+
+-- Remove the command line section completely!
+vim.opt.cmdheight = 0
