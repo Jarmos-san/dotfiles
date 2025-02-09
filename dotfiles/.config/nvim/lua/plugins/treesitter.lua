@@ -122,10 +122,4 @@ return {
     end,
     dependencies = { "theHamsta/nvim-treesitter-pairs", "nvim-treesitter/nvim-treesitter-textobjects" },
   },
-
-  {
-    "windwp/nvim-ts-autotag",
-    event = "BufReadPost",
-    ft = { "typescriptreact", "javascriptreact", "html" },
-  },
 }
