@@ -33,7 +33,7 @@ return {
         treesitter_highlighting = true,
         window = {
           border = "rounded",
-          winblend = 20,
+          winblend = 0,
         },
       },
       list = {
