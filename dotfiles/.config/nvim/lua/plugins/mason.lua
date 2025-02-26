@@ -31,7 +31,7 @@ return {
         "debugpy",
         "dockerfile-language-server",
         "eslint-lsp",
-        "goimports",
+        "goimports-reviser",
         "golines",
         "gopls",
         "hadolint",
