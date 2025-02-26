@@ -62,3 +62,6 @@ alias mkvenv="python3 -m venv .venv"
 # alias penv="eval $(poetry env activate)"
 alias py="python3"
 alias python="python3"
+
+# Some aliases for working with Go
+alias goimports="goimports-reviser -use-cache -rm-unused -set-alias"
