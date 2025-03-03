@@ -68,7 +68,6 @@ return {
       prepend_args = {
         "-rm-unused", -- Remove unused imports
         "-set-alias", -- Create aliases for versioned imports
-        "-use-cache", -- Speed up the formatting process
       },
     }
   end,
