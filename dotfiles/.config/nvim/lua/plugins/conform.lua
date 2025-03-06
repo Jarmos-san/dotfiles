@@ -13,7 +13,7 @@ return {
       lua = { "stylua" },
       scss = { "prettier" },
       sh = { "shfmt" },
-      python = { "ruff_format" },
+      python = { "ruff_organize_imports", "ruff_format" },
       typescript = { "prettier" },
       vue = { "prettier" },
       yaml = { "prettier" },
