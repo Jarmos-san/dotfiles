@@ -11,11 +11,16 @@ return {
       sign = { color = "none" },
       float = {
         color = "mantle",
-        invert_border = false,
+        invert_border = true,
       },
       completion = {
         color = "surface0",
       },
+    },
+    integrations = {
+      blink_cmp = true,
+      gitsigns = true,
+      telescope = true,
     },
   },
 }
