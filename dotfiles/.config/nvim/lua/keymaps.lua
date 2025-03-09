@@ -93,6 +93,7 @@ map("n", "<leader>lg", telescope.live_grep, { desc = "Perform a grep on the file
 -- Open a Terminal inside Neovim itself
 map("n", "<leader>t", terminal.float, { desc = "Open the terminal prompt in a horizontal split" })
 map("n", "<leader>tv", terminal.vertical, { desc = "Open the terminal prompt in vertical split" })
+map({ "n", "i" }, "<C-t>", terminal.toggle, { desc = "Toggle a floating terminal open/close" })
 
 -- Exit terminal mode in builtin terminal with an easier to use shortcut
 map("t", "jk", "<C-\\><C-n>", { desc = "Exit terminal mode" })
