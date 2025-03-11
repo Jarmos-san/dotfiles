@@ -38,6 +38,7 @@ return {
         "tsx",
         "toml",
         "typescript",
+        "typst",
         "yaml",
         "vim",
         "vimdoc",
