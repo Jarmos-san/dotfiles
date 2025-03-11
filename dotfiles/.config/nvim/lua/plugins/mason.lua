@@ -53,7 +53,7 @@ return {
         "tailwindcss-language-server",
         "terraform-ls",
         "typescript-language-server",
-        "typst-lsp",
+        "tinymist",
         "vale-ls",
         "vue-language-server",
         "yaml-language-server",
