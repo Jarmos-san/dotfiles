@@ -164,6 +164,9 @@ update_system() {
       sudo apt-get update
       sudo apt-get upgrade --yes
       ;;
+    fedora)
+      sudo dnf upgrade --refresh --assumeyes
+      ;;
     *)
       error "Failed to identify the OS"
       exit 1
