@@ -76,6 +76,28 @@ error() {
   echo -e "\033[0;31m[ERROR]\033[0m $1"
 }
 
+# Check if the script is running as root
+if [[ "$EUID" -ne 0 ]]; then
+  warn "Please run with root (or \"sudo\") privileges!"
+fi
+
+###############################################################################
+# Configure the system to not require a password prompt for sudo privileges
+###############################################################################
+sudo_nopasswd() {
+  local user
+  local sudoers_file
+
+  user="jarmos"
+  sudoers_file="/etc/sudoers.d/{$user}_nopasswd"
+
+  echo "$user ALL=(ALL) NOPASSWD: ALL" > "$sudoers_file"
+
+  chmod 0440 "$sudoers_file"
+
+  success "Passwordless \"sudo\" has been enabled for user \"$user\"."
+}
+
 ###############################################################################
 # Warn user and prompt for confirmation before executing the script
 ###############################################################################
@@ -440,6 +462,9 @@ EOF
 main() {
   # Perform a preliminary system update before starting the automated setup
   update_system
+
+  # Configure the system for passwordless sudo privileges
+  sudo_nopasswd
 
   # Ensure certain folders are present and/or created for a smooth operation
   create_necessary_dirs
