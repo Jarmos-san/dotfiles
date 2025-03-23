@@ -24,6 +24,7 @@ return {
         "hcl",
         "html",
         "javascript",
+        "jinja",
         "json",
         "lua",
         "make",
