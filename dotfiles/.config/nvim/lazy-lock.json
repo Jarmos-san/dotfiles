@@ -13,7 +13,7 @@
   "mini.comment": { "branch": "main", "commit": "264b8a63edd5a9a41d5361a1d52c13131c3c51a2" },
   "mini.indentscope": { "branch": "main", "commit": "8ce41a77eed7f4121c83c67fda5e2e86af999e6d" },
   "mini.move": { "branch": "main", "commit": "c8b30e92dd2668dd6e56a9a23cb7d4ee38c2266d" },
-  "mini.pairs": { "branch": "main", "commit": "1a3e73649c0eaef2f6c48ce1e761c6f0a7c11918" },
+  "mini.pairs": { "branch": "main", "commit": "cd9d95e33645781f86ca5ffe0a6885a22d59f127" },
   "mini.splitjoin": { "branch": "main", "commit": "efe24ba54f9623cb05698355981ec05278976788" },
   "mini.starter": { "branch": "main", "commit": "736c5177bd90cc852c05d903f662f0fc395a4b4b" },
   "mini.surround": { "branch": "main", "commit": "c92d262deae79545b7674b2069332116461a85f3" },
@@ -21,12 +21,12 @@
   "nvim-lint": { "branch": "master", "commit": "936197073214c26a347fb933c9459c8766376b23" },
   "nvim-lspconfig": { "branch": "master", "commit": "fb733ac734249ccf293e5c8018981d4d8f59fa8f" },
   "nvim-notify": { "branch": "master", "commit": "22f29093eae7785773ee9d543f8750348b1a195c" },
-  "nvim-treesitter": { "branch": "master", "commit": "20a7e40203dab3454686e057adecd805f3d6d334" },
+  "nvim-treesitter": { "branch": "master", "commit": "d26ce0126694283cf32bf1f4192ef37ef404c037" },
   "nvim-treesitter-pairs": { "branch": "master", "commit": "f8c195d4d8464cba6971bf8de2d6a5c8c109b37a" },
   "nvim-treesitter-textobjects": { "branch": "master", "commit": "9937e5e356e5b227ec56d83d0a9d0a0f6bc9cad4" },
   "nvim-ts-context-commentstring": { "branch": "main", "commit": "1b212c2eee76d787bbea6aa5e92a2b534e7b4f8f" },
   "plenary.nvim": { "branch": "master", "commit": "857c5ac632080dba10aae49dba902ce3abf91b35" },
-  "schemastore.nvim": { "branch": "main", "commit": "f293a809fc93e972fcc71fde473f55606cadb091" },
+  "schemastore.nvim": { "branch": "main", "commit": "236438da47cafc39b15d2017a229a6613c581055" },
   "smartcolumn.nvim": { "branch": "main", "commit": "92f3773af80d674f1eb61e112dca79e2fa449fd1" },
   "telescope.nvim": { "branch": "master", "commit": "a4ed82509cecc56df1c7138920a1aeaf246c0ac5" }
 }
