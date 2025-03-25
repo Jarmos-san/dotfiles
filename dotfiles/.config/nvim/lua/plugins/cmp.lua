@@ -21,7 +21,7 @@ return {
     },
     snippets = { preset = "luasnip" },
     sources = {
-      default = { "lsp", "path", "snippets", "buffer" },
+      default = { "lsp", "path", "snippets" },
     },
     completion = {
       accept = {
