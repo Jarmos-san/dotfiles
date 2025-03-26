@@ -31,6 +31,7 @@ return {
       "Trouble",
       "tmux",
       "toml",
+      "typst",
       "zsh",
     },
     custom_colorcolumn = {
