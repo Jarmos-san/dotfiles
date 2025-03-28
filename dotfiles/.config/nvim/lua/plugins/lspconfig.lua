@@ -12,6 +12,7 @@ return {
       underline = true, -- Show diagnostic errors with a squigly underline
       update_in_insert = true, -- Update the diagnostic message even when in Insert mode
       severity_sort = true, -- Configure Neovim to sort the error messages according to the severity.
+      virtual_text = true, -- Enable the virtual texts
     })
     -- Configure the floating window containing information about the object under the cursor
     vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
