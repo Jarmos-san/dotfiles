@@ -12,7 +12,7 @@ return {
       underline = true, -- Show diagnostic errors with a squigly underline
       update_in_insert = true, -- Update the diagnostic message even when in Insert mode
       severity_sort = true, -- Configure Neovim to sort the error messages according to the severity.
-      virtual_text = true, -- Enable the virtual texts
+      virtual_lines = true, -- Display prettier diagnostics on the buffer
     })
     -- Configure the floating window containing information about the object under the cursor
     vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
@@ -48,9 +48,6 @@ return {
         buffer = bufnr,
         callback = function()
           local hover_window_configs = {
-            -- This needs to be false else the cursor swtiches to the diagnostic window.
-            -- See this discussion thread for more information on this concern:
-            -- https://neovim.discourse.group/t/cursor-switching-floating-window-diagnostic-on-movement/1471/2?u=jarmos-san
             focusable = false,
             close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
             border = "rounded",
@@ -64,7 +61,6 @@ return {
       })
     end
 
-    -- local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
     local capabilities = require("blink.cmp").get_lsp_capabilities()
 
     -- INFO: Necessary configuration for the JSON LSP server. See the following URL for more information:
@@ -151,12 +147,6 @@ return {
       on_attach = on_attach,
       capabilities = capabilities,
     })
-
-    -- INFO: The TyepScript LSP is disable temporarily until I can figure out its usefulness
-    -- Also, check out the issues with Volar (the LSP server for Vue.js) which might interfere
-    -- with TypeScript projects.
-    -- TypeScript and other related LSP configurations
-    -- lspconfig["tsserver"].setup({ on_attach = on_attach, capabilities = capabilities })
 
     -- INFO: See the following resources to learn more about configuring the LSP to work with
     -- Vue 3 projects (and its embedded language environments):

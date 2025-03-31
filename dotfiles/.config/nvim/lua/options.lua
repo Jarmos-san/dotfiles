@@ -130,3 +130,6 @@ vim.opt.fillchars = "eob: "
 
 -- Remove the command line section completely!
 vim.opt.cmdheight = 0
+
+-- Add borders for all floating windows
+vim.opt.winborder = "rounded"
