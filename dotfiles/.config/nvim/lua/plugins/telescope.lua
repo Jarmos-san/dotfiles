@@ -11,6 +11,16 @@ return {
     pickers = {
       find_files = {
         find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
+        -- TODO: Figure a way out to make vertical splits through Telescope
+        -- mappings = {
+        --   i = {
+        --     ["<CR>"] = function(bufnr)
+        --       if vim.bo[0].filetype ~= "ministarter" then
+        --         require("telescope.actions").select_vertical(bufnr)
+        --       end
+        --     end,
+        --   },
+        -- },
       },
     },
   },
