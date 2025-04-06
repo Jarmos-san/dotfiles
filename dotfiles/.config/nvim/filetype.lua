@@ -22,5 +22,6 @@ vim.filetype.add({
     -- INFO: Match filenames like - ".env.example", ".env.local" and so on
     ["%.env%.[%w_.-]+"] = "dotenv",
     [".*/ansible/.*%.ya?ml"] = "yaml.ansible", -- Match all YAML files under the "ansible" directory
+    [".*/ansible/.*%.ya?ml%.j2"] = "yaml", -- Ansible template should be considered YAML files
   },
 })
