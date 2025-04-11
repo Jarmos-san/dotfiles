@@ -66,7 +66,8 @@ return {
     -- Format the import statements in Go source code
     conform.formatters["goimports-reviser"] = {
       prepend_args = {
-        "-rm-unused", -- Remove unused imports
+        -- FIXME: It removes "used" statements too!!!!
+        -- "-rm-unused", -- Remove unused imports
         "-set-alias", -- Create aliases for versioned imports
       },
     }
