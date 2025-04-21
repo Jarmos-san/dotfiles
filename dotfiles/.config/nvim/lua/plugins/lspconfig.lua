@@ -78,7 +78,7 @@ return {
           runtime = { version = "LuaJIT" },
           diagnostics = {
             globals = { "vim" },
-            enable = false, -- Disable Lua diagnostics since it interferes with Selene
+            enable = true, -- Disable Lua diagnostics since it interferes with Selene
           },
           workspace = {
             -- Load the Neovim runtime files for usage during Neovim configuration
