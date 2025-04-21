@@ -3,48 +3,65 @@
 -- Inspirational resources are as follows:
 -- https://nuxsh.is-a.dev/blog/custom-nvim-statusline.html
 
+---@class Statusline
+---@field render fun(): string
 local M = {}
 
--- Return the current "mode" in Neovim (see ":h mode" for more info on this regards)
-local mode = function()
-  local modes = {
-    ["n"] = "NORMAL",
-    ["no"] = "NORMAL",
-    ["v"] = "VISUAL",
-    ["V"] = "VISUAL BLOCK",
-    ["s"] = "SELECT",
-    ["S"] = "SELECT LINE",
-    [""] = "SELECT BLOCK",
-    ["i"] = "INSERT",
-    ["ic"] = "INSERT",
-    ["R"] = "REPLACE",
-    ["Rv"] = "VISUAL REPLACE",
-    ["c"] = "COMMAND",
-    ["cv"] = "VIM EX",
-    ["ce"] = "EX",
-    ["r"] = "PROMPT",
-    ["rm"] = "MOAR",
-    ["r?"] = "CONFIRM",
-    ["!"] = "SHELL",
-    ["t"] = "TERMINAL",
-  }
+---@type {[string]: string}
+---The various Vim modes and their respective codes as returned by the mode() function.
+---See vim.api.nvim_get_mode for more information.
+local modes = {
+  ["n"] = "NORMAL",
+  ["no"] = "NORMAL",
+  ["v"] = "VISUAL",
+  ["V"] = "VISUAL BLOCK",
+  ["s"] = "SELECT",
+  ["S"] = "SELECT LINE",
+  [""] = "SELECT BLOCK",
+  ["i"] = "INSERT",
+  ["ic"] = "INSERT",
+  ["R"] = "REPLACE",
+  ["Rv"] = "VISUAL REPLACE",
+  ["c"] = "COMMAND",
+  ["cv"] = "VIM EX",
+  ["ce"] = "EX",
+  ["r"] = "PROMPT",
+  ["rm"] = "MOAR",
+  ["r?"] = "CONFIRM",
+  ["!"] = "SHELL",
+  ["t"] = "TERMINAL",
+  ["nt"] = "TERMINAL",
+}
 
+---@return string
+---Return the current "mode" and return a uppercase formatted string representation.
+---@see vim.api.nvim_get_mode
+local get_mode = function()
+  ---@type string
   local current_mode = vim.api.nvim_get_mode().mode
 
   return string.format(" %s", modes[current_mode]:upper())
 end
 
--- Return the LSP diagnostics info from the client to the statusline
-local diagnostics = function()
-  -- Initialise the count of the diagnostic information returned by the client
-  local count = {}
+---@return string
+---Get the total number of diagnostic entries in the current buffer and return a nicely
+---formatted string with set icons to go with them.
+---@see vim.diagnostic
+local get_diagnostics = function()
+  ---@type {['errors']: integer, ['warnings']: number, ['info']: number, ['hints']: number}
+  local count = {
+    errors = 0,
+    warnings = 0,
+    info = 0,
+    hints = 0,
+  }
 
-  -- The levels of severity of the LSP diagnostics
+  ---@type { [string]: integer }
   local levels = {
-    errors = "Error",
-    warnings = "Warn",
-    info = "Info",
-    hints = "Hint",
+    errors = vim.diagnostic.severity.ERROR,
+    warnings = vim.diagnostic.severity.WARN,
+    info = vim.diagnostic.severity.INFO,
+    hints = vim.diagnostic.severity.HINT,
   }
 
   for key, level in pairs(levels) do
@@ -57,26 +74,28 @@ local diagnostics = function()
   local info = ""
 
   if count["errors"] ~= 0 then
-    errors = " %#LspDiagnosticsSignError# " .. count["errors"]
+    errors = " %#LspDiagnosticsSignError#? " .. count["errors"]
   end
 
   if count["warnings"] ~= 0 then
-    errors = " %#LspDiagnosticsSignWarning# " .. count["warnings"]
+    warnings = " %#LspDiagnosticsSignWarning# " .. count["warnings"]
   end
 
   if count["hints"] ~= 0 then
-    errors = " %#LspDiagnosticsSignHint# " .. count["hints"]
+    hints = " %#LspDiagnosticsSignHint#? " .. count["hints"]
   end
 
   if count["info"] ~= 0 then
-    errors = " %#LspDiagnosticsSignInformation# " .. count["info"]
+    info = " %#LspDiagnosticsSignInformation#? " .. count["info"]
   end
 
   return errors .. warnings .. hints .. info .. "%#Normal#"
 end
 
--- Return the full filename path
-local filepath = function()
+---@return string
+---Return the full filename path
+local get_filepath = function()
+  ---@type string
   local fpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.")
 
   if fpath == "" or fpath == "." then
@@ -86,30 +105,36 @@ local filepath = function()
   return string.format(" %s", fpath)
 end
 
--- Return the current location of the cursor
-local cursor_location = function()
+---@return string
+---Return the current location of the cursor
+local get_cursor_location = function()
+  ---@type integer
   local line = vim.fn.line(".")
+  ---@type integer
   local column = vim.fn.col(".")
 
   return string.format("%s:%s", line, column)
 end
 
--- Return the filetype of the current buffer
-local filetype = function()
+---@return string
+---Return the filetype of the current buffer
+local get_filetype = function()
+  ---@type string
   local ftype = vim.bo.filetype
 
   return string.format(" [%s]", ftype)
 end
 
--- Render the statusline programatically
+---@return string
+---Render the statusline programatically
 function M.render()
   return table.concat({
-    mode(),
-    diagnostics(),
-    filepath(),
+    get_mode(),
+    get_diagnostics(),
+    get_filepath(),
     "%=",
-    cursor_location(),
-    filetype(),
+    get_cursor_location(),
+    get_filetype(),
   })
 end
 
