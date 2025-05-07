@@ -2,7 +2,7 @@
 
 return {
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     cmd = { "LspInstall", "LspUninstall", "Mason" },
     opts = {
       -- Configure the plugin to have rounded borders
