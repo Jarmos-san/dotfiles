@@ -29,9 +29,6 @@ return {
     require("lspconfig.ui.windows").default_options.border = "rounded"
 
     local on_attach = function(_, bufnr)
-      -- Remove the default LSP keymaps
-      vim.keymap.del("n", "gr")
-
       map("n", "gd", telescope.lsp_definitions, { desc = "Jump to the object definition" })
       map("n", "gD", vim.lsp.buf.declaration, { desc = "Jump to the object declaration" })
       map("n", "gT", telescope.lsp_type_definitions, { desc = "Get the type documentations" })
