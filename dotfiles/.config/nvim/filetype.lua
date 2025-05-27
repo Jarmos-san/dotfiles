@@ -23,5 +23,6 @@ vim.filetype.add({
     ["%.env%.[%w_.-]+"] = "dotenv",
     [".*/ansible/.*%.ya?ml"] = "yaml.ansible", -- Match all YAML files under the "ansible" directory
     [".*/ansible/.*%.ya?ml%.j2"] = "yaml", -- Ansible template should be considered YAML files
+    [".*/*.conf*"] = "conf", -- Config files (like "postgresql.conf" and so on)
   },
 })
