@@ -5,6 +5,7 @@ return {
   event = "BufRead",
   opts = {
     disabled_filetypes = {
+      "caddy",
       "checkhealth",
       "conf",
       "dosini",
