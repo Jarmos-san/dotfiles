@@ -12,6 +12,7 @@ return {
       local parsers = {
         "astro",
         "bash",
+        "caddy",
         "comment",
         "css",
         "diff",
