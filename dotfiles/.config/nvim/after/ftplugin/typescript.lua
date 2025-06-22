@@ -1,3 +1,6 @@
+-- Start the Treesitter parsing process for TypeScript files
+vim.treesitter.start()
+
 -- Folding configurations for Neovim
 if vim.api.nvim_buf_line_count(0) >= 100 then
   vim.o.foldmethod = "expr" -- Allow folding using the "nvim-treesitter" plugin
