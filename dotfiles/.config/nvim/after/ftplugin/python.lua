@@ -26,6 +26,9 @@ autocmd({ "BufWritePost" }, {
 vim.opt.wrap = true
 vim.opt.linebreak = true
 
+-- Start the Treesitter parse process for highligting Python files
+vim.treesitter.start()
+
 -- Configure the indent-based folds for Python buffers
 if vim.api.nvim_buf_line_count(0) >= 100 then
   vim.opt.foldmethod = "expr"
