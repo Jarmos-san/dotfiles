@@ -7,7 +7,7 @@ return {
   init = function()
     vim.opt.updatetime = 250 -- Make Neovim to display the diagnostic hover window as fast as possible.
     -- Setup the LSP plugin to log only error messages else the log file grows too large eventually!
-    vim.lsp.set_log_level("error")
+    vim.lsp.set_log_level(vim.log.levels.ERROR)
     vim.diagnostic.config({
       underline = true, -- Show diagnostic errors with a squigly underline
       update_in_insert = true, -- Update the diagnostic message even when in Insert mode
