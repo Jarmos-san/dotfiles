@@ -148,21 +148,70 @@ return {
       capabilities = capabilities,
     })
 
-    -- INFO: See the following resources to learn more about configuring the LSP to work with
-    -- Vue 3 projects (and its embedded language environments):
-    -- https://github.com/vuejs/language-tools/issues/3925
-    -- https://github.com/vuejs/language-tools?tab=readme-ov-file#none-hybrid-modesimilar-to-takeover-mode-configuration-requires-vuelanguage-server-version-207
-    -- Vue 3 related LSP configurations
-    lspconfig["volar"].setup({
+    --[[
+    -- Configurations required for the Vue LSP server to work as expected
+    --]]
+    -- Path to the LSP server executable
+    local vue_language_server_path = vim.fn.stdpath("data")
+      .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
+
+    -- Configuration to initialise the 'vtsls' LSP server with
+    -- NOTE: The VUe LSP server does not work as expected with the official `tsserver`
+    local vtsls_config = {
       filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
-      init_options = {
-        vue = {
-          hybridMode = false,
+      settings = {
+        vtsls = {
+          tsserver = {
+            globalPlugins = {
+              {
+                name = "@vue/typescript-plugin",
+                location = vue_language_server_path,
+                languages = { "vue" },
+                configNamespace = "typescript",
+              },
+            },
+          },
         },
       },
-      on_attach = on_attach,
-      capabilities = capabilities,
-    })
+    }
+
+    -- Configurations the Vue LSP is supposed to be initialised with
+    local vue_ls_config = {
+      on_init = function(client)
+        client.handlers["tsserver/request"] = function(_, result, context)
+          local clients = vim.lsp.get_clients({ bufnr = context.bufnr, name = "vtsls" })
+          if #clients == 0 then
+            vim.notify("Could not find `vtsls` LSP client, `vue_ls` would not work without it.", vim.log.levels.ERROR)
+            return
+          end
+
+          local ts_client = clients[1]
+
+          local param = unpack(result)
+          local id, command, payload = unpack(param)
+          ts_client:exec_cmd({
+            title = "vue_request_forward",
+            command = "typescript.tsserverRequest",
+            arguments = {
+              command,
+              payload,
+            },
+          }, {
+            bufnr = context.bufnr,
+          }, function(_, r)
+            local response_data = { {
+              id,
+              r.body,
+            } }
+            client:notify("tsserver/response", response_data)
+          end)
+        end
+      end,
+    }
+
+    vim.lsp.config("vtsls", vtsls_config)
+    vim.lsp.config("vue_ls", vue_ls_config)
+    vim.lsp.enable({ "vtsls", "vue_ls" })
 
     -- Enable the LSP for Ansible work
     lspconfig["ansiblels"].setup({
