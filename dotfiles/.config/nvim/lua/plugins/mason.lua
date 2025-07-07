@@ -55,6 +55,7 @@ return {
         "typescript-language-server",
         "tinymist",
         "vale-ls",
+        "vtsls",
         "vue-language-server",
         "yaml-language-server",
         "yamllint",
