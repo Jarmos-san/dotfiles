@@ -51,7 +51,7 @@ inspiration.
 - Maria José Solano's
   [MariaSolOs/dotfiles](https://github.com/MariaSolOs/dotfiles)
 - TJ Devrie's [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
-
+<!-- - https://youtu.be/G3NJzFX6XhY?si=84rUTb6t337aHHfC -->
 More will be added as & when I come across any.
 
 ## Terms & Conditions of Usage
