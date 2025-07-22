@@ -67,30 +67,6 @@ return {
     -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#jsonls
     capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-    -- INFO: The official recommended configurations will throw a lot of errors and is generally very buggy!
-    -- LSP configurations for Lua files
-    lspconfig["lua_ls"].setup({
-      on_attach = on_attach,
-      capabilities = capabilities,
-      settings = {
-        Lua = {
-          format = { enable = false }, -- Disable the LSP-based formatting
-          runtime = { version = "LuaJIT" },
-          diagnostics = {
-            globals = { "vim" },
-            enable = true, -- Disable Lua diagnostics since it interferes with Selene
-          },
-          workspace = {
-            -- Load the Neovim runtime files for usage during Neovim configuration
-            library = vim.api.nvim_get_runtime_file("", true),
-            -- Disable checking for 3rd-party libraries
-            checkThirdParty = false,
-          },
-          telemetry = { enable = false },
-        },
-      },
-    })
-
     -- LSP configurations for JSON files
     lspconfig["jsonls"].setup({
       on_attach = on_attach,
