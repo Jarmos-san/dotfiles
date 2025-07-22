@@ -67,18 +67,6 @@ return {
     -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#jsonls
     capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-    -- LSP configurations for JSON files
-    lspconfig["jsonls"].setup({
-      on_attach = on_attach,
-      capabilties = capabilities,
-      settings = {
-        json = {
-          schemas = require("schemastore").json.schemas(),
-          validate = { enable = true },
-        },
-      },
-    })
-
     -- LSP configurations for YAML files
     lspconfig["yamlls"].setup({
       on_attach = on_attach,
@@ -193,15 +181,6 @@ return {
     lspconfig["ansiblels"].setup({
       on_attach = on_attach,
       capabilities = capabilities,
-    })
-
-    -- Enable the LSP for Typst files
-    lspconfig["tinymist"].setup({
-      on_attach = on_attach,
-      capabilities = capabilities,
-      settings = {
-        formatterMode = "typstyle",
-      },
     })
   end,
   dependencies = {
