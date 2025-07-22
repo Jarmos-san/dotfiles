@@ -25,7 +25,6 @@ autocmd("TermOpen", {
     vim.opt.number = false
     vim.opt.relativenumber = false
     vim.cmd("startinsert | 1")
-    -- TODO: Figure out a keybind to get out Insert mode within the terminal
   end,
 })
 
