@@ -28,6 +28,7 @@ return {
         "html",
         "javascript",
         "jinja",
+        "jsdoc",
         "json",
         "lua",
         "make",
