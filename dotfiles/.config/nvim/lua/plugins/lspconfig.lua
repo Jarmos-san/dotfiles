@@ -67,8 +67,6 @@ return {
     -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#jsonls
     capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-    lspconfig["gopls"].setup({ on_attach = on_attach, capabilities = capabilities })
-
     -- LSP configurations for working with Astro files
     lspconfig["astro"].setup({ on_attach = on_attach, capabilities = capabilities })
 
