@@ -70,13 +70,6 @@ return {
     -- LSP configurations for working with Astro files
     lspconfig["astro"].setup({ on_attach = on_attach, capabilities = capabilities })
 
-    -- Terraform and HCL related LSP configurations
-    lspconfig["terraformls"].setup({
-      filetypes = { "terraform", "hcl", "tf" },
-      on_attach = on_attach,
-      capabilities = capabilities,
-    })
-
     --[[
     -- Configurations required for the Vue LSP server to work as expected
     --]]
