@@ -36,3 +36,6 @@ if vim.api.nvim_buf_line_count(0) >= 100 then
   vim.opt.foldlevel = 0
   vim.opt.foldcolumn = "auto"
 end
+
+-- Start the "pyright" LSP server
+vim.lsp.enable("pyright", true)
