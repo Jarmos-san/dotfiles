@@ -67,9 +67,6 @@ return {
     -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#jsonls
     capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-    -- LSP configurations for Dockerfile
-    lspconfig["dockerls"].setup({ on_attach = on_attach, capabilities = capabilities })
-
     -- LSP configurations for TailwindCSS classes
     lspconfig["tailwindcss"].setup({ on_attach = on_attach, capabilities = capabilities })
 
