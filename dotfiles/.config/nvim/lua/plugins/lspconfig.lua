@@ -67,9 +67,6 @@ return {
     -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#jsonls
     capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-    -- LSP configurations for working with Astro files
-    lspconfig["astro"].setup({ on_attach = on_attach, capabilities = capabilities })
-
     --[[
     -- Configurations required for the Vue LSP server to work as expected
     --]]
