@@ -27,6 +27,7 @@ return {
         "ansible-lint",
         "bash-language-server",
         "black",
+        "css-lsp",
         "debugpy",
         "dockerfile-language-server",
         "eslint-lsp",
