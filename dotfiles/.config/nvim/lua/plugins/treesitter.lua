@@ -58,5 +58,7 @@ return {
       require("nvim-treesitter").setup()
       require("nvim-treesitter").install(parsers):wait(300000)
     end,
+    -- TODO: Fix OOM issues which is crashing WSL entirely
+    enabled = false,
   },
 }
