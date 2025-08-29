@@ -2,7 +2,7 @@
 
 return {
   {
-    "echasnovski/mini.comment",
+    "nvim-mini/mini.comment",
     event = { "BufNewFile", "BufReadPost" },
     opts = {
       -- FIXME: Blank lines are also commented (need a fix someday)
@@ -18,7 +18,7 @@ return {
   },
 
   {
-    "echasnovski/mini.pairs",
+    "nvim-mini/mini.pairs",
     event = { "CmdwinEnter", "InsertEnter" },
     opts = {
       modes = {
@@ -33,7 +33,7 @@ return {
   },
 
   {
-    "echasnovski/mini.surround",
+    "nvim-mini/mini.surround",
     event = "BufReadPost",
     config = function()
       require("mini.surround").setup()
@@ -41,7 +41,7 @@ return {
   },
 
   {
-    "echasnovski/mini.indentscope",
+    "nvim-mini/mini.indentscope",
     event = "BufReadPost",
     config = function()
       require("mini.indentscope").setup()
@@ -49,7 +49,7 @@ return {
   },
 
   {
-    "echasnovski/mini.bufremove",
+    "nvim-mini/mini.bufremove",
     event = { "BufReadPost", "BufNewFile" },
     config = function()
       require("mini.bufremove").setup()
@@ -58,7 +58,7 @@ return {
 
   {
     -- Plugin to show a nice, minimal and easy-to-use startup screen
-    "echasnovski/mini.starter",
+    "nvim-mini/mini.starter",
     event = "VimEnter",
     opts = function()
       local header = "Hello World!"
@@ -79,7 +79,7 @@ return {
   },
 
   {
-    "echasnovski/mini.splitjoin",
+    "nvim-mini/mini.splitjoin",
     event = "BufReadPost",
     config = function()
       require("mini.splitjoin").setup()
@@ -87,7 +87,7 @@ return {
   },
 
   {
-    "echasnovski/mini.move",
+    "nvim-mini/mini.move",
     event = "BufReadPost",
     config = function()
       require("mini.move").setup()
