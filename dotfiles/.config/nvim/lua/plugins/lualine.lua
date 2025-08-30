@@ -10,7 +10,6 @@ return {
     section_separators = {},
     component_separator = "|",
     theme = "gruvbox",
-    globalstatus = true,
     disabled_filetypes = {
       statusline = {
         "dashboard",
