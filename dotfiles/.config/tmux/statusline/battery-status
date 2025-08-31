@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+
+###############################################################################
+#
+# Battery Status Check
+#
+# This script prints the battery charge percentage of the system Tmux is
+# running on and it is designed to:
+#   - Detect whether Tmux is running inside a WSL2 distribution.
+#   - Fetch the battery percentage using the relevant API available on the
+#       system for e.g. using PowerShell in WSL2.
+#   - Print the battery percentage with an appropriate glyph (Nerd Font
+#       required).
+#
+# **NOTE**: The script is intended to be run when initialising a Tmux
+# environment. Executing the script in a standalone manner may yield unexpected
+# results.
+#
+# Author: Somraj Saha (contact@jarmos.dev)
+#
+# License: MIT License (https://github.com/Jarmos-san/dotfiles?tab=MIT-1-ov-file#readme)
+#
+###############################################################################
+
+import os
+import platform
+import subprocess
+
+
+def battery_wsl2() -> str:
+    """Retrieve the remaining battery percentage from the WSL2 environment.
+
+    This function invokes a PowerShell command to query the `Win32_Battery` CIM
+    instance and extract the `EstimatedChargeRemaining` property which
+    represents the current battery charge.
+
+    Returns:
+        str: The remaining battery percentage as a string (without the "%").
+
+    Raises:
+        subprocess.ChildProcessError: If the PowerShell command fails.
+        Exception: Any unexpected errors during command execution.
+    """
+    try:
+        output = subprocess.check_output(
+            [
+                "powershell.exe",
+                "-Command",
+                "Get-CimInstance -ClassName Win32_Battery | ",
+                "Select-Object -ExpandProperty EstimatedChargeRemaining",
+            ],
+        )
+        return output.decode("utf-8").strip().replace("\r", "")
+    except Exception:
+        raise
+
+
+def main() -> None:
+    """Entrypoint of the script.
+
+    Detects the current platform and determines whether the environment is
+    WLS2. If so, fetches and prints the battery percentage otherwise prints a
+    placeholder string.
+    """
+    system = platform.system()
+
+    battery_percent = None
+    if system == "Linux":
+        try:
+            with open("/proc/version") as file:
+                if "microsoft" in file.read() and os.getenv("WSL_INTEROP"):
+                    battery_percent = battery_wsl2()
+        except FileNotFoundError as err:
+            raise err
+
+    if battery_percent:
+        print(f" 󰁹 {battery_percent}%")
+    else:
+        print("󰂑")
+
+
+if __name__ == "__main__":
+    main()
