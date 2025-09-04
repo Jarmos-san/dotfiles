@@ -32,7 +32,7 @@ return {
         -- "jinja",
         -- "jinja_inline",
         -- "jsdoc",
-        -- "json",
+        "json",
         -- "lua",
         -- "luadoc",
         -- "lua_patterns",
