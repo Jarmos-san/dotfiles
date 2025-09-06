@@ -55,6 +55,27 @@ def battery_wsl2() -> str:
         raise
 
 
+def battery_percent_printer(battery_percent: int) -> None:
+    """Print a symbolic representation of a battery percentage.
+
+    Args:
+        battery_percent (int): The current battery charge (0-100 inclusive).
+
+    Behavior:
+        - Maps the percentage to one of ten predefined symbols, each covering
+          a 10% range of the battery level.
+        - Prints the symbol followed by the percentage value.
+        - If `battery_percent` is outside the valid range, prints an error symbol.
+    """
+    symbols = ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+
+    if 0 <= battery_percent <= 100:
+        index = min(battery_percent // 10, 9)
+        print(f"{symbols[index]} {battery_percent}%")
+    else:
+        print("󰂑")
+
+
 def main() -> None:
     """Entrypoint of the script.
 
@@ -69,14 +90,12 @@ def main() -> None:
         try:
             with open("/proc/version") as file:
                 if "microsoft" in file.read() and os.getenv("WSL_INTEROP"):
-                    battery_percent = battery_wsl2()
+                    battery_percent = int(battery_wsl2())
         except FileNotFoundError as err:
             raise err
 
     if battery_percent:
-        print(f" 󰁹 {battery_percent}%")
-    else:
-        print("󰂑")
+        battery_percent_printer(battery_percent)
 
 
 if __name__ == "__main__":
