@@ -55,6 +55,39 @@ def battery_wsl2() -> str:
         raise
 
 
+def is_charging() -> bool:
+    """Retrieve the raw battery status code from Windows using PowerShell.
+
+    This function executes a PowerShell command via `powershell.exe` to query the
+    `Win32_Battery` WMI class. It returns the `BatteryStatus` value as a string.
+
+    Returns:
+        str: The battery status code returned by Windows:
+            - "1" = Discharging
+            - "2" = Charging (on AC power)
+            - "3" = Fully Charged
+            - Other codes may indicate low battery, unknown, etc.
+
+    Raises:
+        subprocess.CalledProcessError: If the PowerShell command fails.
+    """
+    try:
+        command = subprocess.check_output(
+            [
+                "powershell.exe",
+                "-Command",
+                "Get-CimInstance -ClassName Win32_Battery | ",
+                "Select-Object -ExpandProperty BatteryStatus",
+            ]
+        )
+    except Exception:
+        raise
+
+    output = command.decode().strip().replace("\r", "")
+
+    return output == "2"
+
+
 def battery_percent_printer(battery_percent: int) -> None:
     """Print a symbolic representation of a battery percentage.
 
@@ -67,7 +100,10 @@ def battery_percent_printer(battery_percent: int) -> None:
         - Prints the symbol followed by the percentage value.
         - If `battery_percent` is outside the valid range, prints an error symbol.
     """
-    symbols = ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    if is_charging():
+        symbols = ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"]
+    else:
+        symbols = ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
 
     if 0 <= battery_percent <= 100:
         index = min(battery_percent // 10, 9)
