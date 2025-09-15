@@ -146,3 +146,23 @@ autocmd("BufWritePre", {
   pattern = "*",
   command = "%s/\\s\\+$//e",
 })
+
+-- Autocommand to apply the highlights while performing a search and replace action
+autocmd("CmdlineEnter", {
+  desc = "Apply highlights during search and replace",
+  group = augroup("apply_highlights"),
+  pattern = { "/", "?" },
+  callback = function()
+    vim.o.hlsearch = true
+  end,
+})
+
+-- Autocommand to clear the highlights after performing a search and replace action
+autocmd("CmdlineLeave", {
+  desc = "Clear highlights after search and replace",
+  group = augroup("clear_highlights"),
+  pattern = { "/", "?" },
+  callback = function()
+    vim.o.hlsearch = false
+  end,
+})
