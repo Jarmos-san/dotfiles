@@ -166,3 +166,12 @@ autocmd("CmdlineLeave", {
     vim.o.hlsearch = false
   end,
 })
+
+-- Autocommand to apply custom highlights after the colorscheme is applied
+autocmd("ColorScheme", {
+  desc = "Apply custom highlights after colorscheme",
+  group = augroup("apply_custom_highlights"),
+  callback = function()
+    require("highlights").setup()
+  end,
+})
