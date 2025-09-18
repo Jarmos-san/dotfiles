@@ -21,7 +21,6 @@ return {
     })
   end,
   config = function()
-    local lspconfig = require("lspconfig")
     local map = require("utils").map
     local telescope = require("telescope.builtin")
 
@@ -133,7 +132,7 @@ return {
     vim.lsp.enable({ "vtsls", "vue_ls" })
 
     -- Enable the LSP for Ansible work
-    lspconfig["ansiblels"].setup({
+    vim.lsp.config("ansiblels", {
       on_attach = on_attach,
       capabilities = capabilities,
     })
