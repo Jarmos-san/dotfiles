@@ -57,12 +57,6 @@ map("i", "<M-j>", "<Down>", { desc = "Move down in Insert mode" })
 map("i", "<M-k>", "<Up>", { desc = "Move up in Insert mode" })
 map("i", "<M-l>", "<Right>", { desc = "Move right in Insert mode" })
 
--- Configure Neovim to delete text without copying them to the unnamed register
-map("n", "d", '"_d', { desc = "Delete a line of texting without storing it in a register" })
-
--- Disable search highlight after a pattern has been searched for
-map("n", "<Esc><Esc>", "<CMD>set nohlsearch<CR>", { desc = "Remove the pattern highlight after a search function" })
-
 -- List all available files (and directories) using Telescope
 map("n", "<leader>ff", telescope.find_files, { desc = "List all available files/directories" })
 map("n", "<leader>gf", git_files, { desc = "List all files and folders tracked inside the Git repository" })
