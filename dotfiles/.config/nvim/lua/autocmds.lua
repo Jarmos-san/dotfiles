@@ -11,13 +11,6 @@ autocmd("TextYankPost", {
   end,
 })
 
-autocmd("FileType", {
-  desc = "When opening Git commit messages, start the buffer in Insert mode",
-  group = augroup("git_insert"),
-  pattern = { "gitcommit", "gitrebase" },
-  command = "startinsert | 1",
-})
-
 autocmd("TermOpen", {
   desc = "Get into Insert mode when the terminal is opened",
   group = augroup("terminal_insert"),
