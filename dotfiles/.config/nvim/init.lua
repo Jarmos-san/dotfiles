@@ -83,3 +83,6 @@ vim.loader.enable()
 
 -- TODO: Figure a way out to manage the plugin using lazy.nvim
 require("statusline").setup()
+
+-- Enable the required LSP servers
+vim.lsp.enable({ "lua_ls" })

@@ -25,17 +25,25 @@ return {
     end
 
     client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-      runtime = { version = "LuaJIT" },
+      runtime = {
+        version = "LuaJIT",
+        path = vim.split(package.path, ";"),
+      },
       path = { "lua/?.lua", "lua/?/init.lua" },
       workspace = {
         checkThirdParty = false,
-        library = { vim.env.RUNTIME },
+        library = {
+          vim.env.VIMRUNTIME,
+        },
       },
       diagnostics = {
         globals = { "vim" },
         enable = true,
       },
       format = { enable = false },
+      telemetry = {
+        enable = false,
+      },
     })
   end,
   settings = {
