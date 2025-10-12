@@ -1,0 +1,9 @@
+name: Feature Enhancement
+description: Request or improve an existing feature
+labels: ["enhancement"]
+assignees:
+  - Jarmos-san
+body:
+  - type: textarea
+    attributes:
+      label: "Provide details of the feature enhancement"
