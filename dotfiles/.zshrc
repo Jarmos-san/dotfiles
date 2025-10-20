@@ -59,3 +59,5 @@ fi
 
 # TODO: Customise the prompt without using 'Starship'
 # https://www.makeuseof.com/customize-zsh-prompt-macos-terminal
+
+export UV_PYTHON_DOWNLOADS=never
