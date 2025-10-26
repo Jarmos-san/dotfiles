@@ -47,6 +47,7 @@ return {
       rust = "100",
       go = "88",
       hcl = "120",
+      jsonc = "90",
       vue = "89",
     },
   },
