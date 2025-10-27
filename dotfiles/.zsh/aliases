@@ -57,7 +57,7 @@ alias homelab="tmux new-session -s homelab -n homelab -c ~/projects/homelab"
 alias git-sync="git switch main && git fetch --prune && git branch -vv | awk '/: gone/ {print $1}' | xargs -r git branch --delete"
 
 # Some aliases for working with Python
-alias mkvenv="python3 -m venv .venv"
+alias mkvenv="uv venv"
 # FIXME: Why does it get evaluated when creating an interactive shell environment?
 # alias penv="eval $(poetry env activate)"
 alias py="python3"
