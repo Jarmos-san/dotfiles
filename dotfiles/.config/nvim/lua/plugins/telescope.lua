@@ -6,11 +6,19 @@ return {
   cmd = "Telescope",
   opts = {
     defaults = {
-      file_ignore_patterns = { "^%.git$", "node_modules", "^%.?venv$", "^%.?env$", "%.terraform", "%.vitepress/cache" },
+      file_ignore_patterns = {
+        "%.git",
+        "node_modules",
+        "%.venv",
+        "^%.?env$",
+        "%.terraform",
+        "%.mypy_cache",
+        "%.ruff_cache",
+      },
     },
     pickers = {
       find_files = {
-        find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
+        find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*", "--no-ignore" },
         -- TODO: Figure a way out to make vertical splits through Telescope
         -- mappings = {
         --   i = {
