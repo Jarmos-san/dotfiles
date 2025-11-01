@@ -19,10 +19,20 @@ import datetime
 import os
 import pathlib
 import re
+import sys
 
 # The current timestamp during the template generation process
 _TIME = datetime.datetime.now(datetime.timezone.utc)
 _BLOG_DIR = pathlib.Path.home() / "projects" / "blogposts" / "blogs"
+
+# Message labels with their respective ANSI colour codes
+_RESET = "\x1b[0m"
+_GREEN = "\x1b[92m"
+_BLUE = "\x1b[94m"
+_YELLOW = "\x1b[93m"
+
+_INFO = f"[{_BLUE}INFO{_RESET}]"
+_WARN = f"[{_YELLOW}WARN{_RESET}]"
 
 
 def parse_args() -> argparse.Namespace:
@@ -139,7 +149,7 @@ def write_file(
 
     # Print a warning message to the user if the specified file already exists
     if filepath.exists() and not force:
-        print(f"[WARN] {filepath} already exists. Use --force to overwrite.")
+        print(f"{_WARN} {filepath} already exists. Use --force to overwrite.")
         return None
 
     # Generate the Markdown file along with its specified template content
@@ -148,7 +158,7 @@ def write_file(
 
     # If the verbose option is enabled, print a verbose output for the user at STDOUT
     if verbose:
-        print(f"[INFO] Created {filepath.resolve()}")
+        print(f"{_INFO} Created {filepath.resolve()}")
 
     return filepath
 
@@ -163,10 +173,15 @@ def main() -> None:
     filepath = write_file(args.title, args.output, args.draft, args.force, args.verbose)
 
     # Print useful guidelines to edit the template if it was succesfully generated
+    if filepath and editor:
+        print(f"{_INFO} Blog template is generated at {str(filepath)}")
+        print(f"{_INFO} Start editing it by running these commands:\n")
+        print(f"{_GREEN}\tcd {filepath.parent}\n\t{editor} {filepath}{_RESET}")
+
+        sys.exit(0)
+
     if filepath:
-        print(f"[INFO] Blog template is generated at {str(filepath)}")
-        print("[INFO] Start editing it by running these commands")
-        print(f"\tcd {filepath.parent}\n\t{editor} {filepath}")
+        print(f"{_INFO} Blog template is generated at {str(filepath)}")
 
 
 if __name__ == "__main__":
