@@ -19,7 +19,7 @@ import datetime
 import os
 import pathlib
 import re
-import sys
+import subprocess
 
 # The current timestamp during the template generation process
 _TIME = datetime.datetime.now(datetime.timezone.utc)
@@ -68,6 +68,14 @@ def parse_args() -> argparse.Namespace:
         type=pathlib.Path,
         default=_BLOG_DIR,
         help=f'directory to save the generated Markdown file to, defaults to "{blogs}"',
+    )
+
+    # Add a flag to edit the blog post
+    parser.add_argument(
+        "-e",
+        "--edit",
+        action="store_true",
+        help='edit the generated Markdown file using $EDITOR, defaults to "False"',
     )
 
     # Add the option to optionally force creation of the Markdown file (even if it
@@ -178,10 +186,9 @@ def main() -> None:
         print(f"{_INFO} Start editing it by running these commands:\n")
         print(f"{_GREEN}\tcd {filepath.parent}\n\t{editor} {filepath}{_RESET}")
 
-        sys.exit(0)
-
-    if filepath:
-        print(f"{_INFO} Blog template is generated at {str(filepath)}")
+        # Open the file using the editor if the script is allowed to do so
+        if args.edit:
+            subprocess.run([editor, filepath])
 
 
 if __name__ == "__main__":
