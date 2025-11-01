@@ -15,9 +15,12 @@ TODO: Provide a usage guide.
 """
 
 import argparse
+import datetime
 import pathlib
 import re
-from datetime import datetime
+
+# The current timestamp during the template generation process
+_TIME = datetime.datetime.now(datetime.timezone.utc)
 
 
 def parse_args() -> argparse.Namespace:
@@ -28,7 +31,7 @@ def parse_args() -> argparse.Namespace:
     """
     # Some usage guidelines and message for using the program.
     description = "generate blogpost Markdown files in a reproducible manner"
-    epilog = f"© 2018-{datetime.now().year} Somraj Saha <contact@jarmos.dev>"
+    epilog = f"© 2018-{_TIME.year} Somraj Saha <contact@jarmos.dev>"
 
     # Create the parser to fetch the CLI flags passed to the script.
     parser = argparse.ArgumentParser(description=description, epilog=epilog)
@@ -93,11 +96,13 @@ def generate_content(title: str, draft: bool) -> str:
     Returns:
         A string containing the Markdown template with populated frontmatter.
     """
-    now = datetime.now().strftime("%Y-%m-%d")
+    now = _TIME
     status = "draft" if draft else "published"
+    description = "Lorem ipsum"
 
     return f"""---
 title: {title}
+description: {description}
 publishedOn: {now}
 status: {status}
 ---
