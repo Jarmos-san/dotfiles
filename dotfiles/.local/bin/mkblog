@@ -20,6 +20,55 @@ import re
 from datetime import datetime
 
 
+def parse_args() -> argparse.Namespace:
+    """Parse and return the CLI arguments.
+
+    Returns:
+        An argparse.Namespace object containing the parsed arguments.
+    """
+    # Some usage guidelines and message for using the program.
+    description = "generate blogpost Markdown files in a reproducible manner"
+    epilog = f"© 2018-{datetime.now().year} Somraj Saha <contact@jarmos.dev>"
+
+    # Create the parser to fetch the CLI flags passed to the script.
+    parser = argparse.ArgumentParser(description=description, epilog=epilog)
+
+    # Add argument to set the title of the blogpost
+    parser.add_argument("title", type=str, help="the title of the blog post")
+
+    # Add the option to store whether the blog is a draft
+    parser.add_argument(
+        "-d",
+        "--draft",
+        action="store_true",
+        default=True,
+        help="create a draft blogpost",
+    )
+
+    # Add the option to set the default path to store the blogpost  to
+    parser.add_argument(
+        "-o",
+        "--output",
+        type=pathlib.Path,
+        default=pathlib.Path.cwd(),
+        help="directory to save the generated Markdown file to",
+    )
+
+    # Add the option to optionally force creation of the Markdown file (even if it
+    # already exists)
+    parser.add_argument(
+        "-f", "--force", action="store_true", help="overwrite if file already exists"
+    )
+
+    # Add the option to provide verbose output when generating the file contents
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="enable verbose output"
+    )
+
+    # Parse the arguments and options
+    return parser.parse_args()
+
+
 def slugify(title: str) -> str:
     """Convert a post title to a filesystem-safe slug.
 
@@ -87,55 +136,6 @@ def write_file(
     # If the verbose option is enabled, print a verbose output for the user at STDOUT
     if verbose:
         print(f"[INFO] Created {filepath.resolve()}")
-
-
-def parse_args() -> argparse.Namespace:
-    """Parse and return the CLI arguments.
-
-    Returns:
-        An argparse.Namespace object containing the parsed arguments.
-    """
-    # Some usage guidelines and message for using the program.
-    description = "generate blogpost Markdown files in a reproducible manner"
-    epilog = f"© 2018-{datetime.now().year} Somraj Saha <contact@jarmos.dev>"
-
-    # Create the parser to fetch the CLI flags passed to the script.
-    parser = argparse.ArgumentParser(description=description, epilog=epilog)
-
-    # Add argument to set the title of the blogpost
-    parser.add_argument("title", type=str, help="the title of the blog post")
-
-    # Add the option to store whether the blog is a draft
-    parser.add_argument(
-        "-d",
-        "--draft",
-        action="store_true",
-        default=True,
-        help="create a draft blogpost",
-    )
-
-    # Add the option to set the default path to store the blogpost  to
-    parser.add_argument(
-        "-o",
-        "--output",
-        type=pathlib.Path,
-        default=pathlib.Path.cwd(),
-        help="directory to save the generated Markdown file to",
-    )
-
-    # Add the option to optionally force creation of the Markdown file (even if it
-    # already exists)
-    parser.add_argument(
-        "-f", "--force", action="store_true", help="overwrite if file already exists"
-    )
-
-    # Add the option to provide verbose output when generating the file contents
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="enable verbose output"
-    )
-
-    # Parse the arguments and options
-    return parser.parse_args()
 
 
 def main() -> None:
