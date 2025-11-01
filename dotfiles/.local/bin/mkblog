@@ -45,7 +45,7 @@ def parse_args() -> argparse.Namespace:
         "--draft",
         action="store_true",
         default=True,
-        help="create a draft blogpost",
+        help='create a draft blogpost, defaults to "True"',
     )
 
     # Add the option to set the default path to store the blogpost  to
@@ -54,7 +54,8 @@ def parse_args() -> argparse.Namespace:
         "--output",
         type=pathlib.Path,
         default=pathlib.Path.cwd(),
-        help="directory to save the generated Markdown file to",
+        help="directory to save the generated Markdown file to, defaults to "
+        f'"{pathlib.Path.cwd()}"',
     )
 
     # Add the option to optionally force creation of the Markdown file (even if it
