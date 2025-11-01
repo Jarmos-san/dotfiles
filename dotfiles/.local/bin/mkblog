@@ -16,12 +16,13 @@ TODO: Provide a usage guide.
 
 import argparse
 import datetime
+import os
 import pathlib
 import re
 
 # The current timestamp during the template generation process
 _TIME = datetime.datetime.now(datetime.timezone.utc)
-_BLOG_DIR = pathlib.Path.home() / "projects" / "blogposts"
+_BLOG_DIR = pathlib.Path.home() / "projects" / "blogposts" / "blogs"
 
 
 def parse_args() -> argparse.Namespace:
@@ -156,6 +157,7 @@ def main() -> None:
     """Entrypoint of the script."""
     # Parse the CLI flags and options
     args = parse_args()
+    editor = os.getenv("EDITOR")
 
     # Get the filepath to the generated template
     filepath = write_file(args.title, args.output, args.draft, args.force, args.verbose)
@@ -164,7 +166,7 @@ def main() -> None:
     if filepath:
         print(f"[INFO] Blog template is generated at {str(filepath)}")
         print("[INFO] Start editing it by running these commands")
-        print(f"\tcd {filepath.parent}\n\tnvim {filepath}")
+        print(f"\tcd {filepath.parent}\n\t{editor} {filepath}")
 
 
 if __name__ == "__main__":
