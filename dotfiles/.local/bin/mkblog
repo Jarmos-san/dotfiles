@@ -67,7 +67,7 @@ def parse_args() -> argparse.Namespace:
         "--output",
         type=pathlib.Path,
         default=_BLOG_DIR,
-        help=f"directory to save the generated Markdown file to, defaults to {blogs}",
+        help=f'directory to save the generated Markdown file to, defaults to "{blogs}"',
     )
 
     # Add the option to optionally force creation of the Markdown file (even if it
