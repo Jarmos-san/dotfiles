@@ -21,6 +21,7 @@ import re
 
 # The current timestamp during the template generation process
 _TIME = datetime.datetime.now(datetime.timezone.utc)
+_BLOG_DIR = pathlib.Path.home() / "projects" / "blogposts"
 
 
 def parse_args() -> argparse.Namespace:
@@ -32,6 +33,7 @@ def parse_args() -> argparse.Namespace:
     # Some usage guidelines and message for using the program.
     description = "generate blogpost Markdown files in a reproducible manner"
     epilog = f"© 2018-{_TIME.year} Somraj Saha <contact@jarmos.dev>"
+    blogs = _BLOG_DIR
 
     # Create the parser to fetch the CLI flags passed to the script.
     parser = argparse.ArgumentParser(description=description, epilog=epilog)
@@ -53,9 +55,8 @@ def parse_args() -> argparse.Namespace:
         "-o",
         "--output",
         type=pathlib.Path,
-        default=pathlib.Path.cwd(),
-        help="directory to save the generated Markdown file to, defaults to "
-        f'"{pathlib.Path.cwd()}"',
+        default=_BLOG_DIR,
+        help=f"directory to save the generated Markdown file to, defaults to {blogs}",
     )
 
     # Add the option to optionally force creation of the Markdown file (even if it
@@ -114,7 +115,7 @@ Add blog content here...
 
 def write_file(
     title: str, output: pathlib.Path, draft: bool, force: bool, verbose: bool
-) -> None:
+) -> pathlib.Path | None:
     """Generate a Markdown file for a new blog post.
 
     This function handles the file naming, existence checks, content generation and
@@ -127,13 +128,18 @@ def write_file(
         force: Whether to overwrite the file if it already exists.
         verbose: Whether to print detailed output messages.
     """
+    # Check if the output directory exists, else create it before generating the
+    # Markdown file into.
+    if not pathlib.Path(output).is_dir():
+        pathlib.Path(output).mkdir(parents=True, exist_ok=True)
+
     # Sanitize and create the filepath of the Markdown file
     filepath = output / f"{slugify(title)}.md"
 
     # Print a warning message to the user if the specified file already exists
     if filepath.exists() and not force:
         print(f"[WARN] {filepath} already exists. Use --force to overwrite.")
-        return
+        return None
 
     # Generate the Markdown file along with its specified template content
     content = generate_content(title, draft)
@@ -143,11 +149,22 @@ def write_file(
     if verbose:
         print(f"[INFO] Created {filepath.resolve()}")
 
+    return filepath
+
 
 def main() -> None:
     """Entrypoint of the script."""
+    # Parse the CLI flags and options
     args = parse_args()
-    write_file(args.title, args.output, args.draft, args.force, args.verbose)
+
+    # Get the filepath to the generated template
+    filepath = write_file(args.title, args.output, args.draft, args.force, args.verbose)
+
+    # Print useful guidelines to edit the template if it was succesfully generated
+    if filepath:
+        print(f"[INFO] Blog template is generated at {str(filepath)}")
+        print("[INFO] Start editing it by running these commands")
+        print(f"\tcd {filepath.parent}\n\tnvim {filepath}")
 
 
 if __name__ == "__main__":
