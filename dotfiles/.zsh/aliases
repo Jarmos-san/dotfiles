@@ -65,3 +65,6 @@ alias python="python3"
 
 # Some aliases for working with Go
 alias goimports="goimports-reviser -use-cache -rm-unused -set-alias"
+
+# Alias to cd into the "blogs" directory
+alias blogs="cd ~/projects/blogposts"
