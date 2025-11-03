@@ -14,6 +14,7 @@ return {
         "%.terraform",
         "%.mypy_cache",
         "%.ruff_cache",
+        "%.nuxt",
       },
     },
     pickers = {
