@@ -15,6 +15,7 @@ return {
         "%.mypy_cache",
         "%.ruff_cache",
         "%.nuxt",
+        "%.task",
       },
     },
     pickers = {
