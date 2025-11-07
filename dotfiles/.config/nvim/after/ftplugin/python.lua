@@ -37,5 +37,31 @@ if vim.api.nvim_buf_line_count(0) >= 100 then
   vim.opt.foldcolumn = "auto"
 end
 
--- Start the "pyright" LSP server
+-- Configure and enable the LSP server for Python
+vim.diagnostic.config({
+  float = true, -- Show the diagnostic messages in a floating window
+  underline = true, -- Show squiggly lines under the statement with an error/warning
+  update_in_insert = true, -- Update the message even when in Insert mode
+  severity_sort = true, -- Configure Neovim to sort the error messages according to their severity
+  virtual_text = true, -- Show virtual lines besides the statement with an error/warning
+})
+
+-- Enable the LSP server for Python
 vim.lsp.enable("pyright", true)
+
+-- TODO: Move this autocommand to its own module/package
+vim.api.nvim_create_autocmd("CursorHold", {
+  buffer = vim.api.nvim_get_current_buf(),
+  callback = function()
+    local hover_window_configs = {
+      focusable = false,
+      close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+      border = "rounded",
+      source = "always",
+      prefix = " ",
+      scope = "cursor",
+    }
+
+    vim.diagnostic.open_float(nil, hover_window_configs)
+  end,
+})

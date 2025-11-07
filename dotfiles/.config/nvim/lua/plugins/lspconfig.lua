@@ -12,12 +12,6 @@ return {
       underline = true, -- Show diagnostic errors with a squigly underline
       update_in_insert = true, -- Update the diagnostic message even when in Insert mode
       severity_sort = true, -- Configure Neovim to sort the error messages according to the severity.
-      virtual_lines = true, -- Display prettier diagnostics on the buffer
-    })
-    -- Configure the floating window containing information about the object under the cursor
-    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-      border = "double", -- Enable a distinguishable border for the window
-      max_width = math.floor(vim.o.columns * 0.5), -- Cap the width of window at 50% of the terminal size
     })
   end,
   config = function()
@@ -27,7 +21,7 @@ return {
     -- Add rounded borders to the LSP flaoting windows
     require("lspconfig.ui.windows").default_options.border = "rounded"
 
-    local on_attach = function(_, bufnr)
+    local on_attach = function()
       map("n", "gd", telescope.lsp_definitions, { desc = "Jump to the object definition" })
       map("n", "gD", vim.lsp.buf.declaration, { desc = "Jump to the object declaration" })
       map("n", "gT", telescope.lsp_type_definitions, { desc = "Get the type documentations" })
@@ -40,24 +34,6 @@ return {
       map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, { desc = "Add workspace folder" })
       map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, { desc = "Remove workspace folder" })
       map("n", "<leader>wl", vim.lsp.buf.list_workspace_folders, { desc = "List workspace folders" })
-
-      -- Configurations for showing diagnostics in a hover window instead. See the documentations at:
-      -- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#show-line-diagnostics-automatically-in-hover-window
-      vim.api.nvim_create_autocmd("CursorHold", {
-        buffer = bufnr,
-        callback = function()
-          local hover_window_configs = {
-            focusable = false,
-            close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-            border = "rounded",
-            source = "always",
-            prefix = " ",
-            scope = "cursor",
-          }
-
-          vim.diagnostic.open_float(nil, hover_window_configs)
-        end,
-      })
     end
 
     local capabilities = require("blink.cmp").get_lsp_capabilities()
