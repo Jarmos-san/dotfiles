@@ -58,8 +58,7 @@ alias git-sync="git switch main && git fetch --prune && git branch -vv | awk '/:
 
 # Some aliases for working with Python
 alias mkvenv="uv venv"
-# FIXME: Why does it get evaluated when creating an interactive shell environment?
-# alias penv="eval $(poetry env activate)"
+alias penv="eval $(poetry env activate)"
 alias py="python3"
 alias python="python3"
 
