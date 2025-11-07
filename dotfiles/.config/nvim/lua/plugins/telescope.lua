@@ -16,6 +16,7 @@ return {
         "%.ruff_cache",
         "%.nuxt",
         "%.task",
+        "dist",
       },
     },
     pickers = {
