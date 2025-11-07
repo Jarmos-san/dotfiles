@@ -17,6 +17,8 @@ return {
         "%.nuxt",
         "%.task",
         "dist",
+        "%.pyc",
+        "%.pytest_cache",
       },
     },
     pickers = {
