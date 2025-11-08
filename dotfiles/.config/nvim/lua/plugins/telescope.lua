@@ -19,6 +19,9 @@ return {
         "dist",
         "%.pyc",
         "%.pytest_cache",
+        "%.vitest",
+        "%.tsbuildinfo",
+        "coverage",
       },
     },
     pickers = {
