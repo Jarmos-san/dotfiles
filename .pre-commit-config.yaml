@@ -26,13 +26,13 @@ repos:
           - "--keep-padding"
 
   - repo: https://github.com/JohnnyMorganz/StyLua
-    rev: v2.3.0
+    rev: v2.3.1
     hooks:
       - id: stylua
         name: format lua files
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.2
+    rev: v0.14.4
     hooks:
       - id: ruff
         name: format/lint python files
