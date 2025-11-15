@@ -6,3 +6,20 @@ if vim.api.nvim_buf_line_count(0) >= 100 then
 end
 
 vim.treesitter.start()
+
+-- TODO: Move this autocommand to its own module/package
+vim.api.nvim_create_autocmd("CursorHold", {
+  buffer = vim.api.nvim_get_current_buf(),
+  callback = function()
+    local hover_window_configs = {
+      focusable = false,
+      close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+      border = "rounded",
+      source = "always",
+      prefix = " ",
+      scope = "cursor",
+    }
+
+    vim.diagnostic.open_float(nil, hover_window_configs)
+  end,
+})
