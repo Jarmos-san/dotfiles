@@ -22,6 +22,7 @@ return {
         "%.vitest",
         "%.tsbuildinfo",
         "coverage",
+        "%.data",
       },
     },
     pickers = {
