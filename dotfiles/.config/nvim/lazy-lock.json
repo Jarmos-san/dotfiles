@@ -19,7 +19,7 @@
   "mini.surround": { "branch": "main", "commit": "88c52297ed3e69ecf9f8652837888ecc727a28ee" },
   "neoscroll.nvim": { "branch": "master", "commit": "f957373912e88579e26fdaea4735450ff2ef5c9c" },
   "nvim-lint": { "branch": "master", "commit": "baf7c91c2b868b12446df511d4cdddc98e9bf66e" },
-  "nvim-lspconfig": { "branch": "master", "commit": "c6f05c0900144f027a8a0332566878e398d457b5" },
+  "nvim-lspconfig": { "branch": "master", "commit": "abf6d190f2c06818489c0bd4b926e7e3a06c5e51" },
   "nvim-notify": { "branch": "master", "commit": "8701bece920b38ea289b457f902e2ad184131a5d" },
   "nvim-treesitter": { "branch": "main", "commit": "0cfa59947416d14e36a41e6fe4f025abd8760301" },
   "nvim-ts-context-commentstring": { "branch": "main", "commit": "1b212c2eee76d787bbea6aa5e92a2b534e7b4f8f" },
