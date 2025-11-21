@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
-###############################################################################
-# Simple script to make running updates aacrsso different easy peasy!
-#
-# Author: Somraj Saha <somraj.saha@jarmos.dev>
-# License: MIT (see the LICENSE document for more info on this regards)
-###############################################################################
+"""Simple script to run system updates across different distributions easy peasy!
+
+Author: Somraj Saha <contact@jarmos.dev>
+License: MIT
+"""
 
 import datetime
 import platform
