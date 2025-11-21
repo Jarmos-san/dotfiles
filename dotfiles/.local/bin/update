@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python3
 
 ###############################################################################
 # Simple script to make running updates aacrsso different easy peasy!
@@ -7,75 +7,73 @@
 # License: MIT (see the LICENSE document for more info on this regards)
 ###############################################################################
 
-# Enable some options for Bash to stop executing the script if there's an error
-set -o errexit
-set -o nounset
-set -o pipefail
+import platform
+import subprocess
+import sys
 
-# Enable debugging capabilities to the script
-if [[ "${TRACE-0}" == "1" ]]; then
-  set -o xtrace
-fi
+# Message labels with their respective colour codes
+_RESET = "\x1b[0m"
+_BLUE = "\x1b[94m"
+_GREEN = "\x1b[92m"
+# _YELLOW = "\x1b[93m"
+# _WARN = f"[{_YELLOW}WARN{_RESET}]"
+_RED = "\x1b[31m"
+_INFO = f"[{_BLUE}INFO{_RESET}]"
+_SUCCESS = f"[{_GREEN}SUCCESS{_RESET}]"
+_ERROR = f"[{_RED}ERROR{_RESET}]"
 
-# Execute the script in context to the current directory where the script is run
-cd "$(dirname "$0")"
 
-###############################################################################
-# Run APT updates on Debian/Ubuntu systems
-###############################################################################
-run_linux_updates() {
-  os_name=$(grep -Po "(?<=^ID=).+" /etc/os-release | sed 's/"//g')
+def run_linux_updates() -> None:
+    """Detect the Linux distribution and run system updates accordingly.
 
-  case "$os_name" in
-    debian)
-      sudo apt-get update
-      sudo apt-get upgrade --yes
-      sudo apt-get autoremove --purge --yes
-      ;;
-    ubuntu)
-      sudo apt-get update
-      sudo apt-get upgrade --yes
-      sudo apt-get autoremove --purge --yes
-      ;;
-    fedora)
-      sudo dnf update --assumeyes
-      ;;
-    *)
-      echo "Failed to identify the OS"
-      exit 1
-      ;;
-  esac
-}
+    Supported distributions:
+      - Ubuntu (apt-get)
+      - Debian (apt-get)
+      - Fedora (dnf)
 
-###############################################################################
-# Run Homebrew updates (if its installed and available)
-###############################################################################
-run_brew_updates() {
-  if [[ $(command -v brew) ]]; then
-    brew update
-    brew upgrade
-    brew autoremove
-    brew cleanup
-  fi
-}
+    This function executes the appropriate package manager commands for
+    updating system packages and removing unused dependencies. It uses
+    `subprocess.run(..., check=True)` to ensure errors are surfaced.
 
-###############################################################################
-# Entrypoint of the script
-###############################################################################
-update_zsh_plugins() {
-    # TODO: Implement function to safely perform a git-pull of the repositories
-    echo ""
-}
+    If the distribution is not recognized, the function logs an error
+    and terminates the program with a non-zero exit code.
+    """
+    distro = platform.freedesktop_os_release().get("NAME", "")
 
-###############################################################################
-# Entrypoint of the script
-###############################################################################
-main() {
-  # Run each functions below sequentially for safety reasons
-  run_linux_updates
-  run_brew_updates
-  update_zsh_plugins
-}
+    match distro:
+        case "Ubuntu" | "Debian":
+            print(f"{_INFO} Updating {distro} system...")
+            subprocess.run(["sudo", "apt-get", "update"], check=True)
+            subprocess.run(["sudo", "apt-get", "upgrade", "--yes"], check=True)
+            subprocess.run(
+                ["sudo", "apt-get", "autoremove", "--purge", "--yes"], check=True
+            )
+            print(f"{_INFO} {distro} APT packages upgrade complete!")
+        case "Fedora":
+            print(f"{_INFO} Updating {distro} system...")
+            subprocess.run(["sudo", "dnf", "upgrade", "--assumeyes"], check=True)
+            subprocess.run(["sudo", "dnf", "autoremove", "--assumeyes"], check=True)
+            print(f"{_INFO} {distro} APT packages upgrade complete!")
+        case _:
+            print(f"{_ERROR} Failed to identify system information...exiting!")
+            sys.exit(1)
 
-# Defer the entrypoint of the script towards the end of the execution flow
-main "$@"
+
+def run_homebrew_updates() -> None:
+    """Run updates for the Homebrew package manager."""
+
+
+def run_zsh_updates() -> None:
+    """Update the ZSH plugins."""
+
+
+def main() -> None:
+    """Entrypoint of the script."""
+    run_linux_updates()
+    run_homebrew_updates()
+
+    print(f"{_SUCCESS} System update complete...exiting now")
+
+
+if __name__ == "__main__":
+    main()
