@@ -1,81 +1,221 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python3
 
-###############################################################################
-# Simple script to make running updates aacrsso different easy peasy!
-#
-# Author: Somraj Saha <somraj.saha@jarmos.dev>
-# License: MIT (see the LICENSE document for more info on this regards)
-###############################################################################
+"""System maintenance and update utility.
 
-# Enable some options for Bash to stop executing the script if there's an error
-set -o errexit
-set -o nounset
-set -o pipefail
+This script provides an unified interface for maintaining and updating the software
+across multiple environments. Depending on the Operating Systems, installed package
+managers and active shell, the script can perform;
 
-# Enable debugging capabilities to the script
-if [[ "${TRACE-0}" == "1" ]]; then
-  set -o xtrace
-fi
+    - Linux distribution updates using the appropriate package manager.
+    - Homebrew package updates on MacOS or Linux systems where Homebrew is installed.
+    - Zsh plugin updates for users running the Zsh shell with plugin repositories stored
+        under `~/.zsh/plugins`.
 
-# Execute the script in context to the current directory where the script is run
-cd "$(dirname "$0")"
+The script determines which update routines to run based on environment inspection
+rather than user input, making it suitable for automated maintenance tasks or periodic
+system cleanup.
 
-###############################################################################
-# Run APT updates on Debian/Ubuntu systems
-###############################################################################
-run_linux_updates() {
-  os_name=$(grep -Po "(?<=^ID=).+" /etc/os-release | sed 's/"//g')
+Errors from subprocess commands (such as package manager failures) may propagate unless
+caught internally, ensuring misconfigurations or unexpected system states are not
+silently ignored.
 
-  case "$os_name" in
-    debian)
-      sudo apt-get update
-      sudo apt-get upgrade --yes
-      sudo apt-get autoremove --purge --yes
-      ;;
-    ubuntu)
-      sudo apt-get update
-      sudo apt-get upgrade --yes
-      sudo apt-get autoremove --purge --yes
-      ;;
-    fedora)
-      sudo dnf update --assumeyes
-      ;;
-    *)
-      echo "Failed to identify the OS"
-      exit 1
-      ;;
-  esac
-}
+Author: Somraj Saha <contact@jarmos.dev>
+License: MIT
+"""
 
-###############################################################################
-# Run Homebrew updates (if its installed and available)
-###############################################################################
-run_brew_updates() {
-  if [[ $(command -v brew) ]]; then
-    brew update
-    brew upgrade
-    brew autoremove
-    brew cleanup
-  fi
-}
+import datetime
+import os
+import platform
+import subprocess
+import sys
+from argparse import ArgumentParser, Namespace
+from pathlib import Path
 
-###############################################################################
-# Entrypoint of the script
-###############################################################################
-update_zsh_plugins() {
-    # TODO: Implement function to safely perform a git-pull of the repositories
-    echo ""
-}
+# Message labels with their respective colour codes
+_RESET = "\x1b[0m"
+_BLUE = "\x1b[94m"
+_GREEN = "\x1b[92m"
+# _YELLOW = "\x1b[93m"
+# _WARN = f"[{_YELLOW}WARN{_RESET}]"
+_RED = "\x1b[31m"
+_INFO = f"[{_BLUE}INFO{_RESET}]"
+_SUCCESS = f"[{_GREEN}SUCCESS{_RESET}]"
+_ERROR = f"[{_RED}ERROR{_RESET}]"
 
-###############################################################################
-# Entrypoint of the script
-###############################################################################
-main() {
-  # Run each functions below sequentially for safety reasons
-  run_linux_updates
-  run_brew_updates
-  update_zsh_plugins
-}
 
-# Defer the entrypoint of the script towards the end of the execution flow
-main "$@"
+def parse_args() -> Namespace:
+    """Parse and return the CLI arguments.
+
+    Returns:
+        An argparse.Namespace object containing the parsed arguments.
+    """
+    current_year = datetime.datetime.now(datetime.timezone.utc).year
+    description = "intelligently update the system packages"
+    epilog = f"© Somraj Saha 2018-{current_year} <contact@jarmos.dev>"
+
+    parser = ArgumentParser(description=description, epilog=epilog)
+
+    return parser.parse_args()
+
+
+def run_linux_updates() -> None:
+    """Detect the Linux distribution and run system updates accordingly.
+
+    Supported distributions:
+      - Ubuntu (apt-get)
+      - Debian (apt-get)
+      - Fedora (dnf)
+
+    This function executes the appropriate package manager commands for
+    updating system packages and removing unused dependencies. It uses
+    `subprocess.run(..., check=True)` to ensure errors are surfaced.
+
+    If the distribution is not recognized, the function logs an error
+    and terminates the program with a non-zero exit code.
+    """
+    distro = platform.freedesktop_os_release().get("NAME", "")
+
+    match distro:
+        case "Ubuntu" | "Debian":
+            print(f"{_INFO} Updating {distro} system...")
+            subprocess.run(["sudo", "apt-get", "update"], check=True)
+            subprocess.run(["sudo", "apt-get", "upgrade", "--yes"], check=True)
+            subprocess.run(
+                ["sudo", "apt-get", "autoremove", "--purge", "--yes"], check=True
+            )
+            print(f"{_SUCCESS} {distro} APT packages upgrade complete!")
+        case "Fedora":
+            print(f"{_INFO} Updating {distro} system...")
+            subprocess.run(["sudo", "dnf", "upgrade", "--assumeyes"], check=True)
+            subprocess.run(["sudo", "dnf", "autoremove", "--assumeyes"], check=True)
+            print(f"{_SUCCESS} {distro} APT packages upgrade complete!")
+        case _:
+            print(f"{_ERROR} Failed to identify system information...exiting!")
+            sys.exit(1)
+
+
+def homebrew_installed() -> bool:
+    """Determine whether Homebrew is installed and accessible.
+
+    This function checks for the presence of the `brew` executable by attempting to run
+    `brew --version`. No output is displayed during the check.
+
+    Returns:
+        `True`: Homebrew is installed and the `brew` command can be executed.
+        `False`: Homebrew is not installed, not available on the system `PATH` or
+            returned an unexpected error during its execution.
+    """
+    try:
+        subprocess.run(["brew", "--version"], check=True, stdout=subprocess.DEVNULL)
+        return True
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        return False
+
+
+def run_homebrew_updates() -> None:
+    """Run system package updates using Homebrew.
+
+    This function executes the standard Homebrew maintenance sequence:
+        - `brew update` to refresh the available package definitions.
+        - `brew upgrade` to upgrade installed formulae and casks.
+        - `brew autoremove` to removed unused dependency packages.
+        - `brew cleanup` to remove outdated files and cached data.
+
+    All the commands are executed with the `check=True` parameter to raise a
+    `subprocess.CalledProcessError` to be raised if any step fails.
+
+    Raises:
+        subprocess.CalledProcessError: If any Homebrew command exits with a non-zero
+            status.
+    """
+    print(f"{_INFO} Running Homebrew updates")
+
+    subprocess.run(["brew", "update"], check=True)
+    subprocess.run(["brew", "upgrade"], check=True)
+    subprocess.run(["brew", "autoremove"], check=True)
+    subprocess.run(["brew", "cleanup"], check=True)
+
+    print(f"{_SUCCESS} Homebrew package upgrades complete!")
+
+
+def run_zsh_updates() -> None:
+    """Update the local Zsh plugins by pulling the latest changes.
+
+    This function assumes the Zsh plugins are cloned under:
+        `~/.zsh/plugins/<PLUGIN-NAME>`
+
+    For each plugin repository listed in the `plugins` tuple, the function:
+        1. Constructs the local plugin directory path.
+        2. Changes the working directory to that location.
+        3. Executes `git pull --rebase` to fetch and apply the upstream updates.
+
+    All Git operations are executed with `check=True`, causing
+    `subprocess.CalledProcessError` to be raised if any update fails.
+
+    Raises:
+        `FileNotFoundError`: If a plugin directory does not exist.
+        `subprocess.CalledProcessError`: If a Git update operation exits with a non-zero
+            status.
+    """
+    plugins = (
+        "zsh-users/zsh-autosuggestions",
+        "ael-code/zsh-colored-man-pages",
+        "zsh-users/zsh-completions",
+        "zsh-users/zsh-syntax-highlighting",
+    )
+
+    print(f"{_INFO} Running ZSH plugin updates")
+    for plugin in plugins:
+        print(f"{_INFO} Fetching https://github.com/{plugin}")
+        plugin_dir = Path.home() / ".zsh" / "plugins" / plugin.split("/")[-1]
+        os.chdir(plugin_dir)
+        subprocess.run(
+            ["git", "pull", "--rebase"], check=True, stdout=subprocess.DEVNULL
+        )
+    print(f"{_SUCCESS} ZSH update plugins complete!")
+
+
+def main() -> None:
+    """Executes the full system update routine for the current environment.
+
+    This function orchestrates all available update mechanisms based on the system
+    configuration and installed tooling:
+
+        1. Parses the CLI arguments for the script.
+        2. Detects the active shell via the `SHELL` environment variable.
+        3. If running on Linux system, executes OS-level package updates.
+        4. If Homebrew is installed, runs Homebrew package maintenance.
+        5. If the active shell is Zsh, updates the Zsh plugins.
+
+    The function prints progress messages and ends with a success message once all
+    relevant update routines have completed. Errors from underlying update handlers
+    (such as failed subprocess calls) may propagate upwards unless explicitly handled
+    within those functions.
+
+    Raises:
+        subprocess.CalledProcessError: If any invoked update command (Linux, Homebrew
+            or Zsh plugin updates) fails and is executed with `check=True`.
+    """
+    # Parse the CLI arguments of the script
+    parse_args()
+
+    # Chech which shell is enabled for the interactive environment
+    shell = os.getenv("SHELL")
+
+    # Run the package updates for a Linux distribution
+    if platform.uname().system == "Linux":
+        run_linux_updates()
+
+    # Run the Homebrew package updates
+    if homebrew_installed():
+        run_homebrew_updates()
+
+    # Update the zsh plugins
+    if shell and shell.split("/")[-1] == "zsh":
+        run_zsh_updates()
+
+    print(f"{_SUCCESS} System update complete...exiting now")
+
+
+if __name__ == "__main__":
+    main()
