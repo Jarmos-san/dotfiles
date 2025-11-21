@@ -7,10 +7,12 @@ License: MIT
 """
 
 import datetime
+import os
 import platform
 import subprocess
 import sys
 from argparse import ArgumentParser, Namespace
+from pathlib import Path
 
 # Message labels with their respective colour codes
 _RESET = "\x1b[0m"
@@ -120,13 +122,49 @@ def run_homebrew_updates() -> None:
 
 
 def run_zsh_updates() -> None:
-    """Update the ZSH plugins."""
+    """Update the local Zsh plugins by pulling the latest changes.
+
+    This function assumes the Zsh plugins are cloned under:
+        `~/.zsh/plugins/<PLUGIN-NAME>`
+
+    For each plugin repository listed in the `plugins` tuple, the function:
+        1. Constructs the local plugin directory path.
+        2. Changes the working directory to that location.
+        3. Executes `git pull --rebase` to fetch and apply the upstream updates.
+
+    All Git operations are executed with `check=True`, causing
+    `subprocess.CalledProcessError` to be raised if any update fails.
+
+    Raises:
+        `FileNotFoundError`: If a plugin directory does not exist.
+        `subprocess.CalledProcessError`: If a Git update operation exits with a non-zero
+            status.
+    """
+    plugins = (
+        "zsh-users/zsh-autosuggestions",
+        "ael-code/zsh-colored-man-pages",
+        "zsh-users/zsh-completions",
+        "zsh-users/zsh-syntax-highlighting",
+    )
+
+    print(f"{_INFO} Running ZSH plugin updates")
+    for plugin in plugins:
+        print(f"{_INFO} Fetching https://github.com/{plugin}")
+        plugin_dir = Path.home() / ".zsh" / "plugins" / plugin.split("/")[-1]
+        os.chdir(plugin_dir)
+        subprocess.run(
+            ["git", "pull", "--rebase"], check=True, stdout=subprocess.DEVNULL
+        )
+    print(f"{_SUCCESS} ZSH update plugins complete!")
 
 
 def main() -> None:
     """Entrypoint of the script."""
     # Parse the CLI arguments of the script
     parse_args()
+
+    # Chech which shell is enabled for the interactive environment
+    shell = os.getenv("SHELL")
 
     # Run the package updates for a Linux distribution
     if platform.uname().system == "Linux":
@@ -135,6 +173,10 @@ def main() -> None:
     # Run the Homebrew package updates
     if homebrew_installed():
         run_homebrew_updates()
+
+    # Update the zsh plugins
+    if shell and shell.split("/")[-1] == "zsh":
+        run_zsh_updates()
 
     print(f"{_SUCCESS} System update complete...exiting now")
 
