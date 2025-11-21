@@ -65,19 +65,59 @@ def run_linux_updates() -> None:
             subprocess.run(
                 ["sudo", "apt-get", "autoremove", "--purge", "--yes"], check=True
             )
-            print(f"{_INFO} {distro} APT packages upgrade complete!")
+            print(f"{_SUCCESS} {distro} APT packages upgrade complete!")
         case "Fedora":
             print(f"{_INFO} Updating {distro} system...")
             subprocess.run(["sudo", "dnf", "upgrade", "--assumeyes"], check=True)
             subprocess.run(["sudo", "dnf", "autoremove", "--assumeyes"], check=True)
-            print(f"{_INFO} {distro} APT packages upgrade complete!")
+            print(f"{_SUCCESS} {distro} APT packages upgrade complete!")
         case _:
             print(f"{_ERROR} Failed to identify system information...exiting!")
             sys.exit(1)
 
 
+def homebrew_installed() -> bool:
+    """Determine whether Homebrew is installed and accessible.
+
+    This function checks for the presence of the `brew` executable by attempting to run
+    `brew --version`. No output is displayed during the check.
+
+    Returns:
+        `True`: Homebrew is installed and the `brew` command can be executed.
+        `False`: Homebrew is not installed, not available on the system `PATH` or
+            returned an unexpected error during its execution.
+    """
+    try:
+        subprocess.run(["brew", "--version"], check=True, stdout=subprocess.DEVNULL)
+        return True
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        return False
+
+
 def run_homebrew_updates() -> None:
-    """Run updates for the Homebrew package manager."""
+    """Run system package updates using Homebrew.
+
+    This function executes the standard Homebrew maintenance sequence:
+        - `brew update` to refresh the available package definitions.
+        - `brew upgrade` to upgrade installed formulae and casks.
+        - `brew autoremove` to removed unused dependency packages.
+        - `brew cleanup` to remove outdated files and cached data.
+
+    All the commands are executed with the `check=True` parameter to raise a
+    `subprocess.CalledProcessError` to be raised if any step fails.
+
+    Raises:
+        subprocess.CalledProcessError: If any Homebrew command exits with a non-zero
+            status.
+    """
+    print(f"{_INFO} Running Homebrew updates")
+
+    subprocess.run(["brew", "update"], check=True)
+    subprocess.run(["brew", "upgrade"], check=True)
+    subprocess.run(["brew", "autoremove"], check=True)
+    subprocess.run(["brew", "cleanup"], check=True)
+
+    print(f"{_SUCCESS} Homebrew package upgrades complete!")
 
 
 def run_zsh_updates() -> None:
@@ -94,7 +134,8 @@ def main() -> None:
         run_linux_updates()
 
     # Run the Homebrew package updates
-    run_homebrew_updates()
+    if homebrew_installed():
+        run_homebrew_updates()
 
     print(f"{_SUCCESS} System update complete...exiting now")
 
