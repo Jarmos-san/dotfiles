@@ -7,9 +7,11 @@
 # License: MIT (see the LICENSE document for more info on this regards)
 ###############################################################################
 
+import datetime
 import platform
 import subprocess
 import sys
+from argparse import ArgumentParser, Namespace
 
 # Message labels with their respective colour codes
 _RESET = "\x1b[0m"
@@ -21,6 +23,21 @@ _RED = "\x1b[31m"
 _INFO = f"[{_BLUE}INFO{_RESET}]"
 _SUCCESS = f"[{_GREEN}SUCCESS{_RESET}]"
 _ERROR = f"[{_RED}ERROR{_RESET}]"
+
+
+def parse_args() -> Namespace:
+    """Parse and return the CLI arguments.
+
+    Returns:
+        An argparse.Namespace object containing the parsed arguments.
+    """
+    current_year = datetime.datetime.now(datetime.timezone.utc).year
+    description = "intelligently update the system packages"
+    epilog = f"© Somraj Saha 2018-{current_year} <contact@jarmos.dev>"
+
+    parser = ArgumentParser(description=description, epilog=epilog)
+
+    return parser.parse_args()
 
 
 def run_linux_updates() -> None:
@@ -69,7 +86,13 @@ def run_zsh_updates() -> None:
 
 def main() -> None:
     """Entrypoint of the script."""
+    # Parse the CLI arguments of the script
+    parse_args()
+
+    # Run the package updates for a Linux distribution
     run_linux_updates()
+
+    # Run the Homebrew package updates
     run_homebrew_updates()
 
     print(f"{_SUCCESS} System update complete...exiting now")
