@@ -1,6 +1,23 @@
 #!/usr/bin/env python3
 
-"""Simple script to run system updates across different distributions easy peasy!
+"""System maintenance and update utility.
+
+This script provides an unified interface for maintaining and updating the software
+across multiple environments. Depending on the Operating Systems, installed package
+managers and active shell, the script can perform;
+
+    - Linux distribution updates using the appropriate package manager.
+    - Homebrew package updates on MacOS or Linux systems where Homebrew is installed.
+    - Zsh plugin updates for users running the Zsh shell with plugin repositories stored
+        under `~/.zsh/plugins`.
+
+The script determines which update routines to run based on environment inspection
+rather than user input, making it suitable for automated maintenance tasks or periodic
+system cleanup.
+
+Errors from subprocess commands (such as package manager failures) may propagate unless
+caught internally, ensuring misconfigurations or unexpected system states are not
+silently ignored.
 
 Author: Somraj Saha <contact@jarmos.dev>
 License: MIT
@@ -159,7 +176,26 @@ def run_zsh_updates() -> None:
 
 
 def main() -> None:
-    """Entrypoint of the script."""
+    """Executes the full system update routine for the current environment.
+
+    This function orchestrates all available update mechanisms based on the system
+    configuration and installed tooling:
+
+        1. Parses the CLI arguments for the script.
+        2. Detects the active shell via the `SHELL` environment variable.
+        3. If running on Linux system, executes OS-level package updates.
+        4. If Homebrew is installed, runs Homebrew package maintenance.
+        5. If the active shell is Zsh, updates the Zsh plugins.
+
+    The function prints progress messages and ends with a success message once all
+    relevant update routines have completed. Errors from underlying update handlers
+    (such as failed subprocess calls) may propagate upwards unless explicitly handled
+    within those functions.
+
+    Raises:
+        subprocess.CalledProcessError: If any invoked update command (Linux, Homebrew
+            or Zsh plugin updates) fails and is executed with `check=True`.
+    """
     # Parse the CLI arguments of the script
     parse_args()
 
