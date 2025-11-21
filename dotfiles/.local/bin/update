@@ -90,7 +90,8 @@ def main() -> None:
     parse_args()
 
     # Run the package updates for a Linux distribution
-    run_linux_updates()
+    if platform.uname().system == "Linux":
+        run_linux_updates()
 
     # Run the Homebrew package updates
     run_homebrew_updates()
