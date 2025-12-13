@@ -23,6 +23,7 @@ return {
         "%.tsbuildinfo",
         "coverage",
         "%.data",
+        "pip",
       },
     },
     pickers = {
