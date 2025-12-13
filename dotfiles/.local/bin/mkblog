@@ -20,6 +20,7 @@ import os
 import pathlib
 import re
 import subprocess
+from dataclasses import dataclass
 
 # The current timestamp during the template generation process
 _TIME = datetime.datetime.now(datetime.timezone.utc)
@@ -51,6 +52,11 @@ def parse_args() -> argparse.Namespace:
 
     # Add argument to set the title of the blogpost
     parser.add_argument("title", type=str, help="the title of the blog post")
+
+    # Add argument to set the description of the blogpost
+    parser.add_argument(
+        "description", type=str, help="the description of the blog post"
+    )
 
     # Add the option to store whether the blog is a draft
     parser.add_argument(
@@ -93,82 +99,87 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def slugify(title: str) -> str:
-    """Convert a post title to a filesystem-safe slug.
+@dataclass
+class Blog:
+    """Represents a blog post and provides utilities for generating and writing a
+    Markdown file with YAML frontmatter.
 
-    Replaces spaces with hyphens and removes any alphanumeric characters.
-
-    Args:
-        title: The title of the blog post.
-
-    Returns:
-        A lowercase, hyphen-seperated string safe for filenames.
+    This class is intended to be used as a lightweight content scaffold for
+    filesystem-based blogging workflows.
     """
-    return re.sub(r"[^a-z0-9-]", "", title.lower().replace(" ", "-"))
 
+    title: str
+    draft: bool
+    description: str
 
-def generate_content(title: str, draft: bool) -> str:
-    """Generate Markdown content with YAML frontmatter for the blogpost.
+    def _slugify(self) -> str:
+        """Generate a filesystem-safe slug from the blog title.
 
-    Args:
-        title: The title of the blogpost.
-        draft: Whether the blogpost should be marked as draft.
+        The title is lowercased, spaces are replaced with hyphens and any characters
+        other than lowercase alphanumerics and hyphens are removed.
 
-    Returns:
-        A string containing the Markdown template with populated frontmatter.
-    """
-    now = _TIME
-    status = "draft" if draft else "published"
-    description = "Lorem ipsum"
+        Returns:
+            A lowercase, hyphen-separated string suitable for use as a filename.
+        """
+        return re.sub(r"[^a-z0-9-]", "", self.title.lower().replace(" ", "-"))
 
-    return f"""---
-title: {title}
-description: {description}
-publishedOn: {now}
-status: {status}
----
+    def _create_template(self) -> str:
+        """Create a Markdown template with populated YAML frontmatter.
 
-Add blog content here...
-"""
+        The frontmatter includes the blog title, description, publication
+        timestamp (UTC), and publication status derived from the `draft`
+        flag.
 
+        Returns:
+            A Markdown-formatted string containing YAML frontmatter
+            followed by placeholder content.
+        """
+        return (
+            "---\n"
+            + f"title: {self.title}\n"
+            + f"description: {self.description}\n"
+            + f"publishedOn: {_TIME}\n"
+            + f"status: {'draft' if self.draft else 'published'}\n"
+            + "---\n\n"
+            + "Add blog content here..."
+        )
 
-def write_file(
-    title: str, output: pathlib.Path, draft: bool, force: bool, verbose: bool
-) -> pathlib.Path | None:
-    """Generate a Markdown file for a new blog post.
+    def write_file(self, base_dir: pathlib.Path, force: bool) -> pathlib.Path | None:
+        """Write the blog post to a Markdown file on disk.
 
-    This function handles the file naming, existence checks, content generation and
-    output messages based on the provided arguments.
+        The file is created under the user's home directory at
+        `~/projects/blogposts/blogs`, using a slugified version of the
+        title as the filename.
 
-    Args:
-        title: The title of the blog post.
-        output: The directory where the Markdown file will be generated at.
-        draft: Whether the blogpost should be marked as draft.
-        force: Whether to overwrite the file if it already exists.
-        verbose: Whether to print detailed output messages.
-    """
-    # Check if the output directory exists, else create it before generating the
-    # Markdown file into.
-    if not pathlib.Path(output).is_dir():
-        pathlib.Path(output).mkdir(parents=True, exist_ok=True)
+        If a file with the same name already exists and `force` is
+        False, the method prints a warning and does not overwrite the
+        file.
 
-    # Sanitize and create the filepath of the Markdown file
-    filepath = output / f"{slugify(title)}.md"
+        Args:
+            force: Whether to overwrite an existing file.
 
-    # Print a warning message to the user if the specified file already exists
-    if filepath.exists() and not force:
-        print(f"{_WARN} {filepath} already exists. Use --force to overwrite.")
-        return None
+        Returns:
+            The path to the written Markdown file, or None if the file
+            already exists and overwriting was not allowed.
+        """
+        # Check if the output directory exists, else create it before generating the
+        # Markdown file into
+        if not base_dir.is_dir():
+            base_dir.mkdir(parents=True, exist_ok=True)
 
-    # Generate the Markdown file along with its specified template content
-    content = generate_content(title, draft)
-    filepath.write_text(content)
+        # Sanitize and create the filepath of the Markdown file
+        filepath = base_dir / f"{self._slugify()}.md"
 
-    # If the verbose option is enabled, print a verbose output for the user at STDOUT
-    if verbose:
-        print(f"{_INFO} Created {filepath.resolve()}")
+        # Print a warning message to the user if the specified file already exists
+        if filepath.exists() and not force:
+            print(f"WARN {filepath} already exists. Use --force to overwrite.")
+            return None
 
-    return filepath
+        # Generate the Markdown file along with its specified template content
+        content = self._create_template()
+        filepath.write_text(content)
+
+        return filepath
 
 
 def main() -> None:
@@ -177,10 +188,13 @@ def main() -> None:
     args = parse_args()
     editor = os.getenv("EDITOR")
 
-    # Get the filepath to the generated template
-    filepath = write_file(args.title, args.output, args.draft, args.force, args.verbose)
+    # Create an instance of "Blog" to generate a blogpost from
+    blog = Blog(title=args.title, draft=args.draft, description=args.description)
 
-    # Print useful guidelines to edit the template if it was succesfully generated
+    # Write the blogpost to disk and get its filepath
+    filepath = blog.write_file(base_dir=args.output, force=args.force)
+
+    # Print useful guidelines to edit the template if it was successfully generated
     if filepath and editor:
         print(f"{_INFO} Blog template is generated at {str(filepath)}")
         print(f"{_INFO} Start editing it by running these commands:\n")
