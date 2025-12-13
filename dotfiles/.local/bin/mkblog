@@ -16,24 +16,52 @@ TODO: Provide a usage guide.
 
 import argparse
 import datetime
+import logging
 import os
 import pathlib
 import re
+import shlex
 import subprocess
 from dataclasses import dataclass
 
 # The current timestamp during the template generation process
-_TIME = datetime.datetime.now(datetime.timezone.utc)
 _BLOG_DIR = pathlib.Path.home() / "projects" / "blogposts" / "blogs"
 
-# Message labels with their respective ANSI colour codes
-_RESET = "\x1b[0m"
-_GREEN = "\x1b[92m"
-_BLUE = "\x1b[94m"
-_YELLOW = "\x1b[93m"
 
-_INFO = f"[{_BLUE}INFO{_RESET}]"
-_WARN = f"[{_YELLOW}WARN{_RESET}]"
+def configure_logging(level: int, name: str = __name__) -> logging.Logger:
+    """Configure and return a logger with a console handler and custom formatting.
+
+    The function initialises or retrieves a logger with the given name, sets its logging
+    level, attaches a stream handler which outputs to STDOUT and applies a simple,
+    structured log message format.
+
+    **NOTE**: The function unconditionally adds a new `StreamHandler` each time it is
+    called. Hence, callers should ensure it is not invoked repeatedly for the same
+    logger name unless multiple handlers are desired.
+
+    Args:
+        level: The logging level to apply (e.g., logging.INFO, logging.DEBUG).
+        name: The name of the logger to configure. Defaults to the caller's module name.
+
+    Returns:
+        A configured `logging.Logger` instance.
+    """
+    # Set the name of the root logger
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    logger.propagate = False
+
+    # Configure the formatting style of the log messages
+    formatter = logging.Formatter("[{levelname}] - {message}", style="{")
+
+    # Set the logger to send the messages to the console output
+    if not logger.handlers:
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(level)
+        console_handler.setFormatter(formatter)
+        logger.addHandler(console_handler)
+
+    return logger
 
 
 def parse_args() -> argparse.Namespace:
@@ -42,9 +70,11 @@ def parse_args() -> argparse.Namespace:
     Returns:
         An argparse.Namespace object containing the parsed arguments.
     """
+    current_year = datetime.datetime.now(datetime.timezone.utc).year
+
     # Some usage guidelines and message for using the program.
     description = "generate blogpost Markdown files in a reproducible manner"
-    epilog = f"© 2018-{_TIME.year} Somraj Saha <contact@jarmos.dev>"
+    epilog = f"© 2018-{current_year} Somraj Saha <contact@jarmos.dev>"
     blogs = _BLOG_DIR
 
     # Create the parser to fetch the CLI flags passed to the script.
@@ -60,7 +90,7 @@ def parse_args() -> argparse.Namespace:
 
     # Add the option to store whether the blog is a draft
     parser.add_argument(
-        "-d",
+        "-D",
         "--draft",
         action="store_true",
         default=True,
@@ -92,7 +122,7 @@ def parse_args() -> argparse.Namespace:
 
     # Add the option to provide verbose output when generating the file contents
     parser.add_argument(
-        "-v", "--verbose", action="store_true", help="enable verbose output"
+        "-d", "--debug", action="store_true", help="enable verbose output"
     )
 
     # Parse the arguments and options
@@ -120,8 +150,16 @@ class Blog:
 
         Returns:
             A lowercase, hyphen-separated string suitable for use as a filename.
+
+        Raises:
+            ValueError if the title cannot be slugified for some reason.
         """
-        return re.sub(r"[^a-z0-9-]", "", self.title.lower().replace(" ", "-"))
+        slug = re.sub(r"[^a-z0-9]+", "-", self.title.lower())
+
+        if not slug:
+            raise ValueError("Title cannot be converted into a valid filename")
+
+        return slug.strip("-")
 
     def _create_template(self) -> str:
         """Create a Markdown template with populated YAML frontmatter.
@@ -134,17 +172,21 @@ class Blog:
             A Markdown-formatted string containing YAML frontmatter
             followed by placeholder content.
         """
+        timestamp = datetime.datetime.now(datetime.timezone.utc)
+
         return (
             "---\n"
             + f"title: {self.title}\n"
             + f"description: {self.description}\n"
-            + f"publishedOn: {_TIME}\n"
+            + f"publishedOn: {timestamp}\n"
             + f"status: {'draft' if self.draft else 'published'}\n"
             + "---\n\n"
             + "Add blog content here..."
         )
 
-    def write_file(self, base_dir: pathlib.Path, force: bool) -> pathlib.Path | None:
+    def write_file(
+        self, base_dir: pathlib.Path, force: bool, logger: logging.Logger
+    ) -> pathlib.Path | None:
         """Write the blog post to a Markdown file on disk.
 
         The file is created under the user's home directory at
@@ -156,7 +198,12 @@ class Blog:
         file.
 
         Args:
-            force: Whether to overwrite an existing file.
+            base_dir (pathlib.Path): The base directory path where the Markdown file
+                will be generated at.
+            force (bool): Whether to overwrite an existing file to replace it with a new
+                file.
+            logger (logging.Logger): An instance of `logging.Logger` to print log
+                messages to the log handler.
 
         Returns:
             The path to the written Markdown file, or None if the file
@@ -172,37 +219,53 @@ class Blog:
 
         # Print a warning message to the user if the specified file already exists
         if filepath.exists() and not force:
-            print(f"WARN {filepath} already exists. Use --force to overwrite.")
+            logger.warning(f"{filepath} already exists")
+            logger.info('Use the "--force" flag to overwrite the existing file')
+
             return None
 
         # Generate the Markdown file along with its specified template content
         content = self._create_template()
-        filepath.write_text(content)
+        filepath.write_text(content, encoding="utf-8")
 
         return filepath
 
 
 def main() -> None:
     """Entrypoint of the script."""
-    # Parse the CLI flags and options
+    # Parse the CLI arguments
     args = parse_args()
+
+    # Create an instance of "Logger" to print log messages
+    logger = configure_logging(logging.DEBUG if args.debug else logging.INFO)
+
+    # Set the editor command
     editor = os.getenv("EDITOR")
 
     # Create an instance of "Blog" to generate a blogpost from
     blog = Blog(title=args.title, draft=args.draft, description=args.description)
 
     # Write the blogpost to disk and get its filepath
-    filepath = blog.write_file(base_dir=args.output, force=args.force)
+    filepath = blog.write_file(base_dir=args.output, force=args.force, logger=logger)
+
+    # Set the editor command which can be invoked directly from the script
+    cmd = None
+    if editor:
+        cmd = shlex.split(editor) + [str(filepath)]
 
     # Print useful guidelines to edit the template if it was successfully generated
     if filepath and editor:
-        print(f"{_INFO} Blog template is generated at {str(filepath)}")
-        print(f"{_INFO} Start editing it by running these commands:\n")
-        print(f"{_GREEN}\tcd {filepath.parent}\n\t{editor} {filepath}{_RESET}")
+        logger.info(f"Blog template is generated at {str(filepath)}")
+        logger.info(
+            "Start editing it by running these commands:\n\n\t\x1b[92mcd "
+            + f"{filepath.parent}\n\t{editor} {filepath}\x1b[0m"
+        )
 
         # Open the file using the editor if the script is allowed to do so
-        if args.edit:
-            subprocess.run([editor, filepath])
+        if args.edit and cmd:
+            result = subprocess.run(cmd)
+            if result.returncode != 0:
+                logger.error(f'"{cmd}" command exited with a non-zero status')
 
 
 if __name__ == "__main__":
