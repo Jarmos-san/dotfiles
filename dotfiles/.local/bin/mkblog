@@ -180,6 +180,9 @@ class Blog:
             + f"description: {self.description}\n"
             + f"publishedOn: {timestamp}\n"
             + f"status: {'draft' if self.draft else 'published'}\n"
+            + "coverImage:"
+            + "  url: https://example.com"
+            + "  alt: Lorem ipsum."
             + "---\n\n"
             + "Add blog content here..."
         )
