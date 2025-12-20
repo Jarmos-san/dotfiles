@@ -85,7 +85,7 @@ def parse_args() -> argparse.Namespace:
 
     # Add argument to set the description of the blogpost
     parser.add_argument(
-        "description", type=str, help="the description of the blog post"
+        "description", nargs="?", type=str, help="the description of the blog post"
     )
 
     # Add the option to store whether the blog is a draft
@@ -245,8 +245,17 @@ def main() -> None:
     # Set the editor command
     editor = os.getenv("EDITOR")
 
+    if not args.description:
+        description = input("Description: ")
+    else:
+        description = args.description
+
+    logger.debug("Title=%s", args.title)
+    logger.debug("Draft=%s", args.draft)
+    logger.debug("Description=%s", description)
+
     # Create an instance of "Blog" to generate a blogpost from
-    blog = Blog(title=args.title, draft=args.draft, description=args.description)
+    blog = Blog(title=args.title, draft=args.draft, description=description)
 
     # Write the blogpost to disk and get its filepath
     filepath = blog.write_file(base_dir=args.output, force=args.force, logger=logger)
