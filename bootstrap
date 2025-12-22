@@ -10,9 +10,67 @@ import pathlib
 import platform
 import subprocess
 import sys
+import time
+import typing
 from argparse import ArgumentParser, Namespace
 from datetime import datetime
-from logging import DEBUG, INFO, Formatter, Logger, StreamHandler, getLogger
+from logging import (
+    CRITICAL,
+    DEBUG,
+    ERROR,
+    INFO,
+    WARNING,
+    Formatter,
+    Logger,
+    LogRecord,
+    StreamHandler,
+    getLogger,
+)
+
+
+class LogFormatter(Formatter):
+    """A log formatter which adds ANSI colours and aligns the level tag.
+
+    The colour is applied to the entire bracketed level tag, while the message text
+    remains uncoloured. The tags are padded to `LABEL_WIDTH` characters to keep log
+    messages in a neatly aligned column.
+
+    Attributes:
+        colours: Mapping of log levels to ANSI colour codes.
+        reset: ANSI escape sequence used to reset terminal colours.
+        label_width: Target width (in visible characters) for the bracketed log-level
+            label, e.g. "[CRITICAL]".
+    """
+
+    # Set the timestamps to be in UTC
+    converter = time.gmtime  # type: ignore
+
+    # Set the ANSI colour codes for levels
+    colours: typing.ClassVar = {
+        DEBUG: "\033[36m",  # Cyan
+        INFO: "\033[32m",  # Green
+        WARNING: "\033[33m",  # Yellow
+        ERROR: "\033[31m",  # Red
+        CRITICAL: "\033[41m",  # Red background
+    }
+
+    # Remove the ANSI colour code for levels
+    reset = "\033[0m"
+
+    @typing.override
+    def format(self, record: LogRecord) -> str:
+        """Format a log record with coloured and padded level labels.
+
+        Args:
+            record: The log record being formatted.
+
+        Returns:
+            A coloured and aligned log message string.
+        """
+        colour = self.colours.get(record.levelno, self.reset)
+        record.coloured_levelname = f"{colour}{record.levelname}{self.reset}"
+
+        return super().format(record)
 
 
 def configure_logging(level: int) -> Logger:
@@ -39,7 +97,10 @@ def configure_logging(level: int) -> Logger:
 
     # Format the log message to provide contextual information about the log level name
     # and its associated log message
-    fmt = Formatter("[%(levelname)s] - %(message)s")
+    fmt = LogFormatter(
+        "%(asctime)s %(coloured_levelname)-9s %(message)s",
+        datefmt="%Y-%m-%dT%H:%M:%S%z",
+    )
 
     # Attach a log handler to print the log messages to STDOUT
     if not logger.handlers:
