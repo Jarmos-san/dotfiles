@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+
+"""Script to automate the setup process of a fresh new development environment.
+
+Author: Somraj Saha <somraj.saha@weburz.com>
+License: MIT
+"""
+
+from argparse import ArgumentParser, Namespace
+from datetime import datetime
+from logging import DEBUG, INFO, Formatter, Logger, StreamHandler, getLogger
+
+
+def configure_logging(level: int) -> Logger:
+    """Configure and return a console logger.
+
+    This function creates (or retrieves) a logger with a given name, set it's logging
+    level and attaches a stream handler with a custom formatted log message if no
+    handlers are already present.
+
+    Args:
+        level: The logging level to be set on the logger and its handler (e.g.,
+            `logging.DEBUG`, `logging.INFO`).
+        name: The name of the logger to configure. Defaults to the name of the current
+            module.
+
+    Returns:
+        A configured `logging.Logger` instance.
+    """
+    # Get a logger and set it's name to the name of the current module
+    logger = getLogger(__name__)
+
+    # Set the logging level for the root log handler
+    logger.setLevel(level)
+
+    # Format the log message to provide contextual information about the log level name
+    # and its associated log message
+    fmt = Formatter("[%(levelname)s] - %(message)s")
+
+    # Attach a log handler to print the log messages to STDOUT
+    if not logger.handlers:
+        console_handler = StreamHandler()
+        console_handler.setLevel(level)
+        console_handler.setFormatter(fmt)
+        logger.addHandler(console_handler)
+
+    return logger
+
+
+def parse_args() -> Namespace:
+    """Parse and return the CLI arguments.
+
+    Initialises an argument parser with program metadata and parses arguments provided
+    via the command-line.
+
+    Returns:
+        An `argparse.Namespace` object containing the parsed command-line arguments.
+    """
+    # Get the current year which is used in the program's description
+    current_year = datetime.now().year
+
+    # Create a parser instance to attach the CLI arguments to
+    parser = ArgumentParser(
+        description="bootstrap a fresh new development environment.",
+        epilog=f"copyright 2018-{current_year} Somraj Saha <somraj.saha@weburz.com>",
+    )
+
+    # Flag to enable debug mode for the script
+    parser.add_argument(
+        "--debug", action="store_true", help="enable debug mode for the script"
+    )
+
+    # Parse the CLI arguments and return them
+    return parser.parse_args()
+
+
+def main() -> None:
+    """Program entry point.
+
+    Parses command-line arguments, configure logging and executes the main application
+    logic.
+    """
+    # Parse the CLI arguments
+    args = parse_args()
+
+    # Configure a logger and give it the `DEBUG` log level
+    if args.debug:
+        level = DEBUG
+    else:
+        level = INFO
+
+    logger = configure_logging(level)
+
+    # Experimental log message which will be replaced any way
+    logger.debug("Hello World!")
+    logger.info("Hello World!")
+
+
+if __name__ == "__main__":
+    main()
