@@ -214,6 +214,31 @@ def configure_sudo(logger: Logger, user: str) -> None:
         logger.warning('"%s" exists, not overwriting it', file)
 
 
+def create_work_dirs(logger: Logger) -> None:
+    """Create standard workspace directories in the user's home directory.
+
+    Ensures that predefined directories used for professional and personal projects
+    exists under the current user's home directory. If a directory already exists, it
+    remains unchanged.
+
+    Args:
+        logger: The Logger instance used to emit informational, debug and warning
+            messages during directory creation.
+    """
+    # The names of the directories to create for my professional and personal projects
+    dirs = ("projects", "work")
+
+    # Create the working directories at the user's home directory
+    logger.info("Creating work directories")
+    for dir in dirs:
+        path = pathlib.Path().home() / dir
+        if not path.is_dir():
+            path.mkdir()
+            logger.debug('Created "%s" directory', path)
+        else:
+            logger.warning('Directory "%s" already exists, not recreating...', path)
+
+
 def main() -> None:
     """Program entry point.
 
@@ -237,6 +262,9 @@ def main() -> None:
 
     # Update the sudoers file according to the required configurations
     configure_sudo(logger, "jarmos")
+
+    # Create the working directories for professional and personal stuff
+    create_work_dirs(logger)
 
 
 if __name__ == "__main__":
