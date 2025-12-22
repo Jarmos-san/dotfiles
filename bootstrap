@@ -6,6 +6,9 @@ Author: Somraj Saha <somraj.saha@weburz.com>
 License: MIT
 """
 
+import platform
+import subprocess
+import sys
 from argparse import ArgumentParser, Namespace
 from datetime import datetime
 from logging import DEBUG, INFO, Formatter, Logger, StreamHandler, getLogger
@@ -74,6 +77,50 @@ def parse_args() -> Namespace:
     return parser.parse_args()
 
 
+def update_system(logger: Logger) -> None:
+    """Update system packages using the native package manager.
+
+    Detects the underlying Linux distribution using freedesktop OS metadata and executes
+    the appropriate system package update and upgrade commands via the distribution's
+    package manager.
+
+    Args:
+        logger: The `logging.Logger` instance used to emit debug, informational and
+            error messages during the update process.
+
+    Raises:
+        SystemExit: If the Operating System cannot be identified or is not supported.
+    """
+    # Get the name of the OS to run updates on
+    os_name = platform.freedesktop_os_release().get("NAME")
+
+    logger.debug("Identified OS name as: %s", os_name)
+    logger.info("Running system updates...")
+
+    # Run system updates based on the Operating System's package manager
+    match os_name:
+        case "Ubuntu" | "Debian":
+            # Command to update the apt-cache
+            update = ["sudo", "apt-get", "update"]
+
+            # Command to update the system packages
+            upgrade = ["sudo", "apt-get", "upgrade", "--yes"]
+
+            logger.debug('Running "%s" to update the apt-cache', " ".join(update))
+            subprocess.run(update)
+
+            logger.debug('Running "%s" to upgrade the apt packages', " ".join(upgrade))
+            subprocess.run(upgrade)
+        case "Fedora":
+            # Command to update the dnf packages
+            cmd = ["sudo", "dnf", "upgrade", "--refresh", "--assumeyes"]
+            logger.debug('Running "%s" to upgrade the dnf packages', " ".join(cmd))
+            subprocess.run(cmd)
+        case _:
+            logger.error("Failed to identify OS name...exiting now!")
+            sys.exit(1)
+
+
 def main() -> None:
     """Program entry point.
 
@@ -83,17 +130,17 @@ def main() -> None:
     # Parse the CLI arguments
     args = parse_args()
 
-    # Configure a logger and give it the `DEBUG` log level
+    # Set the logging level based on the argument passed to the script
     if args.debug:
         level = DEBUG
     else:
         level = INFO
 
+    # Configure a logger and provide it a logging level
     logger = configure_logging(level)
 
-    # Experimental log message which will be replaced any way
-    logger.debug("Hello World!")
-    logger.info("Hello World!")
+    # Update the system before running automated setup
+    update_system(logger)
 
 
 if __name__ == "__main__":
