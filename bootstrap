@@ -6,6 +6,7 @@ Author: Somraj Saha <somraj.saha@weburz.com>
 License: MIT
 """
 
+import pathlib
 import platform
 import subprocess
 import sys
@@ -121,6 +122,37 @@ def update_system(logger: Logger) -> None:
             sys.exit(1)
 
 
+def configure_sudo(logger: Logger, user: str) -> None:
+    """Configure passwordless sudo access for a user.
+
+    Creates a user-specific sudoers configuration file under `/etc/sudoers.d` which
+    grants the specified user passwordless sudo privileges. If the file already exists,
+    it is not overwritten.
+
+    Args:
+        logger: The logging.Logger instance used to emit information, debug, warning and
+            error messages.
+        user: The username for which passwordless sudo access should be configured.
+    """
+    # Create the filepath to the user-specific sudo file
+    file = pathlib.Path("/") / "etc" / "sudoers.d" / f"{user}_nopasswd"
+
+    # Generate the contents to configure passwordless sudo configuration for a specific
+    # user
+    content = f"{user} ALL=(ALL) NOPASSWD: ALL"
+
+    # Check if the file existings and is writable else throw an error or write to it
+    if not file.is_file():
+        logger.info('Configuring the "%s" file', file)
+        logger.debug('Added "%s" to "%s"', content, file)
+        try:
+            file.write_text(content)
+        except PermissionError:
+            logger.error('Failed to write to "%s", use to "sudo"...')
+    else:
+        logger.warning('"%s" exists, not overwriting it', file)
+
+
 def main() -> None:
     """Program entry point.
 
@@ -141,6 +173,9 @@ def main() -> None:
 
     # Update the system before running automated setup
     update_system(logger)
+
+    # Update the sudoers file according to the required configurations
+    configure_sudo(logger, "jarmos")
 
 
 if __name__ == "__main__":
