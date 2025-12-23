@@ -142,6 +142,27 @@ def parse_args() -> Namespace:
     return parser.parse_args()
 
 
+def confirm_sudo() -> None:
+    """Prompt the user about sudo privileges.
+
+    Prompts the user about exeucting the script using sudo privileges which can
+    potentially make irreversible changes to the user's sytem. Selecting to abort the
+    execution will safely stop the operation without making any changes to the system.
+
+    Args:
+        logger: The `logging.Logger` instance to provide warning and information
+            messages to the user about the operation.
+
+    Returns:
+        None
+    """
+    print("This script will run commands with sudo privileges.")
+    response = input("Do you want to continue? [y/N] ").strip().lower()
+    if response != "y":
+        print("Aborting setup...")
+        sys.exit(0)
+
+
 def update_system(logger: Logger) -> None:
     """Update system packages using the native package manager.
 
@@ -341,6 +362,9 @@ def main() -> None:
 
     # Configure a logger and provide it a logging level
     logger = configure_logging(level)
+
+    # Prompt the user about potential usage of sudo
+    confirm_sudo()
 
     # Update the system before running automated setup
     update_system(logger)
