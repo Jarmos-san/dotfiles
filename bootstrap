@@ -6,12 +6,15 @@ Author: Somraj Saha <somraj.saha@weburz.com>
 License: MIT
 """
 
+import json
 import pathlib
 import platform
 import subprocess
 import sys
 import time
 import typing
+import urllib.error
+import urllib.request
 from argparse import ArgumentParser, Namespace
 from datetime import datetime
 from logging import (
@@ -239,6 +242,88 @@ def create_work_dirs(logger: Logger) -> None:
             logger.warning('Directory "%s" already exists, not recreating...', path)
 
 
+def get_latest_nf_version(logger: Logger) -> str | None:
+    """Fetch the latest Nerd Fonts release version from GitHub.
+
+    This function queries the GitHub releases API for the Nerd Fonts repository and
+    extracts the latest release tag (e.g., `v3.4.0`). The version is returned as a
+    string if the request succeeds or `None` if the version cannot be determined due to
+    a network or a parsing error.
+
+    All errors encountered while making the request are logged using the provided
+    logger.
+
+    Args:
+        logger: The `logging.Logger` instance used for debug and error messages.
+
+    Returns:
+        The latest Nerd Fonts version tag as a string or `None` if the version could not
+        be fetched.
+    """
+    logger.debug("Fetching the latest version of Nerd Font...")
+
+    # The URL to fetch the version information from
+    url = "https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest"
+
+    version = None
+
+    # Attempt to fetch the version information from
+    try:
+        with urllib.request.urlopen(url) as response:
+            content = json.loads(response.read().decode("utf-8"))
+            version = content.get("tag_name")
+    except urllib.error.HTTPError as exc:
+        logger.exception('HTTP error %s while requesting "%s"', exc.code, url)
+    except urllib.error.URLError:
+        logger.exception('Failed to make a request to "%s"', url)
+
+    # Log the version number if it was successfully fetched from the GitHub servers
+    if version:
+        logger.debug('Identified the latest Nerd Font version as "%s"', version)
+
+    return version
+
+
+def setup_fonts(logger: Logger, name: str) -> None:
+    """Prepare the download of a Nerd Font by name.
+
+    This function determines the latest Nerd Fonts release version and constructs the
+    corresponding download URL for the specified font. If the code is running inside a
+    Windows Subsystem for Linux (WSL) environment, the setup process is skipped and a
+    warning is logged.
+
+    Args:
+        logger: The `logging.Logger` instance used for informational and warning
+            messages.
+        name: The Nerd Font name to download from GitHub.
+
+    Returns:
+        None
+    """
+    # Skip setting up fonts on WSL 2 environments
+    if pathlib.Path("/proc/sys/fs/binfmt_misc/WSLInterop").exists():
+        logger.warning("WSL environment detected, skipping fonts setup")
+        return None
+
+    # Get the latest version of Nerd Font
+    version = get_latest_nf_version(logger)
+
+    # If a version was feched, build the URL to download the assets from
+    url = None
+    if version:
+        url = (
+            "https://github.com/ryanoasis/nerd-fonts/releases/download/"
+            + version
+            + "/"
+            + name
+            + ".zip"
+        )
+
+    logger.info('Downloading "%s" Nerd Font from "%s"', name, url)
+
+    # TODO: Implement feature to download and setup the fonts
+
+
 def main() -> None:
     """Program entry point.
 
@@ -265,6 +350,9 @@ def main() -> None:
 
     # Create the working directories for professional and personal stuff
     create_work_dirs(logger)
+
+    # Setup fonts on a system (but exclude WSL 2 environments)
+    setup_fonts(logger, "CascadiaCode")
 
 
 if __name__ == "__main__":
