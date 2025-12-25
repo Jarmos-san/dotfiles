@@ -81,7 +81,7 @@ vim.loader.enable()
 -- FIXME: Figure a way out to handle semantic highlights better with the following article as a source of reference:
 -- https://gist.github.com/swarn/fb37d9eefe1bc616c2a7e476c0bc0316
 
--- TODO: Figure a way out to manage the plugin using lazy.nvim
+-- Render the custom statusline
 require("statusline").setup()
 
 -- Enable the required LSP servers

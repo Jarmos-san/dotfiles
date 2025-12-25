@@ -4,19 +4,147 @@
 -- https://nuxsh.is-a.dev/blog/custom-nvim-statusline.html
 -- https://elianiva.my.id/posts/neovim-lua-statusline/
 
+---Statusline module's public interface.
+---
+---This interface exposes minimal and explicit API for managing a custom Neovim
+---statusline by providing the following methods:
+---   - `setup()` performs a one-time configuration and initialization.
+---   - `render()` returns the dynamically rendered statusline.
+---
+---Consumers of the module should only rely on the documented fields below.
+---
 ---@class Statusline
 ---@field render fun(): string
 ---@field setup fun(): nil
 local M = {}
 
+---@class ColorBase
+---@field bg string
+---@field fg string
+
+---@class ColorSet
+---@field red string
+---@field green string
+---@field yellow string
+---@field blue string
+---@field purple string
+---@field aqua string
+---@field gray string
+---@field orange string
+
+---@class BackgroundSet
+---@field bg0_h string
+---@field bg0 string
+---@field bg1 string
+---@field bg2 string
+---@field bg3 string
+---@field bg4 string
+
+---@class ForegroundSet
+---@field fg0 string
+---@field fg1 string
+---@field fg2 string
+---@field fg3 string
+---@field fg4 string
+
+---@class Colors
+---@field base ColorBase
+---@field normal ColorSet
+---@field bright ColorSet
+---@field bg BackgroundSet
+---@field fg ForegroundSet
+local colors = {
+  base = {
+    bg = "#282828",
+    fg = "#ebdbb2",
+  },
+
+  normal = {
+    red = "#cc241d",
+    green = "#98971a",
+    yellow = "#d79921",
+    blue = "#458588",
+    purple = "#b16286",
+    aqua = "#689d6a",
+    gray = "#a89984",
+    orange = "#d65d0e",
+  },
+
+  bright = {
+    red = "#fb4934",
+    green = "#b8bb26",
+    yellow = "#fabd2f",
+    blue = "#83a598",
+    purple = "#d3869b",
+    aqua = "#8ec07c",
+    gray = "#928374",
+    orange = "#fe8019",
+  },
+
+  bg = {
+    bg0_h = "#1d2021",
+    bg0 = "#282828",
+    bg1 = "#3c3836",
+    bg2 = "#504945",
+    bg3 = "#665c54",
+    bg4 = "#7c6f64",
+  },
+
+  fg = {
+    fg0 = "#fbf1c7",
+    fg1 = "#ebdbb2",
+    fg2 = "#d5c4a1",
+    fg3 = "#bdae93",
+    fg4 = "#a89984",
+  },
+}
+
+---Define and register statusline mode highlight groups.
+---
+---This function creates a set of highlight groups used to visually distinguish
+---the current Vim mode in the statusline (Normal, Insert, Visual, Command,
+---Replace and Terminal). Each group shares a common background and emphasis
+---style while the foreground color varies by mode according to the active
+---color palette.
+---
+---The function is idempotent and safe to call multiple times (e.g., after
+---`ColorScheme` autocmds).
+---
 ---@return nil
 local define_highlight_groups = function()
-  vim.api.nvim_set_hl(0, "StatuslineModeNormal", { fg = "#282c34", bg = "#98c379", bold = true })
-  vim.api.nvim_set_hl(0, "StatuslineModeInsert", { fg = "#282c34", bg = "#61afef", bold = true })
-  vim.api.nvim_set_hl(0, "StatuslineModeVisual", { fg = "#282c34", bg = "#c678dd", bold = true })
-  vim.api.nvim_set_hl(0, "StatuslineModeCommand", { fg = "#282c34", bg = "#e5c07b", bold = true })
-  vim.api.nvim_set_hl(0, "StatuslineModeReplace", { fg = "#282c34", bg = "#e06c75", bold = true })
-  vim.api.nvim_set_hl(0, "StatuslineModeTerminal", { fg = "#282c34", bg = "#56b6c2", bold = true })
+  -- Function to set the highlights of a specific capture group
+  local hl = vim.api.nvim_set_hl
+
+  -- Set the background colour with decent contrast
+  local bg = colors.bg.bg1
+
+  ---@alias StatuslineMode
+  ---| "StatuslineModeNormal"
+  ---| "StatuslineModeInsert"
+  ---| "StatuslineModeVisual"
+  ---| "StatuslineModeCommand"
+  ---| "StatuslineModeReplace"
+  ---| "StatuslineModeTerminal"
+  ---
+  ---Foreground colors per statusline mode.
+  ---
+  ---Keys must match the highlight group names consumed by the statusline.
+  ---Values are hex color strings.
+  ---
+  ---@type table<StatuslineMode, string>
+  local mode_fg = {
+    StatuslineModeNormal = colors.bright.green,
+    StatuslineModeInsert = colors.bright.blue,
+    StatuslineModeVisual = colors.bright.purple,
+    StatuslineModeCommand = colors.bright.yellow,
+    StatuslineModeReplace = colors.bright.red,
+    StatuslineModeTerminal = colors.bright.aqua,
+  }
+
+  -- Loop through the table above and apply all the colours wherever possible
+  for group, fg in pairs(mode_fg) do
+    hl(0, group, { fg = fg, bg = bg })
+  end
 end
 
 ---@type {[string]: {label: string, hl: string}}
@@ -151,9 +279,21 @@ function M.render()
   })
 end
 
+---Initialise the statusline.
+---
+---This function performs all one-time setup required for the custom
+---statusline. It registers the highlight groups used by the statusline and
+---configures the global `statusline` option to delegate rendering to Lua.
+---
+---It is expected to be called during Neovim startup and it is safe to be
+---executed repeatedly for example after a `ColorScheme` change.
+---
 ---@return nil
 function M.setup()
+  -- Define the highlight groups before Neovim can render the statusline
   define_highlight_groups()
+
+  -- Render the statusline by delegating the task to Lua
   vim.o.statusline = "%!v:lua.require('statusline').render()"
 end
 
