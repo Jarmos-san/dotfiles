@@ -301,9 +301,16 @@ local get_filepath = function()
     return " "
   end
 
+  -- Set the "modifiable" icon to signify an editable buffer
+  if vim.bo.modifiable then
+    modifiable = "[+]"
+  else
+    modifiable = "[-]"
+  end
+
   vim.api.nvim_set_hl(0, "StatuslineFilePath", { fg = colors.bright.gray, bg = colors.bg.bg0_h })
 
-  return "%#StatuslineFilePath#" .. " " .. fpath
+  return string.format("%%#StatuslineFilePath# %s %s", modifiable, fpath)
 end
 
 ---Builds and returns the statusline segment representing the cursor position.
@@ -325,24 +332,7 @@ local get_cursor_location = function()
 
   vim.api.nvim_set_hl(0, "StatuslineCursorPos", { fg = colors.bright.aqua, bg = colors.bg.bg0_h })
 
-  return "%#StatuslineCursorPos#" .. line .. ":" .. column
-end
-
----Builds and returns the statusline segment representing the current buffer
----filetype.
----
----The filetype is derived from the current buffer's `filetype` option and is
----rendered in square brackets for compact visual seperation.
----
----If the buffer has no filetype assigned, an empty string will be rendered
----inside the brackets (e.g., `[]`), preserving layout consistency.
----
----@return string
----A formatted statusline segment containing the current buffer filetype.
-local get_filetype = function()
-  local ftype = vim.bo.filetype
-
-  return string.format(" [%s]", ftype)
+  return "%#StatuslineCursorPos#" .. line .. ":" .. column .. " "
 end
 
 ---Renders and returns the complete statusline string.
@@ -364,7 +354,6 @@ function M.render()
     get_filepath(),
     "%=",
     get_cursor_location(),
-    get_filetype(),
   })
 end
 
