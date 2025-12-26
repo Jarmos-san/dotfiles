@@ -323,7 +323,9 @@ local get_cursor_location = function()
   -- Current cursor column number
   local column = vim.fn.col(".")
 
-  return string.format("%s:%s", line, column)
+  vim.api.nvim_set_hl(0, "StatuslineCursorPos", { fg = colors.bright.aqua, bg = colors.bg.bg0_h })
+
+  return "%#StatuslineCursorPos#" .. line .. ":" .. column
 end
 
 ---Builds and returns the statusline segment representing the current buffer
@@ -338,7 +340,6 @@ end
 ---@return string
 ---A formatted statusline segment containing the current buffer filetype.
 local get_filetype = function()
-  ---@type string
   local ftype = vim.bo.filetype
 
   return string.format(" [%s]", ftype)
