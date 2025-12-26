@@ -277,7 +277,7 @@ local get_diagnostics = function()
   end
 
   -- Concatenate all active segments and reset highlights to `Normal`
-  return errors .. warnings .. hints .. info .. "%#Normal#"
+  return errors .. warnings .. hints .. info
 end
 
 ---Builds and returns the statusline segment representing the current file
@@ -301,7 +301,9 @@ local get_filepath = function()
     return " "
   end
 
-  return string.format(" %s", fpath)
+  vim.api.nvim_set_hl(0, "StatuslineFilePath", { fg = colors.bright.gray, bg = colors.bg.bg0_h })
+
+  return "%#StatuslineFilePath#" .. " " .. fpath
 end
 
 ---Builds and returns the statusline segment representing the cursor position.
