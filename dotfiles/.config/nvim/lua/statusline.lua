@@ -313,10 +313,19 @@ local get_filepath = function()
   return string.format("%%#StatuslineFilePath# %s %s", modifiable, fpath)
 end
 
----Builds and returns the statusline segment representing the cursor position.
+---Builds and returns the statusline segment representing the cursor position
+---with a visual progress indicator.
 ---
----The position is expressed as `line:column`, where `line` is the current
----1-based line number and `column` is the current 1-based column number.
+---The cursor position is expressed as `line:column`, where `line` is the
+---current 1-based line number and `column` is the current 1-based column
+---number. The numbers are followed by a Nerd Font glyph to showcase the
+---progress through the current buffer.
+---
+---The progress is calculated as a normalized ratio of the current line number
+---to the total number of lines in the buffer and mapped to one of several
+---increasingly filled block glyphs (low -> high). This provides a compact and
+---single-cell progress indicator which avoids statusline jitter while
+---remaining visually expressive.
 ---
 ---This mirrors common editor conventions and provides a compact, readable
 ---cursor indicator suitable for use in a statusline.
@@ -324,15 +333,30 @@ end
 ---@return string
 ---A formatted statusline segment containing the current cursor location.
 local get_cursor_location = function()
-  -- Current cursor line number
+  -- Current cursor position
   local line = vim.fn.line(".")
-
-  -- Current cursor column number
   local column = vim.fn.col(".")
 
+  -- Total number of lines in the buffer
+  local total_lines = vim.fn.line("$")
+
+  -- Normalised progress (0.0 -> 1.0)
+  local progress = line / math.max(total_lines, 1)
+
+  -- Nerd Font progress blocks (low -> high)
+  local blocks = { "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" }
+
+  -- Map progress to a block index
+  local index = math.max(1, math.ceil(progress * #blocks))
+  local glyph = blocks[index]
+
+  -- Highlight group for the cursor position
   vim.api.nvim_set_hl(0, "StatuslineCursorPos", { fg = colors.bright.aqua, bg = colors.bg.bg0_h })
 
-  return "%#StatuslineCursorPos#" .. line .. ":" .. column .. " "
+  -- Highlight group for the glyph
+  vim.api.nvim_set_hl(0, "StatuslineCursorGlyph", { fg = colors.normal.orange, bg = colors.bg.bg0_h })
+
+  return string.format("%%#StatuslineCursorPos#%s:%s %%#StatuslineCursorGlyph#%s ", line, column, glyph)
 end
 
 ---Renders and returns the complete statusline string.
