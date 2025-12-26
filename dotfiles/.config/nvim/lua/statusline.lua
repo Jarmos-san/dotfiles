@@ -154,34 +154,6 @@ end
 ---@field label ModeLabel
 ---@field hl HighlightGroup
 
----@type table<string, StatuslineMode>
----The various Vim modes and their respective codes as returned by the mode() function.
----
----@see vim.api.nvim_get_mode for more information.
-local modes = {
-  ["n"] = { label = "NORMAL", hl = "StatuslineModeNormal" },
-  ["no"] = { label = "NORMAL", hl = "StatuslineModeNormal" },
-  ["v"] = { label = "VISUAL", hl = "StatuslineModeVisual" },
-  ["V"] = { label = "VISUAL LINE", hl = "StatuslineModeVisual" },
-  [""] = { label = "VISUAL BLOCK", hl = "StatuslineModeVisual" },
-  ["s"] = { label = "SELECT", hl = "StatuslineModeVisual" },
-  ["S"] = { label = "SELECT LINE", hl = "StatuslineModeVisual" },
-  [""] = { label = "SELECT BLOCK", hl = "StatuslineModeVisual" },
-  ["i"] = { label = "INSERT", hl = "StatuslineModeInsert" },
-  ["ic"] = { label = "INSERT", hl = "StatuslineModeInsert" },
-  ["R"] = { label = "REPLACE", hl = "StatuslineModeReplace" },
-  ["Rv"] = { label = "REPLACE (VISUAL)", hl = "StatuslineModeReplace" },
-  ["c"] = { label = "COMMAND", hl = "StatuslineModeCommand" },
-  ["cv"] = { label = "COMMAND (VIM EX)", hl = "StatuslineModeCommand" },
-  ["ce"] = { label = "COMMAND (EX)", hl = "StatuslineModeCommand" },
-  ["r"] = { label = "PROMPT", hl = "StatuslineModeCommand" },
-  ["rm"] = { label = "MOAR", hl = "StatuslineModeCommand" },
-  ["r?"] = { label = "CONFIRM", hl = "StatuslineModeCommand" },
-  ["!"] = { label = "SHELL", hl = "StatuslineModeCommand" },
-  ["t"] = { label = "TERMINAL", hl = "StatuslineModeTerminal" },
-  ["nt"] = { label = "TERMINAL", hl = "StatuslineModeTerminal" },
-}
-
 ---Builds and returns the statusline segment representing the current Neovim
 ---mode.
 ---
@@ -202,6 +174,34 @@ local modes = {
 ---
 ---@see vim.api.nvim_get_mode
 local get_mode = function()
+  ---@type table<string, StatuslineMode>
+  ---The various Vim modes and their respective codes as returned by the mode() function.
+  ---
+  ---@see vim.api.nvim_get_mode for more information.
+  local modes = {
+    ["n"] = { label = "NORMAL", hl = "StatuslineModeNormal" },
+    ["no"] = { label = "NORMAL", hl = "StatuslineModeNormal" },
+    ["v"] = { label = "VISUAL", hl = "StatuslineModeVisual" },
+    ["V"] = { label = "VISUAL LINE", hl = "StatuslineModeVisual" },
+    [""] = { label = "VISUAL BLOCK", hl = "StatuslineModeVisual" },
+    ["s"] = { label = "SELECT", hl = "StatuslineModeVisual" },
+    ["S"] = { label = "SELECT LINE", hl = "StatuslineModeVisual" },
+    [""] = { label = "SELECT BLOCK", hl = "StatuslineModeVisual" },
+    ["i"] = { label = "INSERT", hl = "StatuslineModeInsert" },
+    ["ic"] = { label = "INSERT", hl = "StatuslineModeInsert" },
+    ["R"] = { label = "REPLACE", hl = "StatuslineModeReplace" },
+    ["Rv"] = { label = "REPLACE (VISUAL)", hl = "StatuslineModeReplace" },
+    ["c"] = { label = "COMMAND", hl = "StatuslineModeCommand" },
+    ["cv"] = { label = "COMMAND (VIM EX)", hl = "StatuslineModeCommand" },
+    ["ce"] = { label = "COMMAND (EX)", hl = "StatuslineModeCommand" },
+    ["r"] = { label = "PROMPT", hl = "StatuslineModeCommand" },
+    ["rm"] = { label = "MOAR", hl = "StatuslineModeCommand" },
+    ["r?"] = { label = "CONFIRM", hl = "StatuslineModeCommand" },
+    ["!"] = { label = "SHELL", hl = "StatuslineModeCommand" },
+    ["t"] = { label = "TERMINAL", hl = "StatuslineModeTerminal" },
+    ["nt"] = { label = "TERMINAL", hl = "StatuslineModeTerminal" },
+  }
+
   local current_mode = vim.api.nvim_get_mode().mode
   local mode_info = modes[current_mode] or { label = "UNKNOWN", hl = "StatuslineModeNormal" }
 
@@ -364,7 +364,8 @@ end
 ---This function composes the final statusline by concatenating individual
 ---segments produced by the module's helper functions. The `%=` item is used to
 ---seperate left-aligned and right-aligned sections following Neovim's
----statusline formatting rules.
+---statusline formatting rules. It ignores the rendering logic if the buffer's
+---filetype is identified to be "ministarter".
 ---
 ---@return string
 ---The fully formatted statusline string ready to be assigned to the
@@ -372,13 +373,17 @@ end
 ---
 ---@see vim.o.statusline
 function M.render()
-  return table.concat({
-    get_mode(),
-    get_diagnostics(),
-    get_filepath(),
-    "%=",
-    get_cursor_location(),
-  })
+  if vim.bo.filetype ~= "ministarter" then
+    return table.concat({
+      get_mode(),
+      get_diagnostics(),
+      get_filepath(),
+      "%=",
+      get_cursor_location(),
+    })
+  else
+    return ""
+  end
 end
 
 ---Initialise the statusline.
