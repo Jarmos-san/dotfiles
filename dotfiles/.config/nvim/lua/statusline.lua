@@ -147,9 +147,17 @@ local define_highlight_groups = function()
   end
 end
 
----@type {[string]: {label: string, hl: string}}
+---@alias ModeLabel string
+---@alias HighlightGroup string
+
+---@class StatuslineMode
+---@field label ModeLabel
+---@field hl HighlightGroup
+
+---@type table<string, StatuslineMode>
 ---The various Vim modes and their respective codes as returned by the mode() function.
----See vim.api.nvim_get_mode for more information.
+---
+---@see vim.api.nvim_get_mode for more information.
 local modes = {
   ["n"] = { label = "NORMAL", hl = "StatuslineModeNormal" },
   ["no"] = { label = "NORMAL", hl = "StatuslineModeNormal" },
@@ -174,22 +182,57 @@ local modes = {
   ["nt"] = { label = "TERMINAL", hl = "StatuslineModeTerminal" },
 }
 
+---Builds and returns the statusline segment representing the current Neovim
+---mode.
+---
+---This function queries Neovim for the active editor mode, resolves the
+---corresponding label and highlight group from the `modes` table and formats
+---the result using statusline highlight syntax.
+---
+---If the current mode is not explicitly defined in the `modes` table, a safe
+---fallback (`UNKNOWN` with normal-mode highlight) is used.
+---
 ---@return string
----Return the current "mode" and return a uppercase formatted string representation.
+---A formatted statusline segment containing the mode label with the
+---appropriate highlight group applied. The `string.format()` function first
+---escapes Lua's  formatting rules so that `%%` becomes a literal `%`, allowing
+---Neovim's statusline syntax to be emitted safely. The resulting string
+---switches to the specified highlight group (`%#..#`) and renders the mode
+---label using that highlight.
+---
 ---@see vim.api.nvim_get_mode
 local get_mode = function()
   local current_mode = vim.api.nvim_get_mode().mode
   local mode_info = modes[current_mode] or { label = "UNKNOWN", hl = "StatuslineModeNormal" }
 
+  -- Example rendered string - `"%#StatuslineModeInsert# INSERT"`
   return string.format("%%#%s# %s ", mode_info.hl, mode_info.label)
 end
 
+---Builds and returns the statusline segment representing LSP diagnostic counts.
+---
+---This function aggregates diagnostics for the current buffer, grouped by
+---severity (errors, warnings, hints and informational messages). Each non-zero
+---diagnostic category is rendered as a statusline segment with its
+---corresponding highlight group and count.
+---
+---If no diagnostics are present for a given severity that segment is omitted.
+---The returned string always resets the highlight group back to `Normal`.
+---
 ---@return string
----Get the total number of diagnostic entries in the current buffer and return a nicely
----formatted string with set icons to go with them.
+---A formatted statusline segment containing zero or more diagnostic
+---indicators.
+---
 ---@see vim.diagnostic
 local get_diagnostics = function()
-  ---@type {['errors']: integer, ['warnings']: number, ['info']: number, ['hints']: number}
+  ---Aggregated diagnostic couunts by category.
+  ---@class DiagnosticCount
+  ---@field errors integer
+  ---@field warnings integer
+  ---@field info integer
+  ---@field hints integer
+
+  ---@type DiagnosticCount
   local count = {
     errors = 0,
     warnings = 0,
@@ -197,7 +240,8 @@ local get_diagnostics = function()
     hints = 0,
   }
 
-  ---@type { [string]: integer }
+  ---Mapping of diagnostic categories to Neovim severity levels
+  ---@type table<DiagnosticCount, vim.diagnostic.Severity>
   local levels = {
     errors = vim.diagnostic.severity.ERROR,
     warnings = vim.diagnostic.severity.WARN,
@@ -205,10 +249,12 @@ local get_diagnostics = function()
     hints = vim.diagnostic.severity.HINT,
   }
 
+  -- Count diagnostics per severity for the current buffer
   for key, level in pairs(levels) do
     count[key] = vim.tbl_count(vim.diagnostic.get(0, { severity = level }))
   end
 
+  -- Rendered statusline segments for each diagnostic category
   local errors = ""
   local warnings = ""
   local hints = ""
@@ -230,13 +276,25 @@ local get_diagnostics = function()
     info = " %#LspDiagnosticsSignInformation#? " .. count["info"]
   end
 
+  -- Concatenate all active segments and reset highlights to `Normal`
   return errors .. warnings .. hints .. info .. "%#Normal#"
 end
 
+---Builds and returns the statusline segment representing the current file
+---path.
+---
+---The filepath is resolved relative to the current working directory and `~`
+---is used to represent the home directory and `.` is used for paths relative
+---to the current working directory.
+---
+---If the current buffer has no associated file (e.g., `[No Name]`) or resolves
+---to `"."`, a single space is returned to preserve statusline spacing.
+---
 ---@return string
----Return the full filename path
+---A formatted statusline segment containing the current file path or a single
+---space if no valid path is available.
 local get_filepath = function()
-  ---@type string
+  -- Resolved and normalized file path for the current buffer.
   local fpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.")
 
   if fpath == "" or fpath == "." then
@@ -246,19 +304,37 @@ local get_filepath = function()
   return string.format(" %s", fpath)
 end
 
+---Builds and returns the statusline segment representing the cursor position.
+---
+---The position is expressed as `line:column`, where `line` is the current
+---1-based line number and `column` is the current 1-based column number.
+---
+---This mirrors common editor conventions and provides a compact, readable
+---cursor indicator suitable for use in a statusline.
+---
 ---@return string
----Return the current location of the cursor
+---A formatted statusline segment containing the current cursor location.
 local get_cursor_location = function()
-  ---@type integer
+  -- Current cursor line number
   local line = vim.fn.line(".")
-  ---@type integer
+
+  -- Current cursor column number
   local column = vim.fn.col(".")
 
   return string.format("%s:%s", line, column)
 end
 
+---Builds and returns the statusline segment representing the current buffer
+---filetype.
+---
+---The filetype is derived from the current buffer's `filetype` option and is
+---rendered in square brackets for compact visual seperation.
+---
+---If the buffer has no filetype assigned, an empty string will be rendered
+---inside the brackets (e.g., `[]`), preserving layout consistency.
+---
 ---@return string
----Return the filetype of the current buffer
+---A formatted statusline segment containing the current buffer filetype.
 local get_filetype = function()
   ---@type string
   local ftype = vim.bo.filetype
@@ -266,8 +342,18 @@ local get_filetype = function()
   return string.format(" [%s]", ftype)
 end
 
+---Renders and returns the complete statusline string.
+---
+---This function composes the final statusline by concatenating individual
+---segments produced by the module's helper functions. The `%=` item is used to
+---seperate left-aligned and right-aligned sections following Neovim's
+---statusline formatting rules.
+---
 ---@return string
----Render the statusline programatically
+---The fully formatted statusline string ready to be assigned to the
+---`statusline` option.
+---
+---@see vim.o.statusline
 function M.render()
   return table.concat({
     get_mode(),
