@@ -1,3 +1,11 @@
+---@module This module contains the logic to render a custom statusline.
+
+---A wrapper over the Lua function to set the highlight groups and the
+---associated colours for the group.
+---
+---@see vim.api.nvim_set_hl to learn more.
+local hl = vim.api.nvim_set_hl
+
 ---Statusline module's public interface.
 ---
 ---This interface exposes minimal and explicit API for managing a custom Neovim
@@ -120,6 +128,17 @@ local colors = {
 ---
 ---@see vim.api.nvim_get_mode
 local get_mode = function()
+  ---The table representing a mapping of colours to be assigned to a specific
+  ---highlight group.
+  local groups = {
+    StatuslineModeNormal = colors.bright.green,
+    StatuslineModeInsert = colors.bright.blue,
+    StatuslineModeVisual = colors.bright.purple,
+    StatuslineModeCommand = colors.bright.yellow,
+    StatuslineModeReplace = colors.bright.red,
+    StatuslineModeTerminal = colors.bright.aqua,
+  }
+
   ---@type table<string, StatuslineMode>
   ---The various Vim modes and their respective codes as returned by the mode() function.
   ---
@@ -148,16 +167,17 @@ local get_mode = function()
     ["nt"] = { label = "TERMINAL", hl = "StatuslineModeTerminal" },
   }
 
+  -- Get the current mode and its name
   local current_mode = vim.api.nvim_get_mode().mode
   local mode_info = modes[current_mode] or { label = "UNKNOWN", hl = "StatuslineModeNormal" }
 
+  -- Set the background colour for the segment
+  local bg = colors.bg.bg1
+
   -- Apply the highlight groups
-  vim.api.nvim_set_hl(0, "StatuslineModeNormal", { fg = colors.bright.green, bg = colors.bg.bg1 })
-  vim.api.nvim_set_hl(0, "StatuslineModeInsert", { fg = colors.bright.blue, bg = colors.bg.bg1 })
-  vim.api.nvim_set_hl(0, "StatuslineModeVisual", { fg = colors.bright.purple, bg = colors.bg.bg1 })
-  vim.api.nvim_set_hl(0, "StatuslineModeCommand", { fg = colors.bright.yellow, bg = colors.bg.bg1 })
-  vim.api.nvim_set_hl(0, "StatuslineModeReplace", { fg = colors.bright.red, bg = colors.bg.bg1 })
-  vim.api.nvim_set_hl(0, "StatuslineModeTerminal", { fg = colors.bright.aqua, bg = colors.bg.bg1 })
+  for name, color in pairs(groups) do
+    hl(0, name, { fg = color, bg = bg })
+  end
 
   -- Example rendered string - `"%#StatuslineModeInsert# INSERT"`
   return string.format("%%#%s# %s ", mode_info.hl, mode_info.label)
@@ -263,7 +283,7 @@ local get_filepath = function()
     modifiable = "[-]"
   end
 
-  vim.api.nvim_set_hl(0, "StatuslineFilePath", { fg = colors.bright.gray, bg = colors.bg.bg0_h })
+  hl(0, "StatuslineFilePath", { fg = colors.bright.gray, bg = colors.bg.bg0_h })
 
   return string.format("%%#StatuslineFilePath# %s %s", modifiable, fpath)
 end
@@ -305,11 +325,20 @@ local get_cursor_location = function()
   local index = math.max(1, math.ceil(progress * #blocks))
   local glyph = blocks[index]
 
-  -- Highlight group for the cursor position
-  vim.api.nvim_set_hl(0, "StatuslineCursorPos", { fg = colors.bright.aqua, bg = colors.bg.bg0_h })
+  ---The table representing the mappings of the highlight groups and their
+  ---associated colours
+  local group = {
+    StatuslineCursorPos = colors.bright.aqua,
+    StatuslineCursorGlyph = colors.normal.orange,
+  }
 
-  -- Highlight group for the glyph
-  vim.api.nvim_set_hl(0, "StatuslineCursorGlyph", { fg = colors.normal.orange, bg = colors.bg.bg0_h })
+  -- The background colour
+  local bg = colors.bg.bg0_h
+
+  -- Apply the highlight groups and their associated colours
+  for name, color in pairs(group) do
+    hl(0, name, { fg = color, bg = bg })
+  end
 
   return string.format("%%#StatuslineCursorPos#%s:%s %%#StatuslineCursorGlyph#%s ", line, column, glyph)
 end
