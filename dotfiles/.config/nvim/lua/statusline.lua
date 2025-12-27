@@ -93,54 +93,6 @@ local colors = {
   },
 }
 
----Define and register statusline mode highlight groups.
----
----This function creates a set of highlight groups used to visually distinguish
----the current Vim mode in the statusline (Normal, Insert, Visual, Command,
----Replace and Terminal). Each group shares a common background and emphasis
----style while the foreground color varies by mode according to the active
----color palette.
----
----The function is idempotent and safe to call multiple times (e.g., after
----`ColorScheme` autocmds).
----
----@return nil
-local define_highlight_groups = function()
-  -- Function to set the highlights of a specific capture group
-  local hl = vim.api.nvim_set_hl
-
-  -- Set the background colour with decent contrast
-  local bg = colors.bg.bg1
-
-  ---@alias StatuslineMode
-  ---| "StatuslineModeNormal"
-  ---| "StatuslineModeInsert"
-  ---| "StatuslineModeVisual"
-  ---| "StatuslineModeCommand"
-  ---| "StatuslineModeReplace"
-  ---| "StatuslineModeTerminal"
-  ---
-  ---Foreground colors per statusline mode.
-  ---
-  ---Keys must match the highlight group names consumed by the statusline.
-  ---Values are hex color strings.
-  ---
-  ---@type table<StatuslineMode, string>
-  local mode_fg = {
-    StatuslineModeNormal = colors.bright.green,
-    StatuslineModeInsert = colors.bright.blue,
-    StatuslineModeVisual = colors.bright.purple,
-    StatuslineModeCommand = colors.bright.yellow,
-    StatuslineModeReplace = colors.bright.red,
-    StatuslineModeTerminal = colors.bright.aqua,
-  }
-
-  -- Loop through the table above and apply all the colours wherever possible
-  for group, fg in pairs(mode_fg) do
-    hl(0, group, { fg = fg, bg = bg })
-  end
-end
-
 ---@alias ModeLabel string
 ---@alias HighlightGroup string
 
@@ -198,6 +150,14 @@ local get_mode = function()
 
   local current_mode = vim.api.nvim_get_mode().mode
   local mode_info = modes[current_mode] or { label = "UNKNOWN", hl = "StatuslineModeNormal" }
+
+  -- Apply the highlight groups
+  vim.api.nvim_set_hl(0, "StatuslineModeNormal", { fg = colors.bright.green, bg = colors.bg.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineModeInsert", { fg = colors.bright.blue, bg = colors.bg.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineModeVisual", { fg = colors.bright.purple, bg = colors.bg.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineModeCommand", { fg = colors.bright.yellow, bg = colors.bg.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineModeReplace", { fg = colors.bright.red, bg = colors.bg.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineModeTerminal", { fg = colors.bright.aqua, bg = colors.bg.bg1 })
 
   -- Example rendered string - `"%#StatuslineModeInsert# INSERT"`
   return string.format("%%#%s# %s ", mode_info.hl, mode_info.label)
@@ -392,10 +352,6 @@ end
 ---
 ---@return nil
 function M.setup()
-  -- Define the highlight groups before Neovim can render the statusline
-  define_highlight_groups()
-
-  -- Render the statusline by delegating the task to Lua
   vim.o.statusline = "%!v:lua.require('statusline').render()"
 end
 
