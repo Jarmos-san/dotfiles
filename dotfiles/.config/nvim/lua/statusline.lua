@@ -296,6 +296,7 @@ local get_filepath = function()
   end
 
   -- Set the "modifiable" icon to signify an editable buffer
+  local modifiable
   if vim.bo.modifiable then
     modifiable = "[+]"
   else
