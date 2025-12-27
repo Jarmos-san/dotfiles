@@ -337,7 +337,7 @@ function M.render()
       get_cursor_location(),
     })
   else
-    return ""
+    return "%#Normal#"
   end
 end
 
