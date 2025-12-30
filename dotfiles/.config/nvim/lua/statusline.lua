@@ -255,29 +255,19 @@ local get_diagnostics = function()
   return errors .. warnings .. hints .. info
 end
 
----Builds and returns the statusline segment representing the cursor position
----with a visual progress indicator.
+---Returns a visual indicator representing the cursor's vertical position
+---within the current buffer.
 ---
----The cursor position is expressed as `line:column`, where `line` is the
----current 1-based line number and `column` is the current 1-based column
----number. The numbers are followed by a Nerd Font glyph to showcase the
----progress through the current buffer.
----
----The progress is calculated as a normalized ratio of the current line number
----to the total number of lines in the buffer and mapped to one of several
----increasingly filled block glyphs (low -> high). This provides a compact and
----single-cell progress indicator which avoids statusline jitter while
----remaining visually expressive.
----
----This mirrors common editor conventions and provides a compact, readable
----cursor indicator suitable for use in a statusline.
+---The function computes the cursor's progress as a normalized ratio (current
+---line / total lines) and maps it to a glpyh chosen from a predefined sequence
+---of Nerd Font block characters. The resulting glyph provides a compact,
+---intuitive progress indicator suitable for use in a statusline.
 ---
 ---@return string
 ---A formatted statusline segment containing the current cursor location.
-local get_cursor_location = function()
+local cursor_glyph = function()
   -- Current cursor position
   local line = vim.fn.line(".")
-  local column = vim.fn.col(".")
 
   -- Total number of lines in the buffer
   local total_lines = vim.fn.line("$")
@@ -292,22 +282,7 @@ local get_cursor_location = function()
   local index = math.max(1, math.ceil(progress * #blocks))
   local glyph = blocks[index]
 
-  ---The table representing the mappings of the highlight groups and their
-  ---associated colours
-  local group = {
-    StatuslineCursorPos = colors.bright.aqua,
-    StatuslineCursorGlyph = colors.normal.orange,
-  }
-
-  -- The background colour
-  local bg = colors.bg.bg0_h
-
-  -- Apply the highlight groups and their associated colours
-  for name, color in pairs(group) do
-    hl(0, name, { fg = color, bg = bg })
-  end
-
-  return string.format("%%#StatuslineCursorPos#%s:%s %%#StatuslineCursorGlyph#%s ", line, column, glyph)
+  return glyph
 end
 
 ---Renders and returns the complete statusline string.
@@ -339,6 +314,7 @@ function M.render()
 
   -- Set the highlight group for the filepath segment in the statusline
   hl(0, "StatuslineFilePath", { fg = colors.bright.gray, bg = colors.bg.bg0_h })
+  hl(0, "StatuslineCursorGlyph", { fg = colors.bright.orange, bg = colors.bg.bg0_h })
 
   -- Build the statusline (if it wasn't disabled) by concatenating all the
   -- segments in to one single table
@@ -349,7 +325,12 @@ function M.render()
     "%f",
     " %m",
     "%=",
-    get_cursor_location(),
+    "%*",
+    "L: %l, C: %c ",
+    "%#StatuslineCursorGlyph#",
+    cursor_glyph(),
+    "%*",
+    " %p%% ",
   })
 end
 
