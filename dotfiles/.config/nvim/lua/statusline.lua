@@ -357,17 +357,28 @@ end
 ---
 ---@see vim.o.statusline
 function M.render()
-  if vim.bo.filetype ~= "ministarter" then
-    return table.concat({
-      get_mode(),
-      get_diagnostics(),
-      get_filepath(),
-      "%=",
-      get_cursor_location(),
-    })
-  else
+  -- Mapping of filetypes where the statusline should be disabled
+  local disabled_filestypes = { ministarter = true, lazy = true, mason = true }
+
+  -- Get the filetype of the current active buffer
+  local buf = vim.api.nvim_win_get_buf(0)
+  local ft = vim.bo[buf].filetype
+
+  -- Apply the "Normal" highlight group to the statusline to represent a
+  -- "disabled" filetype
+  if disabled_filestypes[ft] then
     return "%#Normal#"
   end
+
+  -- Build the statusline (if it wasn't disabled) by concatenating all the
+  -- segments in to one single table
+  return table.concat({
+    get_mode(),
+    get_diagnostics(),
+    get_filepath(),
+    "%=",
+    get_cursor_location(),
+  })
 end
 
 ---Initialise the statusline.
