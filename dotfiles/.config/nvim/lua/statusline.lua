@@ -1,5 +1,3 @@
----@module This module contains the logic to render a custom statusline.
-
 ---A wrapper over the Lua function to set the highlight groups and the
 ---associated colours for the group.
 ---
@@ -18,6 +16,9 @@ local hl = vim.api.nvim_set_hl
 ---@class Statusline
 ---@field render fun(): string
 ---@field setup fun(): nil
+
+---@module 'statuusline'
+---This module contains the logic to render a custom statusline.
 local M = {}
 
 ---@class ColorBase
