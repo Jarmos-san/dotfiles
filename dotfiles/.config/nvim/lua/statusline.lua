@@ -255,40 +255,6 @@ local get_diagnostics = function()
   return errors .. warnings .. hints .. info
 end
 
----Builds and returns the statusline segment representing the current file
----path.
----
----The filepath is resolved relative to the current working directory and `~`
----is used to represent the home directory and `.` is used for paths relative
----to the current working directory.
----
----If the current buffer has no associated file (e.g., `[No Name]`) or resolves
----to `"."`, a single space is returned to preserve statusline spacing.
----
----@return string
----A formatted statusline segment containing the current file path or a single
----space if no valid path is available.
-local get_filepath = function()
-  -- Resolved and normalized file path for the current buffer.
-  local fpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.")
-
-  if fpath == "" or fpath == "." then
-    return " "
-  end
-
-  -- Set the "modifiable" icon to signify an editable buffer
-  local modifiable
-  if vim.bo.modifiable then
-    modifiable = "[+]"
-  else
-    modifiable = "[-]"
-  end
-
-  hl(0, "StatuslineFilePath", { fg = colors.bright.gray, bg = colors.bg.bg0_h })
-
-  return string.format("%%#StatuslineFilePath# %s %s", modifiable, fpath)
-end
-
 ---Builds and returns the statusline segment representing the cursor position
 ---with a visual progress indicator.
 ---
@@ -371,12 +337,17 @@ function M.render()
     return "%#Normal#"
   end
 
+  -- Set the highlight group for the filepath segment in the statusline
+  hl(0, "StatuslineFilePath", { fg = colors.bright.gray, bg = colors.bg.bg0_h })
+
   -- Build the statusline (if it wasn't disabled) by concatenating all the
   -- segments in to one single table
   return table.concat({
     get_mode(),
     get_diagnostics(),
-    get_filepath(),
+    "%#StatuslineFilePath# ",
+    "%f",
+    " %m",
     "%=",
     get_cursor_location(),
   })
