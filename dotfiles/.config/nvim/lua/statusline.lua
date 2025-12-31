@@ -285,6 +285,54 @@ local cursor_glyph = function()
   return glyph
 end
 
+-- Cache to store the statusline components
+local cache = {}
+
+-- The Nerd Font icon to render with the component
+local branch_icon = " "
+
+---Returns the current Git branch for the working directory.
+---
+---The Git branch is resolved asynchronously using `git branch --show-current`
+---and cached per working directory. While the branch is being resolved,
+---the function returns an empty string. Once available, the cached,
+---preformatted component is returned.
+---
+---@return string
+---A formatted Git branch string (e.g., " main") or nil if the current
+---working directory is not a Git repository.
+local git_branch = function()
+  -- The current directory which is used as the key for caching the the
+  -- component's rendering logic
+  local cwd = vim.fn.getcwd()
+
+  -- Check if the component is cached
+  local cached = cache[cwd]
+  if cached ~= nil then
+    return cached
+  end
+
+  -- Initialise an empty cache if it's not found already
+  cache[cwd] = ""
+
+  -- Fetch the branch name from Git
+  vim.system({ "git", "branch", "--show-current" }, { text = true }, function(result)
+    if result.code == 0 then
+      local branch = result.stdout:gsub("%s+", "")
+      cache[cwd] = branch_icon .. branch
+    else
+      cache[cwd] = ""
+    end
+
+    -- Asynchronously redraw the status if the cache hit was a miss
+    vim.schedule(function()
+      vim.cmd("redrawstatus")
+    end)
+  end)
+
+  return ""
+end
+
 ---Renders and returns the complete statusline string.
 ---
 ---This function composes the final statusline by concatenating individual
@@ -315,11 +363,15 @@ function M.render()
   -- Set the highlight group for the filepath segment in the statusline
   hl(0, "StatuslineFilePath", { fg = colors.bright.gray, bg = colors.bg.bg0_h })
   hl(0, "StatuslineCursorGlyph", { fg = colors.bright.orange, bg = colors.bg.bg0_h })
+  hl(0, "StatuslineGitBranch", { fg = colors.bright.aqua, bg = colors.bg.bg2 })
 
   -- Build the statusline (if it wasn't disabled) by concatenating all the
   -- segments in to one single table
   return table.concat({
     get_mode(),
+    "%#StatuslineGitBranch# ",
+    git_branch(),
+    " %*",
     get_diagnostics(),
     "%#StatuslineFilePath# ",
     "%f",
