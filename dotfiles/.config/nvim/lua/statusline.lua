@@ -17,7 +17,7 @@ local hl = vim.api.nvim_set_hl
 ---@field render fun(): string
 ---@field setup fun(): nil
 
----@module 'statuusline'
+---@module 'statusline'
 ---This module contains the logic to render a custom statusline.
 local M = {}
 
@@ -56,7 +56,7 @@ local M = {}
 ---@field bright ColorSet
 ---@field bg BackgroundSet
 ---@field fg ForegroundSet
-local colors = {
+local COLORS = {
   base = {
     bg = "#282828",
     fg = "#ebdbb2",
@@ -102,85 +102,109 @@ local colors = {
   },
 }
 
----@alias ModeLabel string
----@alias HighlightGroup string
+---@alias StatuslineHighlight vim.api.keyset.highlight
 
----@class StatuslineMode
----@field label ModeLabel
----@field hl HighlightGroup
+---Declaractive registry of all the highlight groups.
+---
+---This table defines the complete list of all the highlight groups used by
+---the statusline and their corresponding foreground/background colours. The
+---keys represent Neovim highlight group names and they passed directly to the
+---`nvim_set_hl(0, group, spec)` function.
+---
+---@type table<string, StatuslineHighlight>
+local HIGHLIGHTS = {
+  StatuslineModeNormal = { fg = COLORS.bright.green, bg = COLORS.bg.bg1 },
+  StatuslineModeInsert = { fg = COLORS.bright.blue, bg = COLORS.bg.bg1 },
+  StatuslineModeVisual = { fg = COLORS.bright.purple, bg = COLORS.bg.bg1 },
+  StatuslineModeCommand = { fg = COLORS.bright.yellow, bg = COLORS.bg.bg1 },
+  StatuslineModeReplace = { fg = COLORS.bright.red, bg = COLORS.bg.bg1 },
+  StatuslineModeTerminal = { fg = COLORS.bright.aqua, bg = COLORS.bg.bg1 },
+  StatuslineFilePath = { fg = COLORS.bright.gray, bg = COLORS.bg.bg0_h },
+  StatuslineCursorGlyph = { fg = COLORS.bright.orange, bg = COLORS.bg.bg0_h },
+  StatuslineGitBranch = { fg = COLORS.bright.aqua, bg = COLORS.bg.bg2 },
+}
 
----Builds and returns the statusline segment representing the current Neovim
+---Mapping of Neovim editing modes to statusline presentation metadata.
+---
+---This table returns the raw mode codes returned by
+---`vim.api.nvim_get_mode().mode` into a human-readable label for display and
+---a highlight group name applied to the segment.
+---
+---The mapping is static and intentionally defined at module scope to avoid
+---per render allocation, centralise mode semantics and keep the render
+---function free of side effects.
+---
+---@alias StatuslineMode
+---@field label string Human-readable mode name shown in the statusline.
+---@field hl string Highlight group name applied to the mode segment.
+---
+---@type table<string, StatuslineMode>
+local MODES = {
+  n = { label = "NORMAL", hl = "StatuslineModeNormal" },
+  no = { label = "NORMAL", hl = "StatuslineModeNormal" },
+  v = { label = "VISUAL", hl = "StatuslineModeVisual" },
+  V = { label = "VISUAL LINE", hl = "StatuslineModeVisual" },
+  [""] = { label = "VISUAL BLOCK", hl = "StatuslineModeVisual" },
+  s = { label = "SELECT", hl = "StatuslineModeVisual" },
+  S = { label = "SELECT LINE", hl = "StatuslineModeVisual" },
+  [""] = { label = "SELECT BLOCK", hl = "StatuslineModeVisual" },
+  i = { label = "INSERT", hl = "StatuslineModeInsert" },
+  ic = { label = "INSERT", hl = "StatuslineModeInsert" },
+  R = { label = "REPLACE", hl = "StatuslineModeReplace" },
+  Rv = { label = "REPLACE (VISUAL)", hl = "StatuslineModeReplace" },
+  c = { label = "COMMAND", hl = "StatuslineModeCommand" },
+  cv = { label = "COMMAND (VIM EX)", hl = "StatuslineModeCommand" },
+  ce = { label = "COMMAND (EX)", hl = "StatuslineModeCommand" },
+  r = { label = "PROMPT", hl = "StatuslineModeCommand" },
+  rm = { label = "MORE", hl = "StatuslineModeCommand" },
+  ["r?"] = { label = "CONFIRM", hl = "StatuslineModeCommand" },
+  ["!"] = { label = "SHELL", hl = "StatuslineModeCommand" },
+  t = { label = "TERMINAL", hl = "StatuslineModeTerminal" },
+  nt = { label = "TERMINAL", hl = "StatuslineModeTerminal" },
+}
+
+---Apply all statusline highlight groups.
+---
+---Iterates over the declarative `HIGHLIGHTS` group and applies each highlight
+---specification using the `vim.api.nvim_set_hl()` function. The function is
+---intended to be used once during the setup process.
+---
+---The function should not be called during render paths to avoid unnecessary
+---work and side effects during the statusline evaluation.
+---
+---@return nil
+local setup_highlights = function()
+  for name, spec in pairs(HIGHLIGHTS) do
+    hl(0, name, spec)
+  end
+end
+
+---Build and return the statusline segment representing the current editor
 ---mode.
 ---
----This function queries Neovim for the active editor mode, resolves the
----corresponding label and highlight group from the `modes` table and formats
----the result using statusline highlight syntax.
+---This function queries Neovim for the active editor mode using
+---`vim.api.nvim_get_mode().mode` and resolves the corresponding presentation
+---metadata froom the `MODES` table.
 ---
----If the current mode is not explicitly defined in the `modes` table, a safe
----fallback (`UNKNOWN` with normal-mode highlight) is used.
+---If the current mode is not explicitly mapped in `MODES`, the function
+---returns `nil` allowing callers to omit the segment entirely. This defensive
+---behaviour prevents rendering stale or misleading model labels when Neovim
+---introduces ne or transient mode codes.
 ---
----@return string
----A formatted statusline segment containing the mode label with the
----appropriate highlight group applied. The `string.format()` function first
----escapes Lua's  formatting rules so that `%%` becomes a literal `%`, allowing
----Neovim's statusline syntax to be emitted safely. The resulting string
----switches to the specified highlight group (`%#..#`) and renders the mode
----label using that highlight.
+---@return string | nil
+---A formatted statusline segment containing the current mode label with its
+---associated highlight group applied or `nil` if the mode is not supported.
 ---
 ---@see vim.api.nvim_get_mode
+---@see MODES
 local get_mode = function()
-  ---The table representing a mapping of colours to be assigned to a specific
-  ---highlight group.
-  local groups = {
-    StatuslineModeNormal = colors.bright.green,
-    StatuslineModeInsert = colors.bright.blue,
-    StatuslineModeVisual = colors.bright.purple,
-    StatuslineModeCommand = colors.bright.yellow,
-    StatuslineModeReplace = colors.bright.red,
-    StatuslineModeTerminal = colors.bright.aqua,
-  }
-
-  ---@type table<string, StatuslineMode>
-  ---The various Vim modes and their respective codes as returned by the mode() function.
-  ---
-  ---@see vim.api.nvim_get_mode for more information.
-  local modes = {
-    ["n"] = { label = "NORMAL", hl = "StatuslineModeNormal" },
-    ["no"] = { label = "NORMAL", hl = "StatuslineModeNormal" },
-    ["v"] = { label = "VISUAL", hl = "StatuslineModeVisual" },
-    ["V"] = { label = "VISUAL LINE", hl = "StatuslineModeVisual" },
-    [""] = { label = "VISUAL BLOCK", hl = "StatuslineModeVisual" },
-    ["s"] = { label = "SELECT", hl = "StatuslineModeVisual" },
-    ["S"] = { label = "SELECT LINE", hl = "StatuslineModeVisual" },
-    [""] = { label = "SELECT BLOCK", hl = "StatuslineModeVisual" },
-    ["i"] = { label = "INSERT", hl = "StatuslineModeInsert" },
-    ["ic"] = { label = "INSERT", hl = "StatuslineModeInsert" },
-    ["R"] = { label = "REPLACE", hl = "StatuslineModeReplace" },
-    ["Rv"] = { label = "REPLACE (VISUAL)", hl = "StatuslineModeReplace" },
-    ["c"] = { label = "COMMAND", hl = "StatuslineModeCommand" },
-    ["cv"] = { label = "COMMAND (VIM EX)", hl = "StatuslineModeCommand" },
-    ["ce"] = { label = "COMMAND (EX)", hl = "StatuslineModeCommand" },
-    ["r"] = { label = "PROMPT", hl = "StatuslineModeCommand" },
-    ["rm"] = { label = "MOAR", hl = "StatuslineModeCommand" },
-    ["r?"] = { label = "CONFIRM", hl = "StatuslineModeCommand" },
-    ["!"] = { label = "SHELL", hl = "StatuslineModeCommand" },
-    ["t"] = { label = "TERMINAL", hl = "StatuslineModeTerminal" },
-    ["nt"] = { label = "TERMINAL", hl = "StatuslineModeTerminal" },
-  }
-
-  -- Get the current mode and its name
   local current_mode = vim.api.nvim_get_mode().mode
-  local mode_info = modes[current_mode] or { label = "UNKNOWN", hl = "StatuslineModeNormal" }
+  local mode_info = MODES[current_mode]
 
-  -- Set the background colour for the segment
-  local bg = colors.bg.bg1
-
-  -- Apply the highlight groups
-  for name, color in pairs(groups) do
-    hl(0, name, { fg = color, bg = bg })
+  if not mode_info then
+    return nil
   end
 
-  -- Example rendered string - `"%#StatuslineModeInsert# INSERT"`
   return string.format("%%#%s# %s ", mode_info.hl, mode_info.label)
 end
 
@@ -194,95 +218,102 @@ end
 ---If no diagnostics are present for a given severity that segment is omitted.
 ---The returned string always resets the highlight group back to `Normal`.
 ---
----@return string
+---@return string | nil
 ---A formatted statusline segment containing zero or more diagnostic
 ---indicators.
 ---
 ---@see vim.diagnostic
 local get_diagnostics = function()
-  ---Aggregated diagnostic couunts by category.
+  ---Aggregated diagnostic counts by category.
   ---@class DiagnosticCount
   ---@field errors integer
   ---@field warnings integer
   ---@field info integer
   ---@field hints integer
 
-  ---@type DiagnosticCount
-  local count = {
-    errors = 0,
-    warnings = 0,
-    info = 0,
-    hints = 0,
-  }
-
-  ---Mapping of diagnostic categories to Neovim severity levels
-  ---@type table<DiagnosticCount, vim.diagnostic.Severity>
-  local levels = {
-    errors = vim.diagnostic.severity.ERROR,
-    warnings = vim.diagnostic.severity.WARN,
-    info = vim.diagnostic.severity.INFO,
-    hints = vim.diagnostic.severity.HINT,
-  }
-
   -- Count diagnostics per severity for the current buffer
-  for key, level in pairs(levels) do
-    count[key] = vim.tbl_count(vim.diagnostic.get(0, { severity = level }))
+  local diags = vim.diagnostic.get(0)
+  if #diags == 0 then
+    return nil
   end
 
-  -- Rendered statusline segments for each diagnostic category
-  local errors = ""
-  local warnings = ""
-  local hints = ""
-  local info = ""
+  -- Table containing a map of the LSP diagnostics and their count
+  local count = { errors = 0, warnings = 0, info = 0, hints = 0 }
 
-  if count["errors"] ~= 0 then
-    errors = "%#LspDiagnosticsSignError#  " .. count["errors"]
+  -- Iterate through the list of diagnostics and count the items
+  for _, item in pairs(diags) do
+    if item.severity == vim.diagnostic.severity.ERROR then
+      count.errors = count.errors + 1
+    end
+
+    if item.severity == vim.diagnostic.severity.WARNING then
+      count.warnings = count.warnings + 1
+    end
+
+    if item.severity == vim.diagnostic.severity.INFO then
+      count.info = count.info + 1
+    end
+
+    if item.severity == vim.diagnostic.severity.HINT then
+      count.hints = count.hints + 1
+    end
   end
 
-  if count["warnings"] ~= 0 then
-    warnings = "%#LspDiagnosticsSignWarning#  " .. count["warnings"]
+  -- The sub-segments of the parent segment
+  local segments = {}
+
+  if count.errors > 0 then
+    segments[#segments + 1] = "%#LspDiagnosticsSignError# ε " .. count.errors
   end
 
-  if count["hints"] ~= 0 then
-    hints = "%#LspDiagnosticsSignHint# 󰮥 " .. count["hints"]
+  if count.warnings > 0 then
+    segments[#segments + 1] = "%#LspDiagnosticsSignWarning#  " .. count.warnings
   end
 
-  if count["info"] ~= 0 then
-    info = "%#LspDiagnosticsSignInformation#  " .. count["info"]
+  if count.hints > 0 then
+    segments[#segments + 1] = "%#LspDiagnosticsSignHint#  " .. count.hints
   end
 
-  -- Concatenate all active segments and reset highlights to `Normal`
-  return errors .. warnings .. hints .. info
+  if count.info > 0 then
+    segments[#segments + 1] = "%#LspDiagnosticsSignInformation#  " .. count.info
+  end
+
+  return table.concat(segments)
 end
 
 ---Returns a visual indicator representing the cursor's vertical position
 ---within the current buffer.
 ---
 ---The function computes the cursor's progress as a normalized ratio (current
----line / total lines) and maps it to a glpyh chosen from a predefined sequence
+---line / total lines) and maps it to a glyph chosen from a predefined sequence
 ---of Nerd Font block characters. The resulting glyph provides a compact,
 ---intuitive progress indicator suitable for use in a statusline.
 ---
----@return string
+---@return string | nil
 ---A formatted statusline segment containing the current cursor location.
-local cursor_glyph = function()
-  -- Current cursor position
-  local line = vim.fn.line(".")
-
+local get_cursor_glyph = function()
   -- Total number of lines in the buffer
   local total_lines = vim.fn.line("$")
 
+  -- No meaningful cursor context
+  if total_lines == 0 then
+    return nil
+  end
+
+  -- Current cursor position
+  local line = vim.fn.line(".")
+
   -- Normalised progress (0.0 -> 1.0)
-  local progress = line / math.max(total_lines, 1)
+  local progress = line / total_lines
 
   -- Nerd Font progress blocks (low -> high)
   local blocks = { "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" }
 
   -- Map progress to a block index
-  local index = math.max(1, math.ceil(progress * #blocks))
-  local glyph = blocks[index]
+  local index = math.ceil(progress * #blocks)
+  index = math.max(1, math.min(index, #blocks))
 
-  return glyph
+  return blocks[index]
 end
 
 -- Cache to store the statusline components
@@ -298,10 +329,10 @@ local branch_icon = " "
 ---the function returns an empty string. Once available, the cached,
 ---preformatted component is returned.
 ---
----@return string
+---@return string | nil
 ---A formatted Git branch string (e.g., " main") or nil if the current
 ---working directory is not a Git repository.
-local git_branch = function()
+local get_git_branch = function()
   -- The current directory which is used as the key for caching the the
   -- component's rendering logic
   local cwd = vim.fn.getcwd()
@@ -313,15 +344,19 @@ local git_branch = function()
   end
 
   -- Initialise an empty cache if it's not found already
-  cache[cwd] = ""
+  cache[cwd] = nil
 
   -- Fetch the branch name from Git
   vim.system({ "git", "branch", "--show-current" }, { text = true }, function(result)
     if result.code == 0 then
       local branch = result.stdout:gsub("%s+", "")
-      cache[cwd] = branch_icon .. branch
+      if branch ~= nil then
+        cache[cwd] = branch_icon .. branch
+      else
+        cache[cwd] = nil
+      end
     else
-      cache[cwd] = ""
+      cache[cwd] = nil
     end
 
     -- Asynchronously redraw the status if the cache hit was a miss
@@ -330,14 +365,35 @@ local git_branch = function()
     end)
   end)
 
-  return ""
+  return nil
+end
+
+--- Append one more values to a table, ignoring `nil` values.
+---
+--- This helper is intended for incremental construction of ordered tables
+--- (e.g., statusline segments), where optional components may return `nil`
+--- to indicate "nothing to render".
+---
+--- Values are appended in the order provided and any `nil` values are skipped.
+---
+--- @generic T
+--- @param t T[]          -- Target table to append values to.
+--- @param ... T | nil    -- One or more values to append
+--- @return nil
+local push_if_present = function(t, ...)
+  for i = 1, select("#", ...) do
+    local v = select(i, ...)
+    if v ~= nil then
+      t[#t + 1] = v
+    end
+  end
 end
 
 ---Renders and returns the complete statusline string.
 ---
 ---This function composes the final statusline by concatenating individual
 ---segments produced by the module's helper functions. The `%=` item is used to
----seperate left-aligned and right-aligned sections following Neovim's
+---separate left-aligned and right-aligned sections following Neovim's
 ---statusline formatting rules. It ignores the rendering logic if the buffer's
 ---filetype is identified to be "ministarter".
 ---
@@ -346,9 +402,9 @@ end
 ---`statusline` option.
 ---
 ---@see vim.o.statusline
-function M.render()
+M.render = function()
   -- Mapping of filetypes where the statusline should be disabled
-  local disabled_filestypes = { ministarter = true, lazy = true, mason = true }
+  local disabled_filetypes = { ministarter = true, lazy = true, mason = true }
 
   -- Get the filetype of the current active buffer
   local buf = vim.api.nvim_win_get_buf(0)
@@ -356,34 +412,36 @@ function M.render()
 
   -- Apply the "Normal" highlight group to the statusline to represent a
   -- "disabled" filetype
-  if disabled_filestypes[ft] then
+  if disabled_filetypes[ft] then
     return "%#Normal#"
   end
 
-  -- Set the highlight group for the filepath segment in the statusline
-  hl(0, "StatuslineFilePath", { fg = colors.bright.gray, bg = colors.bg.bg0_h })
-  hl(0, "StatuslineCursorGlyph", { fg = colors.bright.orange, bg = colors.bg.bg0_h })
-  hl(0, "StatuslineGitBranch", { fg = colors.bright.aqua, bg = colors.bg.bg2 })
+  -- Define a table containing the segments of the statusline. These segments
+  -- will be concatenated into a singular string later down the line
+  local statusline = {}
 
-  -- Build the statusline (if it wasn't disabled) by concatenating all the
-  -- segments in to one single table
-  return table.concat({
-    get_mode(),
-    "%#StatuslineGitBranch# ",
-    git_branch(),
-    " %*",
-    get_diagnostics(),
-    "%#StatuslineFilePath# ",
-    "%f",
-    " %m",
-    "%=",
-    "%*",
-    "L: %l, C: %c ",
-    "%#StatuslineCursorGlyph#",
-    cursor_glyph(),
-    "%*",
-    " %p%% ",
-  })
+  -- The current mode
+  push_if_present(statusline, get_mode())
+
+  -- The Git branch name segment
+  local branch = get_git_branch()
+  if branch then
+    push_if_present(statusline, "%#StatuslineGitBranch# ", branch, " %*")
+  end
+
+  -- The LSP diagnostics segment
+  push_if_present(statusline, get_diagnostics())
+
+  -- The filepath segment
+  push_if_present(statusline, "%#StatuslineFilePath#", " %f", " %m", "%=", "%*")
+
+  -- The cursor position and related information
+  local cursor = get_cursor_glyph()
+  if cursor then
+    push_if_present(statusline, "L: %l, C: %c ", "%#StatuslineCursorGlyph#", cursor, "%*", " %p%% ")
+  end
+
+  return table.concat(statusline)
 end
 
 ---Initialise the statusline.
@@ -396,7 +454,11 @@ end
 ---executed repeatedly for example after a `ColorScheme` change.
 ---
 ---@return nil
-function M.setup()
+M.setup = function()
+  -- Setup the highlight groups
+  setup_highlights()
+
+  -- Configure Neovim to evaluate the statusline from the Lua source code
   vim.o.statusline = "%!v:lua.require('statusline').render()"
 end
 
