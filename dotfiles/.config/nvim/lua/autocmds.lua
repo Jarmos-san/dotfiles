@@ -168,3 +168,21 @@ autocmd("ColorScheme", {
     require("highlights").setup()
   end,
 })
+
+-- Autocommand to trigger hover window for LSP
+autocmd("CursorHold", {
+  desc = "Open/Close hover window for LSP",
+  group = augroup("LspHoverWindow"),
+  callback = function()
+    local config = {
+      focusable = false,
+      close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+      border = "rounded",
+      source = "always",
+      prefix = " ",
+      scope = "cursor",
+    }
+
+    vim.diagnostic.open_float(nil, config)
+  end,
+})
