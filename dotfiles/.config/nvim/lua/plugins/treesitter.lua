@@ -42,7 +42,7 @@ return {
         -- "mermaid",
         "python",
         -- "regex",
-        -- "robots",
+        "robots_txt",
         -- "rst",
         "scss",
         -- "terraform",
