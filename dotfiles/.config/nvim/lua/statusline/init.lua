@@ -9,10 +9,10 @@
 local M = {}
 
 local highlights = require("statusline.highlights")
-local modes = require("statusline.modes")
-local diagnostics = require("statusline.diagnostics")
-local git = require("statusline.git")
-local cursor = require("statusline.cursor")
+local modes = require("statusline.components.modes")
+local diagnostics = require("statusline.components.diagnostics")
+local git = require("statusline.components.git")
+local cursor = require("statusline.components.cursor")
 local utils = require("statusline.utils")
 local disabled = require("statusline.disabled")
 
