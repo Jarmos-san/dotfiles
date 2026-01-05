@@ -4,7 +4,7 @@ local opt = vim.opt
 opt.clipboard = "unnamedplus"
 
 -- Enable the global status line
-opt.laststatus = 2
+opt.laststatus = 3
 
 -- Make the autocompletion window more accessible
 opt.completeopt = "menu,menuone,noselect"
