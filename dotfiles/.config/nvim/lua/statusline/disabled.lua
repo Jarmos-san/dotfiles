@@ -3,7 +3,7 @@
 ---@module 'statusline.disabled'
 local M = {}
 
-local disabled = { ministarter = true, lazy = true, mason = true }
+local disabled = { ministarter = true, lazy = true, mason = true, ["TelescopePrompt"] = true }
 
 ---Check whether a buffer should suppress the statusline.
 ---
