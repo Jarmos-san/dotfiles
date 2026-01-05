@@ -84,5 +84,8 @@ vim.loader.enable()
 -- Render the custom statusline
 require("statusline").setup()
 
+-- Render the winbar
+require("winbar").setup()
+
 -- Enable the required LSP servers
 vim.lsp.enable({ "lua_ls" })
