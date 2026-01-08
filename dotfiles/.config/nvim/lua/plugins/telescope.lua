@@ -24,6 +24,7 @@ return {
         "coverage",
         "%.data",
         "pip",
+        "%.tfplan$",
       },
     },
     pickers = {
