@@ -61,3 +61,8 @@ fi
 # https://www.makeuseof.com/customize-zsh-prompt-macos-terminal
 
 export UV_PYTHON_DOWNLOADS=never
+
+# Source the environment variables to load automatically
+if [[ -f "$HOME/.zshenv" ]]; then
+    source "$HOME/.zshenv"
+fi
