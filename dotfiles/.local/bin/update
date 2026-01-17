@@ -34,6 +34,7 @@ import subprocess
 import sys
 import time
 import typing
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 class LogFormatter(logging.Formatter):
@@ -145,6 +146,7 @@ def run(
     logger: logging.Logger,
     cwd: pathlib.Path | None = None,
     capture_output: bool = False,
+    shell: bool = False,
 ) -> str | None:
     """Execute an external command with controlled output.
 
@@ -155,13 +157,16 @@ def run(
         cmd (str): Command and arguments to execute.
         logger (logging.Logger): Logger used for debug output.
         cwd (pathlib.Path | None): Optional working directory for the command.
+        capture_output (bool): Whether to the capture the output of the command and
+            store in a Python variable.
+        shell (bool): Whether to use the current shell to run the command.
 
     Raises:
         subprocess.CalledProcessError: If the command exits with a non-zero code.
     """
     logger.debug('Executing "%s"', cmd)
     debug_enabled = logger.isEnabledFor(logging.DEBUG)
-    args = shlex.split(cmd)
+    args = cmd if shell else shlex.split(cmd)
 
     if capture_output:
         try:
@@ -171,6 +176,7 @@ def run(
                 check=True,
                 text=True,
                 capture_output=capture_output,
+                shell=shell,
             ).stdout.strip()
         except subprocess.CalledProcessError:
             logger.exception("Command failed: %s", cmd)
@@ -181,9 +187,10 @@ def run(
                 args,
                 cwd=cwd,
                 check=True,
-                text=True,
+                text=False,
                 stdout=None if debug_enabled else subprocess.PIPE,
                 stderr=None if debug_enabled else subprocess.PIPE,
+                shell=shell,
             )
 
             return None
@@ -220,14 +227,21 @@ def run_linux_updates(logger: logging.Logger) -> None:
     match distro:
         case "Ubuntu" | "Debian":
             logger.info("Updating %s system...", distro)
-            run("sudo apt-get update", logger=logger)
-            run("sudo apt-get upgrade --yes", logger=logger)
-            run("sudo apt-get autoremove --purge --yes", logger=logger)
+            run(
+                "sudo apt-get update && "
+                + "sudo apt-get upgrade --yes && "
+                + "sudo apt-get autoremove --purge --yes",
+                shell=True,
+                logger=logger,
+            )
             logger.info("%s APT packages upgrade complete!", distro)
         case "Fedora":
             logger.info("Updating %s system...", distro)
-            run("sudo dnf upgrade --assumeyes", logger=logger)
-            run("sudo dnf autoremove --assumeyes", logger=logger)
+            run(
+                "sudo dnf upgrade --assumeyes && " + "sudo dnf autoremove --assumeyes",
+                shell=True,
+                logger=logger,
+            )
             logger.info("%s APT packages upgrade complete!", distro)
         case _:
             logger.error("Failed to identify system information...exiting!")
@@ -283,10 +297,11 @@ def run_homebrew_updates(logger: logging.Logger) -> None:
     Returns: None
     """
     logger.info("Running Homebrew updates")
-    run("brew update", logger=logger)
-    run("brew upgrade", logger=logger)
-    run("brew autoremove", logger=logger)
-    run("brew cleanup", logger=logger)
+    run(
+        "brew update && " + "brew upgrade && " + "brew autoremove && " + "brew cleanup",
+        shell=True,
+        logger=logger,
+    )
     logger.info("Homebrew package upgrades complete!")
 
 
@@ -322,11 +337,16 @@ def run_zsh_updates(logger: logging.Logger) -> None:
     )
 
     logger.info("Running ZSH plugin updates")
-    for plugin in plugins:
-        logger.info('Updating "%s" ZSH plugin', plugin)
+
+    def update(plugin: str) -> None:
         cwd = pathlib.Path.home() / ".zsh" / "plugins" / plugin.split("/")[-1]
-        logger.debug('Pulling "https://github.com/%s" to %s', plugin, cwd)
         run("git pull --rebase", cwd=cwd, logger=logger)
+
+    with ThreadPoolExecutor(max_workers=min(4, len(plugins))) as pool:
+        futures = [pool.submit(update, plugin) for plugin in plugins]
+        for future in as_completed(futures):
+            future.result()
+
     logger.info("ZSH update plugins complete!")
 
 
@@ -362,6 +382,7 @@ def main(logger: logging.Logger) -> None:
 
     # Run the package updates for a Linux distribution
     if platform.uname().system == "Linux":
+        run("sudo -v", logger=logger)
         run_linux_updates(logger)
 
     # Run the Homebrew package updates
