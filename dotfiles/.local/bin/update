@@ -29,6 +29,7 @@ import logging
 import os
 import pathlib
 import platform
+import shlex
 import subprocess
 import sys
 import time
@@ -130,13 +131,65 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=description, epilog=epilog)
 
     parser.add_argument(
-        "--log-level",
-        default="INFO",
-        choices=["DEBUG", "INFO", "WARNING", "ERROR"],
-        help='the logging verbosity of the command (default: "INFO")',
+        "--debug",
+        action="store_true",
+        help="the optional flag to enable debug mode",
     )
 
     return parser.parse_args()
+
+
+def run(
+    cmd: str,
+    *,
+    logger: logging.Logger,
+    cwd: pathlib.Path | None = None,
+    capture_output: bool = False,
+) -> str | None:
+    """Execute an external command with controlled output.
+
+    The subprocess output is supressed unless DEBUG logging is enabled. On failure,
+    captured output is logged at the ERROR level.
+
+    Args:
+        cmd (str): Command and arguments to execute.
+        logger (logging.Logger): Logger used for debug output.
+        cwd (pathlib.Path | None): Optional working directory for the command.
+
+    Raises:
+        subprocess.CalledProcessError: If the command exits with a non-zero code.
+    """
+    logger.debug('Executing "%s"', cmd)
+    debug_enabled = logger.isEnabledFor(logging.DEBUG)
+    args = shlex.split(cmd)
+
+    if capture_output:
+        try:
+            return subprocess.run(
+                args,
+                cwd=cwd,
+                check=True,
+                text=True,
+                capture_output=capture_output,
+            ).stdout.strip()
+        except subprocess.CalledProcessError:
+            logger.exception("Command failed: %s", cmd)
+            raise
+    else:
+        try:
+            subprocess.run(
+                args,
+                cwd=cwd,
+                check=True,
+                text=True,
+                stdout=None if debug_enabled else subprocess.PIPE,
+                stderr=None if debug_enabled else subprocess.PIPE,
+            )
+
+            return None
+        except subprocess.CalledProcessError:
+            logger.exception("Command failed: %s", cmd)
+            raise
 
 
 def run_linux_updates(logger: logging.Logger) -> None:
@@ -149,7 +202,7 @@ def run_linux_updates(logger: logging.Logger) -> None:
 
     This function executes the appropriate package manager commands for
     updating system packages and removing unused dependencies. It uses
-    `subprocess.run(..., check=True)` to ensure errors are surfaced.
+    `run(...)` to ensure errors are surfaced.
 
     If the distribution is not recognized, the function logs an error
     and terminates the program with a non-zero exit code.
@@ -162,30 +215,34 @@ def run_linux_updates(logger: logging.Logger) -> None:
     """
     distro = platform.freedesktop_os_release().get("NAME", "")
 
+    logger.debug("Identified Linux distrubution: %s", distro)
+
     match distro:
         case "Ubuntu" | "Debian":
             logger.info("Updating %s system...", distro)
-            subprocess.run(["sudo", "apt-get", "update"], check=True)
-            subprocess.run(["sudo", "apt-get", "upgrade", "--yes"], check=True)
-            subprocess.run(
-                ["sudo", "apt-get", "autoremove", "--purge", "--yes"], check=True
-            )
+            run("sudo apt-get update", logger=logger)
+            run("sudo apt-get upgrade --yes", logger=logger)
+            run("sudo apt-get autoremove --purge --yes", logger=logger)
             logger.info("%s APT packages upgrade complete!", distro)
         case "Fedora":
             logger.info("Updating %s system...", distro)
-            subprocess.run(["sudo", "dnf", "upgrade", "--assumeyes"], check=True)
-            subprocess.run(["sudo", "dnf", "autoremove", "--assumeyes"], check=True)
+            run("sudo dnf upgrade --assumeyes", logger=logger)
+            run("sudo dnf autoremove --assumeyes", logger=logger)
             logger.info("%s APT packages upgrade complete!", distro)
         case _:
             logger.error("Failed to identify system information...exiting!")
             sys.exit(1)
 
 
-def homebrew_installed() -> bool:
+def homebrew_installed(logger: logging.Logger) -> bool:
     """Determine whether Homebrew is installed and accessible.
 
     This function checks for the presence of the `brew` executable by attempting to run
     `brew --version`. No output is displayed during the check.
+
+    Args:
+        logger (logging.Logger): The `Logger` instance to display useful information to
+            the STDOUT when checking if Homebrew is installed.
 
     Returns:
         `True`: Homebrew is installed and the `brew` command can be executed.
@@ -193,7 +250,11 @@ def homebrew_installed() -> bool:
             returned an unexpected error during its execution.
     """
     try:
-        subprocess.run(["brew", "--version"], check=True, stdout=subprocess.DEVNULL)
+        logger.debug("Checking if Homebrew is installed...")
+        version = run("brew --version", capture_output=True, logger=logger)
+        logger.debug(
+            'Homebrew installed, identified version information: "%s"', version
+        )
         return True
     except (FileNotFoundError, subprocess.CalledProcessError):
         return False
@@ -222,10 +283,10 @@ def run_homebrew_updates(logger: logging.Logger) -> None:
     Returns: None
     """
     logger.info("Running Homebrew updates")
-    subprocess.run(["brew", "update"], check=True)
-    subprocess.run(["brew", "upgrade"], check=True)
-    subprocess.run(["brew", "autoremove"], check=True)
-    subprocess.run(["brew", "cleanup"], check=True)
+    run("brew update", logger=logger)
+    run("brew upgrade", logger=logger)
+    run("brew autoremove", logger=logger)
+    run("brew cleanup", logger=logger)
     logger.info("Homebrew package upgrades complete!")
 
 
@@ -262,16 +323,14 @@ def run_zsh_updates(logger: logging.Logger) -> None:
 
     logger.info("Running ZSH plugin updates")
     for plugin in plugins:
-        logger.info("Fetching https://github.com/%s", plugin)
-        plugin_dir = pathlib.Path.home() / ".zsh" / "plugins" / plugin.split("/")[-1]
-        os.chdir(plugin_dir)
-        subprocess.run(
-            ["git", "pull", "--rebase"], check=True, stdout=subprocess.DEVNULL
-        )
+        logger.info('Updating "%s" ZSH plugin', plugin)
+        cwd = pathlib.Path.home() / ".zsh" / "plugins" / plugin.split("/")[-1]
+        logger.debug('Pulling "https://github.com/%s" to %s', plugin, cwd)
+        run("git pull --rebase", cwd=cwd, logger=logger)
     logger.info("ZSH update plugins complete!")
 
 
-def main() -> None:
+def main(logger: logging.Logger) -> None:
     """Executes the full system update routine for the current environment.
 
     This function orchestrates all available update mechanisms based on the system
@@ -288,16 +347,16 @@ def main() -> None:
     (such as failed subprocess calls) may propagate upwards unless explicitly handled
     within those functions.
 
+    Args:
+        logger (logging.Logger): The `Logger` instance to display useful information to
+            STDOUT when running the script.
+
+    Returns: None
+
     Raises:
         subprocess.CalledProcessError: If any invoked update command (Linux, Homebrew
             or Zsh plugin updates) fails and is executed with `check=True`.
     """
-    # Parse the CLI arguments of the script
-    args = parse_args()
-
-    # Create a logger
-    logger = configure_logging(args.log_level)
-
     # Chech which shell is enabled for the interactive environment
     shell = os.getenv("SHELL")
 
@@ -306,7 +365,7 @@ def main() -> None:
         run_linux_updates(logger)
 
     # Run the Homebrew package updates
-    if homebrew_installed():
+    if homebrew_installed(logger):
         run_homebrew_updates(logger)
 
     # Update the zsh plugins
@@ -317,4 +376,15 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    # Parse the CLI arguments of the script
+    args = parse_args()
+
+    # Create a logger
+    level = logging.INFO if not args.debug else logging.DEBUG
+    logger = configure_logging(level)
+
+    try:
+        main(logger)
+    except KeyboardInterrupt:
+        logger.warning("System updated interrupted manually...")
+        sys.exit(2)
