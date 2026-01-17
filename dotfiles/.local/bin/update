@@ -23,27 +23,101 @@ Author: Somraj Saha <contact@jarmos.dev>
 License: MIT
 """
 
+import argparse
 import datetime
+import logging
 import os
+import pathlib
 import platform
 import subprocess
 import sys
-from argparse import ArgumentParser, Namespace
-from pathlib import Path
-
-# Message labels with their respective colour codes
-_RESET = "\x1b[0m"
-_BLUE = "\x1b[94m"
-_GREEN = "\x1b[92m"
-# _YELLOW = "\x1b[93m"
-# _WARN = f"[{_YELLOW}WARN{_RESET}]"
-_RED = "\x1b[31m"
-_INFO = f"[{_BLUE}INFO{_RESET}]"
-_SUCCESS = f"[{_GREEN}SUCCESS{_RESET}]"
-_ERROR = f"[{_RED}ERROR{_RESET}]"
+import time
+import typing
 
 
-def parse_args() -> Namespace:
+class LogFormatter(logging.Formatter):
+    """A log formatter which adds ANSI colours and aligns the level tag.
+
+    The colour is applied to the entire bracketed level tag, while the message text
+    remains uncoloured. The tags are padded to `LABEL_WIDTH` characters to keep log
+    messages in a neatly aligned column.
+
+    Attributes:
+        colours: Mapping of log levels to ANSI colour codes.
+        reset: ANSI escape sequence used to reset terminal colours.
+        label_width: Target width (in visible characters) for the bracketed log-level
+            label, e.g. "[CRITICAL]".
+    """
+
+    # Set the timestamps to be in UTC
+    converter = time.gmtime  # type: ignore
+
+    # Set the ANSI colour codes for levels
+    colours: typing.ClassVar = {
+        logging.DEBUG: "\033[36m",  # Cyan
+        logging.INFO: "\033[32m",  # Green
+        logging.WARNING: "\033[33m",  # Yellow
+        logging.ERROR: "\033[31m",  # Red
+        logging.CRITICAL: "\033[41m",  # Red background
+    }
+
+    # Remove the ANSI colour code for levels
+    reset = "\033[0m"
+
+    @typing.override
+    def format(self, record: logging.LogRecord) -> str:
+        """Format a log record with coloured and padded level labels.
+
+        Args:
+            record: The log record being formatted.
+
+        Returns:
+            A coloured and aligned log message string.
+        """
+        colour = self.colours.get(record.levelno, self.reset)
+        record.coloured_levelname = f"{colour}{record.levelname}{self.reset}"
+
+        return super().format(record)
+
+
+def configure_logging(level: int) -> logging.Logger:
+    """Configure and return a console logger.
+
+    This function creates (or retrieves) a logger with a given name, set it's logging
+    level and attaches a stream handler with a custom formatted log message if no
+    handlers are already present.
+
+    Args:
+        level: The logging level to be set on the logger and its handler (e.g.,
+            `logging.DEBUG`, `logging.INFO`).
+
+    Returns:
+        A configured `logging.Logger` instance.
+    """
+    # Get a logger and set it's name to the name of the current module
+    logger = logging.getLogger(__name__)
+
+    # Set the logging level for the root log handler
+    logger.setLevel(level)
+
+    # Format the log message to provide contextual information about the log level name
+    # and its associated log message
+    fmt = LogFormatter(
+        "%(asctime)s %(coloured_levelname)-9s %(message)s",
+        datefmt="%Y-%m-%dT%H:%M:%S%z",
+    )
+
+    # Attach a log handler to print the log messages to STDOUT
+    if not logger.handlers:
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(level)
+        console_handler.setFormatter(fmt)
+        logger.addHandler(console_handler)
+
+    return logger
+
+
+def parse_args() -> argparse.Namespace:
     """Parse and return the CLI arguments.
 
     Returns:
@@ -53,12 +127,19 @@ def parse_args() -> Namespace:
     description = "intelligently update the system packages"
     epilog = f"© Somraj Saha 2018-{current_year} <contact@jarmos.dev>"
 
-    parser = ArgumentParser(description=description, epilog=epilog)
+    parser = argparse.ArgumentParser(description=description, epilog=epilog)
+
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+        help='the logging verbosity of the command (default: "INFO")',
+    )
 
     return parser.parse_args()
 
 
-def run_linux_updates() -> None:
+def run_linux_updates(logger: logging.Logger) -> None:
     """Detect the Linux distribution and run system updates accordingly.
 
     Supported distributions:
@@ -72,25 +153,31 @@ def run_linux_updates() -> None:
 
     If the distribution is not recognized, the function logs an error
     and terminates the program with a non-zero exit code.
+
+    Args:
+        level (logging.Logger): The `Logger` instance used for logging useful messages
+            when running the updates for a particular distribution.
+
+    Returns: None
     """
     distro = platform.freedesktop_os_release().get("NAME", "")
 
     match distro:
         case "Ubuntu" | "Debian":
-            print(f"{_INFO} Updating {distro} system...")
+            logger.info("Updating %s system...", distro)
             subprocess.run(["sudo", "apt-get", "update"], check=True)
             subprocess.run(["sudo", "apt-get", "upgrade", "--yes"], check=True)
             subprocess.run(
                 ["sudo", "apt-get", "autoremove", "--purge", "--yes"], check=True
             )
-            print(f"{_SUCCESS} {distro} APT packages upgrade complete!")
+            logger.info("%s APT packages upgrade complete!", distro)
         case "Fedora":
-            print(f"{_INFO} Updating {distro} system...")
+            logger.info("Updating %s system...", distro)
             subprocess.run(["sudo", "dnf", "upgrade", "--assumeyes"], check=True)
             subprocess.run(["sudo", "dnf", "autoremove", "--assumeyes"], check=True)
-            print(f"{_SUCCESS} {distro} APT packages upgrade complete!")
+            logger.info("%s APT packages upgrade complete!", distro)
         case _:
-            print(f"{_ERROR} Failed to identify system information...exiting!")
+            logger.error("Failed to identify system information...exiting!")
             sys.exit(1)
 
 
@@ -112,7 +199,7 @@ def homebrew_installed() -> bool:
         return False
 
 
-def run_homebrew_updates() -> None:
+def run_homebrew_updates(logger: logging.Logger) -> None:
     """Run system package updates using Homebrew.
 
     This function executes the standard Homebrew maintenance sequence:
@@ -124,21 +211,25 @@ def run_homebrew_updates() -> None:
     All the commands are executed with the `check=True` parameter to raise a
     `subprocess.CalledProcessError` to be raised if any step fails.
 
+    Args:
+        logger (logging.Logger): The `Logger` instance used for logging useful messages
+            to STDOUT when performing some Homebrew updates.
+
     Raises:
         subprocess.CalledProcessError: If any Homebrew command exits with a non-zero
             status.
-    """
-    print(f"{_INFO} Running Homebrew updates")
 
+    Returns: None
+    """
+    logger.info("Running Homebrew updates")
     subprocess.run(["brew", "update"], check=True)
     subprocess.run(["brew", "upgrade"], check=True)
     subprocess.run(["brew", "autoremove"], check=True)
     subprocess.run(["brew", "cleanup"], check=True)
+    logger.info("Homebrew package upgrades complete!")
 
-    print(f"{_SUCCESS} Homebrew package upgrades complete!")
 
-
-def run_zsh_updates() -> None:
+def run_zsh_updates(logger: logging.Logger) -> None:
     """Update the local Zsh plugins by pulling the latest changes.
 
     This function assumes the Zsh plugins are cloned under:
@@ -152,10 +243,15 @@ def run_zsh_updates() -> None:
     All Git operations are executed with `check=True`, causing
     `subprocess.CalledProcessError` to be raised if any update fails.
 
+    logger (logging.Logger): The `Logger` instance used for logging useful messages to
+        STDOUT when updating the ZSH plugins.
+
     Raises:
         `FileNotFoundError`: If a plugin directory does not exist.
         `subprocess.CalledProcessError`: If a Git update operation exits with a non-zero
             status.
+
+    Returns: None
     """
     plugins = (
         "zsh-users/zsh-autosuggestions",
@@ -164,15 +260,15 @@ def run_zsh_updates() -> None:
         "zsh-users/zsh-syntax-highlighting",
     )
 
-    print(f"{_INFO} Running ZSH plugin updates")
+    logger.info("Running ZSH plugin updates")
     for plugin in plugins:
-        print(f"{_INFO} Fetching https://github.com/{plugin}")
-        plugin_dir = Path.home() / ".zsh" / "plugins" / plugin.split("/")[-1]
+        logger.info("Fetching https://github.com/%s", plugin)
+        plugin_dir = pathlib.Path.home() / ".zsh" / "plugins" / plugin.split("/")[-1]
         os.chdir(plugin_dir)
         subprocess.run(
             ["git", "pull", "--rebase"], check=True, stdout=subprocess.DEVNULL
         )
-    print(f"{_SUCCESS} ZSH update plugins complete!")
+    logger.info("ZSH update plugins complete!")
 
 
 def main() -> None:
@@ -197,24 +293,27 @@ def main() -> None:
             or Zsh plugin updates) fails and is executed with `check=True`.
     """
     # Parse the CLI arguments of the script
-    parse_args()
+    args = parse_args()
+
+    # Create a logger
+    logger = configure_logging(args.log_level)
 
     # Chech which shell is enabled for the interactive environment
     shell = os.getenv("SHELL")
 
     # Run the package updates for a Linux distribution
     if platform.uname().system == "Linux":
-        run_linux_updates()
+        run_linux_updates(logger)
 
     # Run the Homebrew package updates
     if homebrew_installed():
-        run_homebrew_updates()
+        run_homebrew_updates(logger)
 
     # Update the zsh plugins
     if shell and shell.split("/")[-1] == "zsh":
-        run_zsh_updates()
+        run_zsh_updates(logger)
 
-    print(f"{_SUCCESS} System update complete...exiting now")
+    logger.info("System update complete...exiting now")
 
 
 if __name__ == "__main__":
