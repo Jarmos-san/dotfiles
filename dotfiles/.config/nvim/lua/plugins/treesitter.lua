@@ -27,7 +27,7 @@ return {
         -- "gosum",
         -- "hcl",
         -- "html",
-        -- "ini",
+        "ini",
         -- "javascript",
         -- "jinja",
         -- "jinja_inline",
