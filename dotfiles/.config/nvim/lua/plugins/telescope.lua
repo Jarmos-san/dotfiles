@@ -26,6 +26,7 @@ return {
         "pip",
         "%.tfplan$",
         "%.ansible",
+        "%.tfstate",
       },
     },
     pickers = {
