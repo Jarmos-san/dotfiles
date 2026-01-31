@@ -27,6 +27,7 @@ return {
         "%.tfplan$",
         "%.ansible",
         "%.tfstate",
+        "%.astro",
       },
     },
     pickers = {
