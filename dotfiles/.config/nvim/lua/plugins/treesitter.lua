@@ -18,6 +18,7 @@ return {
         -- "diff",
         -- "dockerfile",
         -- "editorconfig",
+        "fish",
         -- "git_rebase",
         -- "gitattributes",
         -- "gitcommit",
