@@ -10,6 +10,7 @@ return {
       "conf",
       "dosini",
       "dotenv",
+      "fish",
       "gitattributes",
       "gitcommit",
       "gitconfig",
