@@ -85,4 +85,4 @@ vim.loader.enable()
 require("statusline").setup()
 
 -- Enable the required LSP servers
-vim.lsp.enable({ "lua_ls" })
+vim.lsp.enable({ "lua_ls", "fish_lsp" })
