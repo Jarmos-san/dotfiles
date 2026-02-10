@@ -31,6 +31,7 @@ return {
         "debugpy",
         "dockerfile-language-server",
         "eslint-lsp",
+        "fish-lsp",
         "goimports-reviser",
         "golines",
         "gopls",
