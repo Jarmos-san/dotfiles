@@ -66,7 +66,7 @@ end
 -- My WIP personalised colour scheme
 -- vim.cmd.colorscheme("tansai")
 
-vim.cmd.colorscheme("evergarden")
+vim.cmd.colorscheme("retrobox")
 
 -- INFO: Enable an experimental fast module loader. See the PR for more information:
 -- https://github.com/neovim/neovim/pull/22668
