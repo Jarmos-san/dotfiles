@@ -129,3 +129,6 @@ vim.opt.cmdheight = 1
 
 -- Add borders for all floating windows
 vim.opt.winborder = "rounded"
+
+-- Enable the global statusline for a clean look and feel
+vim.opt.laststatus = 3

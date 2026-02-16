@@ -4,18 +4,15 @@
 
 ---@class Statusline
 ---@field setup fun(): nil
----@field active fun(): string
----@field inactive fun(): string
+---@field render fun(): string
 
 local M = {}
 
-local highlights = require("statusline.highlights")
 local modes = require("statusline.components.modes")
-local diagnostics = require("statusline.components.diagnostics")
 local git = require("statusline.components.git")
+local lsp_progress = require("statusline.components.lsp.progress")
+local diagnostic = require("statusline.components.lsp.diagnostics")
 local cursor = require("statusline.components.cursor")
-local utils = require("statusline.utils")
-local disabled = require("statusline.disabled")
 
 ---Render the statusline for the active window.
 ---
@@ -27,65 +24,59 @@ local disabled = require("statusline.disabled")
 ---group is returned and no custom rendering is applied.
 ---
 ---@return string
-M.active = function()
-  ---@type integer
-  local buf = vim.api.nvim_win_get_buf(0)
+M.render = function()
+  -- Reset the foreground colour of the statusline
+  vim.api.nvim_set_hl(0, "Statusline", { fg = "#000000" })
 
-  if disabled.is_disabled(buf) then
-    return "%#Normal#"
+  -- Disabled filetypes
+  local disabled_filetypes = {
+    ministarter = true,
+    lazy = true,
+    mason = true,
+    TelescopePrompt = true,
+  }
+
+  -- Make the statusline disappear for certain filetypes.
+  local buf = vim.api.nvim_win_get_buf(0)
+  if disabled_filetypes[vim.bo[buf].filetype] then
+    return "%*"
   end
 
-  ---@type string[]
+  -- Render the various segments along with their highlights
+  local mode = modes.render()
+  local git_branch = git.render()
+  local lsp_progress_segment = lsp_progress.render()
+  local diagnostic_segment = diagnostic.render()
+  local cursor_segment = cursor.render()
+
+  -- Create an empty statusline segment to which the segments will be appended to
   local statusline = {}
 
-  -- Mode segment (e.g., NORMAL / INSERT / VISUAL and so on)
-  utils.push_if_present(statusline, modes.render())
-
-  -- Git branch segment (optional)
-  ---@type string | nil
-  local branch = git.render()
-  if branch then
-    utils.push_if_present(statusline, "%#StatuslineGitBranch#", branch, " %*")
+  -- The Vim mode segment
+  if mode ~= nil then
+    table.insert(statusline, mode)
   end
 
-  -- Diagnostics segment (LSP warning/errors, optional)
-  utils.push_if_present(statusline, diagnostics.render())
-
-  -- Filepath and modified flag; `%=` seperates the left and right segments
-  utils.push_if_present(statusline, "%#StatuslineFilePath#", " %f", " %m", "%=", "%*")
-
-  -- Cursor position and percentage through file (optional)
-  ---@type string | nil
-  local cur = cursor.render()
-  if cur then
-    utils.push_if_present(statusline, "L: %l, C: %c ", "%#StatuslineCursorGlyph#", cur, "%*", " %p%% ")
+  -- The Git branch segment
+  if git_branch ~= nil then
+    table.insert(statusline, git_branch)
   end
 
-  return table.concat(statusline)
-end
-
----Render the statusline for an inactive window.
----
----The inactive statusline is intentionally minimal and typically displays only
----the filepath and modified flag. This reduces visual noise while preserving
----essential context for an unfocused window.
----
----If the current buffer is marked as disabled, the default `Normal` highlight
----group is returned.
----
----@return string
-M.inactive = function()
-  ---@type integer
-  local buf = vim.api.nvim_win_get_buf(0)
-
-  if disabled.is_disabled(buf) then
-    return "%#Normal#"
+  -- The LSP progress (work/done) segment
+  if lsp_progress_segment then
+    table.insert(statusline, lsp_progress_segment)
+    vim.cmd("redrawstatus")
   end
 
-  ---@type string[]
-  local statusline = {}
+  -- The diagnostic icons/count
+  if lsp_progress.is_ready() and diagnostic_segment ~= nil then
+    table.insert(statusline, diagnostic_segment)
+  end
 
-  utils.push_if_present(statusline, "%#StatuslineFilePath#", " %f", " %m", "%=", "%*")
+  -- The cursor status and related information
+  if cursor ~= nil then
+    table.insert(statusline, cursor_segment)
+  end
 
   return table.concat(statusline)
 end
@@ -102,25 +93,12 @@ end
 ---
 ---@return nil
 M.setup = function()
-  local augroup = vim.api.nvim_create_augroup("Statusline", { clear = true })
-  local autocmd = vim.api.nvim_create_autocmd
-
-  -- Setup the highlight groups for the statusline segments
-  highlights.setup()
-
-  -- Render the statusline for the active window
-  autocmd({ "WinEnter", "BufEnter" }, {
-    group = augroup,
+  -- Render the statusline with autocommand so that the highlights are applied uniformly
+  -- even after switching windows
+  vim.api.nvim_create_autocmd({ "WinLeave", "BufEnter" }, {
+    group = vim.api.nvim_create_augroup("Statusline", { clear = true }),
     callback = function()
-      vim.opt_local.statusline = '%!v:lua.require("statusline").active()'
-    end,
-  })
-
-  -- Render the statusline for the inactive window
-  autocmd({ "WinLeave", "BufLeave" }, {
-    group = augroup,
-    callback = function()
-      vim.opt_local.statusline = '%!v:lua.require("statusline").inactive()'
+      vim.opt_local.statusline = '%!v:lua.require("statusline").render()'
     end,
   })
 end

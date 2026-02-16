@@ -25,6 +25,9 @@ local branch_icon = " "
 ---A formatted Git branch string (e.g., " main") or nil if the current
 ---working directory is not a Git repository.
 M.render = function()
+  local colors = require("statusline.colors").COLORS
+  local hl = vim.api.nvim_set_hl
+
   -- The current directory which is used as the key for caching the the
   -- component's rendering logic
   local cwd = vim.fn.getcwd()
@@ -38,12 +41,15 @@ M.render = function()
   -- Initialise an empty cache if it's not found already
   cache[cwd] = nil
 
+  -- Set the highlight for the segment
+  hl(0, "StatuslineGitBranch", { fg = colors.fg.fg2, bg = colors.bg.bg0 })
+
   -- Fetch the branch name from Git
   vim.system({ "git", "branch", "--show-current" }, { text = true }, function(result)
     if result.code == 0 then
-      local branch = result.stdout:gsub("%s+", "")
-      if branch ~= nil then
-        cache[cwd] = branch_icon .. branch
+      local branch_name = result.stdout:gsub("%s+", "")
+      if branch_name ~= nil then
+        cache[cwd] = string.format("%%#StatuslineGitBranch# %s%s %%*", branch_icon, branch_name)
       else
         cache[cwd] = nil
       end
