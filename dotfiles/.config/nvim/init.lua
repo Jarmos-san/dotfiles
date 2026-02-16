@@ -86,3 +86,5 @@ require("statusline").setup()
 
 -- Enable the required LSP servers
 vim.lsp.enable({ "lua_ls", "fish_lsp" })
+
+require("winbar").setup()
