@@ -29,13 +29,20 @@ M.render = function()
   local progress = line / total_lines
 
   -- Nerd Font progress blocks (low -> high)
-  local blocks = { "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" }
+  local blocks = { " ", "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" }
 
   -- Map progress to a block index
   local index = math.ceil(progress * #blocks)
   index = math.max(1, math.min(index, #blocks))
 
-  return blocks[index]
+  -- Set the highlights for the segment
+  local hl = vim.api.nvim_set_hl
+  local colors = require("statusline.colors").COLORS
+  local bg = colors.bg.bg0_h
+  hl(0, "StatuslineCursor", { fg = colors.fg.fg2, bg = bg })
+  hl(0, "StatuslineCursorGlyph", { fg = colors.bright.orange, bg = bg })
+
+  return string.format("%%= %%#StatuslineCursor# L: %%l | C: %%c %%#StatuslineCursorGlyph#%s", blocks[index])
 end
 
 return M

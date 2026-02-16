@@ -40,6 +40,26 @@ local modes = {
   nt = { label = "TERMINAL", hl = "StatuslineModeTerminal" },
 }
 
+---Configure custom highlight groups used by the statusline.
+---
+---This function defines mode-specific highlight groups by delegating to
+---`vim.api.nvim_set_hl`. All highlights are applied in the global namespace
+---(ns_id = 0).
+---
+---@return nil
+local setup_highlights = function()
+  local hl = vim.api.nvim_set_hl
+  local colors = require("statusline.colors").COLORS
+  local bg = colors.bg.bg1
+
+  hl(0, "StatuslineModeNormal", { fg = colors.bright.green, bg = bg, bold = true })
+  hl(0, "StatuslineModeInsert", { fg = colors.bright.blue, bg = bg })
+  hl(0, "StatuslineModeVisual", { fg = colors.bright.purple, bg = bg })
+  hl(0, "StatuslineModeCommand", { fg = colors.bright.yellow, bg = bg })
+  hl(0, "StatuslineModeReplace", { fg = colors.bright.red, bg = bg })
+  hl(0, "StatuslineModeTerminal", { fg = colors.bright.aqua, bg = bg })
+end
+
 ---Build and return the statusline segment representing the current editor
 ---mode.
 ---
@@ -65,6 +85,8 @@ M.render = function()
   if not mode_info then
     return nil
   end
+
+  setup_highlights()
 
   return string.format("%%#%s# %s ", mode_info.hl, mode_info.label)
 end
