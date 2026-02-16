@@ -60,20 +60,30 @@ M.render = function()
   -- The sub-segments of the parent segment
   local segments = {}
 
+  -- Setup the highlights for the LSP diagnostic icons
+  local hl = vim.api.nvim_set_hl
+  local colors = require("statusline.colors").COLORS
+  local bg = colors.bg.bg0_h
+
+  hl(0, "LspDiagnosticsSignError", { fg = colors.bright.red, bg = bg })
+  hl(0, "LspDiagnosticsSignWarning", { fg = colors.bright.yellow, bg = bg })
+  hl(0, "LspDiagnosticsSignHint", { fg = colors.bright.green, bg = bg })
+  hl(0, "LspDiagnosticsSignInfo", { fg = colors.bright.blue, bg = bg })
+
   if count.errors > 0 then
-    segments[#segments + 1] = "%#LspDiagnosticsSignError# ε " .. count.errors
+    segments[#segments + 1] = string.format("%%#LspDiagnosticsSignError# ε %s %%*", count.errors)
   end
 
   if count.warnings > 0 then
-    segments[#segments + 1] = "%#LspDiagnosticsSignWarning#  " .. count.warnings
+    segments[#segments + 1] = string.format("%%#LspDiagnosticsSignWarning#  %s %%*", count.warnings)
   end
 
   if count.hints > 0 then
-    segments[#segments + 1] = "%#LspDiagnosticsSignHint#  " .. count.hints
+    segments[#segments + 1] = string.format("%%#LspDiagnosticsSignHint#  %s %%*", count.hints)
   end
 
   if count.info > 0 then
-    segments[#segments + 1] = "%#LspDiagnosticsSignInformation#  " .. count.info
+    segments[#segments + 1] = string.format("%%#LspDiagnosticsSignInfo#  %s %%*", count.info)
   end
 
   return table.concat(segments)

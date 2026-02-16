@@ -20,15 +20,16 @@ local colors = require("statusline.colors").COLORS
 ---@alias StatuslineHighlight vim.api.keyset.highlight
 ---@type table<string, StatuslineHighlight>
 local HIGHLIGHTS = {
-  StatuslineModeNormal = { fg = colors.bright.green, bg = colors.bg.bg1 },
+  StatuslineModeNormal = { fg = colors.bright.green, bg = colors.bg.bg1, bold = true },
   StatuslineModeInsert = { fg = colors.bright.blue, bg = colors.bg.bg1 },
   StatuslineModeVisual = { fg = colors.bright.purple, bg = colors.bg.bg1 },
   StatuslineModeCommand = { fg = colors.bright.yellow, bg = colors.bg.bg1 },
   StatuslineModeReplace = { fg = colors.bright.red, bg = colors.bg.bg1 },
   StatuslineModeTerminal = { fg = colors.bright.aqua, bg = colors.bg.bg1 },
   StatuslineFilePath = { fg = colors.bright.gray, bg = colors.bg.bg0_h },
-  StatuslineCursorGlyph = { fg = colors.bright.orange, bg = colors.bg.bg0_h },
-  StatuslineGitBranch = { fg = colors.bright.aqua, bg = colors.bg.bg2 },
+  StatuslineCursor = { fg = colors.bg.bg0_h, bg = colors.fg.fg0 },
+  StatuslineCursorGlyph = { fg = colors.bg.bg0_h, bg = colors.bright.orange },
+  StatuslineGitBranch = { fg = colors.bg.bg0_h, bg = colors.fg.fg0 },
 }
 
 ---Apply all statusline highlight groups.
