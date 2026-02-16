@@ -87,4 +87,5 @@ require("statusline").setup()
 -- Enable the required LSP servers
 vim.lsp.enable({ "lua_ls", "fish_lsp" })
 
+-- Setup the winbar for Neovim buffers
 require("winbar").setup()
