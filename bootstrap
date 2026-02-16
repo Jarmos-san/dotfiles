@@ -1,0 +1,383 @@
+#!/usr/bin/env python3
+
+"""Script to automate the setup process of a fresh new development environment.
+
+Author: Somraj Saha <somraj.saha@weburz.com>
+License: MIT
+"""
+
+import json
+import pathlib
+import platform
+import subprocess
+import sys
+import time
+import typing
+import urllib.error
+import urllib.request
+from argparse import ArgumentParser, Namespace
+from datetime import datetime
+from logging import (
+    CRITICAL,
+    DEBUG,
+    ERROR,
+    INFO,
+    WARNING,
+    Formatter,
+    Logger,
+    LogRecord,
+    StreamHandler,
+    getLogger,
+)
+
+
+class LogFormatter(Formatter):
+    """A log formatter which adds ANSI colours and aligns the level tag.
+
+    The colour is applied to the entire bracketed level tag, while the message text
+    remains uncoloured. The tags are padded to `LABEL_WIDTH` characters to keep log
+    messages in a neatly aligned column.
+
+    Attributes:
+        colours: Mapping of log levels to ANSI colour codes.
+        reset: ANSI escape sequence used to reset terminal colours.
+        label_width: Target width (in visible characters) for the bracketed log-level
+            label, e.g. "[CRITICAL]".
+    """
+
+    # Set the timestamps to be in UTC
+    converter = time.gmtime  # type: ignore
+
+    # Set the ANSI colour codes for levels
+    colours: typing.ClassVar = {
+        DEBUG: "\033[36m",  # Cyan
+        INFO: "\033[32m",  # Green
+        WARNING: "\033[33m",  # Yellow
+        ERROR: "\033[31m",  # Red
+        CRITICAL: "\033[41m",  # Red background
+    }
+
+    # Remove the ANSI colour code for levels
+    reset = "\033[0m"
+
+    @typing.override
+    def format(self, record: LogRecord) -> str:
+        """Format a log record with coloured and padded level labels.
+
+        Args:
+            record: The log record being formatted.
+
+        Returns:
+            A coloured and aligned log message string.
+        """
+        colour = self.colours.get(record.levelno, self.reset)
+        record.coloured_levelname = f"{colour}{record.levelname}{self.reset}"
+
+        return super().format(record)
+
+
+def configure_logging(level: int) -> Logger:
+    """Configure and return a console logger.
+
+    This function creates (or retrieves) a logger with a given name, set it's logging
+    level and attaches a stream handler with a custom formatted log message if no
+    handlers are already present.
+
+    Args:
+        level: The logging level to be set on the logger and its handler (e.g.,
+            `logging.DEBUG`, `logging.INFO`).
+        name: The name of the logger to configure. Defaults to the name of the current
+            module.
+
+    Returns:
+        A configured `logging.Logger` instance.
+    """
+    # Get a logger and set it's name to the name of the current module
+    logger = getLogger(__name__)
+
+    # Set the logging level for the root log handler
+    logger.setLevel(level)
+
+    # Format the log message to provide contextual information about the log level name
+    # and its associated log message
+    fmt = LogFormatter(
+        "%(asctime)s %(coloured_levelname)-9s %(message)s",
+        datefmt="%Y-%m-%dT%H:%M:%S%z",
+    )
+
+    # Attach a log handler to print the log messages to STDOUT
+    if not logger.handlers:
+        console_handler = StreamHandler()
+        console_handler.setLevel(level)
+        console_handler.setFormatter(fmt)
+        logger.addHandler(console_handler)
+
+    return logger
+
+
+def parse_args() -> Namespace:
+    """Parse and return the CLI arguments.
+
+    Initialises an argument parser with program metadata and parses arguments provided
+    via the command-line.
+
+    Returns:
+        An `argparse.Namespace` object containing the parsed command-line arguments.
+    """
+    # Get the current year which is used in the program's description
+    current_year = datetime.now().year
+
+    # Create a parser instance to attach the CLI arguments to
+    parser = ArgumentParser(
+        description="bootstrap a fresh new development environment.",
+        epilog=f"copyright 2018-{current_year} Somraj Saha <somraj.saha@weburz.com>",
+    )
+
+    # Flag to enable debug mode for the script
+    parser.add_argument(
+        "--debug", action="store_true", help="enable debug mode for the script"
+    )
+
+    # Parse the CLI arguments and return them
+    return parser.parse_args()
+
+
+def confirm_sudo() -> None:
+    """Prompt the user about sudo privileges.
+
+    Prompts the user about exeucting the script using sudo privileges which can
+    potentially make irreversible changes to the user's sytem. Selecting to abort the
+    execution will safely stop the operation without making any changes to the system.
+
+    Args:
+        logger: The `logging.Logger` instance to provide warning and information
+            messages to the user about the operation.
+
+    Returns:
+        None
+    """
+    print("This script will run commands with sudo privileges.")
+    response = input("Do you want to continue? [y/N] ").strip().lower()
+    if response != "y":
+        print("Aborting setup...")
+        sys.exit(0)
+
+
+def update_system(logger: Logger) -> None:
+    """Update system packages using the native package manager.
+
+    Detects the underlying Linux distribution using freedesktop OS metadata and executes
+    the appropriate system package update and upgrade commands via the distribution's
+    package manager.
+
+    Args:
+        logger: The `logging.Logger` instance used to emit debug, informational and
+            error messages during the update process.
+
+    Raises:
+        SystemExit: If the Operating System cannot be identified or is not supported.
+    """
+    # Get the name of the OS to run updates on
+    os_name = platform.freedesktop_os_release().get("NAME")
+
+    logger.debug("Identified OS name as: %s", os_name)
+    logger.info("Running system updates...")
+
+    # Run system updates based on the Operating System's package manager
+    match os_name:
+        case "Ubuntu" | "Debian":
+            # Command to update the apt-cache
+            update = ["sudo", "apt-get", "update"]
+
+            # Command to update the system packages
+            upgrade = ["sudo", "apt-get", "upgrade", "--yes"]
+
+            logger.debug('Running "%s" to update the apt-cache', " ".join(update))
+            subprocess.run(update)
+
+            logger.debug('Running "%s" to upgrade the apt packages', " ".join(upgrade))
+            subprocess.run(upgrade)
+        case "Fedora":
+            # Command to update the dnf packages
+            cmd = ["sudo", "dnf", "upgrade", "--refresh", "--assumeyes"]
+            logger.debug('Running "%s" to upgrade the dnf packages', " ".join(cmd))
+            subprocess.run(cmd)
+        case _:
+            logger.error("Failed to identify OS name...exiting now!")
+            sys.exit(1)
+
+
+def configure_sudo(logger: Logger, user: str) -> None:
+    """Configure passwordless sudo access for a user.
+
+    Creates a user-specific sudoers configuration file under `/etc/sudoers.d` which
+    grants the specified user passwordless sudo privileges. If the file already exists,
+    it is not overwritten.
+
+    Args:
+        logger: The logging.Logger instance used to emit information, debug, warning and
+            error messages.
+        user: The username for which passwordless sudo access should be configured.
+    """
+    # Create the filepath to the user-specific sudo file
+    file = pathlib.Path("/") / "etc" / "sudoers.d" / f"{user}_nopasswd"
+
+    # Generate the contents to configure passwordless sudo configuration for a specific
+    # user
+    content = f"{user} ALL=(ALL) NOPASSWD: ALL"
+
+    # Check if the file existings and is writable else throw an error or write to it
+    if not file.is_file():
+        logger.info('Configuring the "%s" file', file)
+        logger.debug('Added "%s" to "%s"', content, file)
+        try:
+            file.write_text(content)
+        except PermissionError:
+            logger.error('Failed to write to "%s", use to "sudo"...')
+    else:
+        logger.warning('"%s" exists, not overwriting it', file)
+
+
+def create_work_dirs(logger: Logger) -> None:
+    """Create standard workspace directories in the user's home directory.
+
+    Ensures that predefined directories used for professional and personal projects
+    exists under the current user's home directory. If a directory already exists, it
+    remains unchanged.
+
+    Args:
+        logger: The Logger instance used to emit informational, debug and warning
+            messages during directory creation.
+    """
+    # The names of the directories to create for my professional and personal projects
+    dirs = ("projects", "work")
+
+    # Create the working directories at the user's home directory
+    logger.info("Creating work directories")
+    for dir in dirs:
+        path = pathlib.Path().home() / dir
+        if not path.is_dir():
+            path.mkdir()
+            logger.debug('Created "%s" directory', path)
+        else:
+            logger.warning('Directory "%s" already exists, not recreating...', path)
+
+
+def get_latest_nf_version(logger: Logger) -> str | None:
+    """Fetch the latest Nerd Fonts release version from GitHub.
+
+    This function queries the GitHub releases API for the Nerd Fonts repository and
+    extracts the latest release tag (e.g., `v3.4.0`). The version is returned as a
+    string if the request succeeds or `None` if the version cannot be determined due to
+    a network or a parsing error.
+
+    All errors encountered while making the request are logged using the provided
+    logger.
+
+    Args:
+        logger: The `logging.Logger` instance used for debug and error messages.
+
+    Returns:
+        The latest Nerd Fonts version tag as a string or `None` if the version could not
+        be fetched.
+    """
+    logger.debug("Fetching the latest version of Nerd Font...")
+
+    # The URL to fetch the version information from
+    url = "https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest"
+
+    version = None
+
+    # Attempt to fetch the version information from
+    try:
+        with urllib.request.urlopen(url) as response:
+            content = json.loads(response.read().decode("utf-8"))
+            version = content.get("tag_name")
+    except urllib.error.HTTPError as exc:
+        logger.exception('HTTP error %s while requesting "%s"', exc.code, url)
+    except urllib.error.URLError:
+        logger.exception('Failed to make a request to "%s"', url)
+
+    # Log the version number if it was successfully fetched from the GitHub servers
+    if version:
+        logger.debug('Identified the latest Nerd Font version as "%s"', version)
+
+    return version
+
+
+def setup_fonts(logger: Logger, name: str) -> None:
+    """Prepare the download of a Nerd Font by name.
+
+    This function determines the latest Nerd Fonts release version and constructs the
+    corresponding download URL for the specified font. If the code is running inside a
+    Windows Subsystem for Linux (WSL) environment, the setup process is skipped and a
+    warning is logged.
+
+    Args:
+        logger: The `logging.Logger` instance used for informational and warning
+            messages.
+        name: The Nerd Font name to download from GitHub.
+
+    Returns:
+        None
+    """
+    # Skip setting up fonts on WSL 2 environments
+    if pathlib.Path("/proc/sys/fs/binfmt_misc/WSLInterop").exists():
+        logger.warning("WSL environment detected, skipping fonts setup")
+        return None
+
+    # Get the latest version of Nerd Font
+    version = get_latest_nf_version(logger)
+
+    # If a version was feched, build the URL to download the assets from
+    url = None
+    if version:
+        url = (
+            "https://github.com/ryanoasis/nerd-fonts/releases/download/"
+            + version
+            + "/"
+            + name
+            + ".zip"
+        )
+
+    logger.info('Downloading "%s" Nerd Font from "%s"', name, url)
+
+    # TODO: Implement feature to download and setup the fonts
+
+
+def main() -> None:
+    """Program entry point.
+
+    Parses command-line arguments, configure logging and executes the main application
+    logic.
+    """
+    # Parse the CLI arguments
+    args = parse_args()
+
+    # Set the logging level based on the argument passed to the script
+    if args.debug:
+        level = DEBUG
+    else:
+        level = INFO
+
+    # Configure a logger and provide it a logging level
+    logger = configure_logging(level)
+
+    # Prompt the user about potential usage of sudo
+    confirm_sudo()
+
+    # Update the system before running automated setup
+    update_system(logger)
+
+    # Update the sudoers file according to the required configurations
+    configure_sudo(logger, "jarmos")
+
+    # Create the working directories for professional and personal stuff
+    create_work_dirs(logger)
+
+    # Setup fonts on a system (but exclude WSL 2 environments)
+    setup_fonts(logger, "CascadiaCode")
+
+
+if __name__ == "__main__":
+    main()
