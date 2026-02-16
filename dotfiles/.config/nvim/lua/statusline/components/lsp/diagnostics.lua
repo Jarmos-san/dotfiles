@@ -3,7 +3,7 @@
 ---This module queries diagnostics for the current buffer and renders non-zero
 ---severity counts as statusline segments.
 ---
----@module 'statusline.diagnostics'
+---@module "statusline.components.lsp.diagnostics"
 local M = {}
 
 ---Builds and returns the statusline segment representing LSP diagnostic counts.
@@ -16,7 +16,7 @@ local M = {}
 ---If no diagnostics are present for a given severity that segment is omitted.
 ---The returned string always resets the highlight group back to `Normal`.
 ---
----@return string | nil
+---@return string|nil
 ---A formatted statusline segment containing zero or more diagnostic
 ---indicators.
 ---

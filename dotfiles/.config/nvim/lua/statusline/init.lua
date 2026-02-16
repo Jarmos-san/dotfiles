@@ -10,8 +10,9 @@ local M = {}
 
 local modes = require("statusline.components.modes")
 local git = require("statusline.components.git")
+local lsp_progress = require("statusline.components.lsp.progress")
+local diagnostic = require("statusline.components.lsp.diagnostics")
 local cursor = require("statusline.components.cursor")
-local diagnostic = require("statusline.components.diagnostics")
 
 ---Render the statusline for the active window.
 ---
@@ -44,8 +45,9 @@ M.render = function()
   -- Render the various segments along with their highlights
   local mode = modes.render()
   local git_branch = git.render()
-  local cursor_segment = cursor.render()
+  local lsp_progress_segment = lsp_progress.render()
   local diagnostic_segment = diagnostic.render()
+  local cursor_segment = cursor.render()
 
   -- Create an empty statusline segment to which the segments will be appended to
   local statusline = {}
@@ -60,8 +62,14 @@ M.render = function()
     table.insert(statusline, git_branch)
   end
 
+  -- The LSP progress (work/done) segment
+  if lsp_progress_segment then
+    table.insert(statusline, lsp_progress_segment)
+    vim.cmd("redrawstatus")
+  end
+
   -- The diagnostic icons/count
-  if diagnostic_segment ~= nil then
+  if lsp_progress.is_ready() and diagnostic_segment ~= nil then
     table.insert(statusline, diagnostic_segment)
   end
 
