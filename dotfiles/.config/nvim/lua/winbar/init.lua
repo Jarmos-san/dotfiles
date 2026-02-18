@@ -12,9 +12,11 @@ local hl = vim.api.nvim_set_hl
 local colors = require("statusline.colors").COLORS
 local devicons = require("nvim-web-devicons")
 local bg = colors.bg.bg0
+local fg = colors.fg.fg4
 
-hl(0, "WinbarFilepath", { fg = colors.fg.fg2, bg = bg })
-hl(0, "WinbarFlag", { fg = colors.fg.fg4, bg = bg })
+-- Set the base highlight group for the winbar
+hl(0, "Winbar", { bg = bg })
+hl(0, "WinbarFlag", { fg = fg })
 
 ---Filetypes for which the winbar should be suppressed. Using a set-style
 ---table allows O(1) membership checks.
@@ -62,7 +64,7 @@ M.render = function()
   end
 
   -- Render the complete winbar
-  return string.format("%%#WinbarFilepath# %%#WinbarFlag#%%r %s %%f %%#WinbarFlag#%%m%%*", icon_part)
+  return string.format(" %%#WinbarFlag#%%r %s %%f %%#WinbarFlag#%%m%%*", icon_part)
 end
 
 ---Initialises the global winbar option.
