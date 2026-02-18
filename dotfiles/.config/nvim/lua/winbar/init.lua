@@ -21,6 +21,8 @@ hl(0, "WinbarFlag", { fg = colors.fg.fg4, bg = bg })
 ---@type table<string, boolean>
 local disabled_filetypes = {
   ministarter = true,
+  gitrebase = true,
+  gitcommit = true,
 }
 
 ---Render function evaluated by Neovim's winbar engine.
