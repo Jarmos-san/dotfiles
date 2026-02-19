@@ -11,11 +11,10 @@ local M = {}
 local hl = vim.api.nvim_set_hl
 local colors = require("statusline.colors").COLORS
 local devicons = require("nvim-web-devicons")
-local bg = colors.bg.bg0
 local fg = colors.fg.fg4
 
 -- Set the base highlight group for the winbar
-hl(0, "Winbar", { bg = bg })
+hl(0, "Winbar", { fg = fg, bg = "#1c1c1c" })
 hl(0, "WinbarFlag", { fg = fg })
 
 ---Filetypes for which the winbar should be suppressed. Using a set-style
