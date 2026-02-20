@@ -10,7 +10,6 @@ local M = {}
 
 local hl = vim.api.nvim_set_hl
 local colors = require("colors").colors
-local devicons = require("nvim-web-devicons")
 local fg = colors.fg.fg4
 
 -- Set the base highlight group for the winbar
@@ -39,6 +38,9 @@ local disabled_filetypes = {
 ---
 ---@return string
 M.render = function()
+  local icons = require("winbar.icons")
+  local filepath = require("winbar.filepath")
+
   -- Get the filetype of the current active buffer
   local winid = vim.g.statusline_winid
   local buf = vim.api.nvim_win_get_buf(winid)
@@ -49,21 +51,17 @@ M.render = function()
     return ""
   end
 
-  -- Get the filetype's extension to map the devicon icon to
-  local filename = vim.api.nvim_buf_get_name(buf)
-  local extension = vim.fn.fnamemodify(filename, ":e")
+  -- Render the icons and the filepaths for the segment
+  local icon = icons.render(buf)
+  local paths = filepath.render(buf)
 
-  -- Get the devicon based on the derived filetype extension
-  local icon, icon_hl = devicons.get_icon(filename, extension, { default = true })
-
-  -- Render the devicon along with its respective highlight group
-  local icon_part = ""
-  if icon then
-    icon_part = string.format("%%#%s#%s%%*", icon_hl, icon)
+  -- Fail fast if any of the render segments return
+  if icon == nil and paths == nil then
+    return ""
   end
 
   -- Render the complete winbar
-  return string.format(" %%#WinbarFlag#%%r %s %%f %%#WinbarFlag#%%m%%*", icon_part)
+  return string.format(" %%#WinbarFlag#%%r %s %s %%#WinbarFlag#%%m%%*", icon, paths)
 end
 
 ---Initialises the global winbar option.
