@@ -25,7 +25,7 @@ local branch_icon = " "
 ---A formatted Git branch string (e.g., " main") or nil if the current
 ---working directory is not a Git repository.
 M.render = function()
-  local colors = require("statusline.colors").COLORS
+  local colors = require("colors").colors
   local hl = vim.api.nvim_set_hl
 
   -- The current directory which is used as the key for caching the the

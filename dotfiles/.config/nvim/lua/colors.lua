@@ -4,7 +4,7 @@
 ---(base colours, normal colours, bright colours, background and foreground
 ---shades). It does not perform any rendering or side effects.
 ---
----@module 'statusline.colors'
+---@module 'colors'
 local M = {}
 
 ---@class ColorBase
@@ -46,7 +46,7 @@ local M = {}
 ---Complete colour registry consumed by the highlight definitions.
 ---
 ---@type Colors
-M.COLORS = {
+M.colors = {
   base = {
     bg = "#282828",
     fg = "#ebdbb2",
@@ -91,4 +91,5 @@ M.COLORS = {
     fg4 = "#a89984",
   },
 }
+
 return M

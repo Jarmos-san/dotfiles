@@ -9,7 +9,7 @@
 local M = {}
 
 local hl = vim.api.nvim_set_hl
-local colors = require("statusline.colors").COLORS
+local colors = require("colors").colors
 local devicons = require("nvim-web-devicons")
 local fg = colors.fg.fg4
 

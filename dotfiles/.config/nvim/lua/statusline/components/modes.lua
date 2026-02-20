@@ -49,7 +49,7 @@ local modes = {
 ---@return nil
 local setup_highlights = function()
   local hl = vim.api.nvim_set_hl
-  local colors = require("statusline.colors").COLORS
+  local colors = require("colors").colors
   local bg = colors.bg.bg1
 
   hl(0, "StatuslineModeNormal", { fg = colors.bright.green, bg = bg, bold = true })
