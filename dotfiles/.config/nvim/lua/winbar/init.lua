@@ -38,6 +38,9 @@ local disabled_filetypes = {
 ---
 ---@return string
 M.render = function()
+  local icons = require("winbar.icons")
+  local filepath = require("winbar.filepath")
+
   -- Get the filetype of the current active buffer
   local winid = vim.g.statusline_winid
   local buf = vim.api.nvim_win_get_buf(winid)
@@ -48,11 +51,12 @@ M.render = function()
     return ""
   end
 
-  -- Get the icon for the filetype of the current buffer
-  local icon_part = require("winbar.icons").get_filetype_icon(buf)
+  -- Render the icons and the filepaths for the segment
+  local icon = icons.get_filetype_icon(buf)
+  local paths = filepath.render(buf)
 
   -- Render the complete winbar
-  return string.format(" %%#WinbarFlag#%%r %s %%f %%#WinbarFlag#%%m%%*", icon_part)
+  return string.format(" %%#WinbarFlag#%%r %s %s %%#WinbarFlag#%%m%%*", icon, paths)
 end
 
 ---Initialises the global winbar option.
