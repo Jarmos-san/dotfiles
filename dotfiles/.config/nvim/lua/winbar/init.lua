@@ -52,8 +52,13 @@ M.render = function()
   end
 
   -- Render the icons and the filepaths for the segment
-  local icon = icons.get_filetype_icon(buf)
+  local icon = icons.render(buf)
   local paths = filepath.render(buf)
+
+  -- Fail fast if any of the render segments return
+  if icon == nil and paths == nil then
+    return ""
+  end
 
   -- Render the complete winbar
   return string.format(" %%#WinbarFlag#%%r %s %s %%#WinbarFlag#%%m%%*", icon, paths)
