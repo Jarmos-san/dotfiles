@@ -5,7 +5,7 @@ local M = {}
 
 -- Set the highlights for the segment
 local hl = vim.api.nvim_set_hl
-local colors = require("statusline.colors").COLORS
+local colors = require("colors").colors
 hl(0, "StatuslineCursor", { fg = colors.fg.fg2, bg = colors.bg.bg0 })
 hl(0, "StatuslineCursorGlyph", { fg = colors.bright.orange, bg = colors.bg.bg1 })
 hl(0, "StatuslineCursorSeperator", { fg = colors.normal.blue, bg = colors.bg.bg0 })

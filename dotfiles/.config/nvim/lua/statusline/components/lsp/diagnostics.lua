@@ -6,6 +6,16 @@
 ---@module "statusline.components.lsp.diagnostics"
 local M = {}
 
+-- Setup the highlights for the LSP diagnostic icons
+local hl = vim.api.nvim_set_hl
+local colors = require("colors").colors
+local bg = colors.bg.bg0_h
+
+hl(0, "LspDiagnosticsSignError", { fg = colors.bright.red, bg = bg })
+hl(0, "LspDiagnosticsSignWarning", { fg = colors.bright.yellow, bg = bg })
+hl(0, "LspDiagnosticsSignHint", { fg = colors.bright.green, bg = bg })
+hl(0, "LspDiagnosticsSignInfo", { fg = colors.bright.blue, bg = bg })
+
 ---Builds and returns the statusline segment representing LSP diagnostic counts.
 ---
 ---This function aggregates diagnostics for the current buffer, grouped by
@@ -59,16 +69,6 @@ M.render = function()
 
   -- The sub-segments of the parent segment
   local segments = {}
-
-  -- Setup the highlights for the LSP diagnostic icons
-  local hl = vim.api.nvim_set_hl
-  local colors = require("statusline.colors").COLORS
-  local bg = colors.bg.bg0_h
-
-  hl(0, "LspDiagnosticsSignError", { fg = colors.bright.red, bg = bg })
-  hl(0, "LspDiagnosticsSignWarning", { fg = colors.bright.yellow, bg = bg })
-  hl(0, "LspDiagnosticsSignHint", { fg = colors.bright.green, bg = bg })
-  hl(0, "LspDiagnosticsSignInfo", { fg = colors.bright.blue, bg = bg })
 
   if count.errors > 0 then
     segments[#segments + 1] = string.format("%%#LspDiagnosticsSignError# ε %s %%*", count.errors)

@@ -12,7 +12,7 @@
 
 local M = {}
 
-local colors = require("statusline.colors").COLORS
+local colors = require("colors").colors
 
 local bg = colors.bg.bg0
 local fg = colors.bright.blue
