@@ -98,6 +98,7 @@ M.setup = function()
   vim.api.nvim_create_autocmd({ "WinLeave", "BufEnter" }, {
     group = vim.api.nvim_create_augroup("Statusline", { clear = true }),
     callback = function()
+      vim.opt.laststatus = 3
       vim.opt_local.statusline = '%!v:lua.require("statusline").render()'
     end,
   })

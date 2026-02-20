@@ -3,9 +3,6 @@ local opt = vim.opt
 -- Sync the system clipboard with Neovim
 opt.clipboard = "unnamedplus"
 
--- Enable the global status line
-opt.laststatus = 2
-
 -- Make the autocompletion window more accessible
 opt.completeopt = "menu,menuone,noselect"
 
@@ -129,6 +126,3 @@ vim.opt.cmdheight = 1
 
 -- Add borders for all floating windows
 vim.opt.winborder = "rounded"
-
--- Enable the global statusline for a clean look and feel
-vim.opt.laststatus = 3
