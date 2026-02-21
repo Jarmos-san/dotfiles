@@ -94,3 +94,6 @@ map("t", "jk", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 -- Open a list of keymaps which can be fuzzy-searched using the Telescope UI
 map("n", "<leader>k", telescope.keymaps, { desc = "Open a list of available keymaps" })
+
+-- Add a keymap to silently write the buffer contents to a file
+map("n", "<leader>w", "<CMD>silent write<CR>", { desc = "write buffer contents to file" })

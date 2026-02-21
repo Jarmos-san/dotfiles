@@ -186,3 +186,48 @@ autocmd("CursorHold", {
     vim.diagnostic.open_float(nil, config)
   end,
 })
+
+autocmd("BufWritePost", {
+  desc = 'show ":w" message through vim.notify()',
+  group = augroup("WriteNotification"),
+  callback = function(args)
+    local buf = args.buf
+
+    -- Get the name of the buffer. Exit early if the buffer is not named (or is
+    -- set to "No Name")
+    local name = vim.api.nvim_buf_get_name(buf)
+    if name == "" then
+      return
+    end
+
+    -- Attempt to read the statistics of the buffer (or file to write to) or
+    -- throw an error if it is a failure
+    ---@diagnostic disable-next-line: undefined-field
+    local stat = vim.uv.fs_stat(name)
+    if not stat then
+      vim.notify("Failed to retrieve file metadata", vim.log.levels.ERROR, { title = "Neovim" })
+      return
+    end
+
+    -- Store the filename, it's filesize and file size metrics for later usage
+    local filename = vim.fn.fnamemodify(name, ":~:.")
+    local size = stat and stat.size or 0
+    local kb = 1024
+
+    -- Create variables of the file sizes so that they can be represented as a
+    -- notification
+    local size_repr = nil
+    if size < kb then
+      size_repr = string.format("%dB", size)
+    else
+      size_repr = string.format("%.2fKB", size / kb)
+    end
+
+    -- Create a message using the evaluated metrics above
+    local msg = string.format('"%s" written (%s) successfully', filename, size_repr)
+
+    -- Generate the notification if writing the buffer contents to a file was
+    -- successful
+    vim.notify(msg, vim.log.levels.INFO, { title = "Neovim" })
+  end,
+})
