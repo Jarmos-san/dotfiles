@@ -210,7 +210,7 @@ autocmd("BufWritePost", {
     end
 
     -- Store the filename, it's filesize and file size metrics for later usage
-    local filename = vim.fn.fnamemodify(name, ":t")
+    local filename = vim.fn.fnamemodify(name, ":~:.")
     local size = stat and stat.size or 0
     local kb = 1024
 
