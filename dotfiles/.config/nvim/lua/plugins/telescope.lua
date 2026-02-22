@@ -52,7 +52,6 @@ return {
   dependencies = {
     "devicons",
     "nvim-lua/plenary.nvim",
-    "neovim/nvim-lspconfig",
     "nvim-treesitter/nvim-treesitter",
   },
 }
