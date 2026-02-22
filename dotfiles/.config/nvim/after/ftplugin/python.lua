@@ -45,6 +45,3 @@ vim.diagnostic.config({
   severity_sort = true, -- Configure Neovim to sort the error messages according to their severity
   virtual_text = true, -- Show virtual lines besides the statement with an error/warning
 })
-
--- Enable the LSP server for Python
-vim.lsp.enable("pyright", true)
