@@ -84,8 +84,8 @@ vim.loader.enable()
 -- Render the custom statusline
 require("statusline").setup()
 
--- Enable the required LSP servers
-vim.lsp.enable({ "lua_ls", "fish_lsp", "pyright" })
+-- Setup the LSP servers and their capabilities for the client (Neovim)
+require("lsp").setup()
 
 -- Setup the winbar for Neovim buffers
 require("winbar").setup()
