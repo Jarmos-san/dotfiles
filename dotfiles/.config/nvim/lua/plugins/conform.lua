@@ -72,5 +72,4 @@ return {
       },
     }
   end,
-  dependencies = { "neovim/nvim-lspconfig" },
 }
