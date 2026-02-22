@@ -23,6 +23,7 @@ local disabled_filetypes = {
   ministarter = true,
   gitrebase = true,
   gitcommit = true,
+  checkhealth = true,
 }
 
 ---Render function evaluated by Neovim's winbar engine.
