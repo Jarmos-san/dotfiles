@@ -42,7 +42,23 @@ end
 ---`get_configured_servers()` function and even extends the LSP client
 ---capabilities using `blink.cmp`
 M.setup = function()
+  -- Fetch all configured servers from the runtimepath
   local servers = get_configured_servers()
+
+  -- Make the client display diagnostic hover windows as fast as possible
+  vim.opt.updatetime = 250 -- (in milliseconds)
+
+  -- Configure the LSP servers to only log warning messages and avoid enlarging the log
+  -- file beyond a certain limit
+  vim.lsp.set_log_level(vim.log.levels.ERROR)
+
+  -- Configure the diagnostic APIs which the LSP servers will provide diagnostic messages
+  -- with
+  vim.diagnostic.config({
+    virtual_text = true, -- Display the diagnostic message beside the errorneous code
+    update_in_insert = true, -- Update the diagnostic messages even when in Insert mode
+    severity_sort = true, -- Sort the error messages according to their severity
+  })
 
   -- Enable all the available LSP servers
   vim.lsp.enable(servers)
