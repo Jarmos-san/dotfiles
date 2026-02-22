@@ -3,7 +3,7 @@
 return {
   {
     "mason-org/mason.nvim",
-    cmd = { "LspInstall", "LspUninstall", "Mason" },
+    event = "LspAttach",
     opts = {
       -- Configure the plugin to have rounded borders
       ui = { border = "rounded" },
@@ -15,6 +15,7 @@ return {
       require("mason").setup(opts)
     end,
     dependencies = { "neovim/nvim-lspconfig" },
+    enabled = false,
   },
 
   {
@@ -62,5 +63,6 @@ return {
     config = function(_, opts)
       require("mason-tool-installer").setup(opts)
     end,
+    enabled = false,
   },
 }
