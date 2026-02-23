@@ -3,6 +3,8 @@
 local M = {}
 
 M.setup = function()
+  require("keymaps.core")
+
   local telescope = require("telescope.builtin")
   local utils = require("utils")
   local map = require("utils").map
@@ -33,33 +35,6 @@ M.setup = function()
     end
   end
 
-  -- Change to Normal mode by pressing "jk" in quick succession
-  map("i", "jk", "<esc>", { desc = "Change to Normal mode" })
-
-  -- Easier navigation to the beginning or the start of the line
-  map("n", "H", "<Home>", { desc = "Move to the beginning of the line" })
-  map("n", "L", "<End>", { desc = "Move to the end of the line" })
-
-  -- Resize windows using <Ctrl + Arrow keys>
-  map("n", "<C-Up>", "<CMD>resize +2<CR>", { desc = "Increase window height" })
-  map("n", "<C-Down>", "<CMD>resize -2<CR>", { desc = "Decrease window height" })
-  map("n", "<C-Right>", "<CMD>vertical resize +2<CR>", { desc = "Increase window width" })
-  map("n", "<C-Left>", "<CMD>vertical resize -2<CR>", { desc = "Increase window width" })
-
-  -- Better & easier indenting
-  map("v", "<", "<gv")
-  map("v", ">", ">gv")
-
-  -- Disable the redundant (and sometimes annoying "Ex mode")
-  -- INFO: See the docs at ":h gQ" for more info on what its supposed to do
-  map("n", "gQ", "<NOP>")
-
-  -- Easier navigation in Insert mode without the arrow keys!
-  map("i", "<M-h>", "<Left>", { desc = "Move left in Insert mode" })
-  map("i", "<M-j>", "<Down>", { desc = "Move down in Insert mode" })
-  map("i", "<M-k>", "<Up>", { desc = "Move up in Insert mode" })
-  map("i", "<M-l>", "<Right>", { desc = "Move right in Insert mode" })
-
   -- List all available files (and directories) using Telescope
   map("n", "<leader>ff", telescope.find_files, { desc = "List all available files/directories" })
   map("n", "<leader>gf", git_files, { desc = "List all files and folders tracked inside the Git repository" })
@@ -70,10 +45,6 @@ M.setup = function()
 
   -- List all currently loaded buffers
   map("n", "<leader>b", telescope.buffers, { desc = "List all currently in-memory loaded buffers" })
-
-  -- Navigate easier around buffers while using the "leader" key
-  map("n", "<leader>bn", "<CMD>bnext<CR>", { desc = "Change to the next buffer" })
-  map("n", "<leader>bp", "<CMD>bprevious<CR>", { desc = "Change to the previous buffer" })
 
   -- Visually list in Telescope all the currently registered marks on the current buffer
   map("n", "<leader>m", telescope.marks, { desc = "List all Vim marks registered on the current buffer" })
