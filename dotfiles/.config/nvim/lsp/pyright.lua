@@ -23,7 +23,7 @@ end
 return {
   cmd = { "pyright-langserver", "--stdio" },
   filetypes = { "python" },
-  root_markes = {
+  root_markers = {
     "pyrightconfig.json",
     "pyproject.toml",
     "setup.py",
