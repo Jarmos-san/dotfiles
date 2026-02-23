@@ -89,3 +89,6 @@ require("lsp").setup()
 
 -- Setup the winbar for Neovim buffers
 require("winbar").setup()
+
+-- Setup the keymaps
+require("keymaps").setup()
