@@ -4,11 +4,11 @@ local M = {}
 
 M.setup = function()
   require("keymaps.core")
+  require("keymaps.terminal")
 
   local telescope = require("telescope.builtin")
   local utils = require("utils")
   local map = require("utils").map
-  local terminal = require("terminal").setup
 
   -- Open the starter dashboard if the buffer list is empty
   local open_starter_if_empty_buffer = function()
@@ -57,14 +57,6 @@ M.setup = function()
 
   -- Grep through the contents of the current directory for a particular string pattern
   map("n", "<leader>lg", telescope.live_grep, { desc = "Perform a grep on the file contents of the current directory" })
-
-  -- Open a Terminal inside Neovim itself
-  map("n", "<leader>t", terminal.float, { desc = "Open the terminal prompt in a horizontal split" })
-  map("n", "<leader>tv", terminal.vertical, { desc = "Open the terminal prompt in vertical split" })
-  map({ "n", "i" }, "<C-t>", terminal.toggle, { desc = "Toggle a floating terminal open/close" })
-
-  -- Exit terminal mode in builtin terminal with an easier to use shortcut
-  map("t", "jk", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
   -- Open a list of keymaps which can be fuzzy-searched using the Telescope UI
   map("n", "<leader>k", telescope.keymaps, { desc = "Open a list of available keymaps" })
