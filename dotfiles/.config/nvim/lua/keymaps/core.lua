@@ -36,6 +36,7 @@ local keymaps = {
   { mode = "i", lhs = "<M-l>", rhs = "<Right>", opts = { desc = "Move right in Insert mod," } },
   { mode = "n", lhs = "<leader>bn", rhs = "<CMD>bnext<CR>", opts = { desc = "Change to the next buffer" } },
   { mode = "n", lhs = "<leader>bp", rhs = "<CMD>bprevious<CR>", opts = { desc = "Change to the previous buffer" } },
+  { mode = "n", lhs = "<ESC><ESC>", rhs = "<CMD>set nohlsearch<CR>", opts = { desc = "Clear the search highlights" } },
 }
 
 for _, map in ipairs(keymaps) do
