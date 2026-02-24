@@ -5,9 +5,9 @@ local M = {}
 M.setup = function()
   require("keymaps.core")
   require("keymaps.terminal")
+  require("keymaps.fzf")
 
   local telescope = require("telescope.builtin")
-  local utils = require("utils")
   local map = require("utils").map
 
   -- Open the starter dashboard if the buffer list is empty
@@ -28,38 +28,8 @@ M.setup = function()
     open_starter_if_empty_buffer()
   end
 
-  -- Use the ":Telescope git_files" command if the current directory is version controlled with Git
-  local git_files = function()
-    if utils.is_git_repo() or utils.has_git_dir() then
-      telescope.git_files()
-    end
-  end
-
-  -- List all available files (and directories) using Telescope
-  map("n", "<leader>ff", telescope.find_files, { desc = "List all available files/directories" })
-  map("n", "<leader>gf", git_files, { desc = "List all files and folders tracked inside the Git repository" })
-  map("n", "<leader>of", telescope.oldfiles, { desc = "Open recently opened files" })
-
   -- Delete the buffer contents from the Neovim session
   map("n", "<leader>bd", bdelete, { desc = "Delete the buffer contents from the Neovim session" })
-
-  -- List all currently loaded buffers
-  map("n", "<leader>b", telescope.buffers, { desc = "List all currently in-memory loaded buffers" })
-
-  -- Visually list in Telescope all the currently registered marks on the current buffer
-  map("n", "<leader>m", telescope.marks, { desc = "List all Vim marks registered on the current buffer" })
-
-  -- List all the registers available on the buffer
-  map("n", "<leader>r", telescope.registers, { desc = "Show the contents of the registers" })
-
-  -- Open Telescope to fuzzy search through the help docs
-  map("n", "<leader>h", telescope.help_tags, { desc = "Open the help tags menu" })
-
-  -- Grep through the contents of the current directory for a particular string pattern
-  map("n", "<leader>lg", telescope.live_grep, { desc = "Perform a grep on the file contents of the current directory" })
-
-  -- Open a list of keymaps which can be fuzzy-searched using the Telescope UI
-  map("n", "<leader>k", telescope.keymaps, { desc = "Open a list of available keymaps" })
 
   -- Add a keymap to silently write the buffer contents to a file
   map("n", "<leader>w", "<CMD>silent write<CR>", { desc = "write buffer contents to file" })
