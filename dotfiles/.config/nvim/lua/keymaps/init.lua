@@ -10,30 +10,6 @@ M.setup = function()
   local telescope = require("telescope.builtin")
   local map = require("utils").map
 
-  -- Open the starter dashboard if the buffer list is empty
-  local open_starter_if_empty_buffer = function()
-    local buf_id = vim.api.nvim_get_current_buf()
-    local is_empty = vim.api.nvim_buf_get_name(buf_id) == "" and vim.bo[buf_id].filetype == ""
-    if not is_empty then
-      return
-    end
-
-    require("mini.starter").open()
-    vim.cmd(buf_id .. "bwipeout")
-  end
-
-  -- Delete all buffers and open the starter dashboard
-  local bdelete = function()
-    require("mini.bufremove").delete()
-    open_starter_if_empty_buffer()
-  end
-
-  -- Delete the buffer contents from the Neovim session
-  map("n", "<leader>bd", bdelete, { desc = "Delete the buffer contents from the Neovim session" })
-
-  -- Add a keymap to silently write the buffer contents to a file
-  map("n", "<leader>w", "<CMD>silent write<CR>", { desc = "write buffer contents to file" })
-
   -- Some keymaps for LSP capabilities
   map("n", "gd", telescope.lsp_definitions, { desc = "Jump to the object definition" })
   map("n", "gD", vim.lsp.buf.declaration, { desc = "Jump to the object declaration" })
