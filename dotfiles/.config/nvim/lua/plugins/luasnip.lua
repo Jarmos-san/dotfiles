@@ -12,4 +12,5 @@ return {
     require("luasnip").setup(opts)
     require("luasnip.loaders.from_lua").load()
   end,
+  enabled = false,
 }
