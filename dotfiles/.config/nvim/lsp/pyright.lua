@@ -36,7 +36,7 @@ return {
     python = {
       analysis = {
         autoSearchPaths = true,
-        diagnosticMode = "openFilesOnly",
+        diagnosticMode = "workspace",
         useLibraryCodeForTypes = true,
         deprecateTypingAliases = true,
         typeCheckingMode = "strict",
