@@ -30,5 +30,11 @@
       "    \"\"\"${3:docstring}\"\"\"",
       "    ${4:statement}"
     ]
+  },
+  "noqa": {
+    "prefix": "noqa",
+    "body": [
+      "  # noqa: ${1}"
+    ]
   }
 }
