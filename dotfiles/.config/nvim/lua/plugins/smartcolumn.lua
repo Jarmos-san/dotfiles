@@ -8,6 +8,7 @@ return {
       "caddy",
       "checkhealth",
       "conf",
+      "conform-info",
       "dosini",
       "dotenv",
       "fish",
