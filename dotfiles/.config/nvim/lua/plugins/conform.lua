@@ -18,18 +18,11 @@ return {
       vue = { "prettier" },
       yaml = { "prettier" },
     },
-    format_on_save = function(bufnr)
-      local bufname = vim.api.nvim_buf_get_name(bufnr)
-
-      -- Disable file formatting on any temporary buffer contents
-      if bufname:match("/tmp/") then
-        return
-      else
-        return {
-          timeout_ms = 10000,
-          lsp_fallback = true,
-        }
-      end
+    format_on_save = function(_)
+      return {
+        timeout_ms = 10000,
+        lsp_fallback = true,
+      }
     end,
   },
   config = function(_, opts)
