@@ -35,6 +35,9 @@ M.render = function()
   -- Normalised progress (0.0 -> 1.0)
   local progress = line / total_lines
 
+  -- Convert to percentage (rounded)
+  local percentage = math.floor(progress * 100 + 0.5)
+
   -- Nerd Font progress blocks (low -> high)
   local blocks = { " ", "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" }
 
@@ -43,8 +46,9 @@ M.render = function()
   index = math.max(1, math.min(index, #blocks))
 
   return string.format(
-    "%%= %%#StatuslineCursor# L: %%l %%#StatuslineCursorSeperator#| %%#StatuslineCursor#C: %%c "
-      .. "%%#StatuslineCursorGlyph#%s",
+    "%%= %%#StatuslineCursor# L: %%l (%%#StatuslineCursor#%d%%%%) %%#StatuslineCursorSeperator#| %%#StatuslineCursor#C:"
+      .. " %%c %%#StatuslineCursorGlyph#%s",
+    percentage,
     blocks[index]
   )
 end
