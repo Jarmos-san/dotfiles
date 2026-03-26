@@ -28,5 +28,6 @@ vim.filetype.add({
     [".*/ansible/.*%.ya?ml%.j2"] = "yaml", -- Ansible template should be considered YAML files
     [".*/*.conf*"] = "conf", -- Config files (like "postgresql.conf" and so on)
     [".*/Caddyfile%.?.*"] = "caddy", -- Match files like "Caddyfile", "Caddyfile.j2", "Caddyfile.tmpl"
+    [".*/*.html.j2"] = "html", -- 'Match Jinja2 templates for HTML'
   },
 })
