@@ -46,6 +46,7 @@ return {
         "robots_txt",
         -- "rst",
         "scss",
+        "sql",
         -- "terraform",
         -- "tsx",
         -- "toml",
