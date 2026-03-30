@@ -1,6 +1,7 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
 SETUVAR --export HOMEBREW_NO_AUTO_UPDATE:1
+SETUVAR --export HOMEBREW_NO_ENV_HINTS:1
 SETUVAR --export PNPM_HOME:/home/jarmos/\x2elocal/share/pnpm/
 SETUVAR --export VIRTUAL_ENV_DISABLE_PROMPT:1
 SETUVAR __fish_initialized:4300
