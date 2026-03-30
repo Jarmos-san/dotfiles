@@ -1,3 +1,11 @@
+# Build the custom segment for the Python virtual environment
+function __venv_prompt
+    if set --query VIRTUAL_ENV
+        set venv_name (basename "$VIRTUAL_ENV")
+        echo (set_color 458588)"($venv_name)"(set_color normal)
+    end
+end
+
 # Customise the interactive prompt for the shell
 function fish_prompt
     # Store the exit code of the last command which executed
@@ -11,6 +19,10 @@ function fish_prompt
 
     # Local variable to the Git branch information of the local repository
     set --local git_branch
+
+    # The Python virtual environment segment
+    set --local venv_name (__venv_prompt)
+    set --local venv (set_color 831598)"$venv_name"(set_color normal)
 
     # Single empty line to act as a separator for the interactive shell prompt
     printf "\n"
@@ -49,13 +61,13 @@ function fish_prompt
 
         # Set the prompt display in accordance to the local Git repository
         set_color fbf1c7
-        printf '%s on %s %s\n' $display_pwd $git_branch $stat
+        printf '%s on %s %s %s\n' $display_pwd $git_branch $stat $venv
         set_color normal
     else
         # Set the prompt display if the current working directory is not a
         # local Git repository
         set_color fbf1c7
-        printf '%s %s\n' $display_pwd $stat
+        printf '%s %s %s\n' $display_pwd $stat $venv
         set_color normal
     end
 
