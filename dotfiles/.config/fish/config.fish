@@ -15,7 +15,7 @@ if status is-interactive
 
     # Custom symbols used to represent Git repository state.
     # Some states intentionally share the same glyph to reduce visual noise.
-    set --global __fish_git_prompt_char_dirtystate '[]'
+    set --global __fish_git_prompt_char_dirtystate '[]'
     set --global __fish_git_prompt_char_untrackedfiles '[]'
     set --global __fish_git_prompt_char_stagedstate '[]'
     set --global __fish_git_prompt_char_stashstate '[󰇁]'
@@ -23,6 +23,7 @@ if status is-interactive
     # Indicate divergence from the tracked upstream branch.
     set --global __fish_git_prompt_char_upstream_ahead '[󱦲]'
     set --global __fish_git_prompt_char_upstream_behind '[󱦳]'
+    set --global __fish_git_prompt_char_upstream_diverged '[󰹹]'
 
     # Suppress the "=" marker when in sync with upstream
     set --global __fish_git_prompt_char_upstream_equal ''
