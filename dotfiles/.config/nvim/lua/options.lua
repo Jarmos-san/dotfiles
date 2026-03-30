@@ -92,8 +92,8 @@ opt.relativenumber = true
 -- Allow the sign column to show else it'll keep shifting later on
 opt.signcolumn = "yes"
 
--- Explicitly tell Neovim to use ZSH for terminal commands instead of relying on $SHELL
-opt.shell = "zsh"
+-- Explicitly tell Neovim to use whatever the default shell is currently configured by the user
+opt.shell = vim.env.SHELL
 
 -- Enable break indent
 vim.opt.breakindent = true
