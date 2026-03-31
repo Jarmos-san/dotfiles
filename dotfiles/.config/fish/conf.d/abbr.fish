@@ -6,3 +6,7 @@ abbr --add tree "eza --tree --all --icons --ignore-glob='.git|.mypy_cache|.terra
 
 # Print the lines of code of a file
 abbr --add loc "wc --lines"
+
+# Tmux abbreviations
+abbr --add dots "tmux new-session -c ~/.dotfiles"
+abbr --add tnew "tmux new-session"
