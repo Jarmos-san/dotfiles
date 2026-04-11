@@ -10,5 +10,5 @@ abbr --add loc "wc --lines"
 # Tmux abbreviations
 abbr --add dots "tmux new-session -c ~/.dotfiles"
 abbr --add tnew "tmux new-session"
-abbr --add dalal "tmux new-session -c ~/projects/dalal"
+abbr --add arthika "tmux new-session -c ~/projects/arthika"
 abbr --add tls "tmux list-session"
