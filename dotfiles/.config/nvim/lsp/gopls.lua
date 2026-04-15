@@ -98,5 +98,19 @@ return {
   settings = {
     templateExtension = { "tmpl" },
     gofumpt = true,
+    semanticTokens = true,
+    usePlaceholders = true,
+    staticcheck = true,
+    vulncheck = "Imports",
+    hints = { -- FIXME: Inlay hints don't work for some reason
+      assignVariableTypes = true,
+      compositeLiteralFields = true,
+      compositeLiteralTypes = true,
+      constantValues = true,
+      functionTypeParameters = true,
+      ignoredError = true,
+      parameterNames = true,
+      rangeVariableTypes = true,
+    },
   },
 }
