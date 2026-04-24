@@ -28,4 +28,4 @@ vim.treesitter.start()
 
 -- Start the "gopls" LSP server
 vim.lsp.enable("gopls", true)
-vim.lsp.inlay_hint.enable(true) -- FIXME: Inlay hints are not enabled
+vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
