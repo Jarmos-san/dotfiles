@@ -4,26 +4,40 @@
 ---
 --- Google's lsp server for golang.
 
---- @class go_dir_custom_args
----
---- @field envvar_id string
----
---- @field custom_subdir string?
+---@alias GoDir string|nil
 
+---@class GoDirCustomArgs
+---@field envvar_id string
+---@field custom_subdir? string
+
+---@class VimSystemResult
+---@field code integer
+---@field signal integer
+---@field stdout string?
+---@field stderr string?
+
+---@type string|nil
 local mod_cache = nil
+
+---@type string|nil
 local std_lib = nil
 
----@param custom_args go_dir_custom_args
----@param on_complete fun(dir: string | nil)
+---@param custom_args GoDirCustomArgs
+---@param on_complete fun(dir: GoDir): nil
 local function identify_go_dir(custom_args, on_complete)
+  ---@type string[]
   local cmd = { "go", "env", custom_args.envvar_id }
+
+  ---@param output VimSystemResult
   vim.system(cmd, { text = true }, function(output)
     local res = vim.trim(output.stdout or "")
+
     if output.code == 0 and res ~= "" then
       if custom_args.custom_subdir and custom_args.custom_subdir ~= "" then
         res = res .. custom_args.custom_subdir
       end
       on_complete(res)
+      return
     else
       vim.schedule(function()
         vim.notify(
@@ -39,7 +53,7 @@ local function identify_go_dir(custom_args, on_complete)
   end)
 end
 
----@return string?
+---@return GoDir
 local function get_std_lib_dir()
   if std_lib and std_lib ~= "" then
     return std_lib
@@ -53,7 +67,7 @@ local function get_std_lib_dir()
   return std_lib
 end
 
----@return string?
+---@return GoDir
 local function get_mod_cache_dir()
   if mod_cache and mod_cache ~= "" then
     return mod_cache
@@ -64,27 +78,32 @@ local function get_mod_cache_dir()
       mod_cache = dir
     end
   end)
+
   return mod_cache
 end
 
 ---@param fname string
----@return string?
+---@return string|nil
 local function get_root_dir(fname)
   if mod_cache and fname:sub(1, #mod_cache) == mod_cache then
     local clients = vim.lsp.get_clients({ name = "gopls" })
+
     if #clients > 0 then
       return clients[#clients].config.root_dir
     end
   end
+
   if std_lib and fname:sub(1, #std_lib) == std_lib then
     local clients = vim.lsp.get_clients({ name = "gopls" })
     if #clients > 0 then
       return clients[#clients].config.root_dir
     end
   end
+
   return vim.fs.root(fname, "go.work") or vim.fs.root(fname, "go.mod") or vim.fs.root(fname, ".git")
 end
 
+---@type vim.lsp.Config
 return {
   cmd = { "gopls" },
   filetypes = { "go", "gomod", "gowork", "gotmpl" },
@@ -96,7 +115,22 @@ return {
     on_dir(get_root_dir(fname))
   end,
   settings = {
-    templateExtension = { "tmpl" },
-    gofumpt = true,
+    gopls = {
+      gofumpt = true,
+      semanticTokens = true,
+      usePlaceholders = true,
+      staticcheck = true,
+      vulncheck = "Imports",
+      hints = {
+        assignVariableTypes = true,
+        compositeLiteralFields = true,
+        compositeLiteralTypes = true,
+        constantValues = true,
+        functionTypeParameters = true,
+        ignoredError = true,
+        parameterNames = true,
+        rangeVariableTypes = true,
+      },
+    },
   },
 }
