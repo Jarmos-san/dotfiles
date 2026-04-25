@@ -13,3 +13,6 @@ autocmd("BufWritePost", {
 
 -- Start the Treesitter parser process
 vim.treesitter.start()
+
+-- Enable the LSP capabilities
+vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())

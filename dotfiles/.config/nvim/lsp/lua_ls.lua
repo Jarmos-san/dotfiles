@@ -23,8 +23,12 @@ return {
         return
       end
     end
-
-    client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+  end,
+  settings = {
+    Lua = {
+      addonManager = {
+        enable = false,
+      },
       runtime = {
         version = "LuaJIT",
         path = vim.split(package.path, ";"),
@@ -44,9 +48,15 @@ return {
       telemetry = {
         enable = false,
       },
-    })
-  end,
-  settings = {
-    Lua = {},
+      hint = {
+        arrayIndex = "Enable",
+        awaitPropagate = true,
+        enable = true,
+      },
+      type = {
+        weakNilCheck = true,
+        weakUnionCheck = true,
+      },
+    },
   },
 }
