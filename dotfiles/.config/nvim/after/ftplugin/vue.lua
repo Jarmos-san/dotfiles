@@ -1,25 +1,14 @@
--- Folding configurations for Neovim
-if vim.api.nvim_buf_line_count(0) >= 100 then
-  vim.o.foldmethod = "expr" -- Allow folding using the "nvim-treesitter" plugin
-  vim.o.foldexpr = "nvim_treesitter#foldexpr()" -- Configure the folding algorithm to be from the plugin
-  vim.o.foldlevel = 0 -- Configure the maximum indenting for the folding
-end
+-- Module describing the Vue-specification configurations or Neovim
 
+-- Enable and start the Treesitter parser
 vim.treesitter.start()
 
--- TODO: Move this autocommand to its own module/package
-vim.api.nvim_create_autocmd("CursorHold", {
-  buffer = vim.api.nvim_get_current_buf(),
-  callback = function()
-    local hover_window_configs = {
-      focusable = false,
-      close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-      border = "rounded",
-      source = "always",
-      prefix = " ",
-      scope = "cursor",
-    }
-
-    vim.diagnostic.open_float(nil, hover_window_configs)
-  end,
-})
+-- Folding configurations for Neovim
+if vim.api.nvim_buf_line_count(0) >= 100 then
+  vim.o.foldmethod = "expr" -- Allow folding using an expression
+  vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- Use Treesitter for the folding logic
+  vim.o.foldlevel = 1 -- Configure the maximum indenting for the folding
+  vim.wo.foldcolumn = "auto" -- Show fold indicators on the left margin
+  vim.wo.foldnestmax = 3 -- Maximum depth of folds
+  vim.o.foldclose = "all" -- Close all folds when the cursor moves away from the region
+end
