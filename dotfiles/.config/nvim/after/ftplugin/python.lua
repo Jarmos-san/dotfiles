@@ -32,9 +32,10 @@ vim.treesitter.start()
 -- Configure the indent-based folds for Python buffers
 if vim.api.nvim_buf_line_count(0) >= 100 then
   vim.opt.foldmethod = "expr"
-  vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+  vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
   vim.opt.foldlevel = 0
   vim.opt.foldcolumn = "auto"
+  vim.opt.foldnestmax = 99
 end
 
 -- Configure and enable the LSP server for Python
