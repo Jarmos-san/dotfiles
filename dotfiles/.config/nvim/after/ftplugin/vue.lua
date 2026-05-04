@@ -10,5 +10,4 @@ if vim.api.nvim_buf_line_count(0) >= 100 then
   vim.o.foldlevel = 1 -- Configure the maximum indenting for the folding
   vim.wo.foldcolumn = "auto" -- Show fold indicators on the left margin
   vim.wo.foldnestmax = 3 -- Maximum depth of folds
-  vim.o.foldclose = "all" -- Close all folds when the cursor moves away from the region
 end
