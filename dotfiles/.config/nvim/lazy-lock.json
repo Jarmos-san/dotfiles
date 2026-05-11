@@ -5,7 +5,7 @@
   "gitsigns.nvim": { "branch": "main", "commit": "dd3f588bacbeb041be6facf1742e42097f62165d" },
   "lazy.nvim": { "branch": "main", "commit": "306a05526ada86a7b30af95c5cc81ffba93fef97" },
   "mini.bufremove": { "branch": "main", "commit": "8603490905fdfa31943cf2ede7ef4475e3dbac9a" },
-  "mini.comment": { "branch": "main", "commit": "8e5ff3ed3cc0e8f216617aae01020c00c20f7a87" },
+  "mini.comment": { "branch": "main", "commit": "bd086159fd7dd05ec3f86acf7729f130c3ce9673" },
   "mini.indentscope": { "branch": "main", "commit": "e0601f75aa5137a5a13bb92a988c9a300f5bd3de" },
   "mini.move": { "branch": "main", "commit": "74d140143b1bb905c3d0aebcfc2f216fd237080e" },
   "mini.pairs": { "branch": "main", "commit": "42387c7fe68fc0b6e95eaf37f1bb76e7bffaa0d9" },
