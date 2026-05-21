@@ -34,7 +34,7 @@ return {
   }),
 
   -- The default shell to invoke when launching the terminal
-  default_prog = { "/home/linuxbrew/.linuxbrew/bin/zsh", "-l" },
+  default_prog = { "fish", "-l" },
 
   -- Make the font size of the terminal contents legible
   font_size = 11.0,
