@@ -31,8 +31,6 @@ curl -fsSL "https://tinyurl.com/setup-dotfile" | bash -c
   <img src="./assets/neovim.png" alt="Neovim screenshot" />
   <strong>Wezterm:</strong>
   <img src="./assets/wezterm.png" alt="Wezterm screenshot" />
-  <strong>Starship:</strong>
-<img src="./assets/starship.png" alt="Starship prompt screenshot" />
 
 </details>
 

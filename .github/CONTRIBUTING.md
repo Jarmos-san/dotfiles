@@ -78,8 +78,6 @@ The scripts downloads & installs the following applications on my system:
 
 3. Poetry(Python package management system)
 
-4. zsh
-
 and a few more stuff (check the
 [wiki](https://github.com/Jarmos-san/dotfiles/wiki) for a more detailed
 explanation)...

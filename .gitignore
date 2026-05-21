@@ -71,8 +71,6 @@ scratch
 **/.config/git/credentials
 **/cobra-cli
 
-**/.zsh/plugins
-
 **/.local/bin
 !**/.local/bin/update
 !**/.local/bin/git-clean
