@@ -326,53 +326,6 @@ install_lazy_nvim() {
 }
 
 ###############################################################################
-# Install some ZSH plugns
-###############################################################################
-install_zsh_plugins() {
-  declare -a plugins
-
-  # Location where the ZSH plugins will be downloaded to
-  plugins_parent_directory="$HOME/.zsh/plugins"
-
-  # List of all the ZSH plugins
-  plugins=(
-    "https://github.com/zsh-users/zsh-autosuggestions.git"
-    "https://github.com/zsh-users/zsh-syntax-highlighting.git"
-    "https://github.com/zsh-users/zsh-completions.git"
-    "https://github.com/ael-code/zsh-colored-man-pages.git"
-  )
-
-  info "Preparing to install the ZSH plugins..."
-
-  # Create the parent ZSH plugins directory if it doesn't already exist
-  if [[ ! -d $plugins_parent_directory ]]; then
-    mkdir --parents "$plugins_parent_directory"
-  fi
-
-  # Ensure Git is installed & executable, else exit the script execution safely
-  if [[ $(command -v git &> /dev/null) ]]; then
-    error "Git not found...please ensure its installed and executable!"
-    exit 1
-  fi
-
-  # Loop through the list of plugins to install
-  for plugin_url in "${plugins[@]}"; do
-    plugin_name=$(basename "$plugin_url" .git)
-
-    target_dir="$plugins_parent_directory/$plugin_name"
-
-    # If the plugins wasn't already installed, download it locally
-    if [[ ! -d "$target_dir" ]]; then
-      git clone "$plugin_url" "$target_dir"
-    fi
-  done
-
-  success "ZSH plugins installation complete!"
-
-  info "The plugins will be usable after a system restart..."
-}
-
-###############################################################################
 # Setup the dotfiles and related configuration files
 ###############################################################################
 setup_dotfiles() {
@@ -431,13 +384,6 @@ install_homebrew_packages() {
 }
 
 ###############################################################################
-# Setup ZSH as the default shell
-###############################################################################
-setup_zsh() {
-  command -v zsh | sudo tee -a /etc/shells
-  sudo chsh -s "$(command -v zsh)" "${USER}"
-}
-
 ###############################################################################
 # Setup Git credentials (and potentially other things like SSH access and more!)
 ###############################################################################
@@ -487,9 +433,6 @@ main() {
   # Install and setup the "lazy.nvim" package manager for Neovim
   install_lazy_nvim
 
-  # Install all necessary ZSH plugins
-  install_zsh_plugins
-
   # Setup the dotfiles (like setting up the symlinks and so on)
   setup_dotfiles
 
@@ -498,9 +441,6 @@ main() {
 
   # Install necessary tools using the Homebrew package manager
   install_homebrew_packages
-
-  # Make ZSH the default interactive shell environment
-  setup_zsh
 
   # Setup Git to work well with GitHub
   setup_git
