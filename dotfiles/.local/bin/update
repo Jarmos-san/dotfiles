@@ -26,7 +26,6 @@ License: MIT
 import argparse
 import datetime
 import logging
-import os
 import pathlib
 import platform
 import shlex
@@ -34,7 +33,7 @@ import subprocess
 import sys
 import time
 import typing
-from concurrent.futures import ThreadPoolExecutor, as_completed
+
 
 
 class LogFormatter(logging.Formatter):
@@ -305,51 +304,6 @@ def run_homebrew_updates(logger: logging.Logger) -> None:
     logger.info("Homebrew package upgrades complete!")
 
 
-def run_zsh_updates(logger: logging.Logger) -> None:
-    """Update the local Zsh plugins by pulling the latest changes.
-
-    This function assumes the Zsh plugins are cloned under:
-        `~/.zsh/plugins/<PLUGIN-NAME>`
-
-    For each plugin repository listed in the `plugins` tuple, the function:
-        1. Constructs the local plugin directory path.
-        2. Changes the working directory to that location.
-        3. Executes `git pull --rebase` to fetch and apply the upstream updates.
-
-    All Git operations are executed with `check=True`, causing
-    `subprocess.CalledProcessError` to be raised if any update fails.
-
-    logger (logging.Logger): The `Logger` instance used for logging useful messages to
-        STDOUT when updating the ZSH plugins.
-
-    Raises:
-        `FileNotFoundError`: If a plugin directory does not exist.
-        `subprocess.CalledProcessError`: If a Git update operation exits with a non-zero
-            status.
-
-    Returns: None
-    """
-    plugins = (
-        "zsh-users/zsh-autosuggestions",
-        "ael-code/zsh-colored-man-pages",
-        "zsh-users/zsh-completions",
-        "zsh-users/zsh-syntax-highlighting",
-    )
-
-    logger.info("Running ZSH plugin updates")
-
-    def update(plugin: str) -> None:
-        cwd = pathlib.Path.home() / ".zsh" / "plugins" / plugin.split("/")[-1]
-        run("git pull --rebase", cwd=cwd, logger=logger)
-
-    with ThreadPoolExecutor(max_workers=min(4, len(plugins))) as pool:
-        futures = [pool.submit(update, plugin) for plugin in plugins]
-        for future in as_completed(futures):
-            future.result()
-
-    logger.info("ZSH update plugins complete!")
-
-
 def main(logger: logging.Logger) -> None:
     """Executes the full system update routine for the current environment.
 
@@ -377,9 +331,6 @@ def main(logger: logging.Logger) -> None:
         subprocess.CalledProcessError: If any invoked update command (Linux, Homebrew
             or Zsh plugin updates) fails and is executed with `check=True`.
     """
-    # Chech which shell is enabled for the interactive environment
-    shell = os.getenv("SHELL")
-
     # Run the package updates for a Linux distribution
     if platform.uname().system == "Linux":
         run("sudo -v", logger=logger)
@@ -388,10 +339,6 @@ def main(logger: logging.Logger) -> None:
     # Run the Homebrew package updates
     if homebrew_installed(logger):
         run_homebrew_updates(logger)
-
-    # Update the zsh plugins
-    if shell and shell.split("/")[-1] == "zsh":
-        run_zsh_updates(logger)
 
     logger.info("System update complete...exiting now")
 
