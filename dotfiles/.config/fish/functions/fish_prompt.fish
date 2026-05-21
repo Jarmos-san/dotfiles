@@ -21,8 +21,7 @@ function fish_prompt
     set --local git_branch
 
     # The Python virtual environment segment
-    set --local venv_name (__venv_prompt)
-    set --local venv (set_color 831598)"$venv_name"(set_color normal)
+    set --local venv (__venv_prompt)
 
     # Single empty line to act as a separator for the interactive shell prompt
     printf "\n"

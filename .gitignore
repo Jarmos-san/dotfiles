@@ -71,6 +71,8 @@ scratch
 **/.config/git/credentials
 **/cobra-cli
 
+**/.config/fish/fish_variables
+
 **/.local/bin
 !**/.local/bin/update
 !**/.local/bin/git-clean
