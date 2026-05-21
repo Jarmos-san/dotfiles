@@ -37,7 +37,6 @@ return {
       "tmux",
       "toml",
       "typst",
-      "zsh",
     },
     custom_colorcolumn = {
       lua = "120",
