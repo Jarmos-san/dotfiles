@@ -28,7 +28,7 @@ EditorConfig is the source of truth (`.editorconfig`):
 ## Structure
 
 - `dotfiles/` — config source (symlinked to `$HOME` by `bootstrap.sh`)
-- `dotfiles/.config/` — app configs (nvim, fish, git, tmux, wezterm, bat, gh, glow, pip, flameshot)
+- `dotfiles/.config/` — app configs (nvim, fish, git, tmux, wezterm, bat, gh, glow, pip, flameshot, opencode)
 - `dotfiles/.local/bin/update` — Python utility for system updates (apt/dnf + brew)
 - `dotfiles/.homebrew/linux.Brewfile` — Homebrew packages for Linux
 - `bootstrap.sh` — NOT production-ready (hardcoded `jarmos` user, FIXMEs, untested)
