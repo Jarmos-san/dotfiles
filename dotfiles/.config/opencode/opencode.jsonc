@@ -1,0 +1,55 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "AGENTS.md"
+  ],
+  "command": {
+    "check": {
+      "template": "Run all pre-commit checks on the codebase (linting, formatting, typechecking). Fix any issues found.",
+      "description": "Run all pre-commit checks (lint, format, typecheck)"
+    }
+  },
+  "agent": {
+    "code-reviewer": {
+      "description": "Reviews code for best practices and potential issues.",
+      "prompt": "You are a senior software engineer responsible for reviewing your peer's code. Focus on security, performance and maintainability.",
+      "permission": {
+        "edit": "deny"
+      },
+      "temperature": 0.1,
+      "color": "secondary"
+    }
+  },
+  "default_agent": "plan",
+  "share": "disabled",
+  "autoupdate": false,
+  "formatter": false,
+  "lsp": true,
+  "permission": {
+    "edit": "ask",
+    "bash": {
+      "*": "ask",
+      "rm *": "deny",
+      "grep *": "allow",
+      "git commit": "deny", // Disable the "git commit ..." commands
+      "git status": "allow", // Allow for safer "git status ..." checks
+      "git diff": "allow", // Allow for safer "git diff ..." commands
+      "git log": "allow", // Allow checking for previous commit using "git log ..." commands
+      "git push": "deny", // Disable unsafe "git push ..." commands
+      "npm install": "ask"
+    },
+    "lsp": "allow",
+    "skill": "allow",
+    "todowrite": "allow"
+  },
+  "watcher": {
+    "ignore": [
+      "node_modules/**",
+      "dist/**",
+      ".git/**"
+    ]
+  },
+  "plugin": [
+    "@franlol/opencode-md-table-formatter@0.0.6"
+  ]
+}
