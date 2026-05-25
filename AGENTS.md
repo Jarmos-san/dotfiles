@@ -32,6 +32,7 @@ EditorConfig is the source of truth (`.editorconfig`):
 - `dotfiles/.local/bin/update` — Python utility for system updates (apt/dnf + brew)
 - `dotfiles/.homebrew/linux.Brewfile` — Homebrew packages for Linux
 - `bootstrap.sh` — NOT production-ready (hardcoded `jarmos` user, FIXMEs, untested)
+- `dotfiles/.config/fish/conf.d/env.fish` — env vars (`PATH`, `PNPM_HOME`, Homebrew config); `fish_variables` is gitignored
 
 ## Python
 

@@ -15,7 +15,7 @@ The contents of this repository are **VERY** personalised & might not suit
 **YOUR** particular needs as-is. Hence, I strongly recommend to use the contents
 of this repository as a source of reference only.
 
-**DISCLAIMER**: Do not fork this repository & run the [scripts](./setup)
+**DISCLAIMER**: Do not fork this repository & run the [scripts](./bootstrap.sh)
 provided here to setup your system. I'll not be held responsible for any
 potential data loss or system corruption in case something goes south when using
 the contents of this repository. Running the automation script below to setup
@@ -25,8 +25,19 @@ everything:
 curl -fsSL "https://tinyurl.com/setup-dotfile" | bash -c
 ```
 
+## What's Inside
+
+- **Editor**: Neovim (Lua, lazy.nvim, LSP for many languages)
+- **Shell**: Fish (custom prompt, abbreviations, functions)
+- **Terminal**: Wezterm (Cascadia Code Nerd Font, transparency)
+- **Multiplexer**: Tmux (vim keybindings, gruvbox statusline)
+- **Tools**: bat, eza, btop, glow, gh, ripgrep, jq, and more
+- **Python**: uv, ruff, mypy, pip (require-virtualenv)
+- **Go**: gotestsum, golangci-lint, gopls
+- **Package management**: Homebrew (Linux Brewfile), pre-commit hooks
+
 <details>
-  <summary>See screenshots of what the tools look like!</summary>
+  <summary>See screenshots of the terminal, editor & prompt!</summary>
   <strong>Neovim:</strong>
   <img src="./assets/neovim.png" alt="Neovim screenshot" />
   <strong>Wezterm:</strong>
@@ -40,17 +51,11 @@ The configurations I used are heavily inspired from other giants of the
 community. Following are some of the repositories I keep an eye out for
 inspiration.
 
-- Salomon Popp's [disrupted/dotfiles](https://github.com/disrupted/dotfiles)
-- Mathias Bynen's
-  [mathiasbynens/dotfiles](https://github.com/mathiasbynens/dotfiles)
-- [codeinthehouse's gist](https://gist.githubusercontent.com/codeinthehole/26b37efa67041e1307db/raw/67c06401c3cdb7f7f96aa9054e95cbe0e473b7f0/osx_bootstrap.sh)
-- Dries Vints's [driesvints/dotfiles](https://github.com/driesvints/dotfiles)
-- Tom Payne's [twpayne/dotfiles](https://github.com/twpayne/dotfiles)
-- Maria José Solano's
-  [MariaSolOs/dotfiles](https://github.com/MariaSolOs/dotfiles)
-- TJ Devrie's [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
-  <!-- - https://youtu.be/G3NJzFX6XhY?si=84rUTb6t337aHHfC -->
-  More will be added as & when I come across any.
+- [disrupted/dotfiles](https://github.com/disrupted/dotfiles)
+- [mathiasbynens/dotfiles](https://github.com/mathiasbynens/dotfiles)
+- [twpayne/dotfiles](https://github.com/twpayne/dotfiles)
+- [MariaSolOs/dotfiles](https://github.com/MariaSolOs/dotfiles)
+- [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
 
 ## Terms & Conditions of Usage
 
