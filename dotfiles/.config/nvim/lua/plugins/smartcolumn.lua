@@ -20,6 +20,7 @@ return {
       "gosum",
       "help",
       "json",
+      "jsonc",
       "markdown",
       "mason",
       "mdx",
