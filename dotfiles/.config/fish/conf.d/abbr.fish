@@ -41,20 +41,21 @@ abbr --add pgdb "docker run --detach --name postgresql --rm -p 5432:5432 -e POST
 abbr --add rsdb "docker run --name redis --rm -p 6379:6379 -e ALLOW_EMPTY_PASSWORD=yes bitnami/redis:7.2"
 
 # NPM abbreviations
-abbr --add npm "pnpm"
+abbr --add npm pnpm
 abbr --add npx "pnpm dlx"
 
 # Python abbreviations
 abbr --add mkvenv "uv venv"
-abbr --add py "python3"
+abbr --add py python3
 
 # General abbreviations
 abbr --add top "btop --utf-force"
 abbr --add cm "cmatrix -abs"
 abbr --add rands "openssl rand -base64 32"
 abbr --add dateiso "date +%Y-%m-%dT%H:%M:%S%z"
-abbr --add ct "cookiecutter"
-abbr --add webp "cwebp"
+abbr --add ct cookiecutter
+abbr --add webp cwebp
 abbr --add blogs "cd ~/projects/blogposts"
 abbr --add pcs "pre-commit sample-config >> .pre-commit-config.yaml && pre-commit autoupdate &>/dev/null"
 abbr --add git-sync "git switch main && git fetch --prune && git branch -vv | awk '/: gone/ {print $1}' | xargs -r git branch --delete"
+abbr --add glow "glow --style ~/.config/glow/styles/gruvbox-dark.json"
