@@ -3,6 +3,10 @@ name: QA Checks
 on:
   push:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   runStyLua:
     name: Format Lua Files
@@ -31,14 +35,16 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v6
 
-      - name: Download and Setup Selene
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release download --repo Kampfkarren/selene --pattern "selene-*-linux.zip"
-          unzip "selene-light-*-linux.zip"
-          cp selene /usr/local/bin/ && chmod u+x /usr/local/bin/selene
-          echo "Downloaded Selene v$(selene --version | grep --only-matching --perl-regexp '\d+\.\d+\.\d+')"
+      - name: Cache Selene binary
+        id: cache-selene
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/bin/selene
+          key: selene-${{ runner.os }}-0.31
+
+      - name: Install Selene
+        if: steps.cache-selene.outputs.cache-hit != 'true'
+        run: cargo install selene --version ^0.31 --no-default-features
 
       - name: Run Selene to Lint Lua Code
         run: selene .
@@ -47,13 +53,13 @@ jobs:
     name: Lint Python Files
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
 
-      - name: Download and Setup Ruff
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pipx install ruff
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install Ruff
+        run: uv tool install ruff
 
       - name: Run the Ruff Linter for Python Code
         run: ruff check "$PWD"
@@ -62,10 +68,44 @@ jobs:
     name: Format Python Files
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install Black
+        run: uv tool install black
 
       - name: Run the Black Formatter on Python Files
+        run: black . --check
+
+  runMypy:
+    name: Type Check Python Files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install mypy
+        run: uv tool install mypy
+
+      - name: Run mypy
+        run: mypy .
+
+  runShfmt:
+    name: Format Shell Scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install shfmt
         run: |
-          pip install black
-          black . --check
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq shfmt
+
+      - name: Run shfmt
+        run:
+          shfmt --indent=2 --case-indent --binary-next-line --space-redirects
+          --keep-padding -d .
