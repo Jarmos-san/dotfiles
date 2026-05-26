@@ -36,7 +36,9 @@
       "git diff": "allow", // Allow for safer "git diff ..." commands
       "git log": "allow", // Allow checking for previous commit using "git log ..." commands
       "git push": "deny", // Disable unsafe "git push ..." commands
-      "npm install": "ask"
+      "npm install": "ask",
+      "pre-commit *": "allow", // Allow running Pre-Commit commands
+      "ls *": "allow" // Allow listing file/directory objects in the filesystem
     },
     "lsp": "allow",
     "skill": "allow",
