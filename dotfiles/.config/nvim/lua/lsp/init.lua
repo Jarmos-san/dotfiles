@@ -50,7 +50,7 @@ M.setup = function()
 
   -- Configure the LSP servers to only log warning messages and avoid enlarging the log
   -- file beyond a certain limit
-  vim.lsp.set_log_level(vim.log.levels.ERROR)
+  vim.lsp.log.set_level(vim.log.levels.WARN)
 
   -- Configure the diagnostic APIs which the LSP servers will provide diagnostic messages
   -- with
