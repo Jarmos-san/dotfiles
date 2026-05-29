@@ -39,17 +39,9 @@ return {
       },
     },
   },
-  on_attach = function(client)
-    local capabilities = client.server_capabilities
-
-    if capabilities == nil then
-      return
-    end
-
-    if vim.bo.filetype == "vue" then
-      capabilities.semanticTokensProvider.full = false
-    else
-      capabilities.semanticTokensProvider.full = true
+  on_attach = function(client, bufnr)
+    if vim.bo[bufnr].filetype == "vue" then
+      client.server_capabilities.semanticTokensProvider = nil
     end
   end,
 }
