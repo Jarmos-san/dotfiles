@@ -2,6 +2,7 @@
 return {
   cmd = { "tailwindcss-language-server", "--stdio" },
   filetypes = { "vue" },
+  root_markers = { "tailwind.config.js", "package.json", ".git" },
   capabilities = {
     workspace = {
       didChangeWatchedFiles = {
