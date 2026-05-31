@@ -73,9 +73,10 @@ scratch
 
 **/.config/fish/fish_variables
 
-**/.local/bin
+**/.local/bin/**
 !**/.local/bin/update
 !**/.local/bin/git-clean
+!**/.local/bin/wslopen
 
 **/tmux/plugins/**/*
 
