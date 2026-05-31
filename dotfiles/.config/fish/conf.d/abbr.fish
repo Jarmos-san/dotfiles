@@ -59,3 +59,6 @@ abbr --add blogs "cd ~/projects/blogposts"
 abbr --add pcs "pre-commit sample-config >> .pre-commit-config.yaml && pre-commit autoupdate &>/dev/null"
 abbr --add git-sync "git switch main && git fetch --prune && git branch -vv | awk '/: gone/ {print $1}' | xargs -r git branch --delete"
 abbr --add glow "glow --style ~/.config/glow/styles/gruvbox-dark.json"
+
+# OpenCode abbreviations
+abbr --add oc opencode
