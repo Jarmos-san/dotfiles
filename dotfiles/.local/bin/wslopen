@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+
+"""Open a file from WSL using the default Windows application.
+
+This utility converts a WSL-style path such as:
+
+    /mnt/c/Users/somra/Documents/report.pdf
+
+into its Windows equivalent:
+
+    C:\\Users\\alice\\Documents\\report.pdf
+
+and launches the file using the PowerShell's `Start-Process` command, causing Windows to
+open it with the associated default application.
+
+Examples:
+    wsl-open /mnt/c/Users/Alice/Documents/report.pdf
+    wsl-open /mnt/d/Users/Alice/Pictures/image.png
+
+"""
+
+import subprocess
+from argparse import ArgumentParser, Namespace
+
+
+def parse_args() -> Namespace:
+    """Parse the CLI arguments.
+
+    Returns:
+        Namespace: Parsed CLI arguments containing the WSL file path supplied by the
+        user.
+
+    """
+    # Create a parser to the parse the CLI arguments from the script
+    parser = ArgumentParser(
+        prog="wsl-open",
+        description="Open a file from WSL using the default Windows application.",
+    )
+
+    # Register an argument for the script to accept an absolute filepath
+    parser.add_argument(
+        "filepath",
+        help="Absolute WSL path to the file (e.g., /mnt/c/Users/Alice/file.txt).",
+    )
+
+    # Return the CLI arguments to be further manipulated
+    return parser.parse_args()
+
+
+def main() -> None:
+    """Script entrypoint.
+
+    Converts a WSL path into a Windows path and launches the file using PowerShell's
+    `Start-Process` command.
+
+    Example:
+        /mnt/c/Users/Alice/file.txt -> C:\\Users\\Alice\\file.txt
+
+    """
+    # Parse the arguments from the script
+    args = parse_args()
+
+    # Build individual elements of file parts from the filepath passed to the script
+    parts = args.filepath.split("/")[2:]
+
+    # Sanitise and modify the filepath for PowerShell to understand and recognise
+    modified_filepath = f"{parts[0].upper()}:\\{'\\'.join(parts[1:])}"
+
+    # Attempt to invoke the PowerShell command and check it's status code as well as,
+    # through the STDERR to /dev/null before creating a human-readable error message
+    try:
+        subprocess.run(
+            ["powershell.exe", "Start-Process", "-FilePath", modified_filepath],
+            check=True,
+            stderr=subprocess.DEVNULL,
+        )
+    except subprocess.CalledProcessError:
+        print(f"\033[31m[ERROR]: {args.filepath} not found!\033[0m")
+
+
+if __name__ == "__main__":
+    main()
